@@ -144,7 +144,26 @@
           </div>
         </div>
       </div>
+
+        <!-- Mini-Game Section -->
+        <div class="mt-10 text-center">
+          <h3 class="text-xl font-bold mb-2">Relevant Coursework: Atari [Course]out</h3>
+          <p class="mb-4 text-gray-700">Hit and destroy the classes I destroyed!</p>
+          <div id="start-screen" class="inline-block p-4 border-2 border-gray-300 rounded-lg mb-4">
+            <h4 class="font-semibold mb-2">Leaderboard</h4>
+            <ol id="leaderboard" class="list-decimal list-inside mb-4"></ol>
+            <button id="startBtn" class="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-400">
+              Start Game
+            </button>
+            <button id="resetLeaderboardBtn" class="px-4 py-2 bg-purple-400 text-white rounded hover:bg-purple-300">
+              Reset Leaderboard
+            </button>
+          </div>
+          <canvas id="gameCanvas" width="480" height="320" class="mx-auto border-2 border-gray-300" style="display:none;"></canvas>
+        </div>
+      </div>
     </section>
+
 
     <!-- EXPERIENCE SECTION -->
     <section id="experience" class="text-gray-600 body-font font-mono bg-white relative overflow-hidden py-10">
@@ -363,45 +382,46 @@
 
     <!-- PROJECTS SECTION -->
     <section id="projects" class="text-gray-600 body-font font-mono bg-white relative overflow-hidden py-10">
-        <div class="container mx-auto flex px-5 md:flex-row flex-col items-center mb-10">
-            <p class="text-5xl font-bold text-black">Projects</p>
-        </div>
-        <div class="container mx-auto flex px-5 md:flex-row flex-col items-center bg-white">
-            <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 py-10 px-10 border-gray-300 border-2">
-                <!-- 6 placeholder projects -->
-                <div>
-                    <img src="https://via.placeholder.com/300" alt="Project 1" class="w-full mb-4">
-                    <h1 class="mt-4 text-xl font-semibold text-center md:text-left text-gray-800">Project 1</h1>
-                    <p class="mt-2 text-gray-500">Brief description about Project 1.</p>
-                </div>
-                <div>
-                    <img src="https://via.placeholder.com/300" alt="Project 2" class="w-full mb-4">
-                    <h1 class="mt-4 text-xl font-semibold text-center md:text-left text-gray-800">Project 2</h1>
-                    <p class="mt-2 text-gray-500">Brief description about Project 2.</p>
-                </div>
-                <div>
-                    <img src="https://via.placeholder.com/300" alt="Project 3" class="w-full mb-4">
-                    <h1 class="mt-4 text-xl font-semibold text-center md:text-left text-gray-800">Project 3</h1>
-                    <p class="mt-2 text-gray-500">Brief description about Project 3.</p>
-                </div>
-                <div>
-                    <img src="https://via.placeholder.com/300" alt="Project 4" class="w-full mb-4">
-                    <h1 class="mt-4 text-xl font-semibold text-center md:text-left text-gray-800">Project 4</h1>
-                    <p class="mt-2 text-gray-500">Brief description about Project 4.</p>
-                </div>
-                <div>
-                    <img src="https://via.placeholder.com/300" alt="Project 5" class="w-full mb-4">
-                    <h1 class="mt-4 text-xl font-semibold text-center md:text-left text-gray-800">Project 5</h1>
-                    <p class="mt-2 text-gray-500">Brief description about Project 5.</p>
-                </div>
-                <div>
-                    <img src="https://via.placeholder.com/300" alt="Project 6" class="w-full mb-4">
-                    <h1 class="mt-4 text-xl font-semibold text-center md:text-left text-gray-800">Project 6</h1>
-                    <p class="mt-2 text-gray-500">Brief description about Project 6.</p>
-                </div>
-            </div>
-        </div>
+      <div class="container mx-auto flex flex-col items-center justify-center px-5 mb-10 text-center">
+          <p class="text-5xl font-bold text-black">Projects</p>
+      </div>
+      <div class="container mx-auto flex flex-col items-center justify-center px-5 bg-white text-center">
+          <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 py-10 px-10 border-gray-300 border-2">
+              <!-- 6 placeholder projects -->
+              <div>
+                  <img src="https://via.placeholder.com/300" alt="Project 1" class="w-full mb-4 mx-auto">
+                  <h1 class="mt-4 text-xl font-semibold text-gray-800">Project 1</h1>
+                  <p class="mt-2 text-gray-500">Brief description about Project 1.</p>
+              </div>
+              <div>
+                  <img src="https://via.placeholder.com/300" alt="Project 2" class="w-full mb-4 mx-auto">
+                  <h1 class="mt-4 text-xl font-semibold text-gray-800">Project 2</h1>
+                  <p class="mt-2 text-gray-500">Brief description about Project 2.</p>
+              </div>
+              <div>
+                  <img src="https://via.placeholder.com/300" alt="Project 3" class="w-full mb-4 mx-auto">
+                  <h1 class="mt-4 text-xl font-semibold text-gray-800">Project 3</h1>
+                  <p class="mt-2 text-gray-500">Brief description about Project 3.</p>
+              </div>
+              <div>
+                  <img src="https://via.placeholder.com/300" alt="Project 4" class="w-full mb-4 mx-auto">
+                  <h1 class="mt-4 text-xl font-semibold text-gray-800">Project 4</h1>
+                  <p class="mt-2 text-gray-500">Brief description about Project 4.</p>
+              </div>
+              <div>
+                  <img src="https://via.placeholder.com/300" alt="Project 5" class="w-full mb-4 mx-auto">
+                  <h1 class="mt-4 text-xl font-semibold text-gray-800">Project 5</h1>
+                  <p class="mt-2 text-gray-500">Brief description about Project 5.</p>
+              </div>
+              <div>
+                  <img src="https://via.placeholder.com/300" alt="Project 6" class="w-full mb-4 mx-auto">
+                  <h1 class="mt-4 text-xl font-semibold text-gray-800">Project 6</h1>
+                  <p class="mt-2 text-gray-500">Brief description about Project 6.</p>
+              </div>
+          </div>
+      </div>
     </section>
+
 
     <!-- AWARDS & AFFILIATIONS SECTION -->
     <section id="awards-affiliations" class="text-gray-600 body-font font-mono bg-white relative overflow-hidden py-10">

@@ -1,6 +1,6 @@
 # Noah's Portfolio
 ![Maintained Badge](https://img.shields.io/badge/maintained-yes-brightgreen)
-![Website Status](https://img.shields.io/badge/website-incomplete-yellow)
+![Website Status](https://img.shields.io/badge/website-down-red)
 
 Hey there! 
 

@@ -110,9 +110,9 @@ let dx = 2;
 let dy = -2;
 
 const courses = [
-    "AI", "Robotics", "ML", "Data Structures", 
-    "Signals", "Systems", "OS", "Circuits", 
-    "Controls", "Electronics", "Probability", "Computer Arch."
+    "Deep Learning", "Machine Learning", "Reinforcement Learning", "Embedded Systems", 
+    "Signals & Systems", "Software Design", "Logic Design", "Circuits", 
+    "Controls", "Probability, Stats & DS", "Computer Arch.", "CAD"
 ];
 let brickRowCount = 3;
 let brickColumnCount = 4;

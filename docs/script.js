@@ -55,6 +55,9 @@ window.addEventListener('load', () => {
     setTimeout(() => {
         runShakeCycle();
     }, 500);
+
+    // Also load leaderboard from server on page load
+    loadLeaderboardFromServer();
 });
 
 // Intersection Observer to detect visibility changes
@@ -73,7 +76,9 @@ if (resumeBox) {
     observer.observe(resumeBox);
 }
 
-// Simple Breakout Game Logic with Course Names on Bricks
+// ====================
+//  Breakout Game Vars
+// ====================
 
 const startBtn = document.getElementById('startBtn');
 const resetLeaderboardBtn = document.getElementById('resetLeaderboardBtn'); 
@@ -85,9 +90,8 @@ const leaderboardEl = document.getElementById('leaderboard');
 let score = 0;
 let lives = 2;
 
-// Load leaderboard from localStorage
-let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
-updateLeaderboard();
+// Shared leaderboard array loaded from server
+let leaderboard = [];
 
 // Game states
 let isGameOver = false;
@@ -110,7 +114,7 @@ let dx = 2;
 let dy = -2;
 
 const courses = [
-    "Deep Learning", "Machine Learning", "Reinforcement Learning", "Embedded Systems", 
+    "Deep Learning", "Machine Learning", "Embedded Systems", "Reinforcem. Learning", 
     "Signals & Systems", "Software Design", "Logic Design", "Circuits", 
     "Controls", "Probability, Stats & DS", "Computer Arch.", "CAD"
 ];
@@ -149,6 +153,67 @@ for (let c = 0; c < brickColumnCount; c++) {
 const paddleImg = new Image();
 paddleImg.src = "assets/images/paddle.png"; // Provide your own paddle image
 
+// ===============================
+//  Leaderboard Server Integration
+// ===============================
+
+// Load from server
+async function loadLeaderboardFromServer() {
+    try {
+        const res = await fetch('/api/leaderboard');
+        leaderboard = await res.json(); // array of {initials, score}
+        updateLeaderboard();
+    } catch (err) {
+        console.error("Failed to load leaderboard from server:", err);
+        leaderboard = [];
+        updateLeaderboard();
+    }
+}
+
+// Save a new score
+async function saveScoreToServer(initials, newScore) {
+    try {
+        const res = await fetch('/api/leaderboard', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ initials, score: newScore })
+        });
+        const data = await res.json();
+        if (data.leaderboard) {
+            leaderboard = data.leaderboard;
+            updateLeaderboard();
+        }
+    } catch (err) {
+        console.error("Failed to save score:", err);
+    }
+}
+
+// Reset on server
+async function resetLeaderboardOnServer(passkey) {
+    try {
+        const res = await fetch('/api/leaderboard/reset', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ passkey })
+        });
+        const data = await res.json();
+        if (data.error) {
+            alert(data.error);
+        } else {
+            // success
+            alert("reset the leaderboard");
+            leaderboard = [];
+            updateLeaderboard();
+        }
+    } catch (err) {
+        console.error("Failed to reset leaderboard:", err);
+    }
+}
+
+// ====================================================
+//  Generic Drawing Functions for the Breakout Elements
+// ====================================================
+
 function drawRoundedRect(x, y, width, height, radius, fillColor) {
     ctx.beginPath();
     ctx.moveTo(x + radius, y);
@@ -165,54 +230,31 @@ function drawRoundedRect(x, y, width, height, radius, fillColor) {
     ctx.closePath();
 }
 
-// Event listeners
-document.addEventListener("keydown", keyDownHandler, false);
-document.addEventListener("keyup", keyUpHandler, false);
-resetLeaderboardBtn.addEventListener('click', resetLeaderboard);
-
-// Prevent spacebar from scrolling the page:
-window.addEventListener('keydown', function(e) {
-    // If space is pressed
-    if (e.code === 'Space') {
-        e.preventDefault();
+function drawWrappedText(ctx, text, x, y, maxWidth, lineHeight) {
+    const words = text.split(' ');
+    let currentLine = '';
+    
+    for (let i = 0; i < words.length; i++) {
+        const testLine = currentLine + words[i] + ' ';
+        const metrics = ctx.measureText(testLine);
+        const testWidth = metrics.width;
+        
+        if (testWidth > maxWidth) {
+            ctx.fillText(currentLine, x, y);
+            currentLine = words[i] + ' ';
+            y += lineHeight;
+        } else {
+            currentLine = testLine;
+        }
     }
-}, false);
-
-document.addEventListener("keydown", pauseHandler, false);
-
-function keyDownHandler(e) {
-    if (e.key === "Right" || e.key === "ArrowRight") {
-        rightPressed = true;
-    } else if (e.key === "Left" || e.key === "ArrowLeft") {
-        leftPressed = true;
-    }
-}
-
-function pauseHandler(e) {
-    // Press Esc to pause if game is running (launched and not paused/not over)
-    if (e.key === "Escape" && isLaunched && !isPaused && !isGameOver) {
-        isPaused = true;
-    } else if (e.key === " " && isPaused && !isGameOver) {
-        // Spacebar to resume if paused
-        isPaused = false;
-    } else if (e.key === " " && isNotStarted && !isGameOver) {
-        // Start the ball if not started
-        isNotStarted = false;
-        isLaunched = true;
-    }
-}
-
-function keyUpHandler(e) {
-    if (e.key === "Right" || e.key === "ArrowRight") {
-        rightPressed = false;
-    } else if (e.key === "Left" || e.key === "ArrowLeft") {
-        leftPressed = false;
-    }
+    // Draw whatever remains
+    ctx.fillText(currentLine, x, y);
 }
 
 function drawBricks() {
-    ctx.font = "12px Arial";
-    ctx.textBaseline = 'top';
+    ctx.save();
+    ctx.font = "14px Arial";
+    ctx.textBaseline = "top";
 
     for (let c = 0; c < brickColumnCount; c++) {
         for (let r = 0; r < brickRowCount; r++) {
@@ -222,12 +264,24 @@ function drawBricks() {
                 let brickY = (r * (brickHeight + brickPadding)) + brickOffsetTop;
                 b.x = brickX;
                 b.y = brickY;
+
+                // Draw the brick
                 drawRoundedRect(brickX, brickY, brickWidth, brickHeight, 5, b.color);
+
+                // Text color
                 ctx.fillStyle = "#fff";
-                ctx.fillText(b.course, brickX + 8, brickY + 10);
+                drawWrappedText(
+                    ctx,
+                    b.course,
+                    brickX + 8,
+                    brickY + 8,
+                    brickWidth - 16,
+                    16
+                );
             }
         }
     }
+    ctx.restore();
 }
 
 function drawBall() {
@@ -249,31 +303,59 @@ function drawPaddle() {
 function drawScore() {
     ctx.font = "16px Arial";
     ctx.fillStyle = "#fff";
-    ctx.fillText("Score: " + score, 8, 8);
+    ctx.fillText("Score: " + score, 8, 24);
 }
 
 function drawLives() {
     ctx.font = "16px Arial";
     ctx.fillStyle = "#fff";
-    ctx.fillText("Lives: " + lives, gameCanvas.width - 85, 8);
+    ctx.fillText("Lives: " + lives, gameCanvas.width - 85, 24);
 }
+
+// =======================
+//  Collision & Game Logic
+// =======================
 
 function collisionDetection() {
     for (let c = 0; c < brickColumnCount; c++) {
         for (let r = 0; r < brickRowCount; r++) {
             let b = bricks[c][r];
             if (b.status === 1) {
-                if (x > b.x && x < b.x+brickWidth && y > b.y && y < b.y+brickHeight) {
-                    dy = -dy;
+                if (
+                    x + ballRadius > b.x &&
+                    x - ballRadius < b.x + brickWidth &&
+                    y + ballRadius > b.y &&
+                    y - ballRadius < b.y + brickHeight
+                ) {
+                    // Collided
                     b.status = 0;
                     score++;
-                    if (dy < 0) {
+
+                    // Figure out which side we hit
+                    let ballCenterNextX = x + dx;
+                    let ballCenterNextY = y + dy;
+                    const distLeft   = Math.abs(ballCenterNextX - b.x);
+                    const distRight  = Math.abs(ballCenterNextX - (b.x + brickWidth));
+                    const distTop    = Math.abs(ballCenterNextY - b.y);
+                    const distBottom = Math.abs(ballCenterNextY - (b.y + brickHeight));
+                    const minDist = Math.min(distLeft, distRight, distTop, distBottom);
+
+                    if (minDist === distLeft) {
+                        dx = -Math.abs(dx);
+                        x = b.x - ballRadius - 1;
+                    } else if (minDist === distRight) {
+                        dx = Math.abs(dx);
+                        x = b.x + brickWidth + ballRadius + 1;
+                    } else if (minDist === distTop) {
+                        dy = -Math.abs(dy);
                         y = b.y - ballRadius - 1;
                     } else {
+                        dy = Math.abs(dy);
                         y = b.y + brickHeight + ballRadius + 1;
                     }
 
-                    if (score === brickRowCount*brickColumnCount) {
+                    // Win check
+                    if (score === brickRowCount * brickColumnCount) {
                         endGame(true);
                     }
                 }
@@ -285,16 +367,16 @@ function collisionDetection() {
 function endGame(won) {
     isGameOver = true;
     cancelAnimationFrame(animationId);
-    let initials = prompt(won ? "You won! Enter your initials:" : "Game Over! Enter your initials:");
+
+    let initials = prompt(
+      won ? "You won! Enter your initials:" : "Game Over! Enter your initials:"
+    );
     if (!initials) initials = "???";
-    // Limit to 4 characters
     initials = initials.substring(0,4);
-    leaderboard.push({ initials, score });
-    leaderboard.sort((a,b) => b.score - a.score);
-    // Keep top 20 scores
-    leaderboard = leaderboard.slice(0,20);
-    localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
-    updateLeaderboard();
+
+    // Instead of localStorage, send to server
+    saveScoreToServer(initials, score);
+
     gameCanvas.style.display = 'none';
     startScreen.style.display = 'inline-block';
 }
@@ -303,22 +385,18 @@ function updateLeaderboard() {
     // Clear existing
     leaderboardEl.innerHTML = "";
 
-    // We want 5 columns and up to 20 scores.
-    // We'll arrange them in a grid: top-left to right, then next line.
-    // For 20 scores, that's 4 rows x 5 columns if full.
-
-    // Create a single UL
+    // Up to 20 entries
+    // We'll arrange them in a 5-column grid
     const ul = document.createElement('ul');
-    ul.style.fontSize = "10px"; // Smaller font
+    ul.style.fontSize = "10px";
     ul.style.listStyleType = 'none';
     ul.style.margin = '0';
     ul.style.padding = '0';
     ul.style.display = 'grid';
     ul.style.gridTemplateColumns = 'repeat(5, auto)';
-    ul.style.gap = '20px'; // Keep the spacing similar
-    ul.style.alignItems = 'start'; // Align top
+    ul.style.gap = '20px';
+    ul.style.alignItems = 'start';
 
-    // Populate the UL with up to 20 entries, already sorted
     for (let i = 0; i < leaderboard.length; i++) {
         const entry = leaderboard[i];
         const li = document.createElement('li');
@@ -331,15 +409,57 @@ function updateLeaderboard() {
 
 function resetLeaderboard() {
     let passkey = prompt("if you know, you know:");
-    const correctPasskey = "8008"; // Set your own passkey here
+    if (!passkey) return;
 
-    if (passkey === correctPasskey) {
-        localStorage.removeItem('leaderboard');
-        leaderboard = [];
-        updateLeaderboard();
-        alert("reset the leaderboard");
-    } else {
-        alert("hmmm... seems you're not my creator, \nnice try but i'm not resetting the leaderboard.");
+    // Instead of localStorage, reset on server
+    resetLeaderboardOnServer(passkey);
+}
+
+// =======================
+//  Paddle & Ball Movement
+// =======================
+
+// Key listeners
+document.addEventListener("keydown", keyDownHandler, false);
+document.addEventListener("keyup", keyUpHandler, false);
+document.addEventListener("keydown", pauseHandler, false);
+
+// Prevent spacebar from scrolling the page
+window.addEventListener('keydown', function(e) {
+    if (e.code === 'Space') {
+        e.preventDefault();
+    }
+}, false);
+
+function keyDownHandler(e) {
+    if (e.key === "Right" || e.key === "ArrowRight") {
+        rightPressed = true;
+    } else if (e.key === "Left" || e.key === "ArrowLeft") {
+        leftPressed = true;
+    }
+}
+
+function keyUpHandler(e) {
+    if (e.key === "Right" || e.key === "ArrowRight") {
+        rightPressed = false;
+    } else if (e.key === "Left" || e.key === "ArrowLeft") {
+        leftPressed = false;
+    }
+}
+
+function pauseHandler(e) {
+    // Press Esc to pause
+    if (e.key === "Escape" && isLaunched && !isPaused && !isGameOver) {
+        isPaused = true;
+    }
+    // Spacebar to resume if paused
+    else if (e.key === " " && isPaused && !isGameOver) {
+        isPaused = false;
+    }
+    // Spacebar to launch if not started
+    else if (e.key === " " && isNotStarted && !isGameOver) {
+        isNotStarted = false;
+        isLaunched = true;
     }
 }
 
@@ -349,6 +469,7 @@ function draw() {
 
     ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
 
+    // Ball stuck to paddle if not launched
     if (isNotStarted) {
         x = paddleX + paddleWidth / 2;
         y = gameCanvas.height - paddleHeight - 10 - ballRadius;
@@ -365,20 +486,28 @@ function draw() {
 
         // If launched, update ball position
         if (isLaunched) {
-            // Bounce off side walls
+            // Side walls
             if (x + dx > gameCanvas.width - ballRadius || x + dx < ballRadius) {
                 dx = -dx;
             }
-            // Bounce off top
+            // Top
             if (y + dy < ballRadius) {
                 dy = -dy;
-            } else if (y + dy > gameCanvas.height - ballRadius - paddleHeight - 10) {
-                // Ball at bottom area, check paddle
+            }
+            // Bottom area -> check paddle
+            else if (y + dy > gameCanvas.height - ballRadius - paddleHeight - 10) {
                 if (x > paddleX && x < paddleX + paddleWidth) {
-                    dy = -dy;
-                    // Increase ball speed more noticeably every time it hits the paddle
-                    dx *= 1.15;
-                    dy *= 1.15;
+                    // More dynamic angles
+                    const paddleCenter = paddleX + paddleWidth / 2;
+                    const distFromCenter = x - paddleCenter;
+                    dx = distFromCenter * 0.15;  // tweak factor
+
+                    // Flip vertical dir
+                    dy = -Math.abs(dy);
+
+                    // Speed up ball
+                    dx *= 1.1;
+                    dy *= 1.3;
                 } else {
                     lives--;
                     if (!lives) {
@@ -396,7 +525,7 @@ function draw() {
                 }
             }
 
-            // Move paddle with arrow keys only
+            // Move paddle
             if (rightPressed && paddleX < gameCanvas.width - paddleWidth) {
                 paddleX += paddleSpeed;
             } else if (leftPressed && paddleX > 0) {
@@ -407,13 +536,13 @@ function draw() {
                 x += dx;
                 y += dy;
             } else {
-                // Ball stuck to paddle
+                // Ball stuck
                 x = paddleX + paddleWidth/2;
                 y = gameCanvas.height - paddleHeight - 10 - ballRadius;
             }
 
         } else {
-            // Not launched, ball stuck to paddle
+            // Not launched yet
             if (rightPressed && paddleX < gameCanvas.width - paddleWidth) {
                 paddleX += paddleSpeed;
             } else if (leftPressed && paddleX > 0) {
@@ -425,7 +554,7 @@ function draw() {
         }
 
     } else {
-        // Game is paused: draw pause symbol in the center
+        // Game is paused -> draw pause symbol
         const pauseWidth = 10;
         const pauseHeight = 40;
         const gap = 10;

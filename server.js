@@ -10,6 +10,9 @@ app.use(express.static(path.join(__dirname, 'docs')));
 
 const LEADERBOARD_FILE = path.join(__dirname, 'leaderboard.json');
 
+const cors = require('cors');
+app.use(cors());
+
 // GET /api/leaderboard -> Return current leaderboard
 app.get('/api/leaderboard', (req, res) => {
   fs.readFile(LEADERBOARD_FILE, 'utf8', (err, data) => {

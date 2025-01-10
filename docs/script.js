@@ -82,6 +82,7 @@ if (resumeBox) {
 
 const startBtn = document.getElementById('startBtn');
 const resetLeaderboardBtn = document.getElementById('resetLeaderboardBtn'); 
+resetLeaderboardBtn.addEventListener('click', resetLeaderboard);
 const gameCanvas = document.getElementById('gameCanvas');
 const ctx = gameCanvas.getContext('2d');
 const startScreen = document.getElementById('start-screen');

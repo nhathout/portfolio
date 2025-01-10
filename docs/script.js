@@ -162,7 +162,7 @@ const SERVER_URL = "https://portfolio-xoe6.onrender.com";
 // Load from server
 async function loadLeaderboardFromServer() {
     try {
-        const res = await fetch('${SERVER_URL}/api/leaderboard');
+        const res = await fetch(`${SERVER_URL}/api/leaderboard`);
         leaderboard = await res.json(); // array of {initials, score}
         updateLeaderboard();
     } catch (err) {
@@ -175,7 +175,7 @@ async function loadLeaderboardFromServer() {
 // Save a new score
 async function saveScoreToServer(initials, newScore) {
     try {
-        const res = await fetch('${SERVER_URL}/api/leaderboard', {
+        const res = await fetch(`${SERVER_URL}/api/leaderboard`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ initials, score: newScore })
@@ -193,7 +193,7 @@ async function saveScoreToServer(initials, newScore) {
 // Reset on server
 async function resetLeaderboardOnServer(passkey) {
     try {
-        const res = await fetch('${SERVER_URL}/api/leaderboard/reset', {
+        const res = await fetch(`${SERVER_URL}/api/leaderboard/reset`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ passkey })

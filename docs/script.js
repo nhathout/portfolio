@@ -590,4 +590,8 @@ function startGame() {
     }
 
     startScreen.style.display = 'none';
-    
+    gameCanvas.style.display = 'block';
+    draw();
+}
+
+startBtn.addEventListener('click', startGame);

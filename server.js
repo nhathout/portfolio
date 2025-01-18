@@ -1,18 +1,22 @@
-const express = require('express');
+const fs = require('fs');
 const path = require('path');
+const Engine = require('tingodb')();
+const express = require('express');
 const cors = require('cors');
 
-// 1) Import TingoDB engine
-const Engine = require('tingodb')();
-
-// 2) Create TingoDB instance pointing to /data (your Render disk mount path)
-//    This directory will hold TingoDB files that persist between deployments.
-const dbPath = path.join('/data', 'db');  // e.g., /data/db
-const db = new Engine.Db(dbPath, {});
-const leaderboardCollection = db.collection('leaderboard');
-
-// Initialize express
 const app = express();
+app.use(express.json());
+app.use(cors());
+
+// Make sure /data/db directory exists:
+const dbDir = path.join('/data', 'db');
+if (!fs.existsSync(dbDir)) {
+  fs.mkdirSync(dbDir, { recursive: true });
+}
+
+// Now create the TingoDB instance pointing to /data/db
+const db = new Engine.Db(dbDir, {});
+const leaderboardCollection = db.collection('leaderboard');
 
 // Middleware
 app.use(express.json());

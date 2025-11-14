@@ -69,8 +69,11 @@
                     </div>                    
                 </div>
 
-                <p class="sm:text-3xl text-lg my-6 text-center text-black"><br>Hi, I'm Noah [Jean-Pierre] Hathout. <span class="waving-hand">&#128075;</span></p>
-                <h2 class="max-w-3xl text-4xl sm:text-5xl font-bold mx-auto text-gray-800 text-center py-2">R&AS Engineer</h2>
+                <p class="sm:text-3xl text-lg my-6 text-center text-black">
+                    <br>
+                    <span class="typewriter-text">Hi, I'm Noah [Jean-Pierre] Hathout. <span class="waving-hand">&#128075;</span></span>
+                </p>
+                <h2 class="max-w-3xl text-4xl sm:text-5xl font-bold mx-auto text-gray-800 text-center py-2">R&AS Engineering</br>MS Student</h2>
                 <a href="https://www.bu.edu/eng/academics/departments-and-divisions/electrical-and-computer-engineering/" target="_blank" rel="noopener noreferrer">
                     <p class="max-w-3xl text-3xl md:text-3xl font-bold mx-auto text-gray-800 text-center relative w-max transition transform ease-in-out duration-100 hover:bg-gray-500 hover:scale-105">
                       [@ Boston University]
@@ -1650,6 +1653,30 @@
     .top-nav-link:hover::before {
       opacity: 1;
       transform: scaleX(1);
+    }
+    .typewriter-text {
+      display: inline-block;
+      overflow: hidden;
+      border-right: 0.12em solid #1f2937;
+      white-space: nowrap;
+      letter-spacing: 0.08em;
+      padding-right: 0.2em;
+      animation: hero-typewriter 3s steps(40, end) 0.25s forwards, hero-caret 0.65s step-end infinite;
+    }
+    @keyframes hero-typewriter {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+    @keyframes hero-caret {
+      from, to { border-color: transparent; }
+      50% { border-color: #1f2937; }
+    }
+    @media (max-width: 640px) {
+      .typewriter-text {
+        white-space: normal;
+        animation: none;
+        border-right: none;
+      }
     }
     @keyframes wave-animation {
       0% { transform: rotate(0deg) }

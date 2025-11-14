@@ -1,6 +1,7 @@
 // Mobile menu toggle
 const menuToggle = document.getElementById('menuToggle');
 const mobileMenu = document.getElementById('mobileMenu');
+const navSectionIndicator = document.getElementById('navSectionIndicator');
 menuToggle.addEventListener('click', () => {
     mobileMenu.classList.toggle('hidden');
 });
@@ -8,6 +9,32 @@ menuToggle.addEventListener('click', () => {
 // Hide/Show top nav on scroll
 let lastScrollTop = 0;
 const topNav = document.getElementById('topNav');
+const indicatorSections = [
+    { id: 'about', label: '/ about' },
+    { id: 'skills', label: '/ skills' },
+    { id: 'education-experience', label: '/ edex' },
+    { id: 'projects', label: '/ projects' },
+    { id: 'awards-affiliations', label: '/ awards' },
+    { id: 'contact', label: '/ contact' }
+].map(section => {
+    const el = document.getElementById(section.id);
+    return el ? { ...section, element: el } : null;
+}).filter(Boolean);
+
+function updateNavIndicator() {
+    if (!navSectionIndicator) return;
+    const referenceY = window.scrollY + window.innerHeight * 0.25;
+    const headerOffset = topNav ? topNav.offsetHeight + 24 : 24;
+    let activeLabel = '/ ~';
+
+    indicatorSections.forEach(section => {
+        if (referenceY >= section.element.offsetTop - headerOffset) {
+            activeLabel = section.label;
+        }
+    });
+
+    navSectionIndicator.textContent = activeLabel;
+}
 
 window.addEventListener('scroll', () => {
     let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
@@ -19,7 +46,10 @@ window.addEventListener('scroll', () => {
         //topNav.style.transform = 'translateY(0)';
     }
     lastScrollTop = Math.max(scrollTop, 0);
+    updateNavIndicator();
 });
+window.addEventListener('resize', updateNavIndicator);
+window.addEventListener('load', updateNavIndicator);
 
 // Resume box shaking logic
 const resumeBox = document.getElementById('resumeBox');

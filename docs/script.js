@@ -27,11 +27,17 @@ function updateNavIndicator() {
     const headerOffset = topNav ? topNav.offsetHeight + 24 : 24;
     let activeLabel = '/ ~';
 
-    indicatorSections.forEach(section => {
-        if (referenceY >= section.element.offsetTop - headerOffset) {
+    for (const section of indicatorSections) {
+        const elementTop = section.element.offsetTop - headerOffset - 60;
+        const elementBottom = elementTop + section.element.offsetHeight;
+        if (referenceY >= elementTop && referenceY < elementBottom) {
+            activeLabel = section.label;
+            break;
+        }
+        if (referenceY >= elementBottom) {
             activeLabel = section.label;
         }
-    });
+    }
 
     navSectionIndicator.textContent = activeLabel;
 }
@@ -105,6 +111,211 @@ const observer = new IntersectionObserver(entries => {
 if (resumeBox) {
     observer.observe(resumeBox);
 }
+
+// ====================
+//  Skills Grid (3D cubes)
+// ====================
+
+const skillFaces = ['front', 'back', 'right', 'left', 'top', 'bottom'];
+const skillCategories = [
+    { id: 'software', label: 'Programming & AI' },
+    { id: 'hardware', label: 'Embedded & Robotics' },
+    { id: 'platforms', label: 'Platforms & Operating Systems' }
+];
+const skillsData = [
+    { name: 'Python', category: 'software', href: 'https://www.python.org/', img: 'assets/images/python_logo.png' },
+    { name: 'C', category: 'software', href: 'https://en.cppreference.com/w/c', img: 'assets/images/c_logo.png' },
+    { name: 'C++', category: 'software', href: 'https://isocpp.org/', img: 'assets/images/cplus_logo.png' },
+    { name: 'C#', category: 'software', href: 'https://dotnet.microsoft.com/en-us/languages/csharp', img: 'assets/images/csharp_logo.png' },
+    { name: 'TensorFlow', category: 'software', href: 'https://www.tensorflow.org/', img: 'assets/images/tensorflow.png' },
+    { name: 'PyTorch', category: 'software', href: 'https://pytorch.org/', img: 'assets/images/pytorch.png' },
+    { name: 'MATLAB', category: 'software', href: 'https://www.mathworks.com/products/matlab.html', img: 'assets/images/matlab.png' },
+    { name: 'JavaScript', category: 'software', href: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript', img: 'assets/images/javascript.png' },
+    { name: 'SQLite', category: 'software', href: 'https://sqlite.org/', img: 'assets/images/sqlite_logo.png' },
+    { name: 'FastAPI', category: 'software', href: 'https://fastapi.tiangolo.com/', img: 'assets/images/fastapi_logo.png' },
+    { name: 'HTML', category: 'software', href: 'https://developer.mozilla.org/en-US/docs/Web/HTML', img: 'assets/images/html_logo.png' },
+    { name: 'CSS', category: 'software', href: 'https://developer.mozilla.org/en-US/docs/Web/CSS', img: 'assets/images/css_logo.png' },
+    { name: 'Java', category: 'software', href: 'https://www.java.com/', img: 'assets/images/java_logo.png' },
+    { name: 'Arduino', category: 'hardware', href: 'https://www.arduino.cc/', img: 'assets/images/arduino.png' },
+    { name: 'Raspberry Pi', category: 'hardware', href: 'https://www.raspberrypi.org/', img: 'assets/images/raspi_logo.png' },
+    { name: 'Espressif (ESP)', category: 'hardware', href: 'https://www.espressif.com/', img: 'assets/images/espressif.png' },
+    { name: 'NVIDIA', category: 'hardware', href: 'https://learn.nvidia.com/courses/course-detail?course_id=course-v1:DLI+S-FX-01+V1', img: 'assets/images/nvidia.png' },
+    { name: 'Universal Robots', category: 'hardware', href: 'https://www.universal-robots.com/', img: 'assets/images/ur_logo.png' },
+    { name: 'ROS', category: 'hardware', href: 'https://www.ros.org/', img: 'assets/images/ros1_logo.png' },
+    { name: 'ROS2', category: 'hardware', href: 'https://www.ros.org/', img: 'assets/images/ros_logo.png' },
+    { name: 'Intel', category: 'hardware', href: 'https://www.intelrealsense.com/sdk-2/', img: 'assets/images/intel_logo.png' },
+    { name: 'Orbbec', category: 'hardware', href: 'https://www.orbbec.com/developers/orbbec-sdk/', img: 'assets/images/orbbec_logo.png' },
+    { name: 'BeagleBone', category: 'hardware', href: 'https://www.beagleboard.org/', img: 'assets/images/beaglebone_logo.png' },
+    { name: 'GitHub', category: 'platforms', href: 'https://github.com/nhathout', img: 'assets/images/github_logo.png' },
+    { name: 'Git', category: 'platforms', href: 'https://git-scm.com/', img: 'assets/images/git_logo.png' },
+    { name: 'Docker', category: 'platforms', href: 'https://www.docker.com/', img: 'assets/images/docker_logo.png' },
+    { name: 'Onshape', category: 'platforms', href: 'https://www.onshape.com/', img: 'assets/images/onshape.png' },
+    { name: 'Bambu Lab', category: 'platforms', href: 'https://bambulab.com/en-us', img: 'assets/images/bambulablogo.png' },
+    { name: 'Ubuntu', category: 'platforms', href: 'https://ubuntu.com/', img: 'assets/images/ubuntu_logo.png' },
+    { name: 'Unreal Engine 5', category: 'platforms', href: 'https://www.unrealengine.com/en-US/unreal-engine-5', img: 'assets/images/ur5.png' },
+    { name: 'Windows', category: 'platforms', href: 'https://www.microsoft.com/windows', img: 'assets/images/windows_logo.png' },
+    { name: 'macOS', category: 'platforms', href: 'https://www.apple.com/macos/', img: 'assets/images/macos_logo.png' },
+    { name: 'Linux', category: 'platforms', href: 'https://www.kernel.org/', img: 'assets/images/linux_logo.png' }
+];
+
+let activeSkillCategoryIndex = 0;
+let skillsGridEl;
+let skillsTabsEl;
+let skillsActiveLabelEl;
+let skillsPrevBtn;
+let skillsNextBtn;
+let skillTabButtons = [];
+let skillsWheelLock = 0;
+let skillsAutoCycleTimer;
+
+function initSkillsSection() {
+    skillsGridEl = document.getElementById('skillsGrid');
+    skillsTabsEl = document.getElementById('skillsTabs');
+    skillsActiveLabelEl = document.getElementById('skillsActiveLabel');
+    skillsPrevBtn = document.getElementById('skillsPrev');
+    skillsNextBtn = document.getElementById('skillsNext');
+
+    if (!skillsGridEl || !skillsTabsEl) return;
+
+    buildSkillsTabs();
+    renderSkillsGrid(skillCategories[activeSkillCategoryIndex].id);
+    updateSkillsNav();
+
+    skillsPrevBtn?.addEventListener('click', () => {
+        cycleSkillCategory(-1);
+        restartSkillsAutoCycle();
+    });
+    skillsNextBtn?.addEventListener('click', () => {
+        cycleSkillCategory(1);
+        restartSkillsAutoCycle();
+    });
+    skillsGridEl.addEventListener('wheel', event => {
+        handleSkillsWheel(event);
+        restartSkillsAutoCycle();
+    }, { passive: false });
+}
+
+function buildSkillsTabs() {
+    skillsTabsEl.innerHTML = '';
+    skillTabButtons = [];
+
+    skillCategories.forEach((category, index) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'skills-tab';
+        button.textContent = category.label;
+        button.addEventListener('click', () => setSkillCategory(index));
+        skillsTabsEl.appendChild(button);
+        skillTabButtons.push(button);
+    });
+}
+
+function renderSkillsGrid(categoryId) {
+    if (!skillsGridEl) return;
+    skillsGridEl.innerHTML = '';
+
+    const fragment = document.createDocumentFragment();
+    skillsData
+        .filter(skill => skill.category === categoryId)
+        .forEach(skill => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'flex justify-center';
+
+            const link = document.createElement('a');
+            link.href = skill.href;
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            link.className = 'skill-link';
+            link.setAttribute('aria-label', skill.name);
+            link.title = skill.name;
+
+            const cube = document.createElement('div');
+            cube.className = 'skill-cube';
+
+            skillFaces.forEach(face => {
+                const faceEl = document.createElement('div');
+                faceEl.className = `skill-face ${face}`;
+
+                const img = document.createElement('img');
+                img.src = skill.img;
+                img.alt = '';
+                img.setAttribute('aria-hidden', 'true');
+
+                faceEl.appendChild(img);
+                cube.appendChild(faceEl);
+            });
+
+            const label = document.createElement('span');
+            label.className = 'skill-label';
+            label.textContent = skill.name;
+
+            link.appendChild(cube);
+            link.appendChild(label);
+            wrapper.appendChild(link);
+            fragment.appendChild(wrapper);
+        });
+
+    skillsGridEl.appendChild(fragment);
+}
+
+function setSkillCategory(nextIndex, { animate = true } = {}) {
+    if (!skillCategories.length) return;
+    const normalizedIndex = (nextIndex + skillCategories.length) % skillCategories.length;
+    if (normalizedIndex === activeSkillCategoryIndex) return;
+
+    const updateCategory = () => {
+        activeSkillCategoryIndex = normalizedIndex;
+        renderSkillsGrid(skillCategories[activeSkillCategoryIndex].id);
+        updateSkillsNav();
+    };
+
+    if (!animate || !skillsGridEl) {
+        updateCategory();
+        return;
+    }
+
+    skillsGridEl.classList.add('skills-grid--exit');
+    setTimeout(() => {
+        updateCategory();
+        skillsGridEl.classList.remove('skills-grid--exit');
+        skillsGridEl.classList.add('skills-grid--enter');
+        setTimeout(() => skillsGridEl.classList.remove('skills-grid--enter'), 400);
+    }, 200);
+}
+
+function cycleSkillCategory(direction) {
+    setSkillCategory(activeSkillCategoryIndex + direction);
+}
+
+function updateSkillsNav() {
+    if (skillsActiveLabelEl) {
+        skillsActiveLabelEl.textContent = skillCategories[activeSkillCategoryIndex].label;
+    }
+    skillTabButtons.forEach((btn, index) => {
+        btn.classList.toggle('is-active', index === activeSkillCategoryIndex);
+    });
+}
+
+function handleSkillsWheel(event) {
+    if (!skillsGridEl) return;
+    if (Math.abs(event.deltaX) <= Math.abs(event.deltaY)) return;
+    if (Math.abs(event.deltaX) < 15) return;
+    const now = Date.now();
+    if (now - skillsWheelLock < 600) return;
+    event.preventDefault();
+    cycleSkillCategory(event.deltaX > 0 ? 1 : -1);
+    skillsWheelLock = now;
+}
+
+function restartSkillsAutoCycle() {
+    if (skillsAutoCycleTimer) clearInterval(skillsAutoCycleTimer);
+    skillsAutoCycleTimer = setInterval(() => cycleSkillCategory(1), 20000);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initSkillsSection();
+    restartSkillsAutoCycle();
+});
 
 // ====================
 //  Breakout Game Vars

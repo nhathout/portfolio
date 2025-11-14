@@ -22,13 +22,13 @@
             <span class="text-xs sm:text-sm align-text-bottom ml-3 mt-1">/ ~</span>
         </div>
         <div class="flex items-center">
-            <nav class="font-sen text-gray-800 uppercase text-xs sm:text-sm lg:flex items-center hidden">
-                <a href="#about" class="py-2 px-2 sm:px-3 hover:text-black">About</a>
-                <a href="#skills" class="py-2 px-2 sm:px-3 hover:text-black">Skills</a>
-                <a href="#education-experience" class="py-2 px-2 sm:px-3 hover:text-black">Education & Experience</a>
-                <a href="#projects" class="py-2 px-2 sm:px-3 hover:text-black">Projects</a>
-                <a href="#awards-affiliations" class="py-2 px-2 sm:px-3 hover:text-black">Awards & Affiliations</a>
-                <a href="#contact" class="py-2 px-2 sm:px-3 hover:text-black">Contact</a>
+            <nav class="top-nav font-sen text-gray-800 uppercase text-xs sm:text-sm lg:flex items-center hidden">
+                <a href="#about" class="py-2 px-2 sm:px-3 top-nav-link">About</a>
+                <a href="#skills" class="py-2 px-2 sm:px-3 top-nav-link">Skills</a>
+                <a href="#education-experience" class="py-2 px-2 sm:px-3 top-nav-link">Education & Experience</a>
+                <a href="#projects" class="py-2 px-2 sm:px-3 top-nav-link">Projects</a>
+                <a href="#awards-affiliations" class="py-2 px-2 sm:px-3 top-nav-link">Awards & Affiliations</a>
+                <a href="#contact" class="py-2 px-2 sm:px-3 top-nav-link">Contact</a>
             </nav>
             <button class="lg:hidden flex flex-col" id="menuToggle">
                 <span class="w-6 h-1 bg-gray-800 mb-1"></span>
@@ -1598,6 +1598,58 @@
     .pixel-portrait:hover {
       transform: scale(1.05);
       box-shadow: 0 22px 55px rgba(15, 23, 42, 0.5);
+    }
+    .top-nav {
+      gap: 0.35rem;
+    }
+    .top-nav-link {
+      position: relative;
+      color: #1f2937;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      transition: color 250ms ease, transform 250ms ease, opacity 250ms ease;
+      border-radius: 999px;
+    }
+    .top-nav-link::after {
+      content: '';
+      position: absolute;
+      inset: 25% 14%;
+      border-radius: 999px;
+      background: linear-gradient(120deg, rgba(0, 77, 64, 0.16), rgba(0, 121, 107, 0.2));
+      box-shadow: 0 10px 20px rgba(0, 77, 64, 0.15);
+      opacity: 0;
+      transform: scale(0.65);
+      transition: opacity 260ms ease, transform 260ms ease;
+      z-index: -1;
+    }
+    .top-nav-link::before {
+      content: '';
+      position: absolute;
+      left: 20%;
+      right: 20%;
+      bottom: 0.35rem;
+      height: 2px;
+      background: linear-gradient(90deg, #00796b, #fac123);
+      opacity: 0;
+      transform: scaleX(0.4);
+      transform-origin: center;
+      transition: opacity 260ms ease, transform 260ms ease;
+    }
+    .top-nav:hover .top-nav-link {
+      opacity: 0.7;
+    }
+    .top-nav-link:hover {
+      color: #004d40;
+      opacity: 1;
+      transform: translateY(-1px);
+    }
+    .top-nav-link:hover::after {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .top-nav-link:hover::before {
+      opacity: 1;
+      transform: scaleX(1);
     }
     @keyframes wave-animation {
       0% { transform: rotate(0deg) }

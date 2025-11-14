@@ -1,1475 +1,845 @@
 <!DOCTYPE html>
 <html lang="en" style="scroll-behavior: smooth;">
-<head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>[NJPH]</title>
-    <meta name="keywords" content="example, placeholder, template" />
-    <meta name="description" content="Welcome to my personal portfolio website, where I showcase my latest projects, professional skills, and creative ventures." />
-    <meta name="image" property="og:image" content="https://via.placeholder.com/150" />
-    <link rel="icon" href="assets/images/PixelMe_50x50.jpg" />
-    <link rel="stylesheet" href="/assets/css/styles.css" />
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="font-mono bg-white relative overflow-x-hidden">
-
-<!-- HEADER -->
-<header id="topNav" class="h-16 sm:h-20 flex items-center z-30 w-full border-b-2 border-gray-500 transition-transform duration-500 ease-in-out fixed top-0 left-0 bg-white">
-    <div class="container mx-auto px-6 flex items-center justify-between">
-        <div class="uppercase text-gray-800 font-black text-2xl sm:text-3xl flex items-center">
-            <a href="#" class="text-2xl sm:text-3xl ml-3 mt-1 bg-white transition transform ease-in-out duration-100 hover:bg-gray-500 hover:scale-105">[Noah Hathout]</a>
-            <span class="text-xs sm:text-sm align-text-bottom ml-3 mt-1">/ ~</span>
-        </div>
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   [NJPH]
+  </title>
+  <meta content="example, placeholder, template" name="keywords"/>
+  <meta content="Welcome to my personal portfolio website, where I showcase my latest projects, professional skills, and creative ventures." name="description"/>
+  <meta content="https://via.placeholder.com/150" name="image" property="og:image"/>
+  <link href="assets/images/PixelMe_50x50.jpg" rel="icon"/>
+  <link href="/assets/css/styles.css" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+ </head>
+ <body class="font-mono bg-white relative overflow-x-hidden">
+  <!-- HEADER -->
+  <header class="h-16 sm:h-20 flex items-center z-30 w-full border-b-2 border-gray-500 transition-transform duration-500 ease-in-out fixed top-0 left-0 bg-white" id="topNav">
+   <div class="container mx-auto px-6 flex items-center justify-between">
+    <div class="uppercase text-gray-800 font-black text-2xl sm:text-3xl flex items-center">
+     <a class="text-2xl sm:text-3xl ml-3 mt-1 bg-white transition transform ease-in-out duration-100 hover:bg-gray-500 hover:scale-105" href="#">
+      [Noah Hathout]
+     </a>
+     <span class="text-xs sm:text-sm align-text-bottom ml-3 mt-1" id="navSectionIndicator">
+      / ~
+     </span>
+    </div>
+    <div class="flex items-center">
+     <nav class="top-nav font-sen text-gray-800 uppercase text-xs sm:text-sm lg:flex items-center hidden">
+      <a class="py-2 px-2 sm:px-3 top-nav-link" href="#about">
+       About
+      </a>
+      <a class="py-2 px-2 sm:px-3 top-nav-link" href="#skills">
+       Skills
+      </a>
+      <a class="py-2 px-2 sm:px-3 top-nav-link" href="#education-experience">
+       Education &amp; Experience
+      </a>
+      <a class="py-2 px-2 sm:px-3 top-nav-link" href="#projects">
+       Projects
+      </a>
+      <a class="py-2 px-2 sm:px-3 top-nav-link" href="#awards-affiliations">
+       Awards &amp; Affiliations
+      </a>
+      <a class="py-2 px-2 sm:px-3 top-nav-link" href="#contact">
+       Contact
+      </a>
+     </nav>
+     <button class="lg:hidden flex flex-col" id="menuToggle">
+      <span class="w-6 h-1 bg-gray-800 mb-1">
+      </span>
+      <span class="w-6 h-1 bg-gray-800 mb-1">
+      </span>
+      <span class="w-6 h-1 bg-gray-800 mb-1">
+      </span>
+     </button>
+    </div>
+   </div>
+  </header>
+  <!-- MOBILE MENU -->
+  <section class="lg:hidden hidden text-gray-600 bg-gray-100 body-font font-mono bg-white relative overflow-hidden py-5 mt-20" id="mobileMenu">
+   <div class="container mx-auto flex px-5 flex-col items-center">
+    <div class="lg:hidden flex flex-col items-center text-center space-y-2">
+     <a class="px-2" href="#about">
+      About
+     </a>
+     <a class="px-2" href="#skills">
+      Skills
+     </a>
+     <a class="px-2" href="#education-experience">
+      Education &amp; Experience
+     </a>
+     <a class="px-2" href="#projects">
+      Projects
+     </a>
+     <a class="px-2" href="#awards-affiliations">
+      Awards &amp; Affiliations
+     </a>
+     <a class="px-2" href="#contact">
+      Contact
+     </a>
+    </div>
+   </div>
+  </section>
+  <main>
+   <!-- HERO SECTION -->
+   <div class="flex relative z-20 items-center h-screen" style="background:linear-gradient(0deg, rgba(255, 255, 255), rgba(255, 255, 255, 0.1)), url('assets/images/pixel-background.jpg'); background-repeat: no-repeat; background-position: center; background-size: cover;">
+    <div class="container mx-auto px-6 flex flex-col justify-between items-center relative">
+     <div class="flex flex-col relative">
+      <div class="relative mx-auto mt-10">
+       <img class="rounded-2xl w-36 mx-auto pixel-portrait" src="assets/images/PixelMe.jpg"/>
+       <!-- Resume box positioned, no shake class yet -->
+       <div class="absolute top-[0px] left-0 transform -rotate-12 -translate-x-[18rem] bg-yellow-200 p-3 rounded-xl shadow-lg text-center" id="resumeBox">
+        <p class="text-base sm:text-lg font-bold text-gray-800">
+         Download My Resume Here
+        </p>
+        <a class="mt-2 inline-block px-3 py-1 bg-gray-600 text-white text-sm rounded hover:bg-gray-500" download="noahhathout_cv.pdf" href="assets/files/resume_7_noahhathout.pdf">
+         <img alt="Resume" class="h-6 w-6" src="assets/images/inbox-tray.png"/>
+        </a>
+       </div>
+      </div>
+      <p class="sm:text-3xl text-lg my-6 text-center text-black">
+       <br/>
+       <span class="typewriter-text">
+        Hi, I'm Noah [Jean-Pierre] Hathout.
+        <span class="waving-hand">
+         👋
+        </span>
+       </span>
+      </p>
+      <h2 class="max-w-3xl text-4xl sm:text-5xl font-bold mx-auto text-gray-800 text-center py-2">
+       R&amp;AS Engineering</br>MS Student
+      </h2>
+      <a href="https://www.bu.edu/eng/academics/departments-and-divisions/electrical-and-computer-engineering/" rel="noopener noreferrer" target="_blank">
+       <p class="max-w-3xl text-3xl md:text-3xl font-bold mx-auto text-gray-800 text-center relative w-max transition transform ease-in-out duration-100 hover:bg-gray-500 hover:scale-105">
+        [@ Boston University]
+       </p>
+      </a>
+     </div>
+    </div>
+   </div>
+   <!-- ABOUT SECTION -->
+   <section class="text-gray-600 body-font font-mono bg-white relative overflow-hidden pb-10 pt-10" id="about">
+    <div class="container mx-auto flex px-5 lg:flex-row flex-col items-center">
+     <div class="lg:flex-grow md:px-16 lg:pr-24 lg:px-16 flex flex-col md:items-start md:text-left md:mb-0 items-center sm:pb-10">
+      <h1 class="title-font sm:text-5xl text-5xl mb-4 font-bold text-gray-900 py-10">
+       About Me 🇪🇬🇮🇹🇺🇸
+      </h1>
+      <p class="leading-relaxed">
+       I'm Noah Jean-Pierre Hathout--A tech enthusiast, avid gamer, and student at Boston University, getting my master's in Robotics &amp; Autonomous Systems (R&amp;AS). Having just received my B.S. in Computer Engineering with a strong academic record and a spot on the Dean's List, I am passionate about AI and robotics and want to continue to explore how machines can learn and interact with the world.
+       <br/>
+       <br/>
+       Having lived and studied in five countries across three continents,
+       <br/>
+       <br/>
+       <span class="text-2xl font-semibold">
+        [🇺🇸 -&gt; 🇩🇪 -&gt; 🇹🇷 -&gt; 🇳🇱 -&gt; 🇹🇷 -&gt; 🇨🇳 -&gt; 🇩🇪 -&gt; 🇺🇸📍]
+       </span>
+       <br/>
+       <br/>
+       I've gained a unique global perspective and love for cross-cultural collaboration. This diverse background continuously fuels my drive to work on projects that positively impact our world and society.
+       <br/>
+       <br/>
+       When I'm not coding, debugging, or experimenting with new tech, you'll find me at the nearest climbing gym 🧗🏽‍♂️ or tennis courts 🎾, leveling up in the latest video games 🕹️, or maybe teaching an agent to do better than me at the video game 🤖.
+       <br/>
+       <br/>
+       I am all about combining serious tech skills and hard work with a touch of fun and creativity. So if you are also into AI, robotics, gaming, or just want to nerd out over the newest tech, let's connect :)
+      </p>
+     </div>
+     <div class="lg:max-w-lg shadow-2xl sm:shadow-none lg:w-full md:w-1/2 lg:pr-16 mt-10 lg:mt-0 flex flex-col items-center space-y-4">
+      <img alt="hero" class="object-cover object-center border-2 border-gray-200 w-60" src="assets/images/aboutME2.png"/>
+      <img alt="hero2" class="object-cover object-center border-2 border-gray-200 w-60" src="assets/images/aboutME.png"/>
+      <img alt="hero3" class="object-cover object-center border-2 border-gray-200 w-60" src="assets/images/aboutME3.png"/>
+     </div>
+    </div>
+   </section>
+   <!-- EDUCATION & EXPERIENCE SIDE-BY-SIDE + MINI-GAME UNDER EDUCATION -->
+   <section class="text-gray-600 body-font font-mono bg-white relative overflow-hidden py-10" id="education-experience">
+    <div class="container mx-auto px-5 relative md:grid md:grid-cols-2 gap-10 items-start justify-center">
+     <!-- LEFT COLUMN: EDUCATION TIMELINE + MINI-GAME BELOW -->
+     <div class="md:pr-5">
+      <h2 class="text-4xl font-bold text-black mb-10 text-center">
+       Education
+      </h2>
+      <div class="relative timeline">
+       <div class="timeline-line absolute left-1/2 transform -translate-x-1/2">
+       </div>
+       <div class="relative mb-12 timeline-entry">
         <div class="flex items-center">
-            <nav class="font-sen text-gray-800 uppercase text-xs sm:text-sm lg:flex items-center hidden">
-                <a href="#about" class="py-2 px-2 sm:px-3 hover:text-black">About</a>
-                <a href="#skills" class="py-2 px-2 sm:px-3 hover:text-black">Skills</a>
-                <a href="#education-experience" class="py-2 px-2 sm:px-3 hover:text-black">Education & Experience</a>
-                <a href="#projects" class="py-2 px-2 sm:px-3 hover:text-black">Projects</a>
-                <a href="#awards-affiliations" class="py-2 px-2 sm:px-3 hover:text-black">Awards & Affiliations</a>
-                <a href="#contact" class="py-2 px-2 sm:px-3 hover:text-black">Contact</a>
-            </nav>
-            <button class="lg:hidden flex flex-col" id="menuToggle">
-                <span class="w-6 h-1 bg-gray-800 mb-1"></span>
-                <span class="w-6 h-1 bg-gray-800 mb-1"></span>
-                <span class="w-6 h-1 bg-gray-800 mb-1"></span>
-            </button>
+         <div class="w-1/2 text-right pr-10 space-y-2">
+          <img alt="BU Logo" class="h-24 inline-block mb-1" src="assets/images/bu_logo.png"/>
+          <h3 class="text-xl font-bold text-gray-700">
+           Robotics &amp; Autonomous Systems
+           <br/>
+           (MS w/ Thesis)
+          </h3>
+          <ul class="list-disc list-inside text-sm text-gray-600">
+           <li>
+            Coursework: Intro to R&amp;AS (EK505), Robot Motion Planning (ME570), Robot Learning (EC518), Embedded Systems (EC535)
+           </li>
+          </ul>
+          <p class="text-xs text-gray-500 mt-2 italic leading-relaxed">
+           Expected Sep 2025 - Dec 2026 ·
+           <br/>
+           Boston, MA
+          </p>
+         </div>
+         <div class="w-1/2">
+         </div>
         </div>
-    </div>
-</header>
-
-<!-- MOBILE MENU -->
-<section class="lg:hidden hidden text-gray-600 bg-gray-100 body-font font-mono bg-white relative overflow-hidden py-5 mt-20" id="mobileMenu">
-    <div class="container mx-auto flex px-5 flex-col items-center">
-      <div class="lg:hidden flex flex-col items-center text-center space-y-2">
-            <a href="#about" class="px-2">About</a>
-            <a href="#skills" class="px-2">Skills</a>
-            <a href="#education-experience" class="px-2">Education & Experience</a>
-            <a href="#projects" class="px-2">Projects</a>
-            <a href="#awards-affiliations" class="px-2">Awards & Affiliations</a>
-            <a href="#contact" class="px-2">Contact</a>
+       </div>
+       <div class="relative mb-12 timeline-entry">
+        <div class="flex flex-row-reverse items-center">
+         <div class="w-1/2 text-left pl-10 space-y-2">
+          <img alt="BU Logo" class="h-24 inline-block mb-1" src="assets/images/bu_logo.png"/>
+          <h3 class="text-xl font-bold text-gray-700">
+           Computer Engineering (BS)
+          </h3>
+          <p class="text-md font-semibold">
+           Concentration in Machine Learning
+          </p>
+          <ul class="list-disc list-inside text-sm text-gray-600">
+           <li>
+            Cumulative GPA: 3.73 / 4
+           </li>
+           <li>
+            Dean's List
+           </li>
+           <li>
+            Intramural Outdoor Soccer Champions
+           </li>
+           <li>
+            Unity &amp; Social Quality Initiative (USQI)
+           </li>
+          </ul>
+          <p class="text-xs text-gray-500 mt-2 italic leading-relaxed">
+           Sep 2021 - Present ·
+           <br/>
+           Boston, MA
+          </p>
+         </div>
+         <div class="w-1/2">
+         </div>
+        </div>
+       </div>
+       <div class="relative mb-12 timeline-entry">
+        <div class="flex items-center">
+         <div class="w-1/2 text-right pr-10 space-y-2">
+          <img alt="AKHS Logo" class="h-28 inline-block mb-1" src="assets/images/akhs_logo.png"/>
+          <h3 class="text-xl font-bold text-gray-700">
+           Ardrey Kell High School
+          </h3>
+          <p class="text-md font-semibold">
+           High School Diploma
+          </p>
+          <ul class="list-disc list-inside text-sm text-gray-600">
+           <li>
+            Varsity Men's Tennis Team (captain for 2 / 4 years)
+           </li>
+           <li>
+            National Honors Society
+           </li>
+           <li>
+            French Honors Society
+           </li>
+           <li>
+            Junior Marshal
+           </li>
+           <li>
+            AK Garden Club
+           </li>
+          </ul>
+          <p class="text-xs text-gray-500 mt-2 italic leading-relaxed">
+           Aug 2017 - Jun 2021 ·
+           <br/>
+           Charlotte, NC
+          </p>
+         </div>
+         <div class="w-1/2">
+         </div>
+        </div>
+       </div>
       </div>
+      <!-- MINI-GAME SECTION UNDER THE EDUCATION COLUMN -->
+      <section class="text-gray-600 body-font font-mono bg-white relative overflow-hidden py-5 mt-5" id="mini-game">
+       <div class="px-5 flex flex-col items-center">
+        <h3 class="text-xl font-bold mb-2 text-center">
+         Relevant Coursework: Atari [Course]out
+        </h3>
+        <p class="mb-2 text-gray-700 text-center">
+         Hit and destroy the classes I destroyed!
+        </p>
+        <p class="mb-2 text-[13px] text-gray-500 mt-2 text-center">
+         [use your
+         <strong>
+          spacebar
+         </strong>
+         to launch the ball]
+         <br/>
+         [use the
+         <strong>
+          left &amp; right arrow keys
+         </strong>
+         to move the paddle]
+        </p>
+        <p class="mb-4 text-[12px] text-red-500 mt-2 text-center">
+         [this does not work on phones or tablets yet :)]
+        </p>
+        <div class="inline-block p-4 border-2 border-gray-300 rounded-lg mb-4" id="start-screen">
+         <h4 class="font-semibold mb-2">
+          Leaderboard
+         </h4>
+         <ol class="mb-4" id="leaderboard">
+         </ol>
+         <button class="px-4 py-2 rounded game-btn game-btn-primary" id="startBtn">
+          Start Game
+         </button>
+         <button class="px-4 py-2 rounded game-btn game-btn-secondary" id="resetLeaderboardBtn">
+          Reset Leaderboard
+         </button>
+        </div>
+        <canvas class="mx-auto border-2 border-gray-300" height="320" id="gameCanvas" style="display:none;" width="480">
+        </canvas>
+       </div>
+      </section>
+      <!-- END MINI-GAME SECTION -->
+     </div>
+     <!-- RIGHT COLUMN: EXPERIENCE TIMELINE -->
+     <div>
+      <h2 class="text-4xl font-bold text-black mb-10 text-center">
+       Experience
+      </h2>
+      <div class="relative timeline">
+       <div class="timeline-line absolute left-1/2 transform -translate-x-1/2">
+       </div>
+       <div class="relative mb-12 timeline-entry">
+        <div class="flex flex-row-reverse items-center">
+         <div class="w-1/2 text-left pl-10 space-y-2">
+          <img alt="UMG Technologies Logo" class="h-24 inline-block mb-1" src="assets/images/UMGT_logo_sqr.png"/>
+          <h3 class="text-xl font-bold">
+           Head of Software Engineering
+          </h3>
+          <p class="text-md font-semibold text-gray-700">
+           UMG Technologies, Inc. · Part-time
+          </p>
+          <ul class="list-disc list-inside text-sm text-gray-600">
+           <li>
+            Sole software engineer modernizing a C# industrial-automation stack.
+           </li>
+           <li>
+            Improves operator UX while driving down legacy and newly-found bugs.
+           </li>
+           <li>
+            Prototypes AI/computer-vision features for next-gen tooling.
+           </li>
+          </ul>
+          <p class="text-xs text-gray-500 mt-2 italic leading-relaxed">
+           Jun 2025 - Present ·
+           <br/>
+           Danvers, MA ·
+           <br/>
+           Hybrid
+          </p>
+         </div>
+         <div class="w-1/2">
+         </div>
+        </div>
+       </div>
+       <div class="relative mb-12 timeline-entry">
+        <div class="flex items-center">
+         <div class="w-1/2 text-right pr-10 space-y-2">
+          <img alt="Experience 1 Logo" class="h-24 inline-block mb-1" src="assets/images/ur_logo.png"/>
+          <h3 class="text-xl font-bold">
+           Research &amp; Development Intern
+          </h3>
+          <p class="text-md font-semibold text-gray-700">
+           Universal Robots
+          </p>
+          <ul class="list-disc list-inside text-sm text-gray-600">
+           <li>
+            On-site in Odense Kommune, Denmark
+           </li>
+           <li>
+            Contributed to robotic vision in the Innovation Lab
+           </li>
+           <li>
+            Used ROS2, C++, Python, NVIDIA pkgs (Nvblox, cuVSLAM)
+           </li>
+          </ul>
+          <p class="text-xs text-gray-500 mt-2 italic leading-relaxed">
+           May 2024 - Sep 2024 ·
+           <br/>
+           Odense, Denmark ·
+           <br/>
+           On-site
+          </p>
+         </div>
+         <div class="w-1/2">
+         </div>
+        </div>
+       </div>
+       <div class="relative mb-12 timeline-entry">
+        <div class="flex flex-row-reverse items-center">
+         <div class="w-1/2 text-left pl-10 space-y-2">
+          <img alt="Experience 2 Logo" class="h-24 inline-block mb-1" src="assets/images/bu_logo.png"/>
+          <h3 class="text-xl font-bold">
+           Teaching Assistant
+          </h3>
+          <p class="text-md font-semibold text-gray-700">
+           Boston University, College of Engineering
+          </p>
+          <ul class="list-disc list-inside text-sm text-gray-600">
+           <li>
+            TA for EK131 (Intro to Eng: Hands On)
+           </li>
+           <li>
+            Prepared supplies, took attendance, sent mass emails
+           </li>
+           <li>
+            Held weekly office hours
+           </li>
+          </ul>
+          <p class="text-xs text-gray-500 mt-2 italic leading-relaxed">
+           Jan 2023 - Jun 2023 ·
+           <br/>
+           Boston, MA ·
+           <br/>
+           On-campus
+          </p>
+         </div>
+         <div class="w-1/2">
+         </div>
+        </div>
+       </div>
+       <div class="relative mb-12 timeline-entry">
+        <div class="flex items-center">
+         <div class="w-1/2 text-right pr-10 space-y-2">
+          <img alt="Course Hero Logo" class="h-24 inline-block mb-1" src="assets/images/coursehero_logo.png"/>
+          <h3 class="text-xl font-bold">
+           Campus Representative
+          </h3>
+          <p class="text-md font-semibold text-gray-700">
+           Course Hero
+          </p>
+          <ul class="list-disc list-inside text-sm text-gray-600">
+           <li>
+            Hosted virtual/in-person events at BU
+           </li>
+           <li>
+            Promoted social good initiatives
+           </li>
+           <li>
+            Educated students on platform benefits
+           </li>
+          </ul>
+          <p class="text-xs text-gray-500 mt-2 italic leading-relaxed">
+           Oct 2022 - Jan 2023 ·
+           <br/>
+           Boston, MA ·
+           <br/>
+           Hybrid
+          </p>
+         </div>
+         <div class="w-1/2">
+         </div>
+        </div>
+       </div>
+       <div class="relative mb-12 timeline-entry">
+        <div class="flex flex-row-reverse items-center">
+         <div class="w-1/2 text-left pl-10 space-y-2">
+          <img alt="GriplS Logo" class="h-28 inline-block mb-1" src="assets/images/gripls_logo.png"/>
+          <h3 class="text-xl font-bold">
+           Founder &amp; Designer
+          </h3>
+          <p class="text-md font-semibold text-gray-700">
+           GriplS
+          </p>
+          <ul class="list-disc list-inside text-sm text-gray-600">
+           <li>
+            Designed grip bands for multiple sports
+           </li>
+           <li>
+            50% profits to charities (BCRF, Autism Speaks)
+           </li>
+           <li>
+            Sold in local tennis stores in Charlotte, NC
+           </li>
+          </ul>
+          <p class="text-xs text-gray-500 mt-2 italic leading-relaxed">
+           May 2020 - Dec 2022 ·
+           <br/>
+           Charlotte, NC ·
+           <br/>
+           Founder-led
+          </p>
+         </div>
+         <div class="w-1/2">
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
     </div>
+   </section>
+   <!-- SKILLS SECTION -->
+   <section class="text-gray-600 body-font font-mono bg-white relative overflow-hidden py-10" id="skills">
+    <div class="container mx-auto px-5">
+     <h2 class="text-4xl font-bold text-black mb-10 text-center">
+      Skills
+     </h2>
+     <div class="bg-gray-100 p-5 rounded-xl space-y-6">
+      <div class="skills-nav flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+       <div>
+        <p class="text-xs uppercase tracking-[0.3em] text-gray-500">
+         Navigate my stack
+        </p>
+        <h3 class="text-2xl font-bold text-gray-800">
+         Explore by focus area
+        </h3>
+       </div>
+       <div class="skills-pager flex items-center justify-center gap-3">
+        <button aria-label="Previous skill category" class="skills-pager-btn" id="skillsPrev" type="button">
+         ‹
+        </button>
+        <span class="skills-active-label text-lg font-semibold text-gray-800 text-center" id="skillsActiveLabel">
+        </span>
+        <button aria-label="Next skill category" class="skills-pager-btn" id="skillsNext" type="button">
+         ›
+        </button>
+       </div>
+      </div>
+      <div class="skills-tabs flex flex-wrap items-center justify-center gap-3" id="skillsTabs">
+      </div>
+      <div class="skills-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6" id="skillsGrid">
+      </div>
+      <p class="text-center text-xs text-gray-500">
+       Hover over a cube to spin it, then click to check out more info. Use the arrows (or scroll) to switch topics.
+      </p>
+     </div>
+    </div>
+   </section>
+   <!-- PROJECTS SECTION -->
+   <section class="text-gray-600 body-font font-mono bg-white relative overflow-hidden py-10" id="projects">
+    <div class="container mx-auto flex flex-col items-center justify-center px-5 mb-10 text-center">
+     <p class="text-5xl font-bold text-black">
+      Projects
+     </p>
+    </div>
+    <div class="container mx-auto flex flex-col items-center justify-center px-5 bg-white text-center">
+     <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 py-10 px-10 border-gray-300 border-2">
+      <div>
+       <img alt="Pollux" class="w-full mb-4 mx-auto" src="assets/images/pollux.png"/>
+       <h1 class="mt-4 text-xl font-semibold text-gray-800">
+        Pollux
+       </h1>
+       <p class="mt-2 text-gray-500">
+        An autonomous countertop-cleaning robot with integrated reinforcement learning to prevent falling off cliffs and hitting obstacles.
+       </p>
+       <p class="mt-2 text-gray-500 text-sm">
+        <a class="text-blue-500 hover:underline" href="https://github.com/nhathout/pollux-AMR" rel="noopener noreferrer" target="_blank">
+         Click here to see the GitHub Repository
+        </a>
+       </p>
+      </div>
+      <div>
+       <img alt="SuperTuxSmart" class="w-full mb-4 mx-auto" src="assets/images/supertuxsmart.png"/>
+       <h1 class="mt-4 text-xl font-semibold text-gray-800">
+        SuperTuxSmart
+       </h1>
+       <p class="mt-2 text-gray-500">
+        The goal was to optimize performance on the MarioKart-esque driving simulator called pySuperTuxKart. 
+                      Our approach and results are outlined in
+        <a class="text-blue-500 hover:underline" href="https://github.com/nhathout/EC418-Final-Project/blob/main/FinalReport.pdf" rel="noopener noreferrer" target="_blank">
+         Report.pdf
+        </a>
+        .
+       </p>
+       <p class="mt-2 text-gray-500 text-sm">
+        <a class="text-blue-500 hover:underline" href="https://github.com/nhathout/EC418-Final-Project" rel="noopener noreferrer" target="_blank">
+         Click here to see the GitHub Repository
+        </a>
+       </p>
+      </div>
+      <div>
+       <img alt="AreYouTrieuly...Net" class="w-full mb-4 mx-auto" src="assets/images/dl_final_project.png"/>
+       <h1 class="mt-4 text-xl font-semibold text-gray-800">
+        AreYouTrieulyFocusingOrJust
+        <br/>
+        JoshingNoahmNotButHilarioIsNET
+       </h1>
+       <p class="mt-2 text-gray-500">
+        Extended Meta’s advanced Detectron2 model—originally designed for object detection—to incorporate facial recognition and real-time attention tracking. By integrating COCO instance segmentation with a retrained Detectron2 pipeline, our system efficiently analyzes attention patterns in live video streams. 
+                      Our approach and results are outlined in
+        <a class="text-blue-500 hover:underline" href="https://docs.google.com/document/d/1jopVcW5oSQAM1AiB77bWeUELJqZ4IWX0DPezHU_gHWk/edit?usp=sharing" rel="noopener noreferrer" target="_blank">
+         Report.pdf
+        </a>
+        .
+       </p>
+       <p class="mt-2 text-gray-500 text-sm">
+        <a class="text-blue-500 hover:underline" href="https://github.com/nhathout/AreYoutTrieulyPayingAttentionOrJustJoshingNoahmNotButHilarioIsNET" rel="noopener noreferrer" target="_blank">
+         Click here to see the GitHub Repository
+        </a>
+       </p>
+      </div>
+      <div>
+       <img alt="Smart Home API" class="w-full mb-4 mx-auto" src="assets/images/smarthome.png"/>
+       <h1 class="mt-4 text-xl font-semibold text-gray-800">
+        Smart Home API
+       </h1>
+       <p class="mt-2 text-gray-500">
+        This project is a Python-based Smart Home API that manages Users, Houses, Rooms, and Devices. The primary focus is on API design and robust error handling — particularly input validation. The project also includes thorough unit tests to demonstrate proper functionality for successful operations as well as error cases.
+       </p>
+       <p class="mt-2 text-gray-500 text-sm">
+        <a class="text-blue-500 hover:underline" href="https://github.com/nhathout/smart-home-api" rel="noopener noreferrer" target="_blank">
+         Click here to see the GitHub Repository
+        </a>
+       </p>
+      </div>
+      <div>
+       <img alt="PIRA" class="w-full mb-4 mx-auto" src="assets/images/pira.png"/>
+       <h1 class="mt-4 text-xl font-semibold text-gray-800">
+        PIRA - Personal Indoor Robot Assistant
+       </h1>
+       <p class="mt-2 text-gray-500">
+        Developed a personal indoor robot assistant that can autonomously navigate via Optitrack-based indoor positioning and real-time obstacle avoidance or be manually operated via WASD. A Node.js server coordinates data among multiple robots, while Streamlit provides a live 2D visualization and TingoDB logs positional data for monitoring and analysis.
+       </p>
+       <p class="mt-2 text-gray-500 text-sm">
+        <a class="text-blue-500 hover:underline" href="https://github.com/nhathout/PIRA" rel="noopener noreferrer" target="_blank">
+         Click here to see the GitHub Repository
+        </a>
+       </p>
+      </div>
+      <div>
+       <img alt="ChatSheetsAI" class="w-full mb-4 mx-auto" src="assets/images/chatsheets.png"/>
+       <h1 class="mt-4 text-xl font-semibold text-gray-800">
+        ChatSheetsAI
+       </h1>
+       <p class="mt-2 text-gray-500">
+        Built a Python-based tool that lets users explore data entirely through chat. Upload a CSV once, and ChatSheetsAI auto-infers a SQLite schema, reconciles column mismatches, and stores everything locally. A lightweight CLI handles load/list/query commands, while an OpenAI-powered layer translates natural-language questions into SQL on the fly—so you can filter, join, and summarize data without ever opening a traditional spreadsheet.
+       </p>
+       <p class="mt-2 text-gray-500 text-sm">
+        <a class="text-blue-500 hover:underline" href="https://github.com/nhathout/ChatSheetsAI" rel="noopener noreferrer" target="_blank">
+         Click here to see the GitHub Repository
+        </a>
+       </p>
+      </div>
+      <div>
+       <img alt="PyP2PChat" class="w-full mb-4 mx-auto" src="assets/images/pyp2pchat.png"/>
+       <h1 class="mt-4 text-xl font-semibold text-gray-800">
+        PyP2PChat
+       </h1>
+       <p class="mt-2 text-gray-500">
+        Created a terminal-based chat app where each node doubles as client and server, racing to form a single full-duplex TCP link—no central broker required. Python socket + threading keep input responsive while background threads stream messages both ways, and every exchange is time-stamped to a local SQLite log so conversations stay yours alone, even offline.
+       </p>
+       <p class="mt-2 text-gray-500 text-sm">
+        <a class="text-blue-500 hover:underline" href="https://github.com/nhathout/PyP2PChat" rel="noopener noreferrer" target="_blank">
+         Click here to see the GitHub Repository
+        </a>
+       </p>
+      </div>
+      <div>
+       <img alt="Fit Cat" class="w-full mb-4 mx-auto" src="assets/images/fitcat.png"/>
+       <h1 class="mt-4 text-xl font-semibold text-gray-800">
+        FitCat: Network of Smart Cat Collars with Activity Monitoring
+       </h1>
+       <p class="mt-2 text-gray-500">
+        Developed a smart cat collar that captures and transmits real-time activity data (sleeping, wandering, or "moonwalk") using an accelerometer, networked server, and alphanumeric display. It also includes a button interface for switching modes, a buzzer for leadership status changes, and coordinates with a central server to participate in a leader determination system.
+       </p>
+       <p class="mt-2 text-gray-500 text-sm">
+        <a class="text-blue-500 hover:underline" href="https://github.com/nhathout/Fit-Cat" rel="noopener noreferrer" target="_blank">
+         Click here to see the GitHub Repository
+        </a>
+       </p>
+      </div>
+      <div>
+       <img alt="Smart Pill" class="w-full mb-4 mx-auto" src="assets/images/smartpill.png"/>
+       <h1 class="mt-4 text-xl font-semibold text-gray-800">
+        SmartPill: Ingestible Sensor
+       </h1>
+       <p class="mt-2 text-gray-500">
+        Developed a proof-of-concept ingestible sensor (SmartPill) using an ESP32 microcontroller to log and transmit key biometric data as it “travels” through the digestive tract. It continuously captures data, converts it into engineering units, and reports findings via a serial console, laying groundwork for future non-invasive diagnostic tools.
+       </p>
+       <p class="mt-2 text-gray-500 text-sm">
+        <a class="text-blue-500 hover:underline" href="https://github.com/nhathout/SmartPill-Ingestible-Sensor" rel="noopener noreferrer" target="_blank">
+         Click here to see the GitHub Repository
+        </a>
+       </p>
+      </div>
+      <div>
+       <img alt="elect-A-leader" class="w-full mb-4 mx-auto" src="assets/images/election.png"/>
+       <h1 class="mt-4 text-xl font-semibold text-gray-800">
+        elect-A-leader
+       </h1>
+       <p class="mt-2 text-gray-500">
+        Developed a distributed, fail-safe e-voting system using IR-equipped fob devices to simulate NFC-like authentication for casting votes. A dynamically elected Coordinator aggregates votes, manages central server communication, and ensures continuous operation through failover.
+       </p>
+       <p class="mt-2 text-gray-500 text-sm">
+        <a class="text-blue-500 hover:underline" href="https://github.com/nhathout/elect-A-leader" rel="noopener noreferrer" target="_blank">
+         Click here to see the GitHub Repository
+        </a>
+       </p>
+      </div>
+      <div>
+       <img alt="My Portfolio" class="w-full mb-4 mx-auto" src="assets/images/PixelMe.jpg"/>
+       <h1 class="mt-4 text-xl font-semibold text-gray-800">
+        My Personal Portfolio Website
+       </h1>
+       <p class="mt-2 text-gray-500">
+        Website to showcase me 😁
+       </p>
+       <p class="mt-2 text-gray-500 text-sm">
+        <a class="text-blue-500 hover:underline" href="https://github.com/nhathout/portfolio" rel="noopener noreferrer" target="_blank">
+         Click here to see the GitHub Repository
+        </a>
+       </p>
+      </div>
+      <div>
+       <img alt="Mia's Portfolio" class="w-full mb-4 mx-auto" src="assets/images/mia.png"/>
+       <h1 class="mt-4 text-xl font-semibold text-gray-800">
+        Mia's Art Portfolio Website
+       </h1>
+       <p class="mt-2 text-gray-500">
+        Website to showcase my sister's amazing art. Check out the live website at:
+        <a class="text-blue-500 hover:underline" href="https://miasportfolio.art/" rel="noopener noreferrer" target="_blank">
+         miasportfolio.art
+        </a>
+        .
+       </p>
+       <p class="mt-2 text-gray-500 text-sm">
+        <a class="text-blue-500 hover:underline" href="https://github.com/nhathout/mias-portfolio" rel="noopener noreferrer" target="_blank">
+         Click here to see the GitHub Repository
+        </a>
+       </p>
+      </div>
+      <div>
+       <img alt="Geo-Proximity Calculator" class="w-full mb-4 mx-auto" src="assets/images/geo-prox.png"/>
+       <h1 class="mt-4 text-xl font-semibold text-gray-800">
+        Geo-Proximity Calculator
+       </h1>
+       <p class="mt-2 text-gray-500">
+        Built a Python tool to efficiently match geographic coordinates between datasets using the Haversine formula. Supports CSV or manual input, interprets complex coordinate formats (DMS/decimal), and calculates nearest neighbors for logistics or spatial analytics. Features robust error handling and adjustable logging.
+       </p>
+       <p class="mt-2 text-gray-500 text-sm">
+        <a class="text-blue-500 hover:underline" href="https://github.com/nhathout/geo-proximity-calculator" rel="noopener noreferrer" target="_blank">
+         Click here to see the GitHub Repository
+        </a>
+       </p>
+      </div>
+      <div>
+       <img alt="GraphTrak" class="w-full mb-4 mx-auto" src="assets/images/graphtrak.png"/>
+       <h1 class="mt-4 text-xl font-semibold text-gray-800">
+        GraphTrak – Weighted Graph &amp; Multi-Shortest-Paths Analysis
+       </h1>
+       <p class="mt-2 text-gray-500">
+        Developed in C++, this undirected, weighted graph library reads edges from a file, constructs an adjacency list, and uses a priority queue–based approach to calculate distances plus the number of distinct shortest paths. Demonstrates proficiency in data structures, file I/O, and efficient graph algorithms.
+       </p>
+       <p class="mt-2 text-gray-500 text-sm">
+        <a class="text-blue-500 hover:underline" href="https://github.com/nhathout/shortest-path-graph" rel="noopener noreferrer" target="_blank">
+         Click here to see the GitHub Repository
+        </a>
+       </p>
+      </div>
+      <div>
+       <img alt="Huffster" class="w-full mb-4 mx-auto" src="assets/images/huffman.png"/>
+       <h1 class="mt-4 text-xl font-semibold text-gray-800">
+        Huffman Code Generator &amp; File Decoder
+       </h1>
+       <p class="mt-2 text-gray-500">
+        Built in C++, this system uses priority queues to construct a Huffman tree from character frequencies, then generates sorted code tables and decodes compressed files. Showcases expertise in data compression, tree-based algorithms, and file handling.
+       </p>
+       <p class="mt-2 text-gray-500 text-sm">
+        <a class="text-blue-500 hover:underline" href="https://github.com/nhathout/huffman-code-generator" rel="noopener noreferrer" target="_blank">
+         Click here to see the GitHub Repository
+        </a>
+       </p>
+      </div>
+     </div>
+    </div>
+   </section>
+   <!-- AWARDS & AFFILIATIONS SECTION -->
+   <section class="text-gray-600 body-font font-mono bg-white relative overflow-hidden py-10" id="awards-affiliations">
+  <div class="container mx-auto px-5 space-y-12">
+   <div class="flex flex-col gap-6 text-center">
+    <p class="text-xs uppercase tracking-[0.5em] text-gray-500">
+     badges unlocked
+    </p>
+    <h2 class="text-4xl md:text-5xl font-bold text-black">
+     Awards & Affiliations
+    </h2>
+   </div>
+   <div class="award-grid">
+    <article class="award-card">
+     <div class="award-ribbon">
+      <span>
+       Dean's List
+      </span>
+     </div>
+     <div class="award-body">
+      <img alt="Dean's List" src="assets/images/deanslist.png"/>
+      <div>
+       <p class="award-title">
+        Boston University · College of Engineering
+       </p>
+       <p class="award-copy">
+        Consistently placed in the top 30% of my cohort. Long nights, too many debug sessions, still worth it.
+       </p>
+      </div>
+     </div>
+    </article>
+    <article class="award-card">
+     <div class="award-ribbon">
+      <span>
+       Hood Hargett Scholar
+      </span>
+     </div>
+     <div class="award-body">
+      <img alt="Hood Hargett Scholarship" src="assets/images/hhbc.png"/>
+      <div>
+       <p class="award-title">
+        Hood Hargett Breakfast Club
+       </p>
+       <p class="award-copy">
+        Recognized for bridging athletics, academics, and community work. Shared my story at Charlotte Knights’ Truist Field.
+       </p>
+       <a class="award-link" href="https://drive.google.com/file/d/1ibeBpTvYqFsws_GK_nGrChah0Xk3k5Me/view?usp=sharing" rel="noopener noreferrer" target="_blank">
+        Watch the speech →
+       </a>
+      </div>
+     </div>
+    </article>
+   </div>
+   <div class="affiliation-panel">
+    <div class="flex flex-col gap-4">
+     <p class="text-xs uppercase tracking-[0.4em] text-gray-500">
+      communities + affiliations
+     </p>
+     <h3 class="text-3xl font-bold text-gray-900">
+      What communities I am a part of
+     </h3>
+    </div>
+    <div class="affiliation-grid">
+     <a class="affiliation-card" href="https://www.ieee.org/" rel="noopener noreferrer" target="_blank">
+      <img alt="IEEE" src="assets/images/IEEE_logo.png"/>
+      <div>
+       <p>IEEE</p>
+       <small>Student member · Robotics & Automation</small>
+      </div>
+     </a>
+     <a class="affiliation-card" href="https://www.twitch.tv/sernawa" rel="noopener noreferrer" target="_blank">
+      <img alt="Twitch" src="assets/images/twitch_logo.png"/>
+      <div>
+       <p>Twitch</p>
+       <small>Stream team · sernawa</small>
+      </div>
+     </a>
+    </div>
+   </div>
+  </div>
 </section>
-
-<main>
-    <!-- HERO SECTION -->
-    <div class="flex relative z-20 items-center h-screen" style="background:linear-gradient(0deg, rgba(255, 255, 255), rgba(255, 255, 255, 0.1)), url('assets/images/pixel-background.jpg'); background-repeat: no-repeat; background-position: center; background-size: cover;">
-        <div class="container mx-auto px-6 flex flex-col justify-between items-center relative">
-            <div class="flex flex-col relative">
-                <div class="relative mx-auto mt-10">
-                    <img src="assets/images/PixelMe.jpg" class="rounded-2xl w-36 mx-auto" />
-                    <!-- Resume box positioned, no shake class yet -->
-                    <div id="resumeBox" class="absolute top-[0px] left-0 transform -rotate-12 -translate-x-[18rem] bg-yellow-200 p-3 rounded-xl shadow-lg text-center">
-                        <p class="text-base sm:text-lg font-bold text-gray-800">Download My CV / Resume Here</p>
-                        <a href="assets/files/resume_7_noahhathout.pdf" download="noahhathout_cv.pdf" class="mt-2 inline-block px-3 py-1 bg-gray-600 text-white text-sm rounded hover:bg-gray-500">
-                            <img src="assets/images/inbox-tray.png" alt="Resume" class="h-6 w-6">
-                        </a>
-                    </div>                    
-                </div>
-
-                <p class="sm:text-3xl text-lg my-6 text-center text-black"><br>Hi, I'm Noah [Jean-Pierre] Hathout. <span class="waving-hand">&#128075;</span></p>
-                <h2 class="max-w-3xl text-4xl sm:text-5xl font-bold mx-auto text-gray-800 text-center py-2">R&AS Engineer</h2>
-                <a href="https://www.bu.edu/eng/academics/departments-and-divisions/electrical-and-computer-engineering/" target="_blank" rel="noopener noreferrer">
-                    <p class="max-w-3xl text-3xl md:text-3xl font-bold mx-auto text-gray-800 text-center relative w-max transition transform ease-in-out duration-100 hover:bg-gray-500 hover:scale-105">
-                      [@ Boston University]
-                    </p>
-                </a>                  
-            </div>
-        </div>
-    </div>
-
-    <!-- ABOUT SECTION -->
-    <section id="about" class="text-gray-600 body-font font-mono bg-white relative overflow-hidden pb-10 pt-10">
-        <div class="container mx-auto flex px-5 lg:flex-row flex-col items-center">
-          <div class="lg:flex-grow md:px-16 lg:pr-24 lg:px-16 flex flex-col md:items-start md:text-left md:mb-0 items-center sm:pb-10">
-            <h1 class="title-font sm:text-5xl text-5xl mb-4 font-bold text-gray-900 py-10">About Me 🇪🇬🇮🇹🇺🇸</h1>
-            <p class="leading-relaxed">
-                I'm Noah Jean-Pierre Hathout--A tech enthusiast, avid gamer, and student at Boston University, getting my master's in Robotics & Autonomous Systems (R&AS). Having just received my B.S. in Computer Engineering with a strong academic record and a spot on the Dean's List, I am passionate about AI and robotics and want to continue to explore how machines can learn and interact with the world. 
-                <br><br>
-                Having lived and studied in five countries across three continents,<br><br>
-                <span class="text-2xl font-semibold">[🇺🇸 -> 🇩🇪 -> 🇹🇷 -> 🇳🇱 -> 🇹🇷 -> 🇨🇳 -> 🇩🇪 -> 🇺🇸📍]</span><br><br>
-                I've gained a unique global perspective and love for cross-cultural collaboration. This diverse background continuously fuels my drive to work on projects that positively impact our world and society. 
-                <br><br>
-                When I'm not coding, debugging, or experimenting with new tech, you'll find me at the nearest climbing gym 🧗🏽‍♂️ or tennis courts 🎾, leveling up in the latest video games 🕹️, or maybe teaching an agent to do better than me at the video game 🤖. 
-                <br><br>
-                I am all about combining serious tech skills and hard work with a touch of fun and creativity. So if you are also into AI, robotics, gaming, or just want to nerd out over the newest tech, let's connect :)
-            </p>            
-          </div>
-          <div 
-            class="lg:max-w-lg shadow-2xl sm:shadow-none lg:w-full md:w-1/2 lg:pr-16 mt-10 lg:mt-0 
-                  flex flex-col items-center space-y-4"
-          >
-            <img 
-              class="object-cover object-center border-2 border-gray-200 w-60" 
-              alt="hero" 
-              src="assets/images/aboutME2.png"
-            >
-            <img 
-              class="object-cover object-center border-2 border-gray-200 w-60" 
-              alt="hero2" 
-              src="assets/images/aboutME.png"
-            >
-            <img 
-              class="object-cover object-center border-2 border-gray-200 w-60" 
-              alt="hero3" 
-              src="assets/images/aboutME3.png"
-            >
-          </div>
-        </div>
-      </section>
-
-      <!-- EDUCATION & EXPERIENCE SIDE-BY-SIDE + MINI-GAME UNDER EDUCATION -->
-      <section id="education-experience" class="text-gray-600 body-font font-mono bg-white relative overflow-hidden py-10">
-        <div class="container mx-auto px-5 relative md:grid md:grid-cols-2 gap-10 items-start justify-center">
-          
-          <!-- LEFT COLUMN: EDUCATION TIMELINE + MINI-GAME BELOW -->
-          <div class="md:pr-5">
-            <h2 class="text-4xl font-bold text-black mb-10 text-center">Education</h2>
-            <div class="relative">
-
-              <!-- Vertical line (shortened) -->
-              <div 
-                class="absolute left-1/2 transform -translate-x-1/2 top-6 bottom-6 border-l-4 border-gray-300"
-              ></div>
-              
-              <!-- Top dot (First point) -->
-              <div 
-                class="w-6 h-6 bg-purple-300 rounded-full border-2 border-white
-                      absolute left-1/2 transform -translate-x-1/2 top-6"
-              ></div>
-
-              <!-- Point 1 -->
-              <div class="relative mb-12 pt-2">
-                <div class="flex items-center">
-                  <div class="w-1/2 text-right pr-10 space-y-2">
-                    <img src="assets/images/bu_logo.png" alt="BU Logo" class="h-24 inline-block mb-1" />
-                    
-                    <h3 class="text-xl font-bold text-gray-700">Robotics & Autonomous Systems <br>(MS w/ Thesis)</h3>
-                    
-                    <ul class="list-disc list-inside text-sm text-gray-600">
-                      <li>Coursework: Intro to R&AS (EK505), Robot Motion Planning (ME570), Robot Learning (EC518), Embedded Systems (EC535)</li>
-                    </ul>
-                    
-                    <p class="text-xs text-gray-500 mt-2 italic">
-                      Expected September 2025 - May 2026
-                    </p>
-                  </div>
-                  <div class="w-1/2"></div>
-                </div>
-              </div>
-
-              <!-- Point 2 -->
-              <div class="relative mb-12">
-                <div class="flex flex-row-reverse items-center">
-                  <div class="w-1/2 text-left pl-10 space-y-2">
-                    <img src="assets/images/bu_logo.png" alt="BU Logo" class="h-24 inline-block mb-1" />
-                    
-                    <h3 class="text-xl font-bold text-gray-700">Computer Engineering (BS)</h3>
-                    <p class="text-md font-semibold">Concentration in Machine Learning</p>
-                    
-                    <ul class="list-disc list-inside text-sm text-gray-600">
-                      <li>Cumulative GPA: 3.73 / 4</li>
-                      <li>Dean's List</li>
-                      <li>Intramural Outdoor Soccer Champions</li>
-                      <li>Unity & Social Quality Initiative (USQI)</li>
-                    </ul>
-                    
-                    <p class="text-xs text-gray-500 mt-2 italic">
-                      September 2021 - present
-                    </p>
-                  </div>
-                  <div class="w-1/2"></div>
-                </div>
-                <!-- Middle dot for second point -->
-                <div 
-                  class="w-6 h-6 bg-purple-300 rounded-full border-2 border-white
-                        absolute left-1/2 transform -translate-x-1/2 top-1/2"
-                ></div>
-              </div>
-
-              <!-- Point 3 -->
-              <div class="relative mb-12">
-                <div class="flex items-center">
-                  <div class="w-1/2 text-right pr-10 space-y-2">
-                    <img src="assets/images/akhs_logo.png" alt="AKHS Logo" class="h-28 inline-block mb-1" />
-                    
-                    <h3 class="text-xl font-bold text-gray-700">Ardrey Kell High School</h3>
-                    <p class="text-md font-semibold">High School Diploma</p>
-                    
-                    <ul class="list-disc list-inside text-sm text-gray-600">
-                      <li>Varsity Men's Tennis Team (captain for 2 / 4 years)</li>
-                      <li>National Honors Society</li>
-                      <li>French Honors Society</li>
-                      <li>Junior Marshal</li>
-                      <li>AK Garden Club</li>
-                    </ul>
-                    
-                    <p class="text-xs text-gray-500 mt-2 italic">
-                      August 2017 - June 2021
-                    </p>
-                  </div>
-                  <div class="w-1/2"></div>
-                </div>
-                <!-- Bottom dot (Last point) -->
-                <div 
-                  class="w-6 h-6 bg-purple-300 rounded-full border-2 border-white
-                        absolute left-1/2 transform -translate-x-1/2 bottom-6"
-                ></div>
-              </div>
-            </div>
-
-            <!-- MINI-GAME SECTION UNDER THE EDUCATION COLUMN -->
-            <section id="mini-game" class="text-gray-600 body-font font-mono bg-white relative overflow-hidden py-5 mt-5">
-              <div class="px-5 flex flex-col items-center">
-                <h3 class="text-xl font-bold mb-2 text-center">
-                  Relevant Coursework: Atari [Course]out
-                </h3>
-                <p class="mb-2 text-gray-700 text-center">
-                  Hit and destroy the classes I destroyed!
-                </p>
-                <p class="mb-2 text-[13px] text-gray-500 mt-2 text-center">
-                      [use your <strong>spacebar</strong> to launch the ball]
-                      <br>
-                      [use the <strong>left & right arrow keys</strong> to move the paddle]
-                </p>
-                <p class="mb-4 text-[12px] text-red-500 mt-2 text-center">
-                      [this does not work on phones or tablets yet :)]
-                </p>
-                <div id="start-screen" class="inline-block p-4 border-2 border-gray-300 rounded-lg mb-4">
-                  <h4 class="font-semibold mb-2">Leaderboard</h4>
-                  <ol id="leaderboard" class="mb-4"></ol>
-                  <button id="startBtn" class="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-400">
-                    Start Game
-                  </button>
-                  <button id="resetLeaderboardBtn" class="px-4 py-2 bg-purple-400 text-white rounded hover:bg-purple-300">
-                    Reset Leaderboard
-                  </button>
-                </div>
-                <canvas 
-                  id="gameCanvas" 
-                  width="480" 
-                  height="320" 
-                  class="mx-auto border-2 border-gray-300" 
-                  style="display:none;"
-                ></canvas>
-              </div>
-            </section>
-            <!-- END MINI-GAME SECTION -->
-
-          </div>
-          
-          <!-- RIGHT COLUMN: EXPERIENCE TIMELINE -->
-          <div>
-            <h2 class="text-4xl font-bold text-black mb-10 text-center">Experience</h2>
-            <div class="relative">
-
-              <!-- Vertical line (shortened) -->
-              <div 
-                class="absolute left-1/2 transform -translate-x-1/2 top-6 bottom-6 border-l-4 border-gray-300"
-              ></div>
-              
-              <!-- Top dot (first experience) -->
-              <div 
-                class="w-6 h-6 bg-yellow-300 rounded-full border-2 border-white
-                      absolute left-1/2 transform -translate-x-1/2 top-6"
-              ></div>
-
-              <!-- Point 1 -->
-              <div class="relative mb-12 pt-2">
-                <div class="flex items-center">
-                  <div class="w-1/2 text-right pr-10 space-y-2">
-                    <img src="assets/images/ur_logo.png" alt="Experience 1 Logo" class="h-24 inline-block mb-1" />
-
-                    <h3 class="text-xl font-bold">Research & Development Intern</h3>
-                    <p class="text-md font-semibold text-gray-700">Universal Robots</p>
-
-                    <ul class="list-disc list-inside text-sm text-gray-600">
-                      <li>On-site in Odense Kommune, Denmark</li>
-                      <li>Contributed to robotic vision in the Innovation Lab</li>
-                      <li>Used ROS2, C++, Python, NVIDIA pkgs (Nvblox, cuVSLAM)</li>
-                    </ul>
-
-                    <p class="text-xs text-gray-500 mt-2 italic">
-                      May 2024 - September 2024
-                    </p>
-                  </div>
-                  <div class="w-1/2"></div>
-                </div>
-              </div>
-
-              <!-- Point 2 -->
-              <div class="relative mb-12">
-                <div class="flex flex-row-reverse items-center">
-                  <div class="w-1/2 text-left pl-10 space-y-2">
-                    <img src="assets/images/bu_logo.png" alt="Experience 2 Logo" class="h-24 inline-block mb-1" />
-
-                    <h3 class="text-xl font-bold">Teaching Assistant</h3>
-                    <p class="text-md font-semibold text-gray-700">
-                      Boston University, College of Engineering
-                    </p>
-
-                    <ul class="list-disc list-inside text-sm text-gray-600">
-                      <li>TA for EK131 (Intro to Eng: Hands On)</li>
-                      <li>Prepared supplies, took attendance, sent mass emails</li>
-                      <li>Held weekly office hours</li>
-                    </ul>
-
-                    <p class="text-xs text-gray-500 mt-2 italic">
-                      January 2023 - June 2023
-                    </p>
-                  </div>
-                  <div class="w-1/2"></div>
-                </div>
-                <!-- Middle dot for second experience -->
-                <div 
-                  class="w-6 h-6 bg-yellow-300 rounded-full border-2 border-white
-                        absolute left-1/2 transform -translate-x-1/2 top-1/2"
-                ></div>
-              </div>
-
-              <!-- Point 3 -->
-              <div class="relative mb-12">
-                <div class="flex items-center">
-                  <div class="w-1/2 text-right pr-10 space-y-2">
-                    <img src="assets/images/coursehero_logo.png" alt="Course Hero Logo" class="h-24 inline-block mb-1" />
-
-                    <h3 class="text-xl font-bold">Campus Representative</h3>
-                    <p class="text-md font-semibold text-gray-700">Course Hero</p>
-
-                    <ul class="list-disc list-inside text-sm text-gray-600">
-                      <li>Hosted virtual/in-person events at BU</li>
-                      <li>Promoted social good initiatives</li>
-                      <li>Educated students on platform benefits</li>
-                    </ul>
-
-                    <p class="text-xs text-gray-500 mt-2 italic">
-                      October 2022 - Jan 2023
-                    </p>
-                  </div>
-                  <div class="w-1/2"></div>
-                </div>
-                <!-- Middle dot for third experience -->
-                <div 
-                  class="w-6 h-6 bg-yellow-300 rounded-full border-2 border-white
-                        absolute left-1/2 transform -translate-x-1/2 top-1/2"
-                ></div>
-              </div>
-
-              <!-- Point 4 -->
-              <div class="relative mb-12">
-                <div class="flex flex-row-reverse items-center">
-                  <div class="w-1/2 text-left pl-10 space-y-2">
-                    <img src="assets/images/gripls_logo.png" alt="GriplS Logo" class="h-28 inline-block mb-1" />
-
-                    <h3 class="text-xl font-bold">Founder & Designer</h3>
-                    <p class="text-md font-semibold text-gray-700">GriplS</p>
-
-                    <ul class="list-disc list-inside text-sm text-gray-600">
-                      <li>Designed grip bands for multiple sports</li>
-                      <li>50% profits to charities (BCRF, Autism Speaks)</li>
-                      <li>Sold in local tennis stores in Charlotte, NC</li>
-                    </ul>
-
-                    <p class="text-xs text-gray-500 mt-2 italic">
-                      May 2020 - December 2022
-                    </p>
-                  </div>
-                  <div class="w-1/2"></div>
-                </div>
-                <!-- Bottom dot (last experience) -->
-                <div 
-                  class="w-6 h-6 bg-yellow-300 rounded-full border-2 border-white
-                        absolute left-1/2 transform -translate-x-1/2 bottom-6"
-                ></div>
-              </div>
-
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-    <!-- SKILLS SECTION -->
-    <section id="skills" class="text-gray-600 body-font font-mono bg-white relative overflow-hidden py-10">
-      <div class="container mx-auto px-5">
-      <h2 class="text-4xl font-bold text-black mb-10 text-center">Skills</h2>
-      <div class="bg-gray-100 p-5 rounded-xl">
-          <!-- 9 columns x 3 rows = 27 icons -->
-          <div class="grid grid-cols-9 gap-6">
-          <!-- Row 1 (9 icons) -->
-          <div class="flex justify-center items-center">
-            <a href="https://www.python.org/" target="_blank" rel="noopener noreferrer">
-              <div class="relative group aspect-square w-20 sm:w-24 md:w-28 flex items-center justify-center overflow-hidden">
-                <!-- The skill image -->
-                <img 
-                  src="assets/images/python_logo.png" 
-                  alt="Python" 
-                  class="object-contain w-full h-full transition duration-200 group-hover:opacity-60"
-                />
-                <!-- The hover overlay + text -->
-                <div 
-                  class="absolute inset-0 flex items-center justify-center pointer-events-none 
-                         opacity-0 group-hover:opacity-100 transition duration-200 
-                         bg-gray-800 bg-opacity-40"
-                >
-                  <span class="text-white text-sm font-semibold">
-                    Python
-                  </span>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="flex justify-center items-center">
-            <a href="https://en.cppreference.com/w/c" target="_blank" rel="noopener noreferrer">
-              <div class="relative group aspect-square w-20 sm:w-24 md:w-28 flex items-center justify-center overflow-hidden">
-                <!-- The skill image -->
-                <img 
-                  src="assets/images/c_logo.png" 
-                  alt="C" 
-                  class="object-contain w-full h-full transition duration-200 group-hover:opacity-60"
-                />
-                <!-- The hover overlay + text -->
-                <div 
-                  class="absolute inset-0 flex items-center justify-center pointer-events-none 
-                         opacity-0 group-hover:opacity-100 transition duration-200 
-                         bg-gray-800 bg-opacity-40"
-                >
-                  <span class="text-white text-sm font-semibold">
-                    C
-                  </span>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="flex justify-center items-center">
-            <a href="https://isocpp.org/" target="_blank" rel="noopener noreferrer">
-              <div class="relative group aspect-square w-20 sm:w-24 md:w-28 flex items-center justify-center overflow-hidden">
-                <!-- The skill image -->
-                <img 
-                  src="assets/images/cplus_logo.png" 
-                  alt="C++" 
-                  class="object-contain w-full h-full transition duration-200 group-hover:opacity-60"
-                />
-                <!-- The hover overlay + text -->
-                <div 
-                  class="absolute inset-0 flex items-center justify-center pointer-events-none 
-                         opacity-0 group-hover:opacity-100 transition duration-200 
-                         bg-gray-800 bg-opacity-40"
-                >
-                  <span class="text-white text-sm font-semibold">
-                    C++
-                  </span>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="flex justify-center items-center">
-            <a href="https://dotnet.microsoft.com/en-us/languages/csharp" target="_blank" rel="noopener noreferrer">
-              <div class="relative group aspect-square w-20 sm:w-24 md:w-28 flex items-center justify-center overflow-hidden">
-                <!-- The skill image -->
-                <img 
-                  src="assets/images/csharp_logo.png" 
-                  alt="C#" 
-                  class="object-contain w-full h-full transition duration-200 group-hover:opacity-60"
-                />
-                <!-- The hover overlay + text -->
-                <div 
-                  class="absolute inset-0 flex items-center justify-center pointer-events-none 
-                         opacity-0 group-hover:opacity-100 transition duration-200 
-                         bg-gray-800 bg-opacity-40"
-                >
-                  <span class="text-white text-sm font-semibold">
-                    C#
-                  </span>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="flex justify-center items-center">
-            <a href="https://www.tensorflow.org/" target="_blank" rel="noopener noreferrer">
-              <div class="relative group aspect-square w-20 sm:w-24 md:w-28 flex items-center justify-center overflow-hidden">
-                <!-- The skill image -->
-                <img 
-                  src="assets/images/tensorflow.png" 
-                  alt="TensorFlow" 
-                  class="object-contain w-full h-full transition duration-200 group-hover:opacity-60"
-                />
-                <!-- The hover overlay + text -->
-                <div 
-                  class="absolute inset-0 flex items-center justify-center pointer-events-none 
-                         opacity-0 group-hover:opacity-100 transition duration-200 
-                         bg-gray-800 bg-opacity-40"
-                >
-                  <span class="text-white text-sm font-semibold">
-                    TensorFlow
-                  </span>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="flex justify-center items-center">
-            <a href="https://pytorch.org/" target="_blank" rel="noopener noreferrer">
-              <div class="relative group aspect-square w-20 sm:w-24 md:w-28 flex items-center justify-center overflow-hidden">
-                <!-- The skill image -->
-                <img 
-                  src="assets/images/pytorch.png" 
-                  alt="PyTorch" 
-                  class="object-contain w-full h-full transition duration-200 group-hover:opacity-60"
-                />
-                <!-- The hover overlay + text -->
-                <div 
-                  class="absolute inset-0 flex items-center justify-center pointer-events-none 
-                         opacity-0 group-hover:opacity-100 transition duration-200 
-                         bg-gray-800 bg-opacity-40"
-                >
-                  <span class="text-white text-sm font-semibold">
-                    PyTorch
-                  </span>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="flex justify-center items-center">
-            <a href="https://www.mathworks.com/products/matlab.html" target="_blank" rel="noopener noreferrer">
-              <div class="relative group aspect-square w-20 sm:w-24 md:w-28 flex items-center justify-center overflow-hidden">
-                <!-- The skill image -->
-                <img 
-                  src="assets/images/matlab.png" 
-                  alt="MATLAB" 
-                  class="object-contain w-full h-full transition duration-200 group-hover:opacity-60"
-                />
-                <!-- The hover overlay + text -->
-                <div 
-                  class="absolute inset-0 flex items-center justify-center pointer-events-none 
-                         opacity-0 group-hover:opacity-100 transition duration-200 
-                         bg-gray-800 bg-opacity-40"
-                >
-                  <span class="text-white text-sm font-semibold">
-                    MATLAB
-                  </span>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="flex justify-center items-center">
-            <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noopener noreferrer">
-              <div class="relative group aspect-square w-20 sm:w-24 md:w-28 flex items-center justify-center overflow-hidden">
-                <!-- The skill image -->
-                <img 
-                  src="assets/images/javascript.png" 
-                  alt="JavaScript" 
-                  class="object-contain w-full h-full transition duration-200 group-hover:opacity-60"
-                />
-                <!-- The hover overlay + text -->
-                <div 
-                  class="absolute inset-0 flex items-center justify-center pointer-events-none 
-                         opacity-0 group-hover:opacity-100 transition duration-200 
-                         bg-gray-800 bg-opacity-40"
-                >
-                  <span class="text-white text-sm font-semibold">
-                    JavaScript
-                  </span>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="flex justify-center items-center">
-            <a href="https://sqlite.org/" target="_blank" rel="noopener noreferrer">
-              <div class="relative group aspect-square w-20 sm:w-24 md:w-28 flex items-center justify-center overflow-hidden">
-                <!-- The skill image -->
-                <img 
-                  src="assets/images/sqlite_logo.png" 
-                  alt="SQLite" 
-                  class="object-contain w-full h-full transition duration-200 group-hover:opacity-60"
-                />
-                <!-- The hover overlay + text -->
-                <div 
-                  class="absolute inset-0 flex items-center justify-center pointer-events-none 
-                         opacity-0 group-hover:opacity-100 transition duration-200 
-                         bg-gray-800 bg-opacity-40"
-                >
-                  <span class="text-white text-sm font-semibold">
-                    SQLite
-                  </span>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="flex justify-center items-center">
-            <a href="https://fastapi.tiangolo.com/" target="_blank" rel="noopener noreferrer">
-              <div class="relative group aspect-square w-20 sm:w-24 md:w-28 flex items-center justify-center overflow-hidden">
-                <!-- The skill image -->
-                <img 
-                  src="assets/images/fastapi_logo.png" 
-                  alt="FastAPI" 
-                  class="object-contain w-full h-full transition duration-200 group-hover:opacity-60"
-                />
-                <!-- The hover overlay + text -->
-                <div 
-                  class="absolute inset-0 flex items-center justify-center pointer-events-none 
-                         opacity-0 group-hover:opacity-100 transition duration-200 
-                         bg-gray-800 bg-opacity-40"
-                >
-                  <span class="text-white text-sm font-semibold">
-                    FastAPI
-                  </span>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="flex justify-center items-center">
-            <a href="https://developer.mozilla.org/en-US/docs/Web/HTML" target="_blank" rel="noopener noreferrer">
-              <div class="relative group aspect-square w-20 sm:w-24 md:w-28 flex items-center justify-center overflow-hidden">
-                <!-- The skill image -->
-                <img 
-                  src="assets/images/html_logo.png" 
-                  alt="HTML" 
-                  class="object-contain w-full h-full transition duration-200 group-hover:opacity-60"
-                />
-                <!-- The hover overlay + text -->
-                <div 
-                  class="absolute inset-0 flex items-center justify-center pointer-events-none 
-                         opacity-0 group-hover:opacity-100 transition duration-200 
-                         bg-gray-800 bg-opacity-40"
-                >
-                  <span class="text-white text-sm font-semibold">
-                    HTML
-                  </span>
-                </div>
-              </div>
-            </a>
-          </div>
-  
-          <!-- Row 2 (9 icons) -->
-          <div class="flex justify-center items-center">
-            <a href="https://developer.mozilla.org/en-US/docs/Web/CSS" target="_blank" rel="noopener noreferrer">
-                <div class="relative group aspect-square w-20 sm:w-24 md:w-28 flex items-center justify-center overflow-hidden">
-                    <img 
-                        src="assets/images/css_logo.png" 
-                        alt="CSS" 
-                        class="object-contain w-full h-full transition duration-200 group-hover:opacity-60"
-                    />
-                    <div 
-                        class="absolute inset-0 flex items-center justify-center pointer-events-none 
-                               opacity-0 group-hover:opacity-100 transition duration-200 
-                               bg-gray-800 bg-opacity-40"
-                    >
-                        <span class="text-white text-sm font-semibold">
-                            CSS
-                        </span>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="flex justify-center items-center">
-            <a href="https://www.java.com/" target="_blank" rel="noopener noreferrer">
-                <div class="relative group aspect-square w-20 sm:w-24 md:w-28 flex items-center justify-center overflow-hidden">
-                    <img 
-                        src="assets/images/java_logo.png" 
-                        alt="Java" 
-                        class="object-contain w-full h-full transition duration-200 group-hover:opacity-60"
-                    />
-                    <div 
-                        class="absolute inset-0 flex items-center justify-center pointer-events-none 
-                               opacity-0 group-hover:opacity-100 transition duration-200 
-                               bg-gray-800 bg-opacity-40"
-                    >
-                        <span class="text-white text-sm font-semibold">
-                            Java
-                        </span>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="flex justify-center items-center">
-            <a href="https://www.arduino.cc/" target="_blank" rel="noopener noreferrer">
-                <div class="relative group aspect-square w-20 sm:w-24 md:w-28 flex items-center justify-center overflow-hidden">
-                    <img 
-                        src="assets/images/arduino.png" 
-                        alt="Arduino" 
-                        class="object-contain w-full h-full transition duration-200 group-hover:opacity-60"
-                    />
-                    <div 
-                        class="absolute inset-0 flex items-center justify-center pointer-events-none 
-                               opacity-0 group-hover:opacity-100 transition duration-200 
-                               bg-gray-800 bg-opacity-40"
-                    >
-                        <span class="text-white text-sm font-semibold">
-                            Arduino
-                        </span>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="flex justify-center items-center">
-            <a href="https://www.raspberrypi.org/" target="_blank" rel="noopener noreferrer">
-                <div class="relative group aspect-square w-20 sm:w-24 md:w-28 flex items-center justify-center overflow-hidden">
-                    <img 
-                        src="assets/images/raspi_logo.png" 
-                        alt="Raspberry Pi" 
-                        class="object-contain w-full h-full transition duration-200 group-hover:opacity-60"
-                    />
-                    <div 
-                        class="absolute inset-0 flex items-center justify-center pointer-events-none 
-                               opacity-0 group-hover:opacity-100 transition duration-200 
-                               bg-gray-800 bg-opacity-40"
-                    >
-                        <span class="text-white text-sm font-semibold">
-                            Raspberry Pi
-                        </span>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="flex justify-center items-center">
-            <a href="https://www.espressif.com/" target="_blank" rel="noopener noreferrer">
-                <div class="relative group aspect-square w-20 sm:w-24 md:w-28 flex items-center justify-center overflow-hidden">
-                    <img 
-                        src="assets/images/espressif.png" 
-                        alt="Espressif (ESP)" 
-                        class="object-contain w-full h-full transition duration-200 group-hover:opacity-60"
-                    />
-                    <div 
-                        class="absolute inset-0 flex items-center justify-center pointer-events-none 
-                               opacity-0 group-hover:opacity-100 transition duration-200 
-                               bg-gray-800 bg-opacity-40"
-                    >
-                        <span class="text-white text-sm font-semibold">
-                            Espressif
-                        </span>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="flex justify-center items-center">
-            <a href="https://learn.nvidia.com/courses/course-detail?course_id=course-v1:DLI+S-FX-01+V1" target="_blank" rel="noopener noreferrer">
-                <div class="relative group aspect-square w-20 sm:w-24 md:w-28 flex items-center justify-center overflow-hidden">
-                    <img 
-                        src="assets/images/nvidia.png" 
-                        alt="NVIDIA" 
-                        class="object-contain w-full h-full transition duration-200 group-hover:opacity-60"
-                    />
-                    <div 
-                        class="absolute inset-0 flex items-center justify-center pointer-events-none 
-                               opacity-0 group-hover:opacity-100 transition duration-200 
-                               bg-gray-800 bg-opacity-40"
-                    >
-                        <span class="text-white text-sm font-semibold">
-                            NVIDIA
-                        </span>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="flex justify-center items-center">
-            <a href="https://www.universal-robots.com/" target="_blank" rel="noopener noreferrer">
-                <div class="relative group aspect-square w-20 sm:w-24 md:w-28 flex items-center justify-center overflow-hidden">
-                    <img 
-                        src="assets/images/ur_logo.png" 
-                        alt="Universal Robots" 
-                        class="object-contain w-full h-full transition duration-200 group-hover:opacity-60"
-                    />
-                    <div 
-                        class="absolute inset-0 flex items-center justify-center pointer-events-none 
-                               opacity-0 group-hover:opacity-100 transition duration-200 
-                               bg-gray-800 bg-opacity-40"
-                    >
-                        <span class="text-white text-sm font-semibold text-center">
-                            Universal Robots
-                        </span>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="flex justify-center items-center">
-            <a href="https://www.ros.org/" target="_blank" rel="noopener noreferrer">
-                <div class="relative group aspect-square w-20 sm:w-24 md:w-28 flex items-center justify-center overflow-hidden">
-                    <img 
-                        src="assets/images/ros1_logo.png" 
-                        alt="ROS" 
-                        class="object-contain w-full h-full transition duration-200 group-hover:opacity-60"
-                    />
-                    <div 
-                        class="absolute inset-0 flex items-center justify-center pointer-events-none 
-                               opacity-0 group-hover:opacity-100 transition duration-200 
-                               bg-gray-800 bg-opacity-40"
-                    >
-                        <span class="text-white text-sm font-semibold">
-                            ROS
-                        </span>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="flex justify-center items-center">
-            <a href="https://www.ros.org/" target="_blank" rel="noopener noreferrer">
-                <div class="relative group aspect-square w-20 sm:w-24 md:w-28 flex items-center justify-center overflow-hidden">
-                    <img 
-                        src="assets/images/ros_logo.png" 
-                        alt="ROS2" 
-                        class="object-contain w-full h-full transition duration-200 group-hover:opacity-60"
-                    />
-                    <div 
-                        class="absolute inset-0 flex items-center justify-center pointer-events-none 
-                               opacity-0 group-hover:opacity-100 transition duration-200 
-                               bg-gray-800 bg-opacity-40"
-                    >
-                        <span class="text-white text-sm font-semibold">
-                            ROS2
-                        </span>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="flex justify-center items-center">
-            <a href="https://www.intelrealsense.com/sdk-2/" target="_blank" rel="noopener noreferrer">
-                <div class="relative group aspect-square w-20 sm:w-24 md:w-28 flex items-center justify-center overflow-hidden">
-                    <img 
-                        src="assets/images/intel_logo.png" 
-                        alt="Intel" 
-                        class="object-contain w-full h-full transition duration-200 group-hover:opacity-60"
-                    />
-                    <div 
-                        class="absolute inset-0 flex items-center justify-center pointer-events-none 
-                               opacity-0 group-hover:opacity-100 transition duration-200 
-                               bg-gray-800 bg-opacity-40"
-                    >
-                        <span class="text-white text-sm font-semibold">
-                            Intel
-                        </span>
-                    </div>
-                </div>
-            </a>
-        </div>
-
-        <!-- Row 3 (9 icons) -->
-        <div class="flex justify-center items-center">
-            <a href="https://www.orbbec.com/developers/orbbec-sdk/" target="_blank" rel="noopener noreferrer">
-                <div class="relative group aspect-square w-20 sm:w-24 md:w-28 flex items-center justify-center overflow-hidden">
-                    <img 
-                        src="assets/images/orbbec_logo.png" 
-                        alt="Orbbec" 
-                        class="object-contain w-full h-full transition duration-200 group-hover:opacity-60"
-                    />
-                    <div 
-                        class="absolute inset-0 flex items-center justify-center pointer-events-none 
-                               opacity-0 group-hover:opacity-100 transition duration-200 
-                               bg-gray-800 bg-opacity-40"
-                    >
-                        <span class="text-white text-sm font-semibold">
-                            Orbbec
-                        </span>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="flex justify-center items-center">
-            <a href="https://github.com/nhathout" target="_blank" rel="noopener noreferrer">
-                <div class="relative group aspect-square w-20 sm:w-24 md:w-28 flex items-center justify-center overflow-hidden">
-                    <img 
-                        src="assets/images/github_logo.png" 
-                        alt="GitHub" 
-                        class="object-contain w-full h-full transition duration-200 group-hover:opacity-60"
-                    />
-                    <div 
-                        class="absolute inset-0 flex items-center justify-center pointer-events-none 
-                               opacity-0 group-hover:opacity-100 transition duration-200 
-                               bg-gray-800 bg-opacity-40"
-                    >
-                        <span class="text-white text-sm font-semibold">
-                            GitHub
-                        </span>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="flex justify-center items-center">
-            <a href="https://git-scm.com/" target="_blank" rel="noopener noreferrer">
-                <div class="relative group aspect-square w-20 sm:w-24 md:w-28 flex items-center justify-center overflow-hidden">
-                    <img 
-                        src="assets/images/git_logo.png" 
-                        alt="Git" 
-                        class="object-contain w-full h-full transition duration-200 group-hover:opacity-60"
-                    />
-                    <div 
-                        class="absolute inset-0 flex items-center justify-center pointer-events-none 
-                               opacity-0 group-hover:opacity-100 transition duration-200 
-                               bg-gray-800 bg-opacity-40"
-                    >
-                        <span class="text-white text-sm font-semibold">
-                            Git
-                        </span>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="flex justify-center items-center">
-            <a href="https://www.docker.com/" target="_blank" rel="noopener noreferrer">
-                <div class="relative group aspect-square w-20 sm:w-24 md:w-28 flex items-center justify-center overflow-hidden">
-                    <img 
-                        src="assets/images/docker_logo.png" 
-                        alt="Docker" 
-                        class="object-contain w-full h-full transition duration-200 group-hover:opacity-60"
-                    />
-                    <div 
-                        class="absolute inset-0 flex items-center justify-center pointer-events-none 
-                               opacity-0 group-hover:opacity-100 transition duration-200 
-                               bg-gray-800 bg-opacity-40"
-                    >
-                        <span class="text-white text-sm font-semibold">
-                            Docker
-                        </span>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="flex justify-center items-center">
-            <a href="https://www.onshape.com/" target="_blank" rel="noopener noreferrer">
-                <div class="relative group aspect-square w-20 sm:w-24 md:w-28 flex items-center justify-center overflow-hidden">
-                    <img 
-                        src="assets/images/onshape.png" 
-                        alt="Onshape" 
-                        class="object-contain w-full h-full transition duration-200 group-hover:opacity-60"
-                    />
-                    <div 
-                        class="absolute inset-0 flex items-center justify-center pointer-events-none 
-                               opacity-0 group-hover:opacity-100 transition duration-200 
-                               bg-gray-800 bg-opacity-40"
-                    >
-                        <span class="text-white text-sm font-semibold">
-                            Onshape
-                        </span>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="flex justify-center items-center">
-            <a href="https://bambulab.com/en-us" target="_blank" rel="noopener noreferrer">
-                <div class="relative group aspect-square w-20 sm:w-24 md:w-28 flex items-center justify-center overflow-hidden">
-                    <img 
-                        src="assets/images/bambulablogo.png" 
-                        alt="Bambu Lab" 
-                        class="object-contain w-full h-full transition duration-200 group-hover:opacity-60"
-                    />
-                    <div 
-                        class="absolute inset-0 flex items-center justify-center pointer-events-none 
-                               opacity-0 group-hover:opacity-100 transition duration-200 
-                               bg-gray-800 bg-opacity-40"
-                    >
-                        <span class="text-white text-sm font-semibold">
-                            Bambu Lab
-                        </span>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="flex justify-center items-center">
-            <a href="https://ubuntu.com/" target="_blank" rel="noopener noreferrer">
-                <div class="relative group aspect-square w-20 sm:w-24 md:w-28 flex items-center justify-center overflow-hidden">
-                    <img 
-                        src="assets/images/ubuntu_logo.png" 
-                        alt="Ubuntu" 
-                        class="object-contain w-full h-full transition duration-200 group-hover:opacity-60"
-                    />
-                    <div 
-                        class="absolute inset-0 flex items-center justify-center pointer-events-none 
-                               opacity-0 group-hover:opacity-100 transition duration-200 
-                               bg-gray-800 bg-opacity-40"
-                    >
-                        <span class="text-white text-sm font-semibold">
-                            Ubuntu
-                        </span>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="flex justify-center items-center">
-            <a href="https://www.unrealengine.com/en-US/unreal-engine-5" target="_blank" rel="noopener noreferrer">
-                <div class="relative group aspect-square w-20 sm:w-24 md:w-28 flex items-center justify-center overflow-hidden">
-                    <img 
-                        src="assets/images/ur5.png" 
-                        alt="Unreal Engine 5" 
-                        class="object-contain w-full h-full transition duration-200 group-hover:opacity-60"
-                    />
-                    <div 
-                        class="absolute inset-0 flex items-center justify-center pointer-events-none 
-                               opacity-0 group-hover:opacity-100 transition duration-200 
-                               bg-gray-800 bg-opacity-40"
-                    >
-                        <span class="text-white text-sm font-semibold">
-                            Unreal<br>Engine<br> 5
-                        </span>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="flex justify-center items-center">
-            <a href="https://www.microsoft.com/windows" target="_blank" rel="noopener noreferrer">
-                <div class="relative group aspect-square w-20 sm:w-24 md:w-28 flex items-center justify-center overflow-hidden">
-                    <img 
-                        src="assets/images/windows_logo.png" 
-                        alt="Windows" 
-                        class="object-contain w-full h-full transition duration-200 group-hover:opacity-60"
-                    />
-                    <div 
-                        class="absolute inset-0 flex items-center justify-center pointer-events-none 
-                               opacity-0 group-hover:opacity-100 transition duration-200 
-                               bg-gray-800 bg-opacity-40"
-                    >
-                        <span class="text-white text-sm font-semibold">
-                            Windows
-                        </span>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="flex justify-center items-center">
-            <a href="https://www.apple.com/macos/" target="_blank" rel="noopener noreferrer">
-                <div class="relative group aspect-square w-20 sm:w-24 md:w-28 flex items-center justify-center overflow-hidden">
-                    <img 
-                        src="assets/images/macos_logo.png" 
-                        alt="macOS" 
-                        class="object-contain w-full h-full transition duration-200 group-hover:opacity-60"
-                    />
-                    <div 
-                        class="absolute inset-0 flex items-center justify-center pointer-events-none 
-                               opacity-0 group-hover:opacity-100 transition duration-200 
-                               bg-gray-800 bg-opacity-40"
-                    >
-                        <span class="text-white text-sm font-semibold">
-                            macOS
-                        </span>
-                    </div>
-                </div>
-            </a>
-        </div>
-    </section> 
-
-    <!-- PROJECTS SECTION -->
-    <section id="projects" class="text-gray-600 body-font font-mono bg-white relative overflow-hidden py-10">
-      <div class="container mx-auto flex flex-col items-center justify-center px-5 mb-10 text-center">
-          <p class="text-5xl font-bold text-black">Projects</p>
-      </div>
-      <div class="container mx-auto flex flex-col items-center justify-center px-5 bg-white text-center">
-          <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 py-10 px-10 border-gray-300 border-2">
-              
-              <div>
-                  <img src="assets/images/pollux.png" 
-                      alt="Pollux" 
-                      class="w-full mb-4 mx-auto">
-                  
-                  <h1 class="mt-4 text-xl font-semibold text-gray-800">
-                      Pollux
-                  </h1>
-                  
-                  <p class="mt-2 text-gray-500">
-                      An autonomous countertop-cleaning robot with integrated reinforcement learning to prevent falling off cliffs and hitting obstacles.
-                  </p>
-
-                  <p class="mt-2 text-gray-500 text-sm">
-                      <a href="https://github.com/nhathout/pollux-AMR" 
-                        class="text-blue-500 hover:underline" 
-                        target="_blank" 
-                        rel="noopener noreferrer">
-                        Click here to see the GitHub Repository
-                      </a>
-                  </p>
-              </div>
-              <div>
-                  <img src="assets/images/supertuxsmart.png" 
-                      alt="SuperTuxSmart" 
-                      class="w-full mb-4 mx-auto">
-                  
-                  <h1 class="mt-4 text-xl font-semibold text-gray-800">
-                      SuperTuxSmart
-                  </h1>
-                  
-                  <p class="mt-2 text-gray-500">
-                      The goal was to optimize performance on the MarioKart-esque driving simulator called pySuperTuxKart. 
-                      Our approach and results are outlined in 
-                      <a href="https://github.com/nhathout/EC418-Final-Project/blob/main/FinalReport.pdf" 
-                        class="text-blue-500 hover:underline" 
-                        target="_blank" 
-                        rel="noopener noreferrer">
-                        Report.pdf
-                      </a>.
-                  </p>
-
-                  <p class="mt-2 text-gray-500 text-sm">
-                      <a href="https://github.com/nhathout/EC418-Final-Project" 
-                        class="text-blue-500 hover:underline" 
-                        target="_blank" 
-                        rel="noopener noreferrer">
-                        Click here to see the GitHub Repository
-                      </a>
-                  </p>
-              </div>
-              <div>
-                  <img src="assets/images/dl_final_project.png" 
-                      alt="AreYouTrieuly...Net" 
-                      class="w-full mb-4 mx-auto">
-                  
-                  <h1 class="mt-4 text-xl font-semibold text-gray-800">
-                      AreYouTrieulyFocusingOrJust<br>JoshingNoahmNotButHilarioIsNET
-                  </h1>
-                  
-                  <p class="mt-2 text-gray-500">
-                      Extended Meta’s advanced Detectron2 model—originally designed for object detection—to incorporate facial recognition and real-time attention tracking. By integrating COCO instance segmentation with a retrained Detectron2 pipeline, our system efficiently analyzes attention patterns in live video streams. 
-                      Our approach and results are outlined in 
-                      <a href="https://docs.google.com/document/d/1jopVcW5oSQAM1AiB77bWeUELJqZ4IWX0DPezHU_gHWk/edit?usp=sharing" 
-                        class="text-blue-500 hover:underline" 
-                        target="_blank" 
-                        rel="noopener noreferrer">
-                        Report.pdf
-                      </a>.
-                  </p>
-
-                  <p class="mt-2 text-gray-500 text-sm">
-                      <a href="https://github.com/nhathout/AreYoutTrieulyPayingAttentionOrJustJoshingNoahmNotButHilarioIsNET" 
-                        class="text-blue-500 hover:underline" 
-                        target="_blank" 
-                        rel="noopener noreferrer">
-                        Click here to see the GitHub Repository
-                      </a>
-                  </p>
-              </div>
-              <div>
-                  <img src="assets/images/smarthome.png" 
-                      alt="Smart Home API" 
-                      class="w-full mb-4 mx-auto">
-                  
-                  <h1 class="mt-4 text-xl font-semibold text-gray-800">
-                      Smart Home API
-                  </h1>
-                  
-                  <p class="mt-2 text-gray-500">
-                      This project is a Python-based Smart Home API that manages Users, Houses, Rooms, and Devices. The primary focus is on API design and robust error handling — particularly input validation. The project also includes thorough unit tests to demonstrate proper functionality for successful operations as well as error cases.
-                  </p>
-
-                  <p class="mt-2 text-gray-500 text-sm">
-                      <a href="https://github.com/nhathout/smart-home-api" 
-                        class="text-blue-500 hover:underline" 
-                        target="_blank" 
-                        rel="noopener noreferrer">
-                        Click here to see the GitHub Repository
-                      </a>
-                  </p>
-              </div>
-              <div>
-                  <img src="assets/images/pira.png" 
-                      alt="PIRA" 
-                      class="w-full mb-4 mx-auto">
-                  
-                  <h1 class="mt-4 text-xl font-semibold text-gray-800">
-                      PIRA - Personal Indoor Robot Assistant
-                  </h1>
-                  
-                  <p class="mt-2 text-gray-500">
-                      Developed a personal indoor robot assistant that can autonomously navigate via Optitrack-based indoor positioning and real-time obstacle avoidance or be manually operated via WASD. A Node.js server coordinates data among multiple robots, while Streamlit provides a live 2D visualization and TingoDB logs positional data for monitoring and analysis.
-                  </p>
-
-                  <p class="mt-2 text-gray-500 text-sm">
-                      <a href="https://github.com/nhathout/PIRA" 
-                        class="text-blue-500 hover:underline" 
-                        target="_blank" 
-                        rel="noopener noreferrer">
-                        Click here to see the GitHub Repository
-                      </a>
-                  </p>
-              </div>
-              <div>
-                  <img src="assets/images/chatsheets.png" 
-                      alt="ChatSheetsAI" 
-                      class="w-full mb-4 mx-auto">
-                  
-                  <h1 class="mt-4 text-xl font-semibold text-gray-800">
-                      ChatSheetsAI 
-                  </h1>
-                  
-                  <p class="mt-2 text-gray-500">
-                      Built a Python-based tool that lets users explore data entirely through chat. Upload a CSV once, and ChatSheetsAI auto-infers a SQLite schema, reconciles column mismatches, and stores everything locally. A lightweight CLI handles load/list/query commands, while an OpenAI-powered layer translates natural-language questions into SQL on the fly—so you can filter, join, and summarize data without ever opening a traditional spreadsheet.
-                  </p>
-
-                  <p class="mt-2 text-gray-500 text-sm">
-                      <a href="https://github.com/nhathout/ChatSheetsAI" 
-                        class="text-blue-500 hover:underline" 
-                        target="_blank" 
-                        rel="noopener noreferrer">
-                        Click here to see the GitHub Repository
-                      </a>
-                  </p>
-              </div>
-              <div>
-                  <img src="assets/images/pyp2pchat.png" 
-                      alt="PyP2PChat" 
-                      class="w-full mb-4 mx-auto">
-                  
-                  <h1 class="mt-4 text-xl font-semibold text-gray-800">
-                      PyP2PChat 
-                  </h1>
-                  
-                  <p class="mt-2 text-gray-500">
-                      Created a terminal-based chat app where each node doubles as client and server, racing to form a single full-duplex TCP link—no central broker required. Python socket + threading keep input responsive while background threads stream messages both ways, and every exchange is time-stamped to a local SQLite log so conversations stay yours alone, even offline.
-                  </p>
-
-                  <p class="mt-2 text-gray-500 text-sm">
-                      <a href="https://github.com/nhathout/PyP2PChat" 
-                        class="text-blue-500 hover:underline" 
-                        target="_blank" 
-                        rel="noopener noreferrer">
-                        Click here to see the GitHub Repository
-                      </a>
-                  </p>
-              </div>
-              <div>
-                  <img src="assets/images/fitcat.png" 
-                      alt="Fit Cat" 
-                      class="w-full mb-4 mx-auto">
-                  
-                  <h1 class="mt-4 text-xl font-semibold text-gray-800">
-                      FitCat: Network of Smart Cat Collars with Activity Monitoring
-                  </h1>
-                  
-                  <p class="mt-2 text-gray-500">
-                      Developed a smart cat collar that captures and transmits real-time activity data (sleeping, wandering, or "moonwalk") using an accelerometer, networked server, and alphanumeric display. It also includes a button interface for switching modes, a buzzer for leadership status changes, and coordinates with a central server to participate in a leader determination system.
-                  </p>
-
-                  <p class="mt-2 text-gray-500 text-sm">
-                      <a href="https://github.com/nhathout/Fit-Cat" 
-                        class="text-blue-500 hover:underline" 
-                        target="_blank" 
-                        rel="noopener noreferrer">
-                        Click here to see the GitHub Repository
-                      </a>
-                  </p>
-              </div>
-              <div>
-                  <img src="assets/images/smartpill.png" 
-                      alt="Smart Pill" 
-                      class="w-full mb-4 mx-auto">
-                  
-                  <h1 class="mt-4 text-xl font-semibold text-gray-800">
-                      SmartPill: Ingestible Sensor
-                  </h1>
-                  
-                  <p class="mt-2 text-gray-500">
-                      Developed a proof-of-concept ingestible sensor (SmartPill) using an ESP32 microcontroller to log and transmit key biometric data as it “travels” through the digestive tract. It continuously captures data, converts it into engineering units, and reports findings via a serial console, laying groundwork for future non-invasive diagnostic tools.
-                  </p>
-
-                  <p class="mt-2 text-gray-500 text-sm">
-                      <a href="https://github.com/nhathout/SmartPill-Ingestible-Sensor" 
-                        class="text-blue-500 hover:underline" 
-                        target="_blank" 
-                        rel="noopener noreferrer">
-                        Click here to see the GitHub Repository
-                      </a>
-                  </p>
-              </div>
-              <div>
-                  <img src="assets/images/election.png" 
-                      alt="elect-A-leader" 
-                      class="w-full mb-4 mx-auto">
-                  
-                  <h1 class="mt-4 text-xl font-semibold text-gray-800">
-                      elect-A-leader
-                  </h1>
-                  
-                  <p class="mt-2 text-gray-500">
-                      Developed a distributed, fail-safe e-voting system using IR-equipped fob devices to simulate NFC-like authentication for casting votes. A dynamically elected Coordinator aggregates votes, manages central server communication, and ensures continuous operation through failover.
-                  </p>
-
-                  <p class="mt-2 text-gray-500 text-sm">
-                      <a href="https://github.com/nhathout/elect-A-leader" 
-                        class="text-blue-500 hover:underline" 
-                        target="_blank" 
-                        rel="noopener noreferrer">
-                        Click here to see the GitHub Repository
-                      </a>
-                  </p>
-              </div>
-              <div>
-                  <img src="assets/images/PixelMe.jpg" 
-                      alt="My Portfolio" 
-                      class="w-full mb-4 mx-auto">
-                  
-                  <h1 class="mt-4 text-xl font-semibold text-gray-800">
-                      My Personal Portfolio Website
-                  </h1>
-                  
-                  <p class="mt-2 text-gray-500">
-                      Website to showcase me 😁
-                  </p>
-
-                  <p class="mt-2 text-gray-500 text-sm">
-                      <a href="https://github.com/nhathout/portfolio" 
-                        class="text-blue-500 hover:underline" 
-                        target="_blank" 
-                        rel="noopener noreferrer">
-                        Click here to see the GitHub Repository
-                      </a>
-                  </p>
-              </div>
-              <div>
-                  <img src="assets/images/mia.png" 
-                      alt="Mia's Portfolio" 
-                      class="w-full mb-4 mx-auto">
-                  
-                  <h1 class="mt-4 text-xl font-semibold text-gray-800">
-                      Mia's Art Portfolio Website
-                  </h1>
-                  
-                  <p class="mt-2 text-gray-500">
-                      Website to showcase my sister's amazing art. Check out the live website at:
-                      <a href="https://miasportfolio.art/" 
-                        class="text-blue-500 hover:underline" 
-                        target="_blank" 
-                        rel="noopener noreferrer">
-                        miasportfolio.art
-                      </a>.
-                  </p>
-
-                  <p class="mt-2 text-gray-500 text-sm">
-                      <a href="https://github.com/nhathout/mias-portfolio" 
-                        class="text-blue-500 hover:underline" 
-                        target="_blank" 
-                        rel="noopener noreferrer">
-                        Click here to see the GitHub Repository
-                      </a>
-                  </p>
-              </div>
-              <div>
-                  <img src="assets/images/geo-prox.png" 
-                      alt="Geo-Proximity Calculator" 
-                      class="w-full mb-4 mx-auto">
-                  
-                  <h1 class="mt-4 text-xl font-semibold text-gray-800">
-                      Geo-Proximity Calculator
-                  </h1>
-                  
-                  <p class="mt-2 text-gray-500">
-                      Built a Python tool to efficiently match geographic coordinates between datasets using the Haversine formula. Supports CSV or manual input, interprets complex coordinate formats (DMS/decimal), and calculates nearest neighbors for logistics or spatial analytics. Features robust error handling and adjustable logging.
-                  </p>
-
-                  <p class="mt-2 text-gray-500 text-sm">
-                      <a href="https://github.com/nhathout/geo-proximity-calculator" 
-                        class="text-blue-500 hover:underline" 
-                        target="_blank" 
-                        rel="noopener noreferrer">
-                        Click here to see the GitHub Repository
-                      </a>
-                  </p>
-              </div>
-              <div>
-                  <img src="assets/images/graphtrak.png" 
-                      alt="GraphTrak" 
-                      class="w-full mb-4 mx-auto">
-                  
-                  <h1 class="mt-4 text-xl font-semibold text-gray-800">
-                      GraphTrak – Weighted Graph & Multi-Shortest-Paths Analysis
-                  </h1>
-                  
-                  <p class="mt-2 text-gray-500">
-                      Developed in C++, this undirected, weighted graph library reads edges from a file, constructs an adjacency list, and uses a priority queue–based approach to calculate distances plus the number of distinct shortest paths. Demonstrates proficiency in data structures, file I/O, and efficient graph algorithms.
-                  </p>
-
-                  <p class="mt-2 text-gray-500 text-sm">
-                      <a href="https://github.com/nhathout/shortest-path-graph" 
-                        class="text-blue-500 hover:underline" 
-                        target="_blank" 
-                        rel="noopener noreferrer">
-                        Click here to see the GitHub Repository
-                      </a>
-                  </p>
-              </div>
-
-              <div>
-                  <img src="assets/images/huffman.png" 
-                      alt="Huffster" 
-                      class="w-full mb-4 mx-auto">
-                  
-                  <h1 class="mt-4 text-xl font-semibold text-gray-800">
-                      Huffman Code Generator & File Decoder
-                  </h1>
-                  
-                  <p class="mt-2 text-gray-500">
-                      Built in C++, this system uses priority queues to construct a Huffman tree from character frequencies, then generates sorted code tables and decodes compressed files. Showcases expertise in data compression, tree-based algorithms, and file handling.
-                  </p>
-
-                  <p class="mt-2 text-gray-500 text-sm">
-                      <a href="https://github.com/nhathout/huffman-code-generator" 
-                        class="text-blue-500 hover:underline" 
-                        target="_blank" 
-                        rel="noopener noreferrer">
-                        Click here to see the GitHub Repository
-                      </a>
-                  </p>
-              </div>
-          </div>
-      </div>
-    </section>
-
-
-    <!-- AWARDS & AFFILIATIONS SECTION -->
-    <section id="awards-affiliations" class="text-gray-600 body-font font-mono bg-white relative overflow-hidden py-10">
-      <div class="container mx-auto px-5">
-        <!-- Create a 2-column grid -->
-        <div class="grid md:grid-cols-2 gap-10">
-
-          <!-- Awards (left) -->
-          <div>
-            <h2 class="text-4xl font-bold text-black mb-10">Awards</h2>
-            <div class="mb-6">
-              <h3 class="text-2xl font-semibold"></h3>
-              <img src="assets/images/deanslist.png" alt="Dean's List" class="w-32 h-32 my-2">
-              <p class="text-gray-700">
-                Boston University's College of Engineering Undergraduate Policy states
-                that "The top 30 percent of students in each class cohort are placed
-                on the Dean’s List of academic honor each term."
-              </p>
-            </div>
-            <div class="mb-6">
-              <h3 class="text-2xl font-semibold"></h3>
-              <img src="assets/images/hhbc.png" alt="Award 2" class="h-32 my-2">
-              <p class="text-gray-700">
-                Awarded the Hood Hargett Breakfast Club Scholarship for achievements
-                in both academics and athletics.
-              </p>
-              <p class="mt-2 text-gray-500 text-sm">
-                <a href="https://drive.google.com/file/d/1ibeBpTvYqFsws_GK_nGrChah0Xk3k5Me/view?usp=sharing" 
-                  class="text-blue-500 hover:underline" 
-                  target="_blank" 
-                  rel="noopener noreferrer">
-                  Click here to view my speech, presented in Charlotte Knight's Truist Baseball Field.
-                </a>
-              </p>
-            </div>
-          </div>
-
-          <!-- Affiliations (right) -->
-          <!-- Make this column a flex container that justifies content to the right -->
-          <div class="flex justify-center">
-            <div>
-              <h2 class="text-4xl font-bold text-black mb-10">Affiliations</h2><br>
-              <div class="space-y-4">
-                <a href="https://www.ieee.org/" target="_blank" rel="noopener noreferrer">
-                  <img src="assets/images/IEEE_logo.png" alt="IEEE" class="h-36 transform transition-transform duration-200 hover:scale-110">
-                </a>
-                <br><br><br>
-                <a href="https://www.twitch.tv/sernawa" target="_blank" rel="noopener noreferrer">
-                  <img src="assets/images/twitch_logo.png" alt="Twitch" class="h-36 transform transition-transform duration-200 hover:scale-110">
-                </a>
-              </div>
-            </div>
-          </div>
-          
-        </div>
-      </div>
-    </section>
-
-
-    <!-- BLOG SECTION 
+   <!-- BLOG SECTION 
     <section id="blog" class="text-gray-600 body-font font-mono bg-white relative overflow-hidden pb-10">
         <div class="container mx-auto flex px-5 md:flex-row flex-col items-center mb-10">
             <p class="text-5xl font-bold text-black">Blog</p>
@@ -1485,111 +855,630 @@
         </section>
     </section>
     -->
-
-    <!-- CONTACT SECTION -->
-    <section id="contact" class="text-gray-600 body-font font-mono bg-white relative overflow-hidden py-10">
-      <div class="container mx-auto flex flex-col lg:flex-row items-center px-5">
-        
-        <!-- Left Column: Video -->
-        <div class="lg:w-1/2 mb-10 lg:mb-0">
-          <video class="object-cover object-center border-2 border-gray-200 w-full" autoplay loop muted playsinline>
-            <source src="assets/clips/egypt_gif.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-          </video>
-        </div>
-        
-        <!-- Right Column: Contact Info -->
-        <div class="lg:w-1/2 flex flex-col items-center text-center justify-center">
-          <h1 class="title-font text-5xl mb-4 font-bold text-gray-900 py-10">Contact Me</h1>
-          <p class="mb-6 text-gray-700">Get in touch!</p>
-          
-          <!-- Icons -->
-          <div class="flex justify-center gap-8 w-full">
-            <!-- LinkedIn -->
-            <a 
-              href="https://www.linkedin.com/in/noah-hathout/" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              class="transform transition-transform duration-200 hover:scale-110"
-            >
-              <img 
-                src="assets/images/linkedin_logo.png" 
-                alt="LinkedIn" 
-                class="w-24 h-24"
-              />
-            </a>
-
-            <!-- Phone -->
-            <a
-              href="tel:+17047777361"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="transform transition-transform duration-200 hover:scale-110"
-            >
-              <img
-                src="assets/images/phone.png"
-                alt="Phone"
-                class="w-24 h-24"
-              />
-            </a>
-
-            <!-- Email -->
-            <a
-              href="mailto:nhathout11@gmail.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="transform transition-transform duration-200 hover:scale-110"
-            >
-              <img
-                src="assets/images/email.png"
-                alt="Email"
-                class="w-24 h-24"
-              />
-            </a>
-
-            <!-- Instagram -->
-            <a
-              href="https://www.instagram.com/noahhathout/?hl=en"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="transform transition-transform duration-200 hover:scale-110"
-            >
-              <img
-                src="assets/images/instagram_logo.png"
-                alt="Instagram"
-                class="w-24 h-24"
-              />
-            </a>
-          </div>
-        </div>
-
+   <!-- CONTACT SECTION -->
+   <section class="text-gray-600 body-font font-mono bg-white relative overflow-hidden py-10" id="contact">
+    <div class="container mx-auto flex flex-col lg:flex-row items-center px-5 gap-10">
+     <div class="lg:w-1/2 w-full">
+      <video autoplay="" class="contact-video" loop="" muted="" playsinline="">
+       <source src="assets/clips/egypt_gif.mp4" type="video/mp4"/>
+       Your browser does not support the video tag.
+      </video>
+     </div>
+     <div class="lg:w-1/2 w-full">
+      <div class="contact-card">
+       <div class="text-center lg:text-left">
+        <p class="text-xs uppercase tracking-[0.4em] text-gray-500 mb-2">
+         LET'S CONNECT
+        </p>
+        <h1 class="title-font text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
+         Say hi
+        </h1>
+       </div>
+       <div class="contact-links">
+        <a class="contact-link" href="https://www.linkedin.com/in/noah-hathout/" rel="noopener noreferrer" target="_blank">
+         <div class="contact-link-inner">
+          <img alt="LinkedIn" src="assets/images/linkedin_logo.png"/>
+          <span>
+           LinkedIn
+           <small>
+            /noah-hathout
+           </small>
+          </span>
+         </div>
+        </a>
+        <a class="contact-link" href="tel:+17047777361" rel="noopener noreferrer" target="_blank">
+         <div class="contact-link-inner">
+          <img alt="Phone" src="assets/images/phone.png"/>
+          <span>
+           Phone
+          </span>
+         </div>
+        </a>
+        <a class="contact-link" href="mailto:nhathout@bu.edu" rel="noopener noreferrer" target="_blank">
+         <div class="contact-link-inner">
+          <img alt="Email" src="assets/images/email.png"/>
+          <span>
+           Email
+           <small>
+            nhathout@bu.edu
+           </small>
+          </span>
+         </div>
+        </a>
+        <a class="contact-link" href="https://www.instagram.com/noahhathout/?hl=en" rel="noopener noreferrer" target="_blank">
+         <div class="contact-link-inner">
+          <img alt="Instagram" src="assets/images/instagram_logo.png"/>
+          <span>
+           Instagram
+           <small>
+            @noahhathout
+           </small>
+          </span>
+         </div>
+        </a>
+       </div>
       </div>
-    </section>
-  
-</main>
-
-<footer class="text-gray-600 body-font font-mono bg-gray-300">
-  <div class="container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col">
+     </div>
+    </div>
+   </section>
+  </main>
+  <footer class="text-gray-600 body-font font-mono bg-gray-300">
+   <div class="container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col">
     <a class="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
-      <img class="rounded-lg bg-gray-500" src="assets/images/PixelMe_50x50.jpg" alt="Profile Pic">
-      <span class="ml-3 text-xl">[NH]</span>
+     <img alt="Profile Pic" class="rounded-lg bg-gray-500" src="assets/images/PixelMe_50x50.jpg"/>
+     <span class="ml-3 text-xl">
+      [NH]
+     </span>
     </a>
-    <p class="text-sm text-gray-500 sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-200 sm:py-2 sm:mt-0 mt-4">© 2024 —
-      <a href="#contact" class="text-gray-600 ml-1">@noahhathout</a>
+    <p class="text-sm text-gray-500 sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-200 sm:py-2 sm:mt-0 mt-4">
+     © 2024 —
+     <a class="text-gray-600 ml-1" href="#contact">
+      @noahhathout
+     </a>
     </p>
     <span class="inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center fill-current text-gray-500 sm:justify-start">
-      <!-- Social media icons here -->
+     <!-- Social media icons here -->
     </span>
-  </div>
-</footer>
-
-<style>
+   </div>
+  </footer>
+  <style>
+   :root {
+      --timeline-dot-size: 1.15rem;
+      --timeline-line-color-start: rgba(0, 77, 64, 0.85);
+      --timeline-line-color-end: rgba(0, 121, 107, 0.85);
+      --timeline-dot-fill: #fac123;
+      --timeline-dot-border: #00796b;
+    }
     .waving-hand {
       animation-name: wave-animation;
       animation-duration: 2.5s;
       animation-iteration-count: 3;
       transform-origin: 70% 70%;
       display: inline-block;
+    }
+        .pixel-portrait {
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.45);
+      transition: transform 200ms ease, box-shadow 200ms ease;
+    }
+    .pixel-portrait:hover {
+      transform: scale(1.05);
+      box-shadow: 0 22px 55px rgba(15, 23, 42, 0.5);
+    }
+    .top-nav {
+      gap: 0.35rem;
+    }
+    .top-nav-link {
+      position: relative;
+      color: #1f2937;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      transition: color 250ms ease, transform 250ms ease, opacity 250ms ease;
+      border-radius: 999px;
+    }
+    .top-nav-link::after {
+      content: '';
+      position: absolute;
+      inset: 25% 14%;
+      border-radius: 999px;
+      background: linear-gradient(120deg, rgba(0, 77, 64, 0.16), rgba(0, 121, 107, 0.2));
+      box-shadow: 0 10px 20px rgba(0, 77, 64, 0.15);
+      opacity: 0;
+      transform: scale(0.65);
+      transition: opacity 260ms ease, transform 260ms ease;
+      z-index: -1;
+    }
+    .top-nav-link::before {
+      content: '';
+      position: absolute;
+      left: 20%;
+      right: 20%;
+      bottom: 0.35rem;
+      height: 2px;
+      background: linear-gradient(90deg, #00796b, #fac123);
+      opacity: 0;
+      transform: scaleX(0.4);
+      transform-origin: center;
+      transition: opacity 260ms ease, transform 260ms ease;
+    }
+    .top-nav:hover .top-nav-link {
+      opacity: 0.7;
+    }
+    .top-nav-link:hover {
+      color: #004d40;
+      opacity: 1;
+      transform: translateY(-1px);
+    }
+    .top-nav-link:hover::after {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .top-nav-link:hover::before {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+    .timeline {
+      padding: calc(var(--timeline-dot-size) * 0.9) 0 calc(var(--timeline-dot-size) * 1.2);
+    }
+    .timeline-line {
+      width: 4px;
+      background: linear-gradient(180deg, var(--timeline-line-color-start), var(--timeline-line-color-end));
+      border-radius: 999px;
+      z-index: 0;
+      top: 0;
+      bottom: 0;
+    }
+    .timeline-entry {
+      padding-top: 2.5rem;
+      margin-bottom: 3rem;
+    }
+    .timeline-entry:first-of-type {
+      padding-top: 1rem;
+    }
+    .timeline-entry:last-of-type {
+      margin-bottom: 0;
+      padding-bottom: 1rem;
+    }
+    .timeline-entry::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0;
+      transform: translate(-50%, -50%);
+      width: var(--timeline-dot-size);
+      height: var(--timeline-dot-size);
+      border-radius: 999px;
+      background: var(--timeline-dot-fill);
+      border: 3px solid var(--timeline-dot-border);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+      z-index: 1;
+    }
+    .timeline-entry:last-of-type::before {
+      top: auto;
+      bottom: 0;
+      transform: translate(-50%, 50%);
+    }
+    .typewriter-text {
+      display: inline-block;
+      overflow: hidden;
+      border-right: 0.12em solid #1f2937;
+      white-space: nowrap;
+      letter-spacing: 0.08em;
+      padding-right: 0.2em;
+      animation: hero-typewriter 3s steps(40, end) 0.25s forwards, hero-caret 0.65s step-end infinite;
+    }
+    @keyframes hero-typewriter {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+    @keyframes hero-caret {
+      from, to { border-color: transparent; }
+      50% { border-color: #1f2937; }
+    }
+    @media (max-width: 640px) {
+      .typewriter-text {
+        white-space: normal;
+        animation: none;
+        border-right: none;
+      }
+    }
+    .game-btn {
+      transition: background-color 200ms ease, transform 200ms ease;
+    }
+    .game-btn-primary {
+      background-color: #00796b;
+      color: #ffffff;
+    }
+    .game-btn-primary:hover {
+      background-color: #005f52;
+      transform: translateY(-1px);
+    }
+    .game-btn-secondary {
+      background-color: #fac123;
+      color: #1f2937;
+    }
+    .game-btn-secondary:hover {
+      background-color: #e1a100;
+      transform: translateY(-1px);
+    }
+    .skills-tabs {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .skills-tab {
+      padding: 0.45rem 1.25rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.05);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #334155;
+      transition: all 200ms ease;
+    }
+    .skills-tab:hover {
+      background: rgba(0, 121, 107, 0.15);
+      color: #004d40;
+    }
+    .skills-tab.is-active {
+      background: #00796b;
+      color: #ffffff;
+      box-shadow: 0 8px 18px rgba(0, 121, 107, 0.25);
+    }
+    .skills-pager-btn {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 999px;
+      border: 2px solid rgba(0, 121, 107, 0.45);
+      background: #ffffff;
+      color: #004d40;
+      font-size: 1.4rem;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 200ms ease, border-color 200ms ease, color 200ms ease;
+    }
+    .skills-pager-btn:hover {
+      transform: translateY(-2px);
+      border-color: #00796b;
+      color: #00796b;
+    }
+    .skills-active-label {
+      min-width: 11rem;
+    }
+    .award-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .award-card {
+      position: relative;
+      padding: 1.75rem;
+      border-radius: 1.5rem;
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      background: #fdfdfd;
+      box-shadow: 0 20px 45px rgba(15, 23, 42, 0.12);
+      overflow: hidden;
+      transition: transform 250ms ease, box-shadow 250ms ease;
+    }
+    .award-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, rgba(0, 121, 107, 0.08), rgba(250, 193, 35, 0.15));
+      opacity: 0;
+      transition: opacity 250ms ease;
+    }
+    .award-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 35px 60px rgba(15, 23, 42, 0.18);
+    }
+    .award-card:hover::after {
+      opacity: 1;
+    }
+    .award-ribbon {
+      position: relative;
+      display: inline-flex;
+      padding: 0.2rem 0.9rem;
+      border-radius: 999px;
+      background: rgba(0, 77, 64, 0.08);
+      margin-bottom: 1.25rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #004d40;
+      z-index: 1;
+    }
+    .award-body {
+      position: relative;
+      display: flex;
+      gap: 1.1rem;
+      align-items: center;
+      z-index: 1;
+    }
+    .award-body img {
+      width: 90px;
+      height: 90px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+    .award-title {
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+      color: #0f172a;
+    }
+    .award-copy {
+      color: #475569;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    .award-link {
+      display: inline-flex;
+      gap: 0.35rem;
+      align-items: center;
+      margin-top: 0.65rem;
+      font-weight: 600;
+      color: #00796b;
+    }
+    .award-link:hover {
+      color: #004d40;
+    }
+    .affiliation-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 400px) minmax(0, 1fr);
+      gap: 2rem;
+      align-items: center;
+    }
+    @media (max-width: 1024px) {
+      .affiliation-panel {
+        grid-template-columns: 1fr;
+      }
+    }
+    .affiliation-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+    .affiliation-card {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.25rem 1.5rem;
+      border-radius: 1.5rem;
+      background: #ffffff;
+      border: 1px solid rgba(15, 23, 42, 0.1);
+      box-shadow: 0 15px 25px rgba(15, 23, 42, 0.12);
+      text-decoration: none;
+      color: inherit;
+      transition: transform 250ms ease, border-color 250ms ease;
+    }
+    .affiliation-card img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+    }
+    .affiliation-card p {
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      margin-bottom: 0.15rem;
+      color: #0f172a;
+    }
+    .affiliation-card small {
+      color: #475569;
+      letter-spacing: 0.08em;
+    }
+    .affiliation-card:hover {
+      transform: translateY(-8px) rotate(-1deg);
+      border-color: rgba(0, 121, 107, 0.6);
+    }
+    .contact-video {
+      border-radius: 1.5rem;
+      border: 4px solid rgba(0, 77, 64, 0.15);
+    box-shadow: 0 25px 55px rgba(15, 23, 42, 0.25);
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    max-height: 420px;
+  }
+  .contact-card {
+    background: #ffffff;
+    border-radius: 1.75rem;
+    padding: 2.5rem;
+    border: 1px solid rgba(0, 77, 64, 0.06);
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.15);
+  }
+  .contact-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+  }
+  .contact-link {
+    position: relative;
+    display: block;
+    transform: rotate(-4deg) skew(4deg);
+    transition: transform 300ms ease, box-shadow 300ms ease;
+    text-decoration: none;
+  }
+  .contact-link-inner {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    border-radius: 1.25rem;
+    background: #fdfdfd;
+    box-shadow: -18px 18px 18px rgba(15, 23, 42, 0.15);
+    border: 1px solid rgba(0, 77, 64, 0.08);
+  }
+  .contact-link img {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+  }
+  .contact-link span {
+    font-weight: 700;
+    color: #0f172a;
+    display: flex;
+    flex-direction: column;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .contact-link span small {
+    font-size: 0.7rem;
+    color: #475569;
+    letter-spacing: 0.1em;
+  }
+  .contact-link:hover {
+    transform: rotate(-2deg) skew(1deg) translate(10px, -8px);
+  }
+  .contact-link:nth-child(1):hover .contact-link-inner {
+    background: linear-gradient(120deg, #0a66c2, #14b8a6);
+    color: #ffffff;
+  }
+  .contact-link:nth-child(2):hover .contact-link-inner {
+    background: linear-gradient(120deg, #10b981, #34d399);
+    color: #ffffff;
+  }
+  .contact-link:nth-child(3):hover .contact-link-inner {
+    background: linear-gradient(120deg, #f97316, #facc15);
+    color: #ffffff;
+  }
+  .contact-link:nth-child(4):hover .contact-link-inner {
+    background: linear-gradient(120deg, #d946ef, #f43f5e);
+    color: #ffffff;
+  }
+    .skills-grid {
+      perspective: 1300px;
+      perspective-origin: 50% 25%;
+      gap: 1.25rem;
+      grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+      justify-items: center;
+      align-items: center;
+      transition: opacity 260ms ease, transform 260ms ease;
+    }
+    .skills-grid.skills-grid--exit {
+      opacity: 0;
+      transform: translateY(22px);
+      pointer-events: none;
+    }
+    .skills-grid.skills-grid--enter {
+      animation: skills-grid-enter 350ms ease forwards;
+    }
+    .skill-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      text-align: center;
+      gap: 0.5rem;
+      color: inherit;
+      text-decoration: none;
+    }
+    .skill-link:focus-visible {
+      outline: 2px solid #00796b;
+      outline-offset: 6px;
+    }
+    .skill-cube {
+      --skill-size: clamp(4.75rem, 6vw, 6.75rem);
+      --skill-half: calc(var(--skill-size) / 2);
+      width: var(--skill-size);
+      height: var(--skill-size);
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.8s ease;
+      animation: skill-breathe 8s ease-in-out infinite;
+    }
+    .skill-link:hover .skill-cube,
+    .skill-link:focus-visible .skill-cube {
+      animation: skill-rotate 6s linear infinite;
+    }
+    .skill-face {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 16px;
+      border: 2px solid rgba(0, 77, 64, 0.25);
+      background: #ffffff;
+      backface-visibility: hidden;
+      overflow: hidden;
+    }
+    .skill-face img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 0.45rem;
+    }
+    .skill-face::before {
+      content: '';
+      position: absolute;
+      inset: -120%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+      transform: translateZ(20px);
+      transition: transform 0.6s ease;
+    }
+    .skill-face::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.08) 50%, transparent 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .skill-link:hover .skill-face::before,
+    .skill-link:focus-visible .skill-face::before {
+      transform: translate(120%, 120%) translateZ(20px);
+    }
+    .skill-link:hover .skill-face::after,
+    .skill-link:focus-visible .skill-face::after {
+      opacity: 1;
+    }
+    .skill-face.front {
+      transform: translateZ(var(--skill-half));
+    }
+    .skill-face.back {
+      transform: rotateY(180deg) translateZ(var(--skill-half));
+    }
+    .skill-face.right {
+      transform: rotateY(90deg) translateZ(var(--skill-half));
+    }
+    .skill-face.left {
+      transform: rotateY(-90deg) translateZ(var(--skill-half));
+    }
+    .skill-face.top {
+      transform: rotateX(90deg) translateZ(var(--skill-half));
+    }
+    .skill-face.bottom {
+      transform: rotateX(-90deg) translateZ(var(--skill-half));
+    }
+    .skill-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #1f2937;
+    }
+    .skill-link:hover .skill-label,
+    .skill-link:focus-visible .skill-label {
+      color: #004d40;
+    }
+    @keyframes skill-rotate {
+      0% { transform: scale(1.08) rotateX(0deg) rotateY(0deg); }
+      25% { transform: scale(1.08) rotateX(90deg) rotateY(90deg); }
+      50% { transform: scale(1.08) rotateX(180deg) rotateY(180deg); }
+      75% { transform: scale(1.08) rotateX(270deg) rotateY(270deg); }
+      100% { transform: scale(1.08) rotateX(360deg) rotateY(360deg); }
+    }
+    @keyframes skill-breathe {
+      0%, 100% { transform: rotateX(-6deg) rotateY(12deg) scale(0.96); }
+      50% { transform: rotateX(4deg) rotateY(-8deg) scale(1); }
+    }
+    @keyframes skills-grid-enter {
+      0% { opacity: 0; transform: translateY(-18px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
     @keyframes wave-animation {
       0% { transform: rotate(0deg) }
@@ -1620,8 +1509,8 @@
     }
 
     /* Adjust leaderboard font-size and layout are done in JS inline styles */
-</style>
-  
-<script src="script.js" defer></script>
-</body>
+  </style>
+  <script defer="" src="script.js">
+  </script>
+ </body>
 </html>

@@ -130,21 +130,10 @@
           <!-- LEFT COLUMN: EDUCATION TIMELINE + MINI-GAME BELOW -->
           <div class="md:pr-5">
             <h2 class="text-4xl font-bold text-black mb-10 text-center">Education</h2>
-            <div class="relative">
+            <div class="relative timeline">
+              <div class="timeline-line absolute left-1/2 transform -translate-x-1/2"></div>
 
-              <!-- Vertical line (shortened) -->
-              <div 
-                class="absolute left-1/2 transform -translate-x-1/2 top-6 bottom-6 border-l-4 border-gray-300"
-              ></div>
-              
-              <!-- Top dot (First point) -->
-              <div 
-                class="w-6 h-6 bg-purple-300 rounded-full border-2 border-white
-                      absolute left-1/2 transform -translate-x-1/2 top-6"
-              ></div>
-
-              <!-- Point 1 -->
-              <div class="relative mb-12 pt-2">
+              <div class="relative mb-12 timeline-entry">
                 <div class="flex items-center">
                   <div class="w-1/2 text-right pr-10 space-y-2">
                     <img src="assets/images/bu_logo.png" alt="BU Logo" class="h-24 inline-block mb-1" />
@@ -155,16 +144,15 @@
                       <li>Coursework: Intro to R&AS (EK505), Robot Motion Planning (ME570), Robot Learning (EC518), Embedded Systems (EC535)</li>
                     </ul>
                     
-                    <p class="text-xs text-gray-500 mt-2 italic">
-                      Expected September 2025 - May 2026
+                    <p class="text-xs text-gray-500 mt-2 italic leading-relaxed">
+                      Expected Sep 2025 - Dec 2026 ·<br>Boston, MA
                     </p>
                   </div>
                   <div class="w-1/2"></div>
                 </div>
               </div>
 
-              <!-- Point 2 -->
-              <div class="relative mb-12">
+              <div class="relative mb-12 timeline-entry">
                 <div class="flex flex-row-reverse items-center">
                   <div class="w-1/2 text-left pl-10 space-y-2">
                     <img src="assets/images/bu_logo.png" alt="BU Logo" class="h-24 inline-block mb-1" />
@@ -179,21 +167,15 @@
                       <li>Unity & Social Quality Initiative (USQI)</li>
                     </ul>
                     
-                    <p class="text-xs text-gray-500 mt-2 italic">
-                      September 2021 - present
+                    <p class="text-xs text-gray-500 mt-2 italic leading-relaxed">
+                      Sep 2021 - Present ·<br>Boston, MA
                     </p>
                   </div>
                   <div class="w-1/2"></div>
                 </div>
-                <!-- Middle dot for second point -->
-                <div 
-                  class="w-6 h-6 bg-purple-300 rounded-full border-2 border-white
-                        absolute left-1/2 transform -translate-x-1/2 top-1/2"
-                ></div>
               </div>
 
-              <!-- Point 3 -->
-              <div class="relative mb-12">
+              <div class="relative mb-12 timeline-entry">
                 <div class="flex items-center">
                   <div class="w-1/2 text-right pr-10 space-y-2">
                     <img src="assets/images/akhs_logo.png" alt="AKHS Logo" class="h-28 inline-block mb-1" />
@@ -209,17 +191,12 @@
                       <li>AK Garden Club</li>
                     </ul>
                     
-                    <p class="text-xs text-gray-500 mt-2 italic">
-                      August 2017 - June 2021
+                    <p class="text-xs text-gray-500 mt-2 italic leading-relaxed">
+                      Aug 2017 - Jun 2021 ·<br>Charlotte, NC
                     </p>
                   </div>
                   <div class="w-1/2"></div>
                 </div>
-                <!-- Bottom dot (Last point) -->
-                <div 
-                  class="w-6 h-6 bg-purple-300 rounded-full border-2 border-white
-                        absolute left-1/2 transform -translate-x-1/2 bottom-6"
-                ></div>
               </div>
             </div>
 
@@ -243,10 +220,10 @@
                 <div id="start-screen" class="inline-block p-4 border-2 border-gray-300 rounded-lg mb-4">
                   <h4 class="font-semibold mb-2">Leaderboard</h4>
                   <ol id="leaderboard" class="mb-4"></ol>
-                  <button id="startBtn" class="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-400">
+                  <button id="startBtn" class="px-4 py-2 rounded game-btn game-btn-primary">
                     Start Game
                   </button>
-                  <button id="resetLeaderboardBtn" class="px-4 py-2 bg-purple-400 text-white rounded hover:bg-purple-300">
+                  <button id="resetLeaderboardBtn" class="px-4 py-2 rounded game-btn game-btn-secondary">
                     Reset Leaderboard
                   </button>
                 </div>
@@ -266,21 +243,34 @@
           <!-- RIGHT COLUMN: EXPERIENCE TIMELINE -->
           <div>
             <h2 class="text-4xl font-bold text-black mb-10 text-center">Experience</h2>
-            <div class="relative">
-
-              <!-- Vertical line (shortened) -->
-              <div 
-                class="absolute left-1/2 transform -translate-x-1/2 top-6 bottom-6 border-l-4 border-gray-300"
-              ></div>
+            <div class="relative timeline">
+              <div class="timeline-line absolute left-1/2 transform -translate-x-1/2"></div>
               
-              <!-- Top dot (first experience) -->
-              <div 
-                class="w-6 h-6 bg-yellow-300 rounded-full border-2 border-white
-                      absolute left-1/2 transform -translate-x-1/2 top-6"
-              ></div>
+              <div class="relative mb-12 timeline-entry">
+                <div class="flex flex-row-reverse items-center">
+                  <div class="w-1/2 text-left pl-10 space-y-2">
+                    <img src="assets/images/UMGT_logo_sqr.png" alt="UMG Technologies Logo" class="h-24 inline-block mb-1" />
 
-              <!-- Point 1 -->
-              <div class="relative mb-12 pt-2">
+                    <h3 class="text-xl font-bold">Head of Software Engineering</h3>
+                    <p class="text-md font-semibold text-gray-700">
+                      UMG Technologies, Inc. · Part-time
+                    </p>
+
+                    <ul class="list-disc list-inside text-sm text-gray-600">
+                      <li>Sole software engineer modernizing a C# industrial-automation stack.</li>
+                      <li>Improves operator UX while driving down legacy and newly-found bugs.</li>
+                      <li>Prototypes AI/computer-vision features for next-gen tooling.</li>
+                    </ul>
+
+                    <p class="text-xs text-gray-500 mt-2 italic leading-relaxed">
+                      Jun 2025 - Present ·<br>Danvers, MA ·<br>Hybrid
+                    </p>
+                  </div>
+                  <div class="w-1/2"></div>
+                </div>
+              </div>
+
+              <div class="relative mb-12 timeline-entry">
                 <div class="flex items-center">
                   <div class="w-1/2 text-right pr-10 space-y-2">
                     <img src="assets/images/ur_logo.png" alt="Experience 1 Logo" class="h-24 inline-block mb-1" />
@@ -294,16 +284,15 @@
                       <li>Used ROS2, C++, Python, NVIDIA pkgs (Nvblox, cuVSLAM)</li>
                     </ul>
 
-                    <p class="text-xs text-gray-500 mt-2 italic">
-                      May 2024 - September 2024
+                    <p class="text-xs text-gray-500 mt-2 italic leading-relaxed">
+                      May 2024 - Sep 2024 ·<br>Odense, Denmark ·<br>On-site
                     </p>
                   </div>
                   <div class="w-1/2"></div>
                 </div>
               </div>
 
-              <!-- Point 2 -->
-              <div class="relative mb-12">
+              <div class="relative mb-12 timeline-entry">
                 <div class="flex flex-row-reverse items-center">
                   <div class="w-1/2 text-left pl-10 space-y-2">
                     <img src="assets/images/bu_logo.png" alt="Experience 2 Logo" class="h-24 inline-block mb-1" />
@@ -319,21 +308,15 @@
                       <li>Held weekly office hours</li>
                     </ul>
 
-                    <p class="text-xs text-gray-500 mt-2 italic">
-                      January 2023 - June 2023
+                    <p class="text-xs text-gray-500 mt-2 italic leading-relaxed">
+                      Jan 2023 - Jun 2023 ·<br>Boston, MA ·<br>On-campus
                     </p>
                   </div>
                   <div class="w-1/2"></div>
                 </div>
-                <!-- Middle dot for second experience -->
-                <div 
-                  class="w-6 h-6 bg-yellow-300 rounded-full border-2 border-white
-                        absolute left-1/2 transform -translate-x-1/2 top-1/2"
-                ></div>
               </div>
 
-              <!-- Point 3 -->
-              <div class="relative mb-12">
+              <div class="relative mb-12 timeline-entry">
                 <div class="flex items-center">
                   <div class="w-1/2 text-right pr-10 space-y-2">
                     <img src="assets/images/coursehero_logo.png" alt="Course Hero Logo" class="h-24 inline-block mb-1" />
@@ -347,21 +330,15 @@
                       <li>Educated students on platform benefits</li>
                     </ul>
 
-                    <p class="text-xs text-gray-500 mt-2 italic">
-                      October 2022 - Jan 2023
+                    <p class="text-xs text-gray-500 mt-2 italic leading-relaxed">
+                      Oct 2022 - Jan 2023 ·<br>Boston, MA ·<br>Hybrid
                     </p>
                   </div>
                   <div class="w-1/2"></div>
                 </div>
-                <!-- Middle dot for third experience -->
-                <div 
-                  class="w-6 h-6 bg-yellow-300 rounded-full border-2 border-white
-                        absolute left-1/2 transform -translate-x-1/2 top-1/2"
-                ></div>
               </div>
 
-              <!-- Point 4 -->
-              <div class="relative mb-12">
+              <div class="relative mb-12 timeline-entry">
                 <div class="flex flex-row-reverse items-center">
                   <div class="w-1/2 text-left pl-10 space-y-2">
                     <img src="assets/images/gripls_logo.png" alt="GriplS Logo" class="h-28 inline-block mb-1" />
@@ -375,17 +352,12 @@
                       <li>Sold in local tennis stores in Charlotte, NC</li>
                     </ul>
 
-                    <p class="text-xs text-gray-500 mt-2 italic">
-                      May 2020 - December 2022
+                    <p class="text-xs text-gray-500 mt-2 italic leading-relaxed">
+                      May 2020 - Dec 2022 ·<br>Charlotte, NC ·<br>Founder-led
                     </p>
                   </div>
                   <div class="w-1/2"></div>
                 </div>
-                <!-- Bottom dot (last experience) -->
-                <div 
-                  class="w-6 h-6 bg-yellow-300 rounded-full border-2 border-white
-                        absolute left-1/2 transform -translate-x-1/2 bottom-6"
-                ></div>
               </div>
 
             </div>
@@ -1587,6 +1559,13 @@
 </footer>
 
 <style>
+    :root {
+      --timeline-dot-size: 1.15rem;
+      --timeline-line-color-start: rgba(0, 77, 64, 0.85);
+      --timeline-line-color-end: rgba(0, 121, 107, 0.85);
+      --timeline-dot-fill: #fac123;
+      --timeline-dot-border: #00796b;
+    }
     .waving-hand {
       animation-name: wave-animation;
       animation-duration: 2.5s;
@@ -1654,6 +1633,47 @@
       opacity: 1;
       transform: scaleX(1);
     }
+    .timeline {
+      padding: calc(var(--timeline-dot-size) * 0.9) 0 calc(var(--timeline-dot-size) * 1.2);
+    }
+    .timeline-line {
+      width: 4px;
+      background: linear-gradient(180deg, var(--timeline-line-color-start), var(--timeline-line-color-end));
+      border-radius: 999px;
+      z-index: 0;
+      top: 0;
+      bottom: 0;
+    }
+    .timeline-entry {
+      padding-top: 2.5rem;
+      margin-bottom: 3rem;
+    }
+    .timeline-entry:first-of-type {
+      padding-top: 1rem;
+    }
+    .timeline-entry:last-of-type {
+      margin-bottom: 0;
+      padding-bottom: 1rem;
+    }
+    .timeline-entry::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0;
+      transform: translate(-50%, -50%);
+      width: var(--timeline-dot-size);
+      height: var(--timeline-dot-size);
+      border-radius: 999px;
+      background: var(--timeline-dot-fill);
+      border: 3px solid var(--timeline-dot-border);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+      z-index: 1;
+    }
+    .timeline-entry:last-of-type::before {
+      top: auto;
+      bottom: 0;
+      transform: translate(-50%, 50%);
+    }
     .typewriter-text {
       display: inline-block;
       overflow: hidden;
@@ -1677,6 +1697,25 @@
         animation: none;
         border-right: none;
       }
+    }
+    .game-btn {
+      transition: background-color 200ms ease, transform 200ms ease;
+    }
+    .game-btn-primary {
+      background-color: #00796b;
+      color: #ffffff;
+    }
+    .game-btn-primary:hover {
+      background-color: #005f52;
+      transform: translateY(-1px);
+    }
+    .game-btn-secondary {
+      background-color: #fac123;
+      color: #1f2937;
+    }
+    .game-btn-secondary:hover {
+      background-color: #e1a100;
+      transform: translateY(-1px);
     }
     @keyframes wave-animation {
       0% { transform: rotate(0deg) }

@@ -836,40 +836,66 @@
     -->
    <!-- CONTACT SECTION -->
    <section class="text-gray-600 body-font font-mono bg-white relative overflow-hidden py-10" id="contact">
-    <div class="container mx-auto flex flex-col lg:flex-row items-center px-5">
-     <!-- Left Column: Video -->
-     <div class="lg:w-1/2 mb-10 lg:mb-0">
-      <video autoplay="" class="object-cover object-center border-2 border-gray-200 w-full" loop="" muted="" playsinline="">
+    <div class="container mx-auto flex flex-col lg:flex-row items-center px-5 gap-10">
+     <div class="lg:w-1/2 w-full">
+      <video autoplay="" class="contact-video" loop="" muted="" playsinline="">
        <source src="assets/clips/egypt_gif.mp4" type="video/mp4"/>
        Your browser does not support the video tag.
       </video>
      </div>
-     <!-- Right Column: Contact Info -->
-     <div class="lg:w-1/2 flex flex-col items-center text-center justify-center">
-      <h1 class="title-font text-5xl mb-4 font-bold text-gray-900 py-10">
-       Contact Me
-      </h1>
-      <p class="mb-6 text-gray-700">
-       Get in touch!
-      </p>
-      <!-- Icons -->
-      <div class="flex justify-center gap-8 w-full">
-       <!-- LinkedIn -->
-       <a class="transform transition-transform duration-200 hover:scale-110" href="https://www.linkedin.com/in/noah-hathout/" rel="noopener noreferrer" target="_blank">
-        <img alt="LinkedIn" class="w-24 h-24" src="assets/images/linkedin_logo.png"/>
-       </a>
-       <!-- Phone -->
-       <a class="transform transition-transform duration-200 hover:scale-110" href="tel:+17047777361" rel="noopener noreferrer" target="_blank">
-        <img alt="Phone" class="w-24 h-24" src="assets/images/phone.png"/>
-       </a>
-       <!-- Email -->
-       <a class="transform transition-transform duration-200 hover:scale-110" href="mailto:nhathout11@gmail.com" rel="noopener noreferrer" target="_blank">
-        <img alt="Email" class="w-24 h-24" src="assets/images/email.png"/>
-       </a>
-       <!-- Instagram -->
-       <a class="transform transition-transform duration-200 hover:scale-110" href="https://www.instagram.com/noahhathout/?hl=en" rel="noopener noreferrer" target="_blank">
-        <img alt="Instagram" class="w-24 h-24" src="assets/images/instagram_logo.png"/>
-       </a>
+     <div class="lg:w-1/2 w-full">
+      <div class="contact-card">
+       <div class="text-center lg:text-left">
+        <p class="text-xs uppercase tracking-[0.4em] text-gray-500 mb-2">
+         LET'S CONNECT
+        </p>
+        <h1 class="title-font text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
+         Say hi
+        </h1>
+       </div>
+       <div class="contact-links">
+        <a class="contact-link" href="https://www.linkedin.com/in/noah-hathout/" rel="noopener noreferrer" target="_blank">
+         <div class="contact-link-inner">
+          <img alt="LinkedIn" src="assets/images/linkedin_logo.png"/>
+          <span>
+           LinkedIn
+           <small>
+            /noah-hathout
+           </small>
+          </span>
+         </div>
+        </a>
+        <a class="contact-link" href="tel:+17047777361" rel="noopener noreferrer" target="_blank">
+         <div class="contact-link-inner">
+          <img alt="Phone" src="assets/images/phone.png"/>
+          <span>
+           Phone
+          </span>
+         </div>
+        </a>
+        <a class="contact-link" href="mailto:nhathout@bu.edu" rel="noopener noreferrer" target="_blank">
+         <div class="contact-link-inner">
+          <img alt="Email" src="assets/images/email.png"/>
+          <span>
+           Email
+           <small>
+            nhathout@bu.edu
+           </small>
+          </span>
+         </div>
+        </a>
+        <a class="contact-link" href="https://www.instagram.com/noahhathout/?hl=en" rel="noopener noreferrer" target="_blank">
+         <div class="contact-link-inner">
+          <img alt="Instagram" src="assets/images/instagram_logo.png"/>
+          <span>
+           Instagram
+           <small>
+            @noahhathout
+           </small>
+          </span>
+         </div>
+        </a>
+       </div>
       </div>
      </div>
     </div>
@@ -1096,9 +1122,84 @@
       border-color: #00796b;
       color: #00796b;
     }
-    .skills-active-label {
-      min-width: 11rem;
-    }
+  .skills-active-label {
+    min-width: 11rem;
+  }
+  .contact-video {
+    border-radius: 1.5rem;
+    border: 4px solid rgba(0, 77, 64, 0.15);
+    box-shadow: 0 25px 55px rgba(15, 23, 42, 0.25);
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    max-height: 420px;
+  }
+  .contact-card {
+    background: #ffffff;
+    border-radius: 1.75rem;
+    padding: 2.5rem;
+    border: 1px solid rgba(0, 77, 64, 0.06);
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.15);
+  }
+  .contact-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+  }
+  .contact-link {
+    position: relative;
+    display: block;
+    transform: rotate(-4deg) skew(4deg);
+    transition: transform 300ms ease, box-shadow 300ms ease;
+    text-decoration: none;
+  }
+  .contact-link-inner {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    border-radius: 1.25rem;
+    background: #fdfdfd;
+    box-shadow: -18px 18px 18px rgba(15, 23, 42, 0.15);
+    border: 1px solid rgba(0, 77, 64, 0.08);
+  }
+  .contact-link img {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+  }
+  .contact-link span {
+    font-weight: 700;
+    color: #0f172a;
+    display: flex;
+    flex-direction: column;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .contact-link span small {
+    font-size: 0.7rem;
+    color: #475569;
+    letter-spacing: 0.1em;
+  }
+  .contact-link:hover {
+    transform: rotate(-2deg) skew(1deg) translate(10px, -8px);
+  }
+  .contact-link:nth-child(1):hover .contact-link-inner {
+    background: linear-gradient(120deg, #0a66c2, #14b8a6);
+    color: #ffffff;
+  }
+  .contact-link:nth-child(2):hover .contact-link-inner {
+    background: linear-gradient(120deg, #10b981, #34d399);
+    color: #ffffff;
+  }
+  .contact-link:nth-child(3):hover .contact-link-inner {
+    background: linear-gradient(120deg, #f97316, #facc15);
+    color: #ffffff;
+  }
+  .contact-link:nth-child(4):hover .contact-link-inner {
+    background: linear-gradient(120deg, #d946ef, #f43f5e);
+    color: #ffffff;
+  }
     .skills-grid {
       perspective: 1300px;
       perspective-origin: 50% 25%;

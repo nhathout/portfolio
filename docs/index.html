@@ -761,63 +761,84 @@
    </section>
    <!-- AWARDS & AFFILIATIONS SECTION -->
    <section class="text-gray-600 body-font font-mono bg-white relative overflow-hidden py-10" id="awards-affiliations">
-    <div class="container mx-auto px-5">
-     <!-- Create a 2-column grid -->
-     <div class="grid md:grid-cols-2 gap-10">
-      <!-- Awards (left) -->
+  <div class="container mx-auto px-5 space-y-12">
+   <div class="flex flex-col gap-6 text-center">
+    <p class="text-xs uppercase tracking-[0.5em] text-gray-500">
+     badges unlocked
+    </p>
+    <h2 class="text-4xl md:text-5xl font-bold text-black">
+     Awards & Affiliations
+    </h2>
+   </div>
+   <div class="award-grid">
+    <article class="award-card">
+     <div class="award-ribbon">
+      <span>
+       Dean's List
+      </span>
+     </div>
+     <div class="award-body">
+      <img alt="Dean's List" src="assets/images/deanslist.png"/>
       <div>
-       <h2 class="text-4xl font-bold text-black mb-10">
-        Awards
-       </h2>
-       <div class="mb-6">
-        <h3 class="text-2xl font-semibold">
-        </h3>
-        <img alt="Dean's List" class="w-32 h-32 my-2" src="assets/images/deanslist.png"/>
-        <p class="text-gray-700">
-         Boston University's College of Engineering Undergraduate Policy states
-                that "The top 30 percent of students in each class cohort are placed
-                on the Dean’s List of academic honor each term."
-        </p>
-       </div>
-       <div class="mb-6">
-        <h3 class="text-2xl font-semibold">
-        </h3>
-        <img alt="Award 2" class="h-32 my-2" src="assets/images/hhbc.png"/>
-        <p class="text-gray-700">
-         Awarded the Hood Hargett Breakfast Club Scholarship for achievements
-                in both academics and athletics.
-        </p>
-        <p class="mt-2 text-gray-500 text-sm">
-         <a class="text-blue-500 hover:underline" href="https://drive.google.com/file/d/1ibeBpTvYqFsws_GK_nGrChah0Xk3k5Me/view?usp=sharing" rel="noopener noreferrer" target="_blank">
-          Click here to view my speech, presented in Charlotte Knight's Truist Baseball Field.
-         </a>
-        </p>
-       </div>
-      </div>
-      <!-- Affiliations (right) -->
-      <!-- Make this column a flex container that justifies content to the right -->
-      <div class="flex justify-center">
-       <div>
-        <h2 class="text-4xl font-bold text-black mb-10">
-         Affiliations
-        </h2>
-        <br/>
-        <div class="space-y-4">
-         <a href="https://www.ieee.org/" rel="noopener noreferrer" target="_blank">
-          <img alt="IEEE" class="h-36 transform transition-transform duration-200 hover:scale-110" src="assets/images/IEEE_logo.png"/>
-         </a>
-         <br/>
-         <br/>
-         <br/>
-         <a href="https://www.twitch.tv/sernawa" rel="noopener noreferrer" target="_blank">
-          <img alt="Twitch" class="h-36 transform transition-transform duration-200 hover:scale-110" src="assets/images/twitch_logo.png"/>
-         </a>
-        </div>
-       </div>
+       <p class="award-title">
+        Boston University · College of Engineering
+       </p>
+       <p class="award-copy">
+        Consistently placed in the top 30% of my cohort. Long nights, too many debug sessions, still worth it.
+       </p>
       </div>
      </div>
+    </article>
+    <article class="award-card">
+     <div class="award-ribbon">
+      <span>
+       Hood Hargett Scholar
+      </span>
+     </div>
+     <div class="award-body">
+      <img alt="Hood Hargett Scholarship" src="assets/images/hhbc.png"/>
+      <div>
+       <p class="award-title">
+        Hood Hargett Breakfast Club
+       </p>
+       <p class="award-copy">
+        Recognized for bridging athletics, academics, and community work. Shared my story at Charlotte Knights’ Truist Field.
+       </p>
+       <a class="award-link" href="https://drive.google.com/file/d/1ibeBpTvYqFsws_GK_nGrChah0Xk3k5Me/view?usp=sharing" rel="noopener noreferrer" target="_blank">
+        Watch the speech →
+       </a>
+      </div>
+     </div>
+    </article>
+   </div>
+   <div class="affiliation-panel">
+    <div class="flex flex-col gap-4">
+     <p class="text-xs uppercase tracking-[0.4em] text-gray-500">
+      communities + affiliations
+     </p>
+     <h3 class="text-3xl font-bold text-gray-900">
+      What communities I am a part of
+     </h3>
     </div>
-   </section>
+    <div class="affiliation-grid">
+     <a class="affiliation-card" href="https://www.ieee.org/" rel="noopener noreferrer" target="_blank">
+      <img alt="IEEE" src="assets/images/IEEE_logo.png"/>
+      <div>
+       <p>IEEE</p>
+       <small>Student member · Robotics & Automation</small>
+      </div>
+     </a>
+     <a class="affiliation-card" href="https://www.twitch.tv/sernawa" rel="noopener noreferrer" target="_blank">
+      <img alt="Twitch" src="assets/images/twitch_logo.png"/>
+      <div>
+       <p>Twitch</p>
+       <small>Stream team · sernawa</small>
+      </div>
+     </a>
+    </div>
+   </div>
+  </div>
+</section>
    <!-- BLOG SECTION 
     <section id="blog" class="text-gray-600 body-font font-mono bg-white relative overflow-hidden pb-10">
         <div class="container mx-auto flex px-5 md:flex-row flex-col items-center mb-10">
@@ -1122,12 +1143,140 @@
       border-color: #00796b;
       color: #00796b;
     }
-  .skills-active-label {
-    min-width: 11rem;
-  }
-  .contact-video {
-    border-radius: 1.5rem;
-    border: 4px solid rgba(0, 77, 64, 0.15);
+    .skills-active-label {
+      min-width: 11rem;
+    }
+    .award-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .award-card {
+      position: relative;
+      padding: 1.75rem;
+      border-radius: 1.5rem;
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      background: #fdfdfd;
+      box-shadow: 0 20px 45px rgba(15, 23, 42, 0.12);
+      overflow: hidden;
+      transition: transform 250ms ease, box-shadow 250ms ease;
+    }
+    .award-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, rgba(0, 121, 107, 0.08), rgba(250, 193, 35, 0.15));
+      opacity: 0;
+      transition: opacity 250ms ease;
+    }
+    .award-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 35px 60px rgba(15, 23, 42, 0.18);
+    }
+    .award-card:hover::after {
+      opacity: 1;
+    }
+    .award-ribbon {
+      position: relative;
+      display: inline-flex;
+      padding: 0.2rem 0.9rem;
+      border-radius: 999px;
+      background: rgba(0, 77, 64, 0.08);
+      margin-bottom: 1.25rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #004d40;
+      z-index: 1;
+    }
+    .award-body {
+      position: relative;
+      display: flex;
+      gap: 1.1rem;
+      align-items: center;
+      z-index: 1;
+    }
+    .award-body img {
+      width: 90px;
+      height: 90px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+    .award-title {
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+      color: #0f172a;
+    }
+    .award-copy {
+      color: #475569;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    .award-link {
+      display: inline-flex;
+      gap: 0.35rem;
+      align-items: center;
+      margin-top: 0.65rem;
+      font-weight: 600;
+      color: #00796b;
+    }
+    .award-link:hover {
+      color: #004d40;
+    }
+    .affiliation-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 400px) minmax(0, 1fr);
+      gap: 2rem;
+      align-items: center;
+    }
+    @media (max-width: 1024px) {
+      .affiliation-panel {
+        grid-template-columns: 1fr;
+      }
+    }
+    .affiliation-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+    .affiliation-card {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.25rem 1.5rem;
+      border-radius: 1.5rem;
+      background: #ffffff;
+      border: 1px solid rgba(15, 23, 42, 0.1);
+      box-shadow: 0 15px 25px rgba(15, 23, 42, 0.12);
+      text-decoration: none;
+      color: inherit;
+      transition: transform 250ms ease, border-color 250ms ease;
+    }
+    .affiliation-card img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+    }
+    .affiliation-card p {
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      margin-bottom: 0.15rem;
+      color: #0f172a;
+    }
+    .affiliation-card small {
+      color: #475569;
+      letter-spacing: 0.08em;
+    }
+    .affiliation-card:hover {
+      transform: translateY(-8px) rotate(-1deg);
+      border-color: rgba(0, 121, 107, 0.6);
+    }
+    .contact-video {
+      border-radius: 1.5rem;
+      border: 4px solid rgba(0, 77, 64, 0.15);
     box-shadow: 0 25px 55px rgba(15, 23, 42, 0.25);
     object-fit: cover;
     width: 100%;

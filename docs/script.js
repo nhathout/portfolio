@@ -3,17 +3,12 @@ const menuToggle = document.getElementById('menuToggle');
 const mobileMenu = document.getElementById('mobileMenu');
 const mobileMenuClose = document.getElementById('mobileMenuClose');
 const mobileMenuBackdrop = document.getElementById('mobileMenuBackdrop');
-const mobileSwipeTrack = document.getElementById('mobileSwipeTrack');
 const mobileSwipeChips = Array.from(document.querySelectorAll('.mobile-swipe-chip'));
 const navSectionIndicator = document.getElementById('navSectionIndicator');
 const coarsePointerMedia = window.matchMedia ? window.matchMedia('(pointer: coarse)') : null;
 const mobileContactAction = document.querySelector('[data-mobile-contact-action]');
 
-let mobileSwipeStartX = null;
-let mobileSwipeStartY = null;
-let mobileSwipeStartTime = 0;
 let mobileActiveChipIndex = Math.max(mobileSwipeChips.findIndex(chip => chip.classList.contains('is-active')), 0);
-const MOBILE_SWIPE_THRESHOLD = 45;
 
 function setMobileMenuState(nextState) {
     if (!mobileMenu) return;
@@ -50,18 +45,7 @@ function scrollToSection(targetId, { closeMenu = true } = {}) {
     window.scrollTo({ top, behavior: 'smooth' });
     highlightMobileChip(normalizedId, { scrollIntoView: true });
     if (closeMenu && mobileMenu?.classList.contains('is-open')) {
-        setTimeout(() => setMobileMenuState(false), 220);
-    }
-}
-
-function handleMobileNavSwipe(deltaX) {
-    if (!mobileSwipeChips.length) return;
-    const direction = deltaX < 0 ? 1 : -1;
-    const nextIndex = Math.min(Math.max(mobileActiveChipIndex + direction, 0), mobileSwipeChips.length - 1);
-    if (nextIndex === mobileActiveChipIndex) return;
-    const chip = mobileSwipeChips[nextIndex];
-    if (chip?.dataset.target) {
-        scrollToSection(chip.dataset.target);
+        setMobileMenuState(false);
     }
 }
 
@@ -78,36 +62,6 @@ function initMobileNavigation() {
         chip.addEventListener('click', () => scrollToSection(chip.dataset.target));
     });
     mobileContactAction?.addEventListener('click', () => scrollToSection('contact'));
-    if (mobileSwipeTrack) {
-        mobileSwipeTrack.addEventListener('touchstart', event => {
-            if (!event.touches?.length) return;
-            const touch = event.touches[0];
-            mobileSwipeStartX = touch.clientX;
-            mobileSwipeStartY = touch.clientY;
-            mobileSwipeStartTime = Date.now();
-        }, { passive: true });
-        mobileSwipeTrack.addEventListener('touchend', event => {
-            if (mobileSwipeStartX === null) return;
-            const changedTouch = event.changedTouches?.[0];
-            if (!changedTouch) return;
-            const deltaX = changedTouch.clientX - mobileSwipeStartX;
-            const deltaY = changedTouch.clientY - mobileSwipeStartY;
-            const duration = Date.now() - mobileSwipeStartTime;
-            const isFastGesture = duration <= 320;
-            const isHorizontal = Math.abs(deltaX) > Math.abs(deltaY) * 1.4;
-            if (isFastGesture && isHorizontal && Math.abs(deltaX) >= MOBILE_SWIPE_THRESHOLD) {
-                handleMobileNavSwipe(deltaX);
-            }
-            mobileSwipeStartX = null;
-            mobileSwipeStartY = null;
-            mobileSwipeStartTime = 0;
-        }, { passive: true });
-        mobileSwipeTrack.addEventListener('touchcancel', () => {
-            mobileSwipeStartX = null;
-            mobileSwipeStartY = null;
-            mobileSwipeStartTime = 0;
-        }, { passive: true });
-    }
 }
 
 initMobileNavigation();

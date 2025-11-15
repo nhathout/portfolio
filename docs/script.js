@@ -10,6 +10,8 @@ const coarsePointerMedia = window.matchMedia ? window.matchMedia('(pointer: coar
 const mobileContactAction = document.querySelector('[data-mobile-contact-action]');
 
 let mobileSwipeStartX = null;
+let mobileSwipeStartY = null;
+let mobileSwipeStartTime = 0;
 let mobileActiveChipIndex = Math.max(mobileSwipeChips.findIndex(chip => chip.classList.contains('is-active')), 0);
 const MOBILE_SWIPE_THRESHOLD = 45;
 
@@ -79,17 +81,31 @@ function initMobileNavigation() {
     if (mobileSwipeTrack) {
         mobileSwipeTrack.addEventListener('touchstart', event => {
             if (!event.touches?.length) return;
-            mobileSwipeStartX = event.touches[0].clientX;
+            const touch = event.touches[0];
+            mobileSwipeStartX = touch.clientX;
+            mobileSwipeStartY = touch.clientY;
+            mobileSwipeStartTime = Date.now();
         }, { passive: true });
         mobileSwipeTrack.addEventListener('touchend', event => {
             if (mobileSwipeStartX === null) return;
             const changedTouch = event.changedTouches?.[0];
             if (!changedTouch) return;
             const deltaX = changedTouch.clientX - mobileSwipeStartX;
-            if (Math.abs(deltaX) >= MOBILE_SWIPE_THRESHOLD) {
+            const deltaY = changedTouch.clientY - mobileSwipeStartY;
+            const duration = Date.now() - mobileSwipeStartTime;
+            const isFastGesture = duration <= 320;
+            const isHorizontal = Math.abs(deltaX) > Math.abs(deltaY) * 1.4;
+            if (isFastGesture && isHorizontal && Math.abs(deltaX) >= MOBILE_SWIPE_THRESHOLD) {
                 handleMobileNavSwipe(deltaX);
             }
             mobileSwipeStartX = null;
+            mobileSwipeStartY = null;
+            mobileSwipeStartTime = 0;
+        }, { passive: true });
+        mobileSwipeTrack.addEventListener('touchcancel', () => {
+            mobileSwipeStartX = null;
+            mobileSwipeStartY = null;
+            mobileSwipeStartTime = 0;
         }, { passive: true });
     }
 }

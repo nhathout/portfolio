@@ -70,14 +70,14 @@
        Quick Jump
       </p>
       <h3 class="mobile-menu-title" id="mobileMenuTitle">
-       Swipe or tap a section
+       Tap to go to a section
       </h3>
      </div>
      <button aria-label="Close navigation" class="mobile-menu-close resume-popover__close" id="mobileMenuClose" type="button">
      </button>
     </div>
     <p class="mobile-menu-subcopy">
-     Swipe left/right anywhere on the chips or tap one to glide to that part of the site.
+     Tap a section to glide to that part of the site.
     </p>
     <div class="mobile-swipe-track" id="mobileSwipeTrack">
      <button class="mobile-swipe-chip is-active" data-target="about" type="button">
@@ -554,7 +554,12 @@
       <div class="skills-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6" id="skillsGrid">
       </div>
       <p class="text-center text-xs text-gray-500">
-       Hover over a cube to spin it, then click to check out more info. Use the arrows (or scroll) to switch topics.
+       <span class="skills-tip skills-tip--desktop">
+        Hover over a cube to spin it, then click to check out more info. Use the arrows (or scroll) to switch topics.
+       </span>
+       <span class="skills-tip skills-tip--mobile">
+        Double tap to explore more about a skill. 
+       </span>
       </p>
      </div>
     </div>
@@ -1868,6 +1873,17 @@
     }
     .skill-link.is-preview .skill-label {
       color: #004d40;
+    }
+    .skills-tip--mobile {
+      display: none;
+    }
+    @media (pointer: coarse) {
+      .skills-tip--desktop {
+        display: none;
+      }
+      .skills-tip--mobile {
+        display: inline;
+      }
     }
     @keyframes wave-animation {
       0% { transform: rotate(0deg) }

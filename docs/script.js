@@ -59,6 +59,7 @@ window.addEventListener('load', updateNavIndicator);
 
 // Resume box shaking logic
 const resumeBox = document.getElementById('resumeBox');
+const projectsGrid = document.getElementById('projectsGrid');
 
 let shakeCyclesRun = 0; // how many times we've done the 3-shake + pause sequence this round
 let totalCycles = 2;    // do it twice each time it's triggered
@@ -117,6 +118,115 @@ if (resumeBox) {
 // ====================
 
 const skillFaces = ['front', 'back', 'right', 'left', 'top', 'bottom'];
+const projectEntries = [
+    {
+        title: 'Pollux',
+        description: 'An autonomous countertop-cleaning robot with reinforcement learning to avoid cliffs and obstacles.',
+        image: 'assets/images/pollux.png',
+        links: [
+            { label: 'Repository', href: 'https://github.com/nhathout/pollux-AMR' }
+        ]
+    },
+    {
+        title: 'SuperTuxSmart',
+        description: 'Optimized pySuperTuxKart racing performance via computer vision + RL. Full write-up included.',
+        image: 'assets/images/supertuxsmart.png',
+        links: [
+            { label: 'Report', href: 'https://github.com/nhathout/EC418-Final-Project/blob/main/FinalReport.pdf' },
+            { label: 'Repository', href: 'https://github.com/nhathout/EC418-Final-Project' }
+        ]
+    },
+    {
+        title: 'Detectron2 Attention Tracker',
+        description: 'Meta’s Detectron2 reworked for facial attention tracking, blending COCO instance segmentation and custom training.',
+        image: 'assets/images/dl_final_project.png',
+        links: [
+            { label: 'Report', href: 'https://docs.google.com/document/d/1jopVcW5oSQAM1AiB77bWeUELJqZ4IWX0DPezHU_gHWk/edit?usp=sharing' },
+            { label: 'Repository', href: 'https://github.com/nhathout/AreYoutTrieulyPayingAttentionOrJustJoshingNoahmNotButHilarioIsNET' }
+        ]
+    },
+    {
+        title: 'Smart Home API',
+        description: 'Python API to orchestrate houses, rooms, and devices with strong validation + testing.',
+        image: 'assets/images/smarthome.png',
+        links: [
+            { label: 'Repository', href: 'https://github.com/nhathout/smart-home-api' }
+        ]
+    },
+    {
+        title: 'PIRA · Personal Indoor Robot Assistant',
+        description: 'Optitrack navigation, WASD teleop, Node.js coordination, and Streamlit visualization for multi-robot control.',
+        image: 'assets/images/pira.png',
+        links: [
+            { label: 'Repository', href: 'https://github.com/nhathout/PIRA' }
+        ]
+    },
+    {
+        title: 'ChatSheets AI',
+        description: 'Upload a CSV, chat through your dataset, and generate SQL/plots in real time.',
+        image: 'assets/images/chatsheets.png',
+        links: [
+            { label: 'Repository', href: 'https://github.com/nhathout/ChatSheetsAI' }
+        ]
+    },
+    {
+        title: 'PyP2PChat',
+        description: 'Peer-to-peer terminal chat where each node doubles as client/server, racing to establish consensus.',
+        image: 'assets/images/pyp2pchat.png',
+        links: [
+            { label: 'Repository', href: 'https://github.com/nhathout/PyP2PChat' }
+        ]
+    },
+    {
+        title: 'FitCat · Network of Smart Cat Collars',
+        description: 'Hardware + cloud dashboard for cat activity monitoring with LoRa and predictive analytics.',
+        image: 'assets/images/fitcat.png',
+        links: [
+            { label: 'Repository', href: 'https://github.com/nhathout/Fit-Cat' }
+        ]
+    },
+    {
+        title: 'SmartPill · Ingestible Sensor',
+        description: 'ESP32 ingestible sensor logging biometrics along a simulated digestive tract—proof-of-concept diagnostics.',
+        image: 'assets/images/smartpill.png',
+        links: [
+            { label: 'Repository', href: 'https://github.com/nhathout/SmartPill-Ingestible-Sensor' }
+        ]
+    },
+    {
+        title: 'elect-A-leader',
+        description: 'Distributed, fault-tolerant e-voting system with IR fob authentication and leader election.',
+        image: 'assets/images/election.png',
+        links: [
+            { label: 'Repository', href: 'https://github.com/nhathout/elect-A-leader' }
+        ]
+    },
+    {
+        title: 'Personal Portfolio',
+        description: 'The site you’re browsing.',
+        image: 'assets/images/PixelMe.jpg',
+        links: [
+            { label: 'Repository', href: 'https://github.com/nhathout/portfolio' }
+        ]
+    },
+    {
+        title: 'Mia’s Art Portfolio',
+        description: 'Custom site for my sister’s artwork. Live at miasportfolio.art.',
+        image: 'assets/images/mia.png',
+        links: [
+            { label: 'Live', href: 'https://miasportfolio.art/' },
+            { label: 'Repository', href: 'https://github.com/nhathout/mias-portfolio' }
+        ]
+    },
+    {
+        title: 'Huffman Code Generator',
+        description: 'C++ encoder/decoder using Huffman trees and priority queues for compression + restore.',
+        image: 'assets/images/huffman.png',
+        links: [
+            { label: 'Repository', href: 'https://github.com/nhathout/AppliedAlgorithms/tree/main/huffman-code-generator' }
+        ]
+    }
+];
 const skillCategories = [
     { id: 'software', label: 'Programming & AI' },
     { id: 'hardware', label: 'Embedded & Robotics' },
@@ -312,9 +422,53 @@ function restartSkillsAutoCycle() {
     skillsAutoCycleTimer = setInterval(() => cycleSkillCategory(1), 20000);
 }
 
+function buildProjectsGrid() {
+    if (!projectsGrid) return;
+    const fragment = document.createDocumentFragment();
+    projectEntries.forEach(project => {
+        const card = document.createElement('article');
+        card.className = 'project-card';
+
+        const media = document.createElement('div');
+        media.className = 'project-media';
+        const img = document.createElement('img');
+        img.src = project.image;
+        img.alt = project.title;
+        media.appendChild(img);
+
+        const content = document.createElement('div');
+        content.className = 'project-content';
+        const title = document.createElement('h3');
+        title.textContent = project.title;
+        const description = document.createElement('p');
+        description.textContent = project.description;
+
+        const linksContainer = document.createElement('div');
+        linksContainer.className = 'project-links';
+        project.links.forEach(link => {
+            const anchor = document.createElement('a');
+            anchor.href = link.href;
+            anchor.target = '_blank';
+            anchor.rel = 'noopener noreferrer';
+            anchor.textContent = `${link.label} ↗`;
+            linksContainer.appendChild(anchor);
+        });
+
+        content.appendChild(title);
+        content.appendChild(description);
+        content.appendChild(linksContainer);
+
+        card.appendChild(media);
+        card.appendChild(content);
+        fragment.appendChild(card);
+    });
+    projectsGrid.appendChild(fragment);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initSkillsSection();
     restartSkillsAutoCycle();
+    buildProjectsGrid();
 });
 
 // ====================

@@ -57,60 +57,22 @@ window.addEventListener('scroll', () => {
 window.addEventListener('resize', updateNavIndicator);
 window.addEventListener('load', updateNavIndicator);
 
-// Resume box shaking logic
-const resumeBox = document.getElementById('resumeBox');
+const resumePopover = document.getElementById('resumePopover');
+const resumePopoverClose = document.getElementById('resumePopoverClose');
 const projectsGrid = document.getElementById('projectsGrid');
-
-let shakeCyclesRun = 0; // how many times we've done the 3-shake + pause sequence this round
-let totalCycles = 2;    // do it twice each time it's triggered
-let inView = true;      // whether the box is currently in view
-
-function runShakeCycle() {
-    shakeCyclesRun = 0;
-    startShake();
-}
-
-function startShake() {
-    if (!resumeBox) return;
-    resumeBox.classList.add('shake-on-load');
-}
-
-resumeBox.addEventListener('animationend', () => {
-    resumeBox.classList.remove('shake-on-load');
-    shakeCyclesRun++;
-    if (shakeCyclesRun < totalCycles) {
-        // Wait 5 seconds, then shake again
-        setTimeout(() => {
-            if (inView) {
-                startShake();
-            }
-        }, 5000);
-    }
-});
+const RESUME_STORAGE_KEY = null;
 
 window.addEventListener('load', () => {
-    setTimeout(() => {
-        runShakeCycle();
-    }, 500);
-
     // Also load leaderboard from server on page load
     loadLeaderboardFromServer();
 });
 
-// Intersection Observer to detect visibility changes
-const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            inView = true;
-            runShakeCycle();
-        } else {
-            inView = false;
-        }
+function initResumePopover() {
+    if (!resumePopover) return;
+    setTimeout(() => resumePopover.classList.add('is-visible'), 1200);
+    resumePopoverClose?.addEventListener('click', () => {
+        resumePopover.classList.remove('is-visible');
     });
-});
-
-if (resumeBox) {
-    observer.observe(resumeBox);
 }
 
 // ====================
@@ -469,6 +431,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initSkillsSection();
     restartSkillsAutoCycle();
     buildProjectsGrid();
+    initResumePopover();
 });
 
 // ====================

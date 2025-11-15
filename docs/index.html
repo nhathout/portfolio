@@ -48,7 +48,7 @@
        Contact
       </a>
      </nav>
-     <button class="lg:hidden flex flex-col" id="menuToggle">
+     <button aria-controls="mobileMenu" aria-expanded="false" aria-label="Toggle navigation" class="mobile-menu-toggle lg:hidden flex flex-col" id="menuToggle" type="button">
       <span class="w-6 h-1 bg-gray-800 mb-1">
       </span>
       <span class="w-6 h-1 bg-gray-800 mb-1">
@@ -60,27 +60,49 @@
    </div>
   </header>
   <!-- MOBILE MENU -->
-  <section class="lg:hidden hidden text-gray-600 bg-gray-100 body-font font-mono bg-white relative overflow-hidden py-5 mt-20" id="mobileMenu">
-   <div class="container mx-auto flex px-5 flex-col items-center">
-    <div class="lg:hidden flex flex-col items-center text-center space-y-2">
-     <a class="px-2" href="#about">
+  <section aria-hidden="true" class="mobile-menu-panel lg:hidden" id="mobileMenu">
+   <div class="mobile-menu-backdrop" id="mobileMenuBackdrop">
+   </div>
+   <div aria-labelledby="mobileMenuTitle" aria-modal="true" class="mobile-menu-card" role="dialog">
+    <div class="mobile-menu-header">
+     <div>
+      <p class="mobile-menu-kicker">
+       Quick Jump
+      </p>
+      <h3 class="mobile-menu-title" id="mobileMenuTitle">
+       Swipe or tap a section
+      </h3>
+     </div>
+     <button aria-label="Close navigation" class="mobile-menu-close resume-popover__close" id="mobileMenuClose" type="button">
+     </button>
+    </div>
+    <p class="mobile-menu-subcopy">
+     Swipe left/right anywhere on the chips or tap one to glide to that part of the site.
+    </p>
+    <div class="mobile-swipe-track" id="mobileSwipeTrack">
+     <button class="mobile-swipe-chip is-active" data-target="about" type="button">
       About
-     </a>
-     <a class="px-2" href="#skills">
+     </button>
+     <button class="mobile-swipe-chip" data-target="skills" type="button">
       Skills
-     </a>
-     <a class="px-2" href="#education-experience">
+     </button>
+     <button class="mobile-swipe-chip" data-target="education-experience" type="button">
       Education &amp; Experience
-     </a>
-     <a class="px-2" href="#projects">
+     </button>
+     <button class="mobile-swipe-chip" data-target="projects" type="button">
       Projects
-     </a>
-     <a class="px-2" href="#awards-affiliations">
+     </button>
+     <button class="mobile-swipe-chip" data-target="awards-affiliations" type="button">
       Awards &amp; Affiliations
-     </a>
-     <a class="px-2" href="#contact">
-      Contact
-     </a>
+     </button>
+    </div>
+    <div class="mobile-menu-actions">
+      <a class="mobile-menu-action mobile-menu-action--resume" download="noahhathout_cv.pdf" href="assets/files/resume_7_noahhathout.pdf">
+       Download Resume
+      </a>
+      <button class="mobile-menu-action mobile-menu-action--outline" data-mobile-contact-action="" type="button">
+       Say hello
+      </button>
     </div>
    </div>
   </section>
@@ -104,7 +126,7 @@
     </div>
    </div>
    <!-- HERO SECTION -->
-   <div class="flex relative z-20 items-center h-screen" style="background:linear-gradient(0deg, rgba(255, 255, 255), rgba(255, 255, 255, 0.1)), url('assets/images/pixel-background.jpg'); background-repeat: no-repeat; background-position: center; background-size: cover;">
+   <div class="hero-panel flex relative z-20 items-center min-h-screen pt-24 pb-12 sm:py-0" style="background:linear-gradient(0deg, rgba(255, 255, 255), rgba(255, 255, 255, 0.1)), url('assets/images/pixel-background.jpg'); background-repeat: no-repeat; background-position: center; background-size: cover;">
     <div class="container mx-auto px-6 flex flex-col justify-between items-center relative">
      <div class="flex flex-col relative">
       <div class="relative mx-auto mt-10">
@@ -177,13 +199,13 @@
    <!-- EDUCATION & EXPERIENCE SIDE-BY-SIDE + MINI-GAME UNDER EDUCATION -->
    <section class="text-gray-600 body-font font-mono bg-white relative overflow-hidden py-10" id="education-experience">
     <div class="container mx-auto px-5 relative md:grid md:grid-cols-2 gap-10 items-start justify-center">
-     <!-- LEFT COLUMN: EDUCATION TIMELINE + MINI-GAME BELOW -->
-     <div class="md:pr-5">
+     <!-- LEFT COLUMN: EDUCATION TIMELINE -->
+     <div class="md:pr-5 md:pb-0 pb-14">
       <h2 class="text-4xl font-bold text-black mb-10 text-center">
        Education
       </h2>
       <div class="relative timeline">
-       <div class="timeline-line absolute left-1/2 transform -translate-x-1/2">
+       <div class="timeline-line absolute">
        </div>
        <div class="relative mb-12 timeline-entry">
         <div class="flex items-center">
@@ -281,8 +303,7 @@
         </div>
        </div>
       </div>
-      <!-- MINI-GAME SECTION UNDER THE EDUCATION COLUMN -->
-      <section class="text-gray-600 body-font font-mono bg-white relative overflow-hidden py-5 mt-5" id="mini-game">
+      <div class="hidden md:block mt-24" id="mini-game">
        <div class="px-5 flex flex-col items-center">
         <h3 class="text-xl font-bold mb-2 text-center">
          Relevant Coursework: Atari [Course]out
@@ -304,7 +325,7 @@
          to move the paddle]
         </p>
         <p class="mb-4 text-[12px] text-red-500 mt-2 text-center">
-         [this does not work on phones or tablets yet :)]
+         [desktop/laptop only]
         </p>
         <div class="inline-block p-4 border-2 border-gray-300 rounded-lg mb-4" id="start-screen">
          <h4 class="font-semibold mb-2">
@@ -322,16 +343,15 @@
         <canvas class="mx-auto border-2 border-gray-300" height="320" id="gameCanvas" style="display:none;" width="480">
         </canvas>
        </div>
-      </section>
-      <!-- END MINI-GAME SECTION -->
+      </div>
      </div>
      <!-- RIGHT COLUMN: EXPERIENCE TIMELINE -->
-     <div>
+     <div class="md:pt-0 pt-6">
       <h2 class="text-4xl font-bold text-black mb-10 text-center">
        Experience
       </h2>
       <div class="relative timeline">
-       <div class="timeline-line absolute left-1/2 transform -translate-x-1/2">
+       <div class="timeline-line absolute">
        </div>
        <div class="relative mb-12 timeline-entry">
         <div class="flex flex-row-reverse items-center">
@@ -902,6 +922,8 @@
       transform: scaleX(1);
     }
     .timeline {
+      --timeline-line-left: 50%;
+      --timeline-line-transform: translateX(-50%);
       padding: calc(var(--timeline-dot-size) * 0.9) 0 calc(var(--timeline-dot-size) * 1.2);
     }
     .timeline-line {
@@ -909,6 +931,8 @@
       background: linear-gradient(180deg, var(--timeline-line-color-start), var(--timeline-line-color-end));
       border-radius: 999px;
       z-index: 0;
+      left: var(--timeline-line-left);
+      transform: var(--timeline-line-transform);
       top: 0;
       bottom: 0;
     }
@@ -926,7 +950,7 @@
     .timeline-entry::before {
       content: '';
       position: absolute;
-      left: 50%;
+      left: var(--timeline-line-left);
       top: 0;
       transform: translate(-50%, -50%);
       width: var(--timeline-dot-size);
@@ -1027,16 +1051,7 @@
       filter: brightness(1.08);
       color: #ffffff;
     }
-    @media (max-width: 640px) {
-      .resume-popover {
-        left: 50%;
-        right: auto;
-        transform: translate(-50%, 20px);
-      }
-      .resume-popover.is-visible {
-        transform: translate(-50%, 0);
-      }
-    }
+    
     .floating-chip {
       position: absolute;
       right: -32px;
@@ -1078,25 +1093,6 @@
         animation: none;
         border-right: none;
       }
-    }
-    .game-btn {
-      transition: background-color 200ms ease, transform 200ms ease;
-    }
-    .game-btn-primary {
-      background-color: #00796b;
-      color: #ffffff;
-    }
-    .game-btn-primary:hover {
-      background-color: #005f52;
-      transform: translateY(-1px);
-    }
-    .game-btn-secondary {
-      background-color: #fac123;
-      color: #1f2937;
-    }
-    .game-btn-secondary:hover {
-      background-color: #e1a100;
-      transform: translateY(-1px);
     }
     .skills-tabs {
       flex-wrap: wrap;
@@ -1560,6 +1556,318 @@
     @keyframes skills-grid-enter {
       0% { opacity: 0; transform: translateY(-18px); }
       100% { opacity: 1; transform: translateY(0); }
+    }
+    body {
+      scroll-padding-top: 110px;
+    }
+    @media (max-width: 640px) {
+      body {
+        scroll-padding-top: 80px;
+      }
+    }
+    section[id] {
+      scroll-margin-top: 120px;
+    }
+    @media (max-width: 1024px) {
+      section[id] {
+        scroll-margin-top: 96px;
+      }
+    }
+    .hero-panel {
+      position: relative;
+      isolation: isolate;
+    }
+    .hero-panel::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 10% 20%, rgba(0, 77, 64, 0.15), transparent 45%), radial-gradient(circle at 80% 0%, rgba(250, 193, 35, 0.12), transparent 40%);
+      opacity: 0.8;
+      z-index: 0;
+    }
+    .hero-panel > * {
+      position: relative;
+      z-index: 1;
+    }
+    @media (max-width: 768px) {
+      .hero-panel {
+        padding-top: 6rem;
+      }
+      .hero-panel h2 {
+        font-size: 2.2rem;
+      }
+      .hero-panel p {
+        font-size: 1rem;
+      }
+      .pixel-portrait {
+        width: 8rem;
+      }
+    }
+    .mobile-menu-panel {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 1.5rem;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 250ms ease, visibility 250ms ease;
+      z-index: 60;
+    }
+    .mobile-menu-panel.is-open {
+      pointer-events: auto;
+      opacity: 1;
+      visibility: visible;
+    }
+    .mobile-menu-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.4);
+      opacity: 0;
+      transition: opacity 250ms ease;
+    }
+    .mobile-menu-panel.is-open .mobile-menu-backdrop {
+      opacity: 1;
+      backdrop-filter: blur(8px);
+    }
+    .mobile-menu-card {
+      position: relative;
+      width: 100%;
+      max-width: 460px;
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.96);
+      box-shadow: 0 35px 65px rgba(15, 23, 42, 0.35);
+      padding: 1.75rem;
+      transform: translateY(20px) scale(0.96);
+      transition: transform 280ms ease;
+      overflow: hidden;
+    }
+    .mobile-menu-panel.is-open .mobile-menu-card {
+      transform: translateY(0) scale(1);
+    }
+    .mobile-menu-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 20% -20%, rgba(0, 121, 107, 0.08), transparent 55%);
+      pointer-events: none;
+    }
+    .mobile-menu-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .mobile-menu-kicker {
+      letter-spacing: 0.35em;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: #475569;
+      margin-bottom: 0.25rem;
+    }
+    .mobile-menu-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    .mobile-menu-subcopy {
+      color: #475569;
+      font-size: 0.9rem;
+      margin: 0.5rem 0 1.25rem;
+    }
+    .mobile-menu-close {
+      width: 42px;
+      height: 42px;
+      border: none;
+      background: transparent;
+      padding: 0;
+    }
+    .mobile-menu-close::before,
+    .mobile-menu-close::after {
+      background-color: #0f172a;
+      width: 28px;
+    }
+    .mobile-menu-close:hover::before {
+      transform: translate(-50%, -50%) rotate(-45deg);
+    }
+    .mobile-menu-close:hover::after {
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+    .mobile-swipe-track {
+      display: flex;
+      gap: 0.75rem;
+      overflow-x: auto;
+      padding: 0.35rem 0 0.5rem;
+      scroll-snap-type: x proximity;
+      -webkit-overflow-scrolling: touch;
+    }
+    .mobile-swipe-track::-webkit-scrollbar {
+      display: none;
+    }
+    .mobile-swipe-chip {
+      flex: 0 0 auto;
+      padding: 0.65rem 1.35rem;
+      border-radius: 999px;
+      background: rgba(0, 77, 64, 0.09);
+      border: 1px solid transparent;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #0f172a;
+      cursor: pointer;
+      scroll-snap-align: center;
+      transition: background 220ms ease, color 220ms ease, transform 220ms ease;
+    }
+    .mobile-swipe-chip.is-active {
+      background: linear-gradient(120deg, #053b36, #0f766e);
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 12px 25px rgba(5, 59, 54, 0.25);
+      transform: translateY(-3px);
+    }
+    .mobile-menu-actions {
+      margin-top: 1.75rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 0.85rem;
+    }
+    .mobile-menu-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.9rem 1.25rem;
+      border-radius: 14px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border: 2px solid rgba(0, 0, 0, 0.05);
+      background: #f8fafc;
+      color: #0f172a;
+      transition: transform 200ms ease, box-shadow 200ms ease;
+    }
+    .mobile-menu-action--resume {
+      border-color: #053b36;
+      background: #053b36;
+      color: #fef5d8;
+      box-shadow: 0 18px 30px rgba(5, 59, 54, 0.25);
+    }
+    .mobile-menu-action--outline {
+      background: #ffffff;
+      color: #004d40;
+      border-color: rgba(0, 77, 64, 0.3);
+      box-shadow: inset 0 0 0 1px rgba(0, 77, 64, 0.08);
+    }
+    .mobile-menu-action:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 32px rgba(0, 121, 107, 0.2);
+    }
+    .game-btn {
+      transition: background-color 200ms ease, transform 200ms ease;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+    .game-btn-primary {
+      background-color: #00796b;
+      color: #ffffff;
+    }
+    .game-btn-primary:hover {
+      background-color: #005f52;
+      transform: translateY(-1px);
+    }
+    .game-btn-secondary {
+      background-color: #fac123;
+      color: #1f2937;
+    }
+    .game-btn-secondary:hover {
+      background-color: #e1a100;
+      transform: translateY(-1px);
+    }
+    body.mobile-nav-open {
+      overflow: hidden;
+    }
+    .mobile-menu-toggle span {
+      transition: transform 200ms ease, opacity 200ms ease;
+      display: block;
+    }
+    .mobile-menu-toggle.is-active span:nth-child(1) {
+      transform: translateY(6px) rotate(45deg);
+    }
+    .mobile-menu-toggle.is-active span:nth-child(2) {
+      opacity: 0;
+    }
+    .mobile-menu-toggle.is-active span:nth-child(3) {
+      transform: translateY(-6px) rotate(-45deg);
+    }
+    @media (max-width: 640px) {
+      .mobile-menu-card {
+        padding: 1.35rem;
+        border-radius: 22px;
+      }
+      .mobile-menu-title {
+        font-size: 1.3rem;
+      }
+      .mobile-menu-subcopy {
+        font-size: 0.85rem;
+      }
+    }
+    @media (max-width: 1024px) {
+      .timeline {
+        --timeline-line-left: clamp(3.5rem, 11vw, 5rem);
+        --timeline-line-transform: none;
+      }
+      .timeline-entry {
+        padding-left: calc(var(--timeline-line-left) + 2.25rem);
+        margin-left: 0;
+      }
+      .timeline-entry > .flex,
+      .timeline-entry > .flex-row-reverse {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 1.25rem;
+      }
+      .timeline-entry .w-1/2 {
+        width: 100% !important;
+      }
+      .timeline-entry .pr-10,
+      .timeline-entry .pl-10 {
+        padding: 0 !important;
+      }
+      .timeline-entry .text-right {
+        text-align: left;
+      }
+    }
+    @media (max-width: 768px) {
+      .projects-grid {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      }
+      .project-media {
+        height: 180px;
+      }
+      .resume-popover {
+        width: min(92vw, 360px);
+        left: 50%;
+        right: auto;
+        transform: translate(-50%, 24px);
+      }
+      .resume-popover.is-visible {
+        transform: translate(-50%, 0);
+      }
+    }
+    .skill-link.is-preview .skill-cube {
+      animation: skill-rotate 6s linear infinite;
+      transform: scale(1.08) rotateX(-4deg) rotateY(12deg);
+    }
+    .skill-link.is-preview .skill-face::before {
+      transform: translate(120%, 120%) translateZ(20px);
+    }
+    .skill-link.is-preview .skill-face::after {
+      opacity: 1;
+    }
+    .skill-link.is-preview .skill-label {
+      color: #004d40;
     }
     @keyframes wave-animation {
       0% { transform: rotate(0deg) }

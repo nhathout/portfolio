@@ -1,10 +1,100 @@
-// Mobile menu toggle
+// Mobile navigation + indicator state
 const menuToggle = document.getElementById('menuToggle');
 const mobileMenu = document.getElementById('mobileMenu');
+const mobileMenuClose = document.getElementById('mobileMenuClose');
+const mobileMenuBackdrop = document.getElementById('mobileMenuBackdrop');
+const mobileSwipeTrack = document.getElementById('mobileSwipeTrack');
+const mobileSwipeChips = Array.from(document.querySelectorAll('.mobile-swipe-chip'));
 const navSectionIndicator = document.getElementById('navSectionIndicator');
-menuToggle.addEventListener('click', () => {
-    mobileMenu.classList.toggle('hidden');
-});
+const coarsePointerMedia = window.matchMedia ? window.matchMedia('(pointer: coarse)') : null;
+const mobileContactAction = document.querySelector('[data-mobile-contact-action]');
+
+let mobileSwipeStartX = null;
+let mobileActiveChipIndex = Math.max(mobileSwipeChips.findIndex(chip => chip.classList.contains('is-active')), 0);
+const MOBILE_SWIPE_THRESHOLD = 45;
+
+function setMobileMenuState(nextState) {
+    if (!mobileMenu) return;
+    const shouldOpen = typeof nextState === 'boolean' ? nextState : !mobileMenu.classList.contains('is-open');
+    mobileMenu.classList.toggle('is-open', shouldOpen);
+    document.body.classList.toggle('mobile-nav-open', shouldOpen);
+    mobileMenu.setAttribute('aria-hidden', String(!shouldOpen));
+    menuToggle?.setAttribute('aria-expanded', String(shouldOpen));
+    menuToggle?.classList.toggle('is-active', shouldOpen);
+}
+
+function highlightMobileChip(targetId, { scrollIntoView = false } = {}) {
+    if (!mobileSwipeChips.length || !targetId) return;
+    const normalizedId = targetId.replace(/^#/, '');
+    mobileSwipeChips.forEach((chip, index) => {
+        const matches = chip.dataset.target === normalizedId;
+        chip.classList.toggle('is-active', matches);
+        if (matches) {
+            mobileActiveChipIndex = index;
+            if (scrollIntoView) {
+                chip.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            }
+        }
+    });
+}
+
+function scrollToSection(targetId, { closeMenu = true } = {}) {
+    if (!targetId) return;
+    const normalizedId = targetId.replace(/^#/, '');
+    const target = document.getElementById(normalizedId);
+    if (!target) return;
+    const offset = (topNav?.offsetHeight || 0) + 16;
+    const top = target.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({ top, behavior: 'smooth' });
+    highlightMobileChip(normalizedId, { scrollIntoView: true });
+    if (closeMenu && mobileMenu?.classList.contains('is-open')) {
+        setTimeout(() => setMobileMenuState(false), 220);
+    }
+}
+
+function handleMobileNavSwipe(deltaX) {
+    if (!mobileSwipeChips.length) return;
+    const direction = deltaX < 0 ? 1 : -1;
+    const nextIndex = Math.min(Math.max(mobileActiveChipIndex + direction, 0), mobileSwipeChips.length - 1);
+    if (nextIndex === mobileActiveChipIndex) return;
+    const chip = mobileSwipeChips[nextIndex];
+    if (chip?.dataset.target) {
+        scrollToSection(chip.dataset.target);
+    }
+}
+
+function initMobileNavigation() {
+    menuToggle?.addEventListener('click', () => setMobileMenuState());
+    mobileMenuClose?.addEventListener('click', () => setMobileMenuState(false));
+    mobileMenuBackdrop?.addEventListener('click', () => setMobileMenuState(false));
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape') {
+            setMobileMenuState(false);
+        }
+    });
+    mobileSwipeChips.forEach(chip => {
+        chip.addEventListener('click', () => scrollToSection(chip.dataset.target));
+    });
+    mobileContactAction?.addEventListener('click', () => scrollToSection('contact'));
+    if (mobileSwipeTrack) {
+        mobileSwipeTrack.addEventListener('touchstart', event => {
+            if (!event.touches?.length) return;
+            mobileSwipeStartX = event.touches[0].clientX;
+        }, { passive: true });
+        mobileSwipeTrack.addEventListener('touchend', event => {
+            if (mobileSwipeStartX === null) return;
+            const changedTouch = event.changedTouches?.[0];
+            if (!changedTouch) return;
+            const deltaX = changedTouch.clientX - mobileSwipeStartX;
+            if (Math.abs(deltaX) >= MOBILE_SWIPE_THRESHOLD) {
+                handleMobileNavSwipe(deltaX);
+            }
+            mobileSwipeStartX = null;
+        }, { passive: true });
+    }
+}
+
+initMobileNavigation();
 
 // Hide/Show top nav on scroll
 let lastScrollTop = 0;
@@ -26,20 +116,24 @@ function updateNavIndicator() {
     const referenceY = window.scrollY + window.innerHeight * 0.25;
     const headerOffset = topNav ? topNav.offsetHeight + 24 : 24;
     let activeLabel = '/ ~';
+    let activeSectionId = null;
 
     for (const section of indicatorSections) {
         const elementTop = section.element.offsetTop - headerOffset - 60;
         const elementBottom = elementTop + section.element.offsetHeight;
         if (referenceY >= elementTop && referenceY < elementBottom) {
             activeLabel = section.label;
+            activeSectionId = section.id;
             break;
         }
         if (referenceY >= elementBottom) {
             activeLabel = section.label;
+            activeSectionId = section.id;
         }
     }
 
     navSectionIndicator.textContent = activeLabel;
+    highlightMobileChip(activeSectionId);
 }
 
 window.addEventListener('scroll', () => {
@@ -61,11 +155,6 @@ const resumePopover = document.getElementById('resumePopover');
 const resumePopoverClose = document.getElementById('resumePopoverClose');
 const projectsGrid = document.getElementById('projectsGrid');
 const RESUME_STORAGE_KEY = null;
-
-window.addEventListener('load', () => {
-    // Also load leaderboard from server on page load
-    loadLeaderboardFromServer();
-});
 
 function initResumePopover() {
     if (!resumePopover) return;
@@ -239,6 +328,91 @@ let skillsNextBtn;
 let skillTabButtons = [];
 let skillsWheelLock = 0;
 let skillsAutoCycleTimer;
+let skillPreviewLink = null;
+let skillPreviewTimer = null;
+let skillPreviewHandlersBound = false;
+
+function isCoarsePointer() {
+    return Boolean(coarsePointerMedia?.matches) || 'ontouchstart' in window;
+}
+
+function setSkillPreview(link) {
+    if (!link) return;
+    if (skillPreviewLink === link) {
+        resetSkillPreviewTimer();
+        return;
+    }
+    clearSkillPreview();
+    skillPreviewLink = link;
+    link.classList.add('is-preview');
+    resetSkillPreviewTimer();
+}
+
+function resetSkillPreviewTimer() {
+    if (skillPreviewTimer) {
+        clearTimeout(skillPreviewTimer);
+    }
+    if (!skillPreviewLink) return;
+    skillPreviewTimer = window.setTimeout(() => {
+        clearSkillPreview();
+    }, 5000);
+}
+
+function clearSkillPreview() {
+    if (skillPreviewLink) {
+        skillPreviewLink.classList.remove('is-preview');
+        skillPreviewLink = null;
+    }
+    if (skillPreviewTimer) {
+        clearTimeout(skillPreviewTimer);
+        skillPreviewTimer = null;
+    }
+}
+
+function handleSkillLinkPreview(event) {
+    if (!isCoarsePointer()) return;
+    const link = event.target.closest('.skill-link');
+    if (!link) return;
+    if (!link.classList.contains('is-preview')) {
+        event.preventDefault();
+        setSkillPreview(link);
+    } else {
+        clearSkillPreview();
+    }
+}
+
+function handleOutsideSkillClick(event) {
+    if (!skillPreviewLink) return;
+    const clickedLink = event.target.closest('.skill-link');
+    if (clickedLink === skillPreviewLink) return;
+    clearSkillPreview();
+}
+
+function handleSkillScrollClear() {
+    if (!skillPreviewLink || !isCoarsePointer()) return;
+    clearSkillPreview();
+}
+
+function initSkillLinkPreviewHandling() {
+    if (!skillsGridEl || skillPreviewHandlersBound) return;
+    skillsGridEl.addEventListener('click', handleSkillLinkPreview);
+    document.addEventListener('click', handleOutsideSkillClick);
+    window.addEventListener('scroll', handleSkillScrollClear, { passive: true });
+    skillPreviewHandlersBound = true;
+}
+
+if (coarsePointerMedia) {
+    const pointerChangeHandler = event => {
+        if (!event.matches) {
+            clearSkillPreview();
+        }
+    };
+    if (typeof coarsePointerMedia.addEventListener === 'function') {
+        coarsePointerMedia.addEventListener('change', pointerChangeHandler);
+    } else if (typeof coarsePointerMedia.addListener === 'function') {
+        coarsePointerMedia.addListener(pointerChangeHandler);
+    }
+}
 
 function initSkillsSection() {
     skillsGridEl = document.getElementById('skillsGrid');
@@ -249,6 +423,7 @@ function initSkillsSection() {
 
     if (!skillsGridEl || !skillsTabsEl) return;
 
+    initSkillLinkPreviewHandling();
     buildSkillsTabs();
     renderSkillsGrid(skillCategories[activeSkillCategoryIndex].id);
     updateSkillsNav();
@@ -284,6 +459,7 @@ function buildSkillsTabs() {
 
 function renderSkillsGrid(categoryId) {
     if (!skillsGridEl) return;
+    clearSkillPreview();
     skillsGridEl.innerHTML = '';
 
     const fragment = document.createDocumentFragment();
@@ -434,17 +610,27 @@ document.addEventListener('DOMContentLoaded', () => {
     initResumePopover();
 });
 
+(() => {
 // ====================
 //  Breakout Game Vars
 // ====================
 
 const startBtn = document.getElementById('startBtn');
 const resetLeaderboardBtn = document.getElementById('resetLeaderboardBtn'); 
-resetLeaderboardBtn.addEventListener('click', resetLeaderboard);
 const gameCanvas = document.getElementById('gameCanvas');
-const ctx = gameCanvas.getContext('2d');
 const startScreen = document.getElementById('start-screen');
 const leaderboardEl = document.getElementById('leaderboard');
+
+const isCoarsePointer = coarsePointerMedia?.matches;
+
+if (!startBtn || !resetLeaderboardBtn || !gameCanvas || !startScreen || !leaderboardEl || isCoarsePointer) {
+    return;
+}
+
+window.addEventListener('load', loadLeaderboardFromServer);
+
+resetLeaderboardBtn.addEventListener('click', resetLeaderboard);
+const ctx = gameCanvas.getContext('2d');
 
 let score = 0;
 let lives = 2;
@@ -954,3 +1140,4 @@ function startGame() {
 }
 
 startBtn.addEventListener('click', startGame);
+})();

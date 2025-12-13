@@ -141,9 +141,18 @@ function initResumePopover() {
 const skillFaces = ['front', 'back', 'right', 'left', 'top', 'bottom'];
 const projectEntries = [
     {
+        title: 'TiltGolf',
+        description: 'Tilt-controlled mini golf on BeagleBone Black; IMU driver streams tilt to a Qt arcade UI with real-time physics.',
+        image: 'assets/clips/TiltGolfFinalProjectofEC535BostonUniversity_Open-SourceIMUMiniGolfonBeagleBone-ezgif.com-speed.gif',
+        links: [
+            { label: 'Report', href: 'https://github.com/nhathout/TiltGolf/blob/main/tiltgolf-final-report.pdf' },
+            { label: 'Repository', href: 'https://github.com/nhathout/TiltGolf' }
+        ]
+    },
+    {
         title: 'Trashformer',
         description: 'Open-source 3D-printed tabletop sorting arm with vision-driven classification and trajectory planning to sort waste.',
-        image: 'assets/images/trashformer1.png',
+        image: 'assets/images/trashformer.png',
         links: [
             { label: 'Report', href: 'assets/files/EK505_Transformer_Final_Report__2_.pdf' },
             { label: 'Repository', href: 'https://github.com/nhathout/trashformer' }

@@ -1308,13 +1308,16 @@
       overflow: hidden;
       height: 220px;
     }
-    .project-media img {
+    .project-media img,
+    .project-media video {
       width: 100%;
       height: 100%;
       object-fit: cover;
       transition: transform 320ms ease, filter 320ms ease;
+      display: block;
     }
-    .project-card:hover .project-media img {
+    .project-card:hover .project-media img,
+    .project-card:hover .project-media video {
       transform: scale(1.07);
       filter: saturate(1.1);
     }

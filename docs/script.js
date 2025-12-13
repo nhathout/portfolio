@@ -1,13 +1,110 @@
-// Mobile menu toggle
+// Mobile navigation + indicator state
 const menuToggle = document.getElementById('menuToggle');
 const mobileMenu = document.getElementById('mobileMenu');
-menuToggle.addEventListener('click', () => {
-    mobileMenu.classList.toggle('hidden');
-});
+const mobileMenuClose = document.getElementById('mobileMenuClose');
+const mobileMenuBackdrop = document.getElementById('mobileMenuBackdrop');
+const mobileSwipeChips = Array.from(document.querySelectorAll('.mobile-swipe-chip'));
+const navSectionIndicator = document.getElementById('navSectionIndicator');
+const coarsePointerMedia = window.matchMedia ? window.matchMedia('(pointer: coarse)') : null;
+const mobileContactAction = document.querySelector('[data-mobile-contact-action]');
+
+let mobileActiveChipIndex = Math.max(mobileSwipeChips.findIndex(chip => chip.classList.contains('is-active')), 0);
+
+function setMobileMenuState(nextState) {
+    if (!mobileMenu) return;
+    const shouldOpen = typeof nextState === 'boolean' ? nextState : !mobileMenu.classList.contains('is-open');
+    mobileMenu.classList.toggle('is-open', shouldOpen);
+    document.body.classList.toggle('mobile-nav-open', shouldOpen);
+    mobileMenu.setAttribute('aria-hidden', String(!shouldOpen));
+    menuToggle?.setAttribute('aria-expanded', String(shouldOpen));
+    menuToggle?.classList.toggle('is-active', shouldOpen);
+}
+
+function highlightMobileChip(targetId, { scrollIntoView = false } = {}) {
+    if (!mobileSwipeChips.length || !targetId) return;
+    const normalizedId = targetId.replace(/^#/, '');
+    mobileSwipeChips.forEach((chip, index) => {
+        const matches = chip.dataset.target === normalizedId;
+        chip.classList.toggle('is-active', matches);
+        if (matches) {
+            mobileActiveChipIndex = index;
+            if (scrollIntoView) {
+                chip.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            }
+        }
+    });
+}
+
+function scrollToSection(targetId, { closeMenu = true } = {}) {
+    if (!targetId) return;
+    const normalizedId = targetId.replace(/^#/, '');
+    const target = document.getElementById(normalizedId);
+    if (!target) return;
+    const offset = (topNav?.offsetHeight || 0) + 16;
+    const top = target.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({ top, behavior: 'smooth' });
+    highlightMobileChip(normalizedId, { scrollIntoView: true });
+    if (closeMenu && mobileMenu?.classList.contains('is-open')) {
+        setMobileMenuState(false);
+    }
+}
+
+function initMobileNavigation() {
+    menuToggle?.addEventListener('click', () => setMobileMenuState());
+    mobileMenuClose?.addEventListener('click', () => setMobileMenuState(false));
+    mobileMenuBackdrop?.addEventListener('click', () => setMobileMenuState(false));
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape') {
+            setMobileMenuState(false);
+        }
+    });
+    mobileSwipeChips.forEach(chip => {
+        chip.addEventListener('click', () => scrollToSection(chip.dataset.target));
+    });
+    mobileContactAction?.addEventListener('click', () => scrollToSection('contact'));
+}
+
+initMobileNavigation();
 
 // Hide/Show top nav on scroll
 let lastScrollTop = 0;
 const topNav = document.getElementById('topNav');
+const indicatorSections = [
+    { id: 'about', label: '/ about' },
+    { id: 'skills', label: '/ skills' },
+    { id: 'education-experience', label: '/ edex' },
+    { id: 'projects', label: '/ projects' },
+    { id: 'awards-affiliations', label: '/ awards' },
+    { id: 'contact', label: '/ contact' }
+].map(section => {
+    const el = document.getElementById(section.id);
+    return el ? { ...section, element: el } : null;
+}).filter(Boolean);
+
+function updateNavIndicator() {
+    if (!navSectionIndicator) return;
+    const referenceY = window.scrollY + window.innerHeight * 0.25;
+    const headerOffset = topNav ? topNav.offsetHeight + 24 : 24;
+    let activeLabel = '/ ~';
+    let activeSectionId = null;
+
+    for (const section of indicatorSections) {
+        const elementTop = section.element.offsetTop - headerOffset - 60;
+        const elementBottom = elementTop + section.element.offsetHeight;
+        if (referenceY >= elementTop && referenceY < elementBottom) {
+            activeLabel = section.label;
+            activeSectionId = section.id;
+            break;
+        }
+        if (referenceY >= elementBottom) {
+            activeLabel = section.label;
+            activeSectionId = section.id;
+        }
+    }
+
+    navSectionIndicator.textContent = activeLabel;
+    highlightMobileChip(activeSectionId);
+}
 
 window.addEventListener('scroll', () => {
     let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
@@ -19,74 +116,491 @@ window.addEventListener('scroll', () => {
         //topNav.style.transform = 'translateY(0)';
     }
     lastScrollTop = Math.max(scrollTop, 0);
+    updateNavIndicator();
 });
+window.addEventListener('resize', updateNavIndicator);
+window.addEventListener('load', updateNavIndicator);
 
-// Resume box shaking logic
-const resumeBox = document.getElementById('resumeBox');
+const resumePopover = document.getElementById('resumePopover');
+const resumePopoverClose = document.getElementById('resumePopoverClose');
+const projectsGrid = document.getElementById('projectsGrid');
+const RESUME_STORAGE_KEY = null;
 
-let shakeCyclesRun = 0; // how many times we've done the 3-shake + pause sequence this round
-let totalCycles = 2;    // do it twice each time it's triggered
-let inView = true;      // whether the box is currently in view
-
-function runShakeCycle() {
-    shakeCyclesRun = 0;
-    startShake();
-}
-
-function startShake() {
-    if (!resumeBox) return;
-    resumeBox.classList.add('shake-on-load');
-}
-
-resumeBox.addEventListener('animationend', () => {
-    resumeBox.classList.remove('shake-on-load');
-    shakeCyclesRun++;
-    if (shakeCyclesRun < totalCycles) {
-        // Wait 5 seconds, then shake again
-        setTimeout(() => {
-            if (inView) {
-                startShake();
-            }
-        }, 5000);
-    }
-});
-
-window.addEventListener('load', () => {
-    setTimeout(() => {
-        runShakeCycle();
-    }, 500);
-
-    // Also load leaderboard from server on page load
-    loadLeaderboardFromServer();
-});
-
-// Intersection Observer to detect visibility changes
-const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            inView = true;
-            runShakeCycle();
-        } else {
-            inView = false;
-        }
+function initResumePopover() {
+    if (!resumePopover) return;
+    setTimeout(() => resumePopover.classList.add('is-visible'), 1200);
+    resumePopoverClose?.addEventListener('click', () => {
+        resumePopover.classList.remove('is-visible');
     });
-});
-
-if (resumeBox) {
-    observer.observe(resumeBox);
 }
 
+// ====================
+//  Skills Grid (3D cubes)
+// ====================
+
+const skillFaces = ['front', 'back', 'right', 'left', 'top', 'bottom'];
+const projectEntries = [
+    {
+        title: 'Pollux',
+        description: 'An autonomous countertop-cleaning robot with reinforcement learning to avoid cliffs and obstacles.',
+        image: 'assets/clips/pollux.gif',
+        links: [
+            { label: 'Repository', href: 'https://github.com/nhathout/pollux-AMR' }
+        ]
+    },
+    {
+        title: 'SuperTuxSmart',
+        description: 'Optimized pySuperTuxKart racing performance via computer vision + RL. Full write-up included.',
+        image: 'assets/images/supertuxsmart.png',
+        links: [
+            { label: 'Report', href: 'https://github.com/nhathout/EC418-Final-Project/blob/main/FinalReport.pdf' },
+            { label: 'Repository', href: 'https://github.com/nhathout/EC418-Final-Project' }
+        ]
+    },
+    {
+        title: 'Detectron2 Attention Tracker',
+        description: 'Meta’s Detectron2 reworked for facial attention tracking, blending COCO instance segmentation and custom training.',
+        image: 'assets/images/dl_final_project.png',
+        links: [
+            { label: 'Report', href: 'https://docs.google.com/document/d/1jopVcW5oSQAM1AiB77bWeUELJqZ4IWX0DPezHU_gHWk/edit?usp=sharing' },
+            { label: 'Repository', href: 'https://github.com/nhathout/AreYoutTrieulyPayingAttentionOrJustJoshingNoahmNotButHilarioIsNET' }
+        ]
+    },
+    {
+        title: 'Smart Home API',
+        description: 'Python API to orchestrate houses, rooms, and devices with strong validation + testing.',
+        image: 'assets/images/smarthome.png',
+        links: [
+            { label: 'Repository', href: 'https://github.com/nhathout/smart-home-api' }
+        ]
+    },
+    {
+        title: 'PIRA · Personal Indoor Robot Assistant',
+        description: 'Optitrack navigation, WASD teleop, Node.js coordination, and Streamlit visualization for multi-robot control.',
+        image: 'assets/images/pira.png',
+        links: [
+            { label: 'Repository', href: 'https://github.com/nhathout/PIRA' }
+        ]
+    },
+    {
+        title: 'ChatSheets AI',
+        description: 'Upload a CSV, chat through your dataset, and generate SQL/plots in real time.',
+        image: 'assets/images/chatsheets.png',
+        links: [
+            { label: 'Repository', href: 'https://github.com/nhathout/ChatSheetsAI' }
+        ]
+    },
+    {
+        title: 'PyP2PChat',
+        description: 'Peer-to-peer terminal chat where each node doubles as client/server, racing to establish consensus.',
+        image: 'assets/images/pyp2pchat.png',
+        links: [
+            { label: 'Repository', href: 'https://github.com/nhathout/PyP2PChat' }
+        ]
+    },
+    {
+        title: 'FitCat · Network of Smart Cat Collars',
+        description: 'Hardware + cloud dashboard for cat activity monitoring with LoRa and predictive analytics.',
+        image: 'assets/images/fitcat.png',
+        links: [
+            { label: 'Repository', href: 'https://github.com/nhathout/Fit-Cat' }
+        ]
+    },
+    {
+        title: 'SmartPill · Ingestible Sensor',
+        description: 'ESP32 ingestible sensor logging biometrics along a simulated digestive tract—proof-of-concept diagnostics.',
+        image: 'assets/images/smartpill.png',
+        links: [
+            { label: 'Repository', href: 'https://github.com/nhathout/SmartPill-Ingestible-Sensor' }
+        ]
+    },
+    {
+        title: 'elect-A-leader',
+        description: 'Distributed, fault-tolerant e-voting system with IR fob authentication and leader election.',
+        image: 'assets/images/election.png',
+        links: [
+            { label: 'Repository', href: 'https://github.com/nhathout/elect-A-leader' }
+        ]
+    },
+    {
+        title: 'Personal Portfolio',
+        description: 'The site you’re browsing.',
+        image: 'assets/images/PixelMe.jpg',
+        links: [
+            { label: 'Repository', href: 'https://github.com/nhathout/portfolio' }
+        ]
+    },
+    {
+        title: 'Mia’s Art Portfolio',
+        description: 'Custom site for my sister’s artwork. Live at miasportfolio.art.',
+        image: 'assets/images/mia.png',
+        links: [
+            { label: 'Live', href: 'https://miasportfolio.art/' },
+            { label: 'Repository', href: 'https://github.com/nhathout/mias-portfolio' }
+        ]
+    },
+    {
+        title: 'Huffman Code Generator',
+        description: 'C++ encoder/decoder using Huffman trees and priority queues for compression + restore.',
+        image: 'assets/images/huffman.png',
+        links: [
+            { label: 'Repository', href: 'https://github.com/nhathout/AppliedAlgorithms/tree/main/huffman-code-generator' }
+        ]
+    }
+];
+const skillCategories = [
+    { id: 'software', label: 'Programming & AI' },
+    { id: 'hardware', label: 'Embedded & Robotics' },
+    { id: 'platforms', label: 'Platforms & Operating Systems' }
+];
+const skillsData = [
+    { name: 'Python', category: 'software', href: 'https://www.python.org/', img: 'assets/images/python_logo.png' },
+    { name: 'C', category: 'software', href: 'https://en.cppreference.com/w/c', img: 'assets/images/c_logo.png' },
+    { name: 'C++', category: 'software', href: 'https://isocpp.org/', img: 'assets/images/cplus_logo.png' },
+    { name: 'C#', category: 'software', href: 'https://dotnet.microsoft.com/en-us/languages/csharp', img: 'assets/images/csharp_logo.png' },
+    { name: 'TensorFlow', category: 'software', href: 'https://www.tensorflow.org/', img: 'assets/images/tensorflow.png' },
+    { name: 'PyTorch', category: 'software', href: 'https://pytorch.org/', img: 'assets/images/pytorch.png' },
+    { name: 'MATLAB', category: 'software', href: 'https://www.mathworks.com/products/matlab.html', img: 'assets/images/matlab.png' },
+    { name: 'JavaScript', category: 'software', href: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript', img: 'assets/images/javascript.png' },
+    { name: 'SQLite', category: 'software', href: 'https://sqlite.org/', img: 'assets/images/sqlite_logo.png' },
+    { name: 'FastAPI', category: 'software', href: 'https://fastapi.tiangolo.com/', img: 'assets/images/fastapi_logo.png' },
+    { name: 'HTML', category: 'software', href: 'https://developer.mozilla.org/en-US/docs/Web/HTML', img: 'assets/images/html_logo.png' },
+    { name: 'CSS', category: 'software', href: 'https://developer.mozilla.org/en-US/docs/Web/CSS', img: 'assets/images/css_logo.png' },
+    { name: 'Java', category: 'software', href: 'https://www.java.com/', img: 'assets/images/java_logo.png' },
+    { name: 'Arduino', category: 'hardware', href: 'https://www.arduino.cc/', img: 'assets/images/arduino.png' },
+    { name: 'Raspberry Pi', category: 'hardware', href: 'https://www.raspberrypi.org/', img: 'assets/images/raspi_logo.png' },
+    { name: 'Espressif (ESP)', category: 'hardware', href: 'https://www.espressif.com/', img: 'assets/images/espressif.png' },
+    { name: 'NVIDIA', category: 'hardware', href: 'https://learn.nvidia.com/courses/course-detail?course_id=course-v1:DLI+S-FX-01+V1', img: 'assets/images/nvidia.png' },
+    { name: 'Universal Robots', category: 'hardware', href: 'https://www.universal-robots.com/', img: 'assets/images/ur_logo.png' },
+    { name: 'ROS', category: 'hardware', href: 'https://www.ros.org/', img: 'assets/images/ros1_logo.png' },
+    { name: 'ROS2', category: 'hardware', href: 'https://www.ros.org/', img: 'assets/images/ros_logo.png' },
+    { name: 'Intel', category: 'hardware', href: 'https://www.intelrealsense.com/sdk-2/', img: 'assets/images/intel_logo.png' },
+    { name: 'Orbbec', category: 'hardware', href: 'https://www.orbbec.com/developers/orbbec-sdk/', img: 'assets/images/orbbec_logo.png' },
+    { name: 'BeagleBone', category: 'hardware', href: 'https://www.beagleboard.org/', img: 'assets/images/beaglebone_logo.png' },
+    { name: 'GitHub', category: 'platforms', href: 'https://github.com/nhathout', img: 'assets/images/github_logo.png' },
+    { name: 'Git', category: 'platforms', href: 'https://git-scm.com/', img: 'assets/images/git_logo.png' },
+    { name: 'Docker', category: 'platforms', href: 'https://www.docker.com/', img: 'assets/images/docker_logo.png' },
+    { name: 'Onshape', category: 'platforms', href: 'https://www.onshape.com/', img: 'assets/images/onshape.png' },
+    { name: 'Bambu Lab', category: 'platforms', href: 'https://bambulab.com/en-us', img: 'assets/images/bambulablogo.png' },
+    { name: 'Ubuntu', category: 'platforms', href: 'https://ubuntu.com/', img: 'assets/images/ubuntu_logo.png' },
+    { name: 'Unreal Engine 5', category: 'platforms', href: 'https://www.unrealengine.com/en-US/unreal-engine-5', img: 'assets/images/ur5.png' },
+    { name: 'Windows', category: 'platforms', href: 'https://www.microsoft.com/windows', img: 'assets/images/windows_logo.png' },
+    { name: 'macOS', category: 'platforms', href: 'https://www.apple.com/macos/', img: 'assets/images/macos_logo.png' },
+    { name: 'Linux', category: 'platforms', href: 'https://www.kernel.org/', img: 'assets/images/linux_logo.png' }
+];
+
+let activeSkillCategoryIndex = 0;
+let skillsGridEl;
+let skillsTabsEl;
+let skillsActiveLabelEl;
+let skillsPrevBtn;
+let skillsNextBtn;
+let skillTabButtons = [];
+let skillsWheelLock = 0;
+let skillsAutoCycleTimer;
+let skillPreviewLink = null;
+let skillPreviewTimer = null;
+let skillPreviewHandlersBound = false;
+
+function isCoarsePointer() {
+    return Boolean(coarsePointerMedia?.matches) || 'ontouchstart' in window;
+}
+
+function setSkillPreview(link) {
+    if (!link) return;
+    if (skillPreviewLink === link) {
+        resetSkillPreviewTimer();
+        return;
+    }
+    clearSkillPreview();
+    skillPreviewLink = link;
+    link.classList.add('is-preview');
+    resetSkillPreviewTimer();
+}
+
+function resetSkillPreviewTimer() {
+    if (skillPreviewTimer) {
+        clearTimeout(skillPreviewTimer);
+    }
+    if (!skillPreviewLink) return;
+    skillPreviewTimer = window.setTimeout(() => {
+        clearSkillPreview();
+    }, 5000);
+}
+
+function clearSkillPreview() {
+    if (skillPreviewLink) {
+        skillPreviewLink.classList.remove('is-preview');
+        skillPreviewLink = null;
+    }
+    if (skillPreviewTimer) {
+        clearTimeout(skillPreviewTimer);
+        skillPreviewTimer = null;
+    }
+}
+
+function handleSkillLinkPreview(event) {
+    if (!isCoarsePointer()) return;
+    const link = event.target.closest('.skill-link');
+    if (!link) return;
+    if (!link.classList.contains('is-preview')) {
+        event.preventDefault();
+        setSkillPreview(link);
+    } else {
+        clearSkillPreview();
+    }
+}
+
+function handleOutsideSkillClick(event) {
+    if (!skillPreviewLink) return;
+    const clickedLink = event.target.closest('.skill-link');
+    if (clickedLink === skillPreviewLink) return;
+    clearSkillPreview();
+}
+
+function handleSkillScrollClear() {
+    if (!skillPreviewLink || !isCoarsePointer()) return;
+    clearSkillPreview();
+}
+
+function initSkillLinkPreviewHandling() {
+    if (!skillsGridEl || skillPreviewHandlersBound) return;
+    skillsGridEl.addEventListener('click', handleSkillLinkPreview);
+    document.addEventListener('click', handleOutsideSkillClick);
+    window.addEventListener('scroll', handleSkillScrollClear, { passive: true });
+    skillPreviewHandlersBound = true;
+}
+
+if (coarsePointerMedia) {
+    const pointerChangeHandler = event => {
+        if (!event.matches) {
+            clearSkillPreview();
+        }
+    };
+    if (typeof coarsePointerMedia.addEventListener === 'function') {
+        coarsePointerMedia.addEventListener('change', pointerChangeHandler);
+    } else if (typeof coarsePointerMedia.addListener === 'function') {
+        coarsePointerMedia.addListener(pointerChangeHandler);
+    }
+}
+
+function initSkillsSection() {
+    skillsGridEl = document.getElementById('skillsGrid');
+    skillsTabsEl = document.getElementById('skillsTabs');
+    skillsActiveLabelEl = document.getElementById('skillsActiveLabel');
+    skillsPrevBtn = document.getElementById('skillsPrev');
+    skillsNextBtn = document.getElementById('skillsNext');
+
+    if (!skillsGridEl || !skillsTabsEl) return;
+
+    initSkillLinkPreviewHandling();
+    buildSkillsTabs();
+    renderSkillsGrid(skillCategories[activeSkillCategoryIndex].id);
+    updateSkillsNav();
+
+    skillsPrevBtn?.addEventListener('click', () => {
+        cycleSkillCategory(-1);
+        restartSkillsAutoCycle();
+    });
+    skillsNextBtn?.addEventListener('click', () => {
+        cycleSkillCategory(1);
+        restartSkillsAutoCycle();
+    });
+    skillsGridEl.addEventListener('wheel', event => {
+        handleSkillsWheel(event);
+        restartSkillsAutoCycle();
+    }, { passive: false });
+}
+
+function buildSkillsTabs() {
+    skillsTabsEl.innerHTML = '';
+    skillTabButtons = [];
+
+    skillCategories.forEach((category, index) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'skills-tab';
+        button.textContent = category.label;
+        button.addEventListener('click', () => setSkillCategory(index));
+        skillsTabsEl.appendChild(button);
+        skillTabButtons.push(button);
+    });
+}
+
+function renderSkillsGrid(categoryId) {
+    if (!skillsGridEl) return;
+    clearSkillPreview();
+    skillsGridEl.innerHTML = '';
+
+    const fragment = document.createDocumentFragment();
+    skillsData
+        .filter(skill => skill.category === categoryId)
+        .forEach(skill => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'flex justify-center';
+
+            const link = document.createElement('a');
+            link.href = skill.href;
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            link.className = 'skill-link';
+            link.setAttribute('aria-label', skill.name);
+            link.title = skill.name;
+
+            const cube = document.createElement('div');
+            cube.className = 'skill-cube';
+
+            skillFaces.forEach(face => {
+                const faceEl = document.createElement('div');
+                faceEl.className = `skill-face ${face}`;
+
+                const img = document.createElement('img');
+                img.src = skill.img;
+                img.alt = '';
+                img.setAttribute('aria-hidden', 'true');
+
+                faceEl.appendChild(img);
+                cube.appendChild(faceEl);
+            });
+
+            const label = document.createElement('span');
+            label.className = 'skill-label';
+            label.textContent = skill.name;
+
+            link.appendChild(cube);
+            link.appendChild(label);
+            wrapper.appendChild(link);
+            fragment.appendChild(wrapper);
+        });
+
+    skillsGridEl.appendChild(fragment);
+}
+
+function setSkillCategory(nextIndex, { animate = true } = {}) {
+    if (!skillCategories.length) return;
+    const normalizedIndex = (nextIndex + skillCategories.length) % skillCategories.length;
+    if (normalizedIndex === activeSkillCategoryIndex) return;
+
+    const updateCategory = () => {
+        activeSkillCategoryIndex = normalizedIndex;
+        renderSkillsGrid(skillCategories[activeSkillCategoryIndex].id);
+        updateSkillsNav();
+    };
+
+    if (!animate || !skillsGridEl) {
+        updateCategory();
+        return;
+    }
+
+    skillsGridEl.classList.add('skills-grid--exit');
+    setTimeout(() => {
+        updateCategory();
+        skillsGridEl.classList.remove('skills-grid--exit');
+        skillsGridEl.classList.add('skills-grid--enter');
+        setTimeout(() => skillsGridEl.classList.remove('skills-grid--enter'), 400);
+    }, 200);
+}
+
+function cycleSkillCategory(direction) {
+    setSkillCategory(activeSkillCategoryIndex + direction);
+}
+
+function updateSkillsNav() {
+    if (skillsActiveLabelEl) {
+        skillsActiveLabelEl.textContent = skillCategories[activeSkillCategoryIndex].label;
+    }
+    skillTabButtons.forEach((btn, index) => {
+        btn.classList.toggle('is-active', index === activeSkillCategoryIndex);
+    });
+}
+
+function handleSkillsWheel(event) {
+    if (!skillsGridEl) return;
+    if (Math.abs(event.deltaX) <= Math.abs(event.deltaY)) return;
+    if (Math.abs(event.deltaX) < 15) return;
+    const now = Date.now();
+    if (now - skillsWheelLock < 600) return;
+    event.preventDefault();
+    cycleSkillCategory(event.deltaX > 0 ? 1 : -1);
+    skillsWheelLock = now;
+}
+
+function restartSkillsAutoCycle() {
+    if (skillsAutoCycleTimer) clearInterval(skillsAutoCycleTimer);
+    skillsAutoCycleTimer = setInterval(() => cycleSkillCategory(1), 20000);
+}
+
+function buildProjectsGrid() {
+    if (!projectsGrid) return;
+    const fragment = document.createDocumentFragment();
+    projectEntries.forEach(project => {
+        const card = document.createElement('article');
+        card.className = 'project-card';
+
+        const media = document.createElement('div');
+        media.className = 'project-media';
+        const img = document.createElement('img');
+        img.src = project.image;
+        img.alt = project.title;
+        media.appendChild(img);
+
+        const content = document.createElement('div');
+        content.className = 'project-content';
+        const title = document.createElement('h3');
+        title.textContent = project.title;
+        const description = document.createElement('p');
+        description.textContent = project.description;
+
+        const linksContainer = document.createElement('div');
+        linksContainer.className = 'project-links';
+        project.links.forEach(link => {
+            const anchor = document.createElement('a');
+            anchor.href = link.href;
+            anchor.target = '_blank';
+            anchor.rel = 'noopener noreferrer';
+            anchor.textContent = `${link.label} ↗`;
+            linksContainer.appendChild(anchor);
+        });
+
+        content.appendChild(title);
+        content.appendChild(description);
+        content.appendChild(linksContainer);
+
+        card.appendChild(media);
+        card.appendChild(content);
+        fragment.appendChild(card);
+    });
+    projectsGrid.appendChild(fragment);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initSkillsSection();
+    restartSkillsAutoCycle();
+    buildProjectsGrid();
+    initResumePopover();
+});
+
+(() => {
 // ====================
 //  Breakout Game Vars
 // ====================
 
 const startBtn = document.getElementById('startBtn');
 const resetLeaderboardBtn = document.getElementById('resetLeaderboardBtn'); 
-resetLeaderboardBtn.addEventListener('click', resetLeaderboard);
 const gameCanvas = document.getElementById('gameCanvas');
-const ctx = gameCanvas.getContext('2d');
 const startScreen = document.getElementById('start-screen');
 const leaderboardEl = document.getElementById('leaderboard');
+
+const isCoarsePointer = coarsePointerMedia?.matches;
+
+if (!startBtn || !resetLeaderboardBtn || !gameCanvas || !startScreen || !leaderboardEl || isCoarsePointer) {
+    return;
+}
+
+window.addEventListener('load', loadLeaderboardFromServer);
+
+resetLeaderboardBtn.addEventListener('click', resetLeaderboard);
+const ctx = gameCanvas.getContext('2d');
 
 let score = 0;
 let lives = 2;
@@ -596,3 +1110,4 @@ function startGame() {
 }
 
 startBtn.addEventListener('click', startGame);
+})();

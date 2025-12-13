@@ -141,6 +141,14 @@ function initResumePopover() {
 const skillFaces = ['front', 'back', 'right', 'left', 'top', 'bottom'];
 const projectEntries = [
     {
+        title: 'BROS2',
+        description: 'Electron desktop app to visually compose ROS 2 graphs, auto-generate packages/launch files, and run them in a managed Docker workspace with live introspection.',
+        image: 'assets/clips/ec601-demo-HD720p-ezgif.com-video-speed.mov',
+        links: [
+            { label: 'Repository', href: 'https://github.com/nhathout/BROS2' }
+        ]
+    },
+    {
         title: 'TiltGolf',
         description: 'Tilt-controlled mini golf on BeagleBone Black; IMU driver streams tilt to a Qt arcade UI with real-time physics.',
         image: 'assets/clips/TiltGolfFinalProjectofEC535BostonUniversity_Open-SourceIMUMiniGolfonBeagleBone-ezgif.com-speed.gif',
@@ -557,10 +565,22 @@ function buildProjectsGrid() {
 
         const media = document.createElement('div');
         media.className = 'project-media';
-        const img = document.createElement('img');
-        img.src = project.image;
-        img.alt = project.title;
-        media.appendChild(img);
+        const isVideo = /\.(mp4|mov|webm)$/i.test(project.image);
+        if (isVideo) {
+            const video = document.createElement('video');
+            video.src = project.image;
+            video.autoplay = true;
+            video.loop = true;
+            video.muted = true;
+            video.playsInline = true;
+            video.setAttribute('aria-label', project.title);
+            media.appendChild(video);
+        } else {
+            const img = document.createElement('img');
+            img.src = project.image;
+            img.alt = project.title;
+            media.appendChild(img);
+        }
 
         const content = document.createElement('div');
         content.className = 'project-content';

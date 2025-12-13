@@ -143,7 +143,7 @@ const projectEntries = [
     {
         title: 'Pollux',
         description: 'An autonomous countertop-cleaning robot with reinforcement learning to avoid cliffs and obstacles.',
-        image: 'assets/images/pollux.png',
+        image: 'assets/clips/pollux.gif',
         links: [
             { label: 'Repository', href: 'https://github.com/nhathout/pollux-AMR' }
         ]

@@ -141,6 +141,15 @@ function initResumePopover() {
 const skillFaces = ['front', 'back', 'right', 'left', 'top', 'bottom'];
 const projectEntries = [
     {
+        title: 'Trashformer',
+        description: 'Open-source 3D-printed tabletop sorting arm with vision-driven classification and trajectory planning to sort waste.',
+        image: 'assets/images/trashformer1.png',
+        links: [
+            { label: 'Report', href: 'assets/files/EK505_Transformer_Final_Report__2_.pdf' },
+            { label: 'Repository', href: 'https://github.com/nhathout/trashformer' }
+        ]
+    },
+    {
         title: 'Pollux',
         description: 'An autonomous countertop-cleaning robot with reinforcement learning to avoid cliffs and obstacles.',
         image: 'assets/clips/pollux.gif',

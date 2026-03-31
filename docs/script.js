@@ -144,6 +144,10 @@ const projectEntries = [
         title: 'BROS2',
         description: 'Electron desktop app to visually compose ROS 2 graphs, auto-generate packages/launch files, and run them in a managed Docker workspace with live introspection.',
         image: 'assets/clips/ec601-demo-HD720p-ezgif.com-video-speed.mov',
+        award: {
+            title: 'BU Best Project Award',
+            season: 'Fall 2025'
+        },
         links: [
             { label: 'Repository', href: 'https://github.com/nhathout/BROS2' }
         ]
@@ -556,12 +560,61 @@ function restartSkillsAutoCycle() {
     skillsAutoCycleTimer = setInterval(() => cycleSkillCategory(1), 20000);
 }
 
+function createProjectAwardText(award) {
+    const text = document.createElement('span');
+    text.className = 'project-award-text';
+
+    const title = document.createElement('strong');
+    title.textContent = award.title;
+
+    const season = document.createElement('small');
+    season.textContent = award.season;
+
+    text.appendChild(title);
+    text.appendChild(season);
+
+    return text;
+}
+
+function createProjectAwardBadge() {
+    const badge = document.createElement('div');
+    badge.className = 'project-award-badge';
+    badge.setAttribute('aria-hidden', 'true');
+
+    const icon = document.createElement('span');
+    icon.className = 'project-award-icon';
+    icon.setAttribute('aria-hidden', 'true');
+    icon.innerHTML = `
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 3H16L14.2 10.1C13.8 11.6 12.4 12.6 10.9 12.4L8.3 12L10 3Z" fill="#0F766E"/>
+            <path d="M22 3H16L17.8 10.1C18.2 11.6 19.6 12.6 21.1 12.4L23.7 12L22 3Z" fill="#115E59"/>
+            <circle cx="16" cy="16" r="8" fill="#FAC123"/>
+            <circle cx="16" cy="16" r="5" fill="#FFF3C2"/>
+            <path d="M16 12.8L17.3 15.4L20.2 15.8L18.1 17.8L18.6 20.7L16 19.3L13.4 20.7L13.9 17.8L11.8 15.8L14.7 15.4L16 12.8Z" fill="#B45309"/>
+        </svg>
+    `;
+
+    badge.appendChild(icon);
+
+    return badge;
+}
+
+function createProjectAwardNote(award) {
+    const note = document.createElement('div');
+    note.className = 'project-award-note';
+    note.appendChild(createProjectAwardText(award));
+    return note;
+}
+
 function buildProjectsGrid() {
     if (!projectsGrid) return;
     const fragment = document.createDocumentFragment();
     projectEntries.forEach(project => {
         const card = document.createElement('article');
         card.className = 'project-card';
+        if (project.award) {
+            card.classList.add('project-card--awarded');
+        }
 
         const media = document.createElement('div');
         media.className = 'project-media';
@@ -580,6 +633,9 @@ function buildProjectsGrid() {
             img.src = project.image;
             img.alt = project.title;
             media.appendChild(img);
+        }
+        if (project.award) {
+            media.appendChild(createProjectAwardBadge());
         }
 
         const content = document.createElement('div');
@@ -601,6 +657,9 @@ function buildProjectsGrid() {
         });
 
         content.appendChild(title);
+        if (project.award) {
+            content.appendChild(createProjectAwardNote(project.award));
+        }
         content.appendChild(description);
         content.appendChild(linksContainer);
 

@@ -141,12 +141,48 @@ function initResumePopover() {
 const skillFaces = ['front', 'back', 'right', 'left', 'top', 'bottom'];
 const projectEntries = [
     {
+        title: "Master's Thesis",
+        description: 'Current thesis work. Final title, visuals, summary, and links unlock once the project is complete.',
+        upcoming: {
+            label: 'Thesis in progress',
+            note: 'This block stays locked until the thesis is finished.',
+            placeholderMark: '?'
+        },
+        links: []
+    },
+    {
+        title: 'TrashformerPro',
+        description: 'Next-stage smart waste-sorting system currently under active development. Full visuals and write-up unlock after the project is complete.',
+        upcoming: {
+            label: 'Build in progress',
+            note: 'The repo is public now; the rest stays locked until release.',
+            placeholderMark: 'TFP'
+        },
+        links: [
+            { label: 'Repository', href: 'https://github.com/nhathout/TrashformerPro' }
+        ]
+    },
+    {
         title: 'BROS2',
         description: 'Electron desktop app to visually compose ROS 2 graphs, auto-generate packages/launch files, and run them in a managed Docker workspace with live introspection.',
         image: 'assets/clips/ec601-demo-HD720p-ezgif.com-video-speed.mov',
+        award: {
+            title: 'BU Best Project Award',
+            season: 'Fall 2025'
+        },
         links: [
             { label: 'Repository', href: 'https://github.com/nhathout/BROS2' }
         ]
+    },
+    {
+        title: 'PixelPose',
+        description: 'Camera pose regression research project currently in proposal stage. Final summary, media, and results unlock once the work is ready to publish.',
+        upcoming: {
+            label: 'Proposal stage',
+            note: 'The concept is set; public details stay locked for now.',
+            placeholderMark: 'POSE'
+        },
+        links: []
     },
     {
         title: 'TiltGolf',
@@ -556,31 +592,142 @@ function restartSkillsAutoCycle() {
     skillsAutoCycleTimer = setInterval(() => cycleSkillCategory(1), 20000);
 }
 
+function createProjectAwardText(award) {
+    const text = document.createElement('span');
+    text.className = 'project-award-text';
+
+    const title = document.createElement('strong');
+    title.textContent = award.title;
+
+    const season = document.createElement('small');
+    season.textContent = award.season;
+
+    text.appendChild(title);
+    text.appendChild(season);
+
+    return text;
+}
+
+function createProjectAwardBadge() {
+    const badge = document.createElement('div');
+    badge.className = 'project-award-badge';
+    badge.setAttribute('aria-hidden', 'true');
+
+    const icon = document.createElement('span');
+    icon.className = 'project-award-icon';
+    icon.setAttribute('aria-hidden', 'true');
+    icon.innerHTML = `
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 3H16L14.2 10.1C13.8 11.6 12.4 12.6 10.9 12.4L8.3 12L10 3Z" fill="#0F766E"/>
+            <path d="M22 3H16L17.8 10.1C18.2 11.6 19.6 12.6 21.1 12.4L23.7 12L22 3Z" fill="#115E59"/>
+            <circle cx="16" cy="16" r="8" fill="#FAC123"/>
+            <circle cx="16" cy="16" r="5" fill="#FFF3C2"/>
+            <path d="M16 12.8L17.3 15.4L20.2 15.8L18.1 17.8L18.6 20.7L16 19.3L13.4 20.7L13.9 17.8L11.8 15.8L14.7 15.4L16 12.8Z" fill="#B45309"/>
+        </svg>
+    `;
+
+    badge.appendChild(icon);
+
+    return badge;
+}
+
+function createProjectAwardNote(award) {
+    const note = document.createElement('div');
+    note.className = 'project-award-note';
+    note.appendChild(createProjectAwardText(award));
+    return note;
+}
+
+function createProjectUpcomingNote(upcoming) {
+    const note = document.createElement('div');
+    note.className = 'project-upcoming-note';
+
+    const lock = document.createElement('span');
+    lock.className = 'project-upcoming-lock';
+    lock.textContent = 'Locked';
+
+    const text = document.createElement('span');
+    text.className = 'project-upcoming-text';
+
+    const label = document.createElement('strong');
+    label.textContent = upcoming.label;
+
+    const detail = document.createElement('small');
+    detail.textContent = upcoming.note;
+
+    text.appendChild(label);
+    text.appendChild(detail);
+    note.appendChild(lock);
+    note.appendChild(text);
+
+    return note;
+}
+
+function createProjectMedia(project) {
+    const media = document.createElement('div');
+    media.className = 'project-media';
+
+    if (project.upcoming) {
+        media.classList.add('project-media--placeholder');
+
+        const lockBadge = document.createElement('span');
+        lockBadge.className = 'project-lock-badge';
+        lockBadge.textContent = 'Locked';
+
+        const mark = document.createElement('span');
+        mark.className = 'project-placeholder-mark';
+        mark.setAttribute('aria-hidden', 'true');
+        mark.textContent = (project.upcoming.placeholderMark || '?').toUpperCase();
+
+        const label = document.createElement('span');
+        label.className = 'project-placeholder-label';
+        label.textContent = project.upcoming.label;
+
+        media.appendChild(lockBadge);
+        media.appendChild(mark);
+        media.appendChild(label);
+
+        return media;
+    }
+
+    const isVideo = project.image && /\.(mp4|mov|webm)$/i.test(project.image);
+    if (isVideo) {
+        const video = document.createElement('video');
+        video.src = project.image;
+        video.autoplay = true;
+        video.loop = true;
+        video.muted = true;
+        video.playsInline = true;
+        video.setAttribute('aria-label', project.title);
+        media.appendChild(video);
+    } else if (project.image) {
+        const img = document.createElement('img');
+        img.src = project.image;
+        img.alt = project.title;
+        media.appendChild(img);
+    }
+
+    if (project.award) {
+        media.appendChild(createProjectAwardBadge());
+    }
+
+    return media;
+}
+
 function buildProjectsGrid() {
     if (!projectsGrid) return;
+    projectsGrid.innerHTML = '';
     const fragment = document.createDocumentFragment();
     projectEntries.forEach(project => {
         const card = document.createElement('article');
         card.className = 'project-card';
-
-        const media = document.createElement('div');
-        media.className = 'project-media';
-        const isVideo = /\.(mp4|mov|webm)$/i.test(project.image);
-        if (isVideo) {
-            const video = document.createElement('video');
-            video.src = project.image;
-            video.autoplay = true;
-            video.loop = true;
-            video.muted = true;
-            video.playsInline = true;
-            video.setAttribute('aria-label', project.title);
-            media.appendChild(video);
-        } else {
-            const img = document.createElement('img');
-            img.src = project.image;
-            img.alt = project.title;
-            media.appendChild(img);
+        if (project.award) {
+            card.classList.add('project-card--awarded');
         }
+        if (project.upcoming) {
+            card.classList.add('project-card--upcoming');
+        }
+        const media = createProjectMedia(project);
 
         const content = document.createElement('div');
         content.className = 'project-content';
@@ -601,8 +748,16 @@ function buildProjectsGrid() {
         });
 
         content.appendChild(title);
+        if (project.award) {
+            content.appendChild(createProjectAwardNote(project.award));
+        }
+        if (project.upcoming) {
+            content.appendChild(createProjectUpcomingNote(project.upcoming));
+        }
         content.appendChild(description);
-        content.appendChild(linksContainer);
+        if (project.links?.length) {
+            content.appendChild(linksContainer);
+        }
 
         card.appendChild(media);
         card.appendChild(content);

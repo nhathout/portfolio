@@ -141,6 +141,28 @@ function initResumePopover() {
 const skillFaces = ['front', 'back', 'right', 'left', 'top', 'bottom'];
 const projectEntries = [
     {
+        title: "Master's Thesis",
+        description: 'Current thesis work. Final title, visuals, summary, and links unlock once the project is complete.',
+        upcoming: {
+            label: 'Thesis in progress',
+            note: 'This block stays locked until the thesis is finished.',
+            placeholderMark: '?'
+        },
+        links: []
+    },
+    {
+        title: 'TrashformerPro',
+        description: 'Next-stage smart waste-sorting system currently under active development. Full visuals and write-up unlock after the project is complete.',
+        upcoming: {
+            label: 'Build in progress',
+            note: 'The repo is public now; the rest stays locked until release.',
+            placeholderMark: 'TFP'
+        },
+        links: [
+            { label: 'Repository', href: 'https://github.com/nhathout/TrashformerPro' }
+        ]
+    },
+    {
         title: 'BROS2',
         description: 'Electron desktop app to visually compose ROS 2 graphs, auto-generate packages/launch files, and run them in a managed Docker workspace with live introspection.',
         image: 'assets/clips/ec601-demo-HD720p-ezgif.com-video-speed.mov',
@@ -151,6 +173,16 @@ const projectEntries = [
         links: [
             { label: 'Repository', href: 'https://github.com/nhathout/BROS2' }
         ]
+    },
+    {
+        title: 'PixelPose',
+        description: 'Camera pose regression research project currently in proposal stage. Final summary, media, and results unlock once the work is ready to publish.',
+        upcoming: {
+            label: 'Proposal stage',
+            note: 'The concept is set; public details stay locked for now.',
+            placeholderMark: 'POSE'
+        },
+        links: []
     },
     {
         title: 'TiltGolf',
@@ -606,8 +638,85 @@ function createProjectAwardNote(award) {
     return note;
 }
 
+function createProjectUpcomingNote(upcoming) {
+    const note = document.createElement('div');
+    note.className = 'project-upcoming-note';
+
+    const lock = document.createElement('span');
+    lock.className = 'project-upcoming-lock';
+    lock.textContent = 'Locked';
+
+    const text = document.createElement('span');
+    text.className = 'project-upcoming-text';
+
+    const label = document.createElement('strong');
+    label.textContent = upcoming.label;
+
+    const detail = document.createElement('small');
+    detail.textContent = upcoming.note;
+
+    text.appendChild(label);
+    text.appendChild(detail);
+    note.appendChild(lock);
+    note.appendChild(text);
+
+    return note;
+}
+
+function createProjectMedia(project) {
+    const media = document.createElement('div');
+    media.className = 'project-media';
+
+    if (project.upcoming) {
+        media.classList.add('project-media--placeholder');
+
+        const lockBadge = document.createElement('span');
+        lockBadge.className = 'project-lock-badge';
+        lockBadge.textContent = 'Locked';
+
+        const mark = document.createElement('span');
+        mark.className = 'project-placeholder-mark';
+        mark.setAttribute('aria-hidden', 'true');
+        mark.textContent = (project.upcoming.placeholderMark || '?').toUpperCase();
+
+        const label = document.createElement('span');
+        label.className = 'project-placeholder-label';
+        label.textContent = project.upcoming.label;
+
+        media.appendChild(lockBadge);
+        media.appendChild(mark);
+        media.appendChild(label);
+
+        return media;
+    }
+
+    const isVideo = project.image && /\.(mp4|mov|webm)$/i.test(project.image);
+    if (isVideo) {
+        const video = document.createElement('video');
+        video.src = project.image;
+        video.autoplay = true;
+        video.loop = true;
+        video.muted = true;
+        video.playsInline = true;
+        video.setAttribute('aria-label', project.title);
+        media.appendChild(video);
+    } else if (project.image) {
+        const img = document.createElement('img');
+        img.src = project.image;
+        img.alt = project.title;
+        media.appendChild(img);
+    }
+
+    if (project.award) {
+        media.appendChild(createProjectAwardBadge());
+    }
+
+    return media;
+}
+
 function buildProjectsGrid() {
     if (!projectsGrid) return;
+    projectsGrid.innerHTML = '';
     const fragment = document.createDocumentFragment();
     projectEntries.forEach(project => {
         const card = document.createElement('article');
@@ -615,28 +724,10 @@ function buildProjectsGrid() {
         if (project.award) {
             card.classList.add('project-card--awarded');
         }
-
-        const media = document.createElement('div');
-        media.className = 'project-media';
-        const isVideo = /\.(mp4|mov|webm)$/i.test(project.image);
-        if (isVideo) {
-            const video = document.createElement('video');
-            video.src = project.image;
-            video.autoplay = true;
-            video.loop = true;
-            video.muted = true;
-            video.playsInline = true;
-            video.setAttribute('aria-label', project.title);
-            media.appendChild(video);
-        } else {
-            const img = document.createElement('img');
-            img.src = project.image;
-            img.alt = project.title;
-            media.appendChild(img);
+        if (project.upcoming) {
+            card.classList.add('project-card--upcoming');
         }
-        if (project.award) {
-            media.appendChild(createProjectAwardBadge());
-        }
+        const media = createProjectMedia(project);
 
         const content = document.createElement('div');
         content.className = 'project-content';
@@ -660,8 +751,13 @@ function buildProjectsGrid() {
         if (project.award) {
             content.appendChild(createProjectAwardNote(project.award));
         }
+        if (project.upcoming) {
+            content.appendChild(createProjectUpcomingNote(project.upcoming));
+        }
         content.appendChild(description);
-        content.appendChild(linksContainer);
+        if (project.links?.length) {
+            content.appendChild(linksContainer);
+        }
 
         card.appendChild(media);
         card.appendChild(content);

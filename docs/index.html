@@ -1292,12 +1292,26 @@
       border-color: rgba(250, 193, 35, 0.5);
       box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12), inset 0 0 0 1px rgba(255, 244, 201, 0.82);
     }
+    .project-card--upcoming {
+      border-color: rgba(15, 23, 42, 0.14);
+      background: linear-gradient(180deg, #fcfdff 0%, #f4f7fb 100%);
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.88);
+    }
     .project-card--awarded::before {
       content: '';
       position: absolute;
       inset: 0;
       border: 2px solid rgba(250, 193, 35, 0.38);
       border-radius: inherit;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .project-card--upcoming::before {
+      content: '';
+      position: absolute;
+      inset: 0.7rem;
+      border: 1px dashed rgba(71, 85, 105, 0.26);
+      border-radius: 1rem;
       pointer-events: none;
       z-index: 2;
     }
@@ -1321,6 +1335,34 @@
       overflow: hidden;
       height: 220px;
     }
+    .project-media--placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      isolation: isolate;
+      background:
+        radial-gradient(circle at top right, rgba(37, 99, 235, 0.18), transparent 38%),
+        radial-gradient(circle at bottom left, rgba(13, 148, 136, 0.16), transparent 42%),
+        linear-gradient(135deg, #dbeafe 0%, #f8fafc 52%, #e2e8f0 100%);
+    }
+    .project-media--placeholder::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(135deg, rgba(15, 23, 42, 0.08) 0 0.75rem, transparent 0.75rem 1.45rem);
+      opacity: 0.45;
+      z-index: -2;
+    }
+    .project-media--placeholder::after {
+      content: '';
+      position: absolute;
+      inset: 1.05rem;
+      border-radius: 1.2rem;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.08));
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+      z-index: -1;
+    }
     .project-card--awarded .project-media::before {
       content: '';
       position: absolute;
@@ -1332,6 +1374,55 @@
       background: radial-gradient(circle, rgba(250, 193, 35, 0.32), transparent 68%);
       z-index: 1;
       pointer-events: none;
+    }
+    .project-lock-badge {
+      position: absolute;
+      top: 0.9rem;
+      left: 0.9rem;
+      z-index: 3;
+      padding: 0.45rem 0.8rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      color: #f8fafc;
+      font-size: 0.66rem;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      box-shadow: 0 12px 26px rgba(15, 23, 42, 0.18);
+    }
+    .project-placeholder-mark {
+      position: relative;
+      z-index: 1;
+      font-size: clamp(4.75rem, 16vw, 6.5rem);
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(15, 23, 42, 0.34);
+      filter: blur(4px);
+      transform: scale(1.08) rotate(-7deg);
+      transition: transform 320ms ease, filter 320ms ease;
+      user-select: none;
+    }
+    .project-card--upcoming:hover .project-placeholder-mark {
+      transform: scale(1.16) rotate(-4deg);
+      filter: blur(3px);
+    }
+    .project-placeholder-label {
+      position: absolute;
+      left: 1.15rem;
+      right: 1.15rem;
+      bottom: 1.15rem;
+      z-index: 3;
+      padding: 0.78rem 0.96rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.86);
+      color: #0f172a;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      text-align: center;
+      box-shadow: 0 14px 28px rgba(15, 23, 42, 0.12);
     }
     .project-award-badge {
       position: absolute;
@@ -1455,6 +1546,44 @@
       font-size: 0.98rem;
       letter-spacing: 0.13em;
     }
+    .project-upcoming-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.72rem;
+      padding: 0.82rem 0.98rem;
+      border-radius: 1rem;
+      background: rgba(241, 245, 249, 0.92);
+      border: 1px solid rgba(148, 163, 184, 0.24);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
+    }
+    .project-upcoming-lock {
+      flex-shrink: 0;
+      padding: 0.32rem 0.62rem;
+      border-radius: 999px;
+      background: #e2e8f0;
+      color: #0f172a;
+      font-size: 0.66rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+    .project-upcoming-text {
+      display: flex;
+      flex-direction: column;
+      gap: 0.18rem;
+      line-height: 1.15;
+    }
+    .project-upcoming-text strong {
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #334155;
+    }
+    .project-upcoming-text small {
+      font-size: 0.84rem;
+      color: #475569;
+    }
     .project-links {
       margin-top: auto;
       display: flex;
@@ -1471,6 +1600,14 @@
     .project-links a:hover {
       color: #ffffff;
       background: #00796b;
+    }
+    .project-card--upcoming .project-links a {
+      color: #0f172a;
+      background: rgba(15, 23, 42, 0.08);
+    }
+    .project-card--upcoming .project-links a:hover {
+      color: #ffffff;
+      background: #0f172a;
     }
     .contact-video {
       border-radius: 1.5rem;
@@ -1967,6 +2104,22 @@
       .project-media {
         height: 180px;
       }
+      .project-lock-badge {
+        top: 0.75rem;
+        left: 0.75rem;
+        padding: 0.38rem 0.64rem;
+        font-size: 0.58rem;
+      }
+      .project-placeholder-mark {
+        font-size: clamp(3.6rem, 20vw, 5rem);
+      }
+      .project-placeholder-label {
+        left: 0.9rem;
+        right: 0.9rem;
+        bottom: 0.9rem;
+        padding: 0.66rem 0.78rem;
+        font-size: 0.66rem;
+      }
       .project-award-badge {
         top: 0.8rem;
         right: 0.8rem;
@@ -1990,6 +2143,15 @@
       }
       .project-award-note .project-award-text small {
         font-size: 0.88rem;
+      }
+      .project-upcoming-note {
+        padding: 0.72rem 0.84rem;
+      }
+      .project-upcoming-text strong {
+        font-size: 0.66rem;
+      }
+      .project-upcoming-text small {
+        font-size: 0.78rem;
       }
       .resume-popover {
         width: min(92vw, 360px);

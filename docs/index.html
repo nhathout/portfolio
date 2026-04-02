@@ -93,7 +93,7 @@
       Projects
      </button>
      <button class="mobile-swipe-chip" data-target="awards-affiliations" type="button">
-      Awards &amp; Affiliations
+      Awards + Affiliations
      </button>
     </div>
     <div class="mobile-menu-actions">
@@ -196,327 +196,460 @@
      </div>
     </div>
    </section>
-   <!-- EDUCATION & EXPERIENCE SIDE-BY-SIDE + MINI-GAME UNDER EDUCATION -->
-   <section class="text-gray-600 body-font font-mono bg-white relative overflow-hidden py-10" id="education-experience">
-    <div class="container mx-auto px-5 relative md:grid md:grid-cols-2 gap-10 items-start justify-center">
-     <!-- LEFT COLUMN: EDUCATION TIMELINE -->
-     <div class="md:pr-5 md:pb-0 pb-14">
-      <h2 class="text-4xl font-bold text-black mb-10 text-center">
-       Education
-      </h2>
-      <div class="relative timeline">
-       <div class="timeline-line absolute">
+   <!-- EDUCATION & EXPERIENCE -->
+   <section class="text-gray-600 body-font font-mono bg-white relative py-10" id="education-experience">
+    <div class="container mx-auto px-5">
+     <div class="edex-shell">
+      <div class="edex-header">
+       <div class="edex-header-copy">
+        <p class="edex-kicker">
+         Timeline / education + experience
+        </p>
+        <h2 class="edex-title">
+         Education <br>+ Experience
+        </h2>
        </div>
-       <div class="relative mb-12 timeline-entry">
-        <div class="flex items-center">
-         <div class="w-1/2 text-right pr-10 space-y-2">
-          <img alt="BU Logo" class="h-24 inline-block mb-1" src="assets/images/bu_logo.png"/>
-          <h3 class="text-xl font-bold text-gray-700">
-           Robotics &amp; Autonomous Systems
-           <br/>
-           (MS w/ Thesis)
-          </h3>
-          <ul class="list-disc list-inside text-sm text-gray-600">
-           <li>
-            Coursework: Intro to R&amp;AS (EK505), Robot Motion Planning (ME570), Robot Learning (EC518), Embedded Systems (EC535)
-           </li>
-          </ul>
-          <p class="text-xs text-gray-500 mt-2 italic leading-relaxed">
-           Expected Sep 2025 - Dec 2026 ·
-           <br/>
-           Boston, MA
-          </p>
-         </div>
-         <div class="w-1/2">
-         </div>
-        </div>
-       </div>
-       <div class="relative mb-12 timeline-entry">
-        <div class="flex flex-row-reverse items-center">
-         <div class="w-1/2 text-left pl-10 space-y-2">
-          <img alt="BU Logo" class="h-24 inline-block mb-1" src="assets/images/bu_logo.png"/>
-          <h3 class="text-xl font-bold text-gray-700">
-           Computer Engineering (BS)
-          </h3>
-          <p class="text-md font-semibold">
-           Concentration in Machine Learning
-          </p>
-          <ul class="list-disc list-inside text-sm text-gray-600">
-           <li>
-            Cumulative GPA: 3.73 / 4
-           </li>
-           <li>
-            Dean's List
-           </li>
-           <li>
-            Intramural Outdoor Soccer Champions
-           </li>
-           <li>
-            Unity &amp; Social Quality Initiative (USQI)
-           </li>
-          </ul>
-          <p class="text-xs text-gray-500 mt-2 italic leading-relaxed">
-           Sep 2021 - Present ·
-           <br/>
-           Boston, MA
-          </p>
-         </div>
-         <div class="w-1/2">
-         </div>
-        </div>
-       </div>
-       <div class="relative mb-12 timeline-entry">
-        <div class="flex items-center">
-         <div class="w-1/2 text-right pr-10 space-y-2">
-          <img alt="AKHS Logo" class="h-28 inline-block mb-1" src="assets/images/akhs_logo.png"/>
-          <h3 class="text-xl font-bold text-gray-700">
-           Ardrey Kell High School
-          </h3>
-          <p class="text-md font-semibold">
-           High School Diploma
-          </p>
-          <ul class="list-disc list-inside text-sm text-gray-600">
-           <li>
-            Varsity Men's Tennis Team (captain for 2 / 4 years)
-           </li>
-           <li>
-            National Honors Society
-           </li>
-           <li>
-            French Honors Society
-           </li>
-           <li>
-            Junior Marshal
-           </li>
-           <li>
-            AK Garden Club
-           </li>
-          </ul>
-          <p class="text-xs text-gray-500 mt-2 italic leading-relaxed">
-           Aug 2017 - Jun 2021 ·
-           <br/>
-           Charlotte, NC
-          </p>
-         </div>
-         <div class="w-1/2">
-         </div>
-        </div>
+       <div aria-label="Education and experience summary" class="edex-stats">
+        <article class="edex-stat">
+         <span>
+          08
+         </span>
+         <p>
+          Levels
+         </p>
+        </article>
+        <article class="edex-stat">
+         <span>
+          03
+         </span>
+         <p>
+          education levels
+         </p>
+        </article>
+        <article class="edex-stat">
+         <span>
+          05
+         </span>
+         <p>
+          experience levels
+         </p>
+        </article>
+        <article class="edex-stat">
+         <span>
+          04
+         </span>
+         <p>
+          cities
+         </p>
+        </article>
        </div>
       </div>
-      <div class="hidden md:block mt-24" id="mini-game">
-       <div class="px-5 flex flex-col items-center">
-        <h3 class="text-xl font-bold mb-2 text-center">
-         Relevant Coursework: Atari [Course]out
-        </h3>
-        <p class="mb-2 text-gray-700 text-center">
-         Hit and destroy the classes I destroyed!
+      <div class="edex-toolbar">
+       <div aria-label="Filter education and experience" class="edex-filter-group" role="group">
+        <button aria-pressed="true" class="edex-filter is-active" data-filter="all" type="button">
+         All
+        </button>
+        <button aria-pressed="false" class="edex-filter" data-filter="experience" type="button">
+         Experience
+        </button>
+        <button aria-pressed="false" class="edex-filter" data-filter="education" type="button">
+         Education
+        </button>
+       </div>
+      </div>
+      <div class="edex-layout">
+       <aside aria-live="polite" class="edex-spotlight" id="edexSpotlight">
+        <div aria-hidden="true" class="edex-spotlight__glow">
+        </div>
+        <div class="edex-spotlight__top">
+         <div>
+          <p class="edex-spotlight__eyebrow" id="edexSpotlightEyebrow">
+           Experience / Current role
+          </p>
+          <h3 class="edex-spotlight__title" id="edexSpotlightTitle">
+           Lead Software Engineer
+          </h3>
+          <p class="edex-spotlight__org" id="edexSpotlightOrg">
+           UMG Technologies, Inc.
+          </p>
+         </div>
+         <div class="edex-spotlight__logo-shell">
+          <img alt="UMG Technologies logo" id="edexSpotlightLogo" src="assets/images/UMGT_logo_sqr.png"/>
+         </div>
+        </div>
+        <p class="edex-spotlight__summary" id="edexSpotlightSummary">
+         Part-time leadership role steering the software direction of UMG's industrial tooling as the platform moves into its next phase.
         </p>
-        <p class="mb-2 text-[13px] text-gray-500 mt-2 text-center">
-         [use your
+        <div class="edex-spotlight__meta" id="edexSpotlightMeta">
+         <span class="edex-meta-pill">
+          Jun 2025 - Present
+         </span>
+         <span class="edex-meta-pill">
+          Danvers, MA
+         </span>
+         <span class="edex-meta-pill">
+          Hybrid
+         </span>
+        </div>
+        <div class="edex-spotlight__tags" id="edexSpotlightTags">
+         <span class="edex-tag">
+          C#
+         </span>
+         <span class="edex-tag">
+          Automation
+         </span>
+         <span class="edex-tag">
+          Computer Vision
+         </span>
+        </div>
+        <ul class="edex-spotlight__list" id="edexSpotlightHighlights">
+         <li>
+          Sole software engineer modernizing a C# industrial-automation stack.
+         </li>
+         <li>
+          Improving operator UX while driving down legacy and newly found bugs.
+         </li>
+         <li>
+          Prototyping AI and computer-vision features for next-gen tooling.
+         </li>
+        </ul>
+       </aside>
+       <div class="edex-rail" id="edexRail">
+        <div aria-hidden="true" class="edex-rail__line">
+        </div>
+        <article aria-label="View details for Lead Software Engineer at UMG Technologies" aria-pressed="true" class="edex-card is-active" data-category="experience" data-category-label="Experience" data-highlights="Sole software engineer modernizing a C# industrial-automation stack|Improving operator UX while driving down legacy and newly found bugs|Prototyping AI and computer-vision features for next-gen tooling" data-location="Danvers, MA" data-logo="assets/images/UMGT_logo_sqr.png" data-mode="Hybrid" data-org="UMG Technologies, Inc." data-period="Jun 2025 - Present" data-phase="Current role" data-summary="Part-time leadership role steering the software direction of UMG's industrial tooling as the platform moves into its next phase." data-tags="C#|Automation|Computer Vision" data-title="Lead Software Engineer" role="button" style="--edex-accent:#0f766e; --edex-accent-soft:rgba(15,118,110,0.16);" tabindex="0">
+         <div class="edex-card__topline">
+          <span class="edex-pill edex-pill--experience">
+           Experience
+          </span>
+          <span class="edex-card__range">
+           2025 - Present
+          </span>
+         </div>
+         <div class="edex-card__heading">
+          <div class="edex-card__logo">
+           <img alt="UMG Technologies Logo" src="assets/images/UMGT_logo_sqr.png"/>
+          </div>
+          <div>
+           <p class="edex-card__org">
+            UMG Technologies, Inc.
+           </p>
+           <h3 class="edex-card__title">
+            Lead Software Engineer
+           </h3>
+          </div>
+         </div>
+         <p class="edex-card__teaser">
+          Industrial automation modernization, operator UX, next-gen website, and AI integration.
+         </p>
+         <div class="edex-card__tags">
+          <span>
+           Danvers, MA
+          </span>
+          <span>
+           Hybrid
+          </span>
+          <span>
+           C#
+          </span>
+         </div>
+        </article>
+        <article aria-label="View details for Robotics and Autonomous Systems masters at Boston University" aria-pressed="false" class="edex-card" data-category="education" data-category-label="Education" data-highlights="Coursework includes Vision/Robotics/Planning (ME740), Intro to R&amp;AS (EK505), Image/Video Computing (CS585), Product Design in ECE (EC601), Robot Learning (EC518), and Embedded Systems (EC535)|Graduate studies centered on how planning, learning, and hardware come together in robotic systems" data-location="Boston, MA" data-logo="assets/images/bu_logo.png" data-mode="On campus" data-org="Boston University" data-period="Exp. Sep 2025 - Dec 2026" data-phase="Graduate thesis track" data-summary="Current graduate chapter at BU focused on the systems side of autonomy, from motion planning to learning-driven robot behavior." data-tags="Thesis|Motion Planning|Robot Learning" data-title="M.S. in R&amp;AS" role="button" style="--edex-accent:#b91c1c; --edex-accent-soft:rgba(185,28,28,0.16);" tabindex="0">
+         <div class="edex-card__topline">
+          <span class="edex-pill edex-pill--education">
+           Education
+          </span>
+          <span class="edex-card__range">
+           Exp. 2025 - 2026
+          </span>
+         </div>
+         <div class="edex-card__heading">
+          <div class="edex-card__logo">
+           <img alt="Boston University Logo" src="assets/images/bu_logo.png"/>
+          </div>
+          <div>
+           <p class="edex-card__org">
+            Boston University
+           </p>
+           <h3 class="edex-card__title">
+            M.S. in Robotics &amp; Autonomous Systems
+           </h3>
+          </div>
+         </div>
+         <p class="edex-card__teaser">
+          Thesis-driven graduate work in robotics and AI.
+         </p>
+         <div class="edex-card__tags">
+          <span>
+           Boston, MA
+          </span>
+          <span>
+           4.00 GPA
+          </span>
+          <span>
+           Thesis
+          </span>
+         </div>
+        </article>
+        <article aria-label="View details for Computer Engineering bachelor's at Boston University" aria-pressed="false" class="edex-card" data-category="education" data-category-label="Education" data-highlights="Completed a BS in Computer Engineering with a concentration in Machine Learning|Graduated in 2025 cum laude, with a 3.73 / 4.00 cumulative GPA, and 5 Dean's List awards|Was also a part of BU USQI (Unity &amp; Social Quality Initiative), and intramural indoor &amp; outdoor soccer" data-location="Boston, MA" data-logo="assets/images/bu_logo.png" data-mode="cum laude" data-org="Boston University" data-period="Sep 2021 - May 2025" data-phase="Completed undergraduate degree" data-summary="BU undergraduate chapter that built the core engineering base behind the rest of this timeline." data-tags="Machine Learning|Dean's List|GPA 3.73" data-title="B.S. in CE" role="button" style="--edex-accent:#b91c1c; --edex-accent-soft:rgba(185,28,28,0.16);" tabindex="0">
+         <div class="edex-card__topline">
+          <span class="edex-pill edex-pill--education">
+           Education
+          </span>
+          <span class="edex-card__range">
+           2021 - 2025
+          </span>
+         </div>
+         <div class="edex-card__heading">
+          <div class="edex-card__logo">
+           <img alt="Boston University Logo" src="assets/images/bu_logo.png"/>
+          </div>
+          <div>
+           <p class="edex-card__org">
+            Boston University
+           </p>
+           <h3 class="edex-card__title">
+            B.S. in Computer Engineering
+           </h3>
+          </div>
+         </div>
+         <p class="edex-card__teaser">
+          Completed in 2025 with a concentration in Machine Learning. Graduated cum laude with 5 Dean's List awards.
+         </p>
+         <div class="edex-card__tags">
+          <span>
+           Boston, MA
+          </span>
+          <span>
+           3.73 GPA
+          </span>
+          <span>
+           ML
+          </span>
+         </div>
+        </article>
+        <article aria-label="View details for Research and Development Intern at Universal Robots" aria-pressed="false" class="edex-card" data-category="experience" data-category-label="Experience" data-highlights="Worked on-site in Odense Kommune, Denmark in the Innovation Lab|Contributed to robotic vision efforts in a hands-on R&amp;D environment|Used ROS2, C++, Python, and NVIDIA packages including Nvblox and cuVSLAM" data-location="Odense, Denmark" data-logo="assets/images/ur_logo.png" data-mode="On-site" data-org="Universal Robots" data-period="May 2024 - Sep 2024" data-phase="Research internship" data-summary="Cross-functional robotics internship combining perception work, tooling, and hands-on lab development at Universal Robots." data-tags="ROS2|C++|Robot Vision" data-title="Research &amp; Development Intern" role="button" style="--edex-accent:#0284c7; --edex-accent-soft:rgba(2,132,199,0.16);" tabindex="0">
+         <div class="edex-card__topline">
+          <span class="edex-pill edex-pill--experience">
+           Experience
+          </span>
+          <span class="edex-card__range">
+           2024
+          </span>
+         </div>
+         <div class="edex-card__heading">
+          <div class="edex-card__logo">
+           <img alt="Universal Robots Logo" src="assets/images/ur_logo.png"/>
+          </div>
+          <div>
+           <p class="edex-card__org">
+            Universal Robots
+           </p>
+           <h3 class="edex-card__title">
+            Research &amp; Development Intern
+           </h3>
+          </div>
+         </div>
+         <p class="edex-card__teaser">
+          Robotics vision work in the Innovation Lab using ROS2, C++, Python, and NVIDIA tooling.
+         </p>
+         <div class="edex-card__tags">
+          <span>
+           Odense, DK
+          </span>
+          <span>
+           On-site
+          </span>
+          <span>
+           ROS2
+          </span>
+         </div>
+        </article>
+        <article aria-label="View details for Teaching Assistant at Boston University College of Engineering" aria-pressed="false" class="edex-card" data-category="experience" data-category-label="Experience" data-highlights="TA for EK131, Intro to Engineering: Hands On|Supported students via office hours|Maintained Ender-3 V2 3D printers and managed on-demand print requests" data-location="Boston, MA" data-logo="assets/images/bu_logo.png" data-mode="On campus" data-org="Boston University, College of Engineering" data-period="Jan 2023 - Jun 2023" data-phase="Teaching" data-summary="Teaching and course-operations support role that kept BU's EK131 lab section moving week to week." data-tags="Teaching|Mentoring|Engineering" data-title="Teaching Assistant" role="button" style="--edex-accent:#b91c1c; --edex-accent-soft:rgba(185,28,28,0.16);" tabindex="0">
+         <div class="edex-card__topline">
+          <span class="edex-pill edex-pill--experience">
+           Experience
+          </span>
+          <span class="edex-card__range">
+           2023
+          </span>
+         </div>
+         <div class="edex-card__heading">
+          <div class="edex-card__logo">
+           <img alt="Boston University Logo" src="assets/images/bu_logo.png"/>
+          </div>
+          <div>
+           <p class="edex-card__org">
+            Boston University
+           </p>
+           <h3 class="edex-card__title">
+            Teaching Assistant
+           </h3>
+          </div>
+         </div>
+         <p class="edex-card__teaser">
+          EK131 teaching support through logistics, communication, and office hours.
+         </p>
+         <div class="edex-card__tags">
+          <span>
+           Boston, MA
+          </span>
+          <span>
+           Mentoring
+          </span>
+         </div>
+        </article>
+        <article aria-label="View details for Campus Representative at Course Hero" aria-pressed="false" class="edex-card" data-category="experience" data-category-label="Experience" data-highlights="Hosted virtual and in-person events at Boston University|Promoted social good initiatives|Educated students on platform benefits" data-location="Boston, MA" data-logo="assets/images/coursehero_logo.png" data-mode="Hybrid" data-org="Course Hero" data-period="Oct 2022 - Jan 2023" data-phase="Campus ambassador" data-summary="Student community role focused on representing the platform on campus and turning awareness into participation." data-tags="Events|Community|Outreach" data-title="Campus Representative" role="button" style="--edex-accent:#1327a2; --edex-accent-soft:rgba(19,39,162,0.16);" tabindex="0">
+         <div class="edex-card__topline">
+          <span class="edex-pill edex-pill--experience">
+           Experience
+          </span>
+          <span class="edex-card__range">
+           2022 - 2023
+          </span>
+         </div>
+         <div class="edex-card__heading">
+          <div class="edex-card__logo">
+           <img alt="Course Hero Logo" src="assets/images/coursehero_logo.png"/>
+          </div>
+          <div>
+           <p class="edex-card__org">
+            Course Hero
+           </p>
+           <h3 class="edex-card__title">
+            Campus Representative
+           </h3>
+          </div>
+         </div>
+         <p class="edex-card__teaser">
+          Student-facing outreach through events, education, and social good campaigns.
+         </p>
+         <div class="edex-card__tags">
+          <span>
+           Boston, MA
+          </span>
+          <span>
+           Hybrid
+          </span>
+          <span>
+           Community
+          </span>
+         </div>
+        </article>
+        <article aria-label="View details for Founder and Designer at GriplS" aria-pressed="false" class="edex-card" data-category="experience" data-category-label="Experience" data-highlights="Designed grip bands for multiple sports|Directed 50% of profits to charities including BCRF and Autism Speaks|Sold the product in local sporting goods stores in Charlotte, North Carolina" data-location="Charlotte, NC" data-logo="assets/images/gripls_logo.png" data-mode="Founder-led" data-org="GriplS" data-period="May 2020 - Dec 2022" data-phase="Founder-led venture" data-summary="Founder-led venture that moved from product concept to local retail while keeping a charity component built into the business." data-tags="Product Design|Sales" data-title="Founder &amp; Designer" role="button" style="--edex-accent:#f59e0b; --edex-accent-soft:rgba(245,158,11,0.18);" tabindex="0">
+         <div class="edex-card__topline">
+          <span class="edex-pill edex-pill--experience">
+           Experience
+          </span>
+          <span class="edex-card__range">
+           2020 - 2022
+          </span>
+         </div>
+         <div class="edex-card__heading">
+          <div class="edex-card__logo">
+           <img alt="GriplS Logo" src="assets/images/gripls_logo.png"/>
+          </div>
+          <div>
+           <p class="edex-card__org">
+            GriplS
+           </p>
+           <h3 class="edex-card__title">
+            Founder &amp; Designer
+           </h3>
+          </div>
+         </div>
+         <p class="edex-card__teaser">
+          Product design, local retail sales, and a charity-backed founder-led brand.
+         </p>
+         <div class="edex-card__tags">
+          <span>
+           Charlotte, NC
+          </span>
+          <span>
+           Founder-led
+          </span>
+         </div>
+        </article>
+        <article aria-label="View details for Ardrey Kell High School" aria-pressed="false" class="edex-card" data-category="education" data-category-label="Education" data-highlights="Completed a high school diploma at Ardrey Kell High School|Played on the varsity men's tennis team for 4 years; 2 years as captain|Awards and affiliations include  National Honors Society, French Honors Society, Junior Marshal, and AK Garden Club" data-location="Charlotte, NC" data-logo="assets/images/akhs_logo.png" data-mode="Leadership" data-org="Ardrey Kell High School" data-period="Aug 2017 - Jun 2021" data-phase="High school" data-summary="Early chapter built around academics, leadership, extracurriculars, and varsity tennis." data-tags="Tennis|Honors|Leadership" data-title="High School Diploma" role="button" style="--edex-accent:#6d28d9; --edex-accent-soft:rgba(109,40,217,0.16);" tabindex="0">
+         <div class="edex-card__topline">
+          <span class="edex-pill edex-pill--education">
+           Education
+          </span>
+          <span class="edex-card__range">
+           2017 - 2021
+          </span>
+         </div>
+         <div class="edex-card__heading">
+          <div class="edex-card__logo">
+           <img alt="Ardrey Kell High School Logo" src="assets/images/akhs_logo.png"/>
+          </div>
+          <div>
+           <p class="edex-card__org">
+            Ardrey Kell High School
+           </p>
+           <h3 class="edex-card__title">
+            High School Diploma
+           </h3>
+          </div>
+         </div>
+         <p class="edex-card__teaser">
+          Leadership, honors, and athletics that set the base for everything after.
+         </p>
+         <div class="edex-card__tags">
+          <span>
+           Charlotte, NC
+          </span>
+          <span>
+           Tennis
+          </span>
+         </div>
+        </article>
+       </div>
+      </div>
+      <div class="hidden md:grid edex-sidequest" id="mini-game">
+       <div class="edex-sidequest__copy">
+        <p class="edex-sidequest__kicker">
+         Coursework side quest
+        </p>
+        <h3 class="edex-sidequest__title">
+         Atari [Course]out
+        </h3>
+        <p class="edex-sidequest__desc">
+         Destroy the classes I destroyed :) 
+        </p>
+        <p class="edex-sidequest__instructions">
+         Use
          <strong>
           spacebar
          </strong>
-         to launch the ball]
-         <br/>
-         [use the
+         to launch and
          <strong>
-          left &amp; right arrow keys
+          left / right arrow keys
          </strong>
-         to move the paddle]
+         to move the paddle.
         </p>
-        <p class="mb-4 text-[12px] text-red-500 mt-2 text-center">
-         [desktop/laptop only]
+        <p class="edex-sidequest__note">
+         Desktop / laptop only
         </p>
-        <div class="inline-block p-4 border-2 border-gray-300 rounded-lg mb-4" id="start-screen">
+       </div>
+       <div class="edex-sidequest__play">
+        <div class="edex-game-panel" id="start-screen">
          <h4 class="font-semibold mb-2">
           Leaderboard
          </h4>
          <ol class="mb-4" id="leaderboard">
          </ol>
-         <button class="px-4 py-2 rounded game-btn game-btn-primary" id="startBtn">
-          Start Game
-         </button>
-         <button class="px-4 py-2 rounded game-btn game-btn-secondary" id="resetLeaderboardBtn">
-          Reset Leaderboard
-         </button>
+         <div class="edex-game-actions">
+          <button class="px-4 py-2 rounded game-btn game-btn-primary" id="startBtn">
+           Start Game
+          </button>
+          <button class="px-4 py-2 rounded game-btn game-btn-secondary" id="resetLeaderboardBtn">
+           Reset Leaderboard
+          </button>
+         </div>
         </div>
-        <canvas class="mx-auto border-2 border-gray-300" height="320" id="gameCanvas" style="display:none;" width="480">
+        <canvas class="edex-game-canvas mx-auto border-2 border-gray-300" height="360" id="gameCanvas" style="display:none;" width="560">
         </canvas>
-       </div>
-      </div>
-     </div>
-     <!-- RIGHT COLUMN: EXPERIENCE TIMELINE -->
-     <div class="md:pt-0 pt-6">
-      <h2 class="text-4xl font-bold text-black mb-10 text-center">
-       Experience
-      </h2>
-      <div class="relative timeline">
-       <div class="timeline-line absolute">
-       </div>
-       <div class="relative mb-12 timeline-entry">
-        <div class="flex flex-row-reverse items-center">
-         <div class="w-1/2 text-left pl-10 space-y-2">
-          <img alt="UMG Technologies Logo" class="h-24 inline-block mb-1" src="assets/images/UMGT_logo_sqr.png"/>
-          <h3 class="text-xl font-bold">
-           Head of Software Engineering
-          </h3>
-          <p class="text-md font-semibold text-gray-700">
-           UMG Technologies, Inc. · Part-time
-          </p>
-          <ul class="list-disc list-inside text-sm text-gray-600">
-           <li>
-            Sole software engineer modernizing a C# industrial-automation stack.
-           </li>
-           <li>
-            Improves operator UX while driving down legacy and newly-found bugs.
-           </li>
-           <li>
-            Prototypes AI/computer-vision features for next-gen tooling.
-           </li>
-          </ul>
-          <p class="text-xs text-gray-500 mt-2 italic leading-relaxed">
-           Jun 2025 - Present ·
-           <br/>
-           Danvers, MA ·
-           <br/>
-           Hybrid
-          </p>
-         </div>
-         <div class="w-1/2">
-         </div>
-        </div>
-       </div>
-       <div class="relative mb-12 timeline-entry">
-        <div class="flex items-center">
-         <div class="w-1/2 text-right pr-10 space-y-2">
-          <img alt="Experience 1 Logo" class="h-24 inline-block mb-1" src="assets/images/ur_logo.png"/>
-          <h3 class="text-xl font-bold">
-           Research &amp; Development Intern
-          </h3>
-          <p class="text-md font-semibold text-gray-700">
-           Universal Robots
-          </p>
-          <ul class="list-disc list-inside text-sm text-gray-600">
-           <li>
-            On-site in Odense Kommune, Denmark
-           </li>
-           <li>
-            Contributed to robotic vision in the Innovation Lab
-           </li>
-           <li>
-            Used ROS2, C++, Python, NVIDIA pkgs (Nvblox, cuVSLAM)
-           </li>
-          </ul>
-          <p class="text-xs text-gray-500 mt-2 italic leading-relaxed">
-           May 2024 - Sep 2024 ·
-           <br/>
-           Odense, Denmark ·
-           <br/>
-           On-site
-          </p>
-         </div>
-         <div class="w-1/2">
-         </div>
-        </div>
-       </div>
-       <div class="relative mb-12 timeline-entry">
-        <div class="flex flex-row-reverse items-center">
-         <div class="w-1/2 text-left pl-10 space-y-2">
-          <img alt="Experience 2 Logo" class="h-24 inline-block mb-1" src="assets/images/bu_logo.png"/>
-          <h3 class="text-xl font-bold">
-           Teaching Assistant
-          </h3>
-          <p class="text-md font-semibold text-gray-700">
-           Boston University, College of Engineering
-          </p>
-          <ul class="list-disc list-inside text-sm text-gray-600">
-           <li>
-            TA for EK131 (Intro to Eng: Hands On)
-           </li>
-           <li>
-            Prepared supplies, took attendance, sent mass emails
-           </li>
-           <li>
-            Held weekly office hours
-           </li>
-          </ul>
-          <p class="text-xs text-gray-500 mt-2 italic leading-relaxed">
-           Jan 2023 - Jun 2023 ·
-           <br/>
-           Boston, MA ·
-           <br/>
-           On-campus
-          </p>
-         </div>
-         <div class="w-1/2">
-         </div>
-        </div>
-       </div>
-       <div class="relative mb-12 timeline-entry">
-        <div class="flex items-center">
-         <div class="w-1/2 text-right pr-10 space-y-2">
-          <img alt="Course Hero Logo" class="h-24 inline-block mb-1" src="assets/images/coursehero_logo.png"/>
-          <h3 class="text-xl font-bold">
-           Campus Representative
-          </h3>
-          <p class="text-md font-semibold text-gray-700">
-           Course Hero
-          </p>
-          <ul class="list-disc list-inside text-sm text-gray-600">
-           <li>
-            Hosted virtual/in-person events at BU
-           </li>
-           <li>
-            Promoted social good initiatives
-           </li>
-           <li>
-            Educated students on platform benefits
-           </li>
-          </ul>
-          <p class="text-xs text-gray-500 mt-2 italic leading-relaxed">
-           Oct 2022 - Jan 2023 ·
-           <br/>
-           Boston, MA ·
-           <br/>
-           Hybrid
-          </p>
-         </div>
-         <div class="w-1/2">
-         </div>
-        </div>
-       </div>
-       <div class="relative mb-12 timeline-entry">
-        <div class="flex flex-row-reverse items-center">
-         <div class="w-1/2 text-left pl-10 space-y-2">
-          <img alt="GriplS Logo" class="h-28 inline-block mb-1" src="assets/images/gripls_logo.png"/>
-          <h3 class="text-xl font-bold">
-           Founder &amp; Designer
-          </h3>
-          <p class="text-md font-semibold text-gray-700">
-           GriplS
-          </p>
-          <ul class="list-disc list-inside text-sm text-gray-600">
-           <li>
-            Designed grip bands for multiple sports
-           </li>
-           <li>
-            50% profits to charities (BCRF, Autism Speaks)
-           </li>
-           <li>
-            Sold in local tennis stores in Charlotte, NC
-           </li>
-          </ul>
-          <p class="text-xs text-gray-500 mt-2 italic leading-relaxed">
-           May 2020 - Dec 2022 ·
-           <br/>
-           Charlotte, NC ·
-           <br/>
-           Founder-led
-          </p>
-         </div>
-         <div class="w-1/2">
-         </div>
-        </div>
        </div>
       </div>
      </div>
@@ -587,7 +720,7 @@
        badges unlocked
       </p>
       <h2 class="text-4xl md:text-5xl font-bold text-black">
-       Awards &amp; Affiliations
+       Awards + Affiliations
       </h2>
      </div>
      <div class="award-grid">
@@ -759,7 +892,11 @@
      </span>
     </a>
     <p class="text-sm text-gray-500 sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-200 sm:py-2 sm:mt-0 mt-4">
-     © 2024 —
+     ©
+     <span id="copyrightYear">
+      2024-2026
+     </span>
+     —
      <a class="text-gray-600 ml-1" href="#contact">
       @noahhathout
      </a>
@@ -771,11 +908,12 @@
   </footer>
   <style>
    :root {
-      --timeline-dot-size: 1.15rem;
-      --timeline-line-color-start: rgba(0, 77, 64, 0.85);
-      --timeline-line-color-end: rgba(0, 121, 107, 0.85);
-      --timeline-dot-fill: #fac123;
-      --timeline-dot-border: #00796b;
+      --edex-ink: #0f172a;
+      --edex-muted: #475569;
+      --edex-emerald: #0f766e;
+      --edex-amber: #fac123;
+      --edex-line: rgba(15, 118, 110, 0.16);
+      --edex-shadow: 0 28px 64px rgba(15, 23, 42, 0.12);
     }
     .resume-cta {
       margin-top: 3.5rem;
@@ -926,50 +1064,593 @@
       opacity: 1;
       transform: scaleX(1);
     }
-    .timeline {
-      --timeline-line-left: 50%;
-      --timeline-line-transform: translateX(-50%);
-      padding: calc(var(--timeline-dot-size) * 0.9) 0 calc(var(--timeline-dot-size) * 1.2);
+    .edex-shell {
+      position: relative;
+      padding: clamp(1.35rem, 3vw, 2rem);
+      border-radius: 2rem;
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      background:
+        radial-gradient(circle at top right, rgba(250, 193, 35, 0.18), transparent 24%),
+        radial-gradient(circle at bottom left, rgba(15, 118, 110, 0.12), transparent 28%),
+        linear-gradient(180deg, #f8fbfb 0%, #f4f7f7 100%);
+      box-shadow: var(--edex-shadow);
+      isolation: isolate;
     }
-    .timeline-line {
-      width: 4px;
-      background: linear-gradient(180deg, var(--timeline-line-color-start), var(--timeline-line-color-end));
-      border-radius: 999px;
-      z-index: 0;
-      left: var(--timeline-line-left);
-      transform: var(--timeline-line-transform);
-      top: 0;
-      bottom: 0;
-    }
-    .timeline-entry {
-      padding-top: 2.5rem;
-      margin-bottom: 3rem;
-    }
-    .timeline-entry:first-of-type {
-      padding-top: 1rem;
-    }
-    .timeline-entry:last-of-type {
-      margin-bottom: 0;
-      padding-bottom: 1rem;
-    }
-    .timeline-entry::before {
+    .edex-shell::before {
       content: '';
       position: absolute;
-      left: var(--timeline-line-left);
-      top: 0;
-      transform: translate(-50%, -50%);
-      width: var(--timeline-dot-size);
-      height: var(--timeline-dot-size);
-      border-radius: 999px;
-      background: var(--timeline-dot-fill);
-      border: 3px solid var(--timeline-dot-border);
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+      inset: 0;
+      border-radius: inherit;
+      background-image:
+        linear-gradient(rgba(15, 118, 110, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(15, 118, 110, 0.04) 1px, transparent 1px);
+      background-size: 32px 32px;
+      opacity: 0.65;
+      pointer-events: none;
+    }
+    .edex-header,
+    .edex-toolbar,
+    .edex-layout,
+    .edex-sidequest {
+      position: relative;
       z-index: 1;
     }
-    .timeline-entry:last-of-type::before {
-      top: auto;
-      bottom: 0;
-      transform: translate(-50%, 50%);
+    .edex-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+      gap: 1.5rem;
+      align-items: end;
+    }
+    .edex-kicker {
+      font-size: 0.78rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #0f766e;
+      margin-bottom: 0.85rem;
+    }
+    .edex-title {
+      font-size: clamp(2.3rem, 4vw, 4.25rem);
+      line-height: 1;
+      font-weight: 900;
+      color: var(--edex-ink);
+      max-width: 12ch;
+    }
+    .edex-subtitle {
+      margin-top: 1rem;
+      max-width: 44rem;
+      line-height: 1.8;
+      color: #334155;
+      font-size: 0.98rem;
+    }
+    .edex-stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.9rem;
+    }
+    .edex-stat {
+      padding: 1rem 1.1rem;
+      border-radius: 1.25rem;
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      background: rgba(255, 255, 255, 0.82);
+      box-shadow: 0 18px 36px rgba(15, 23, 42, 0.08);
+      backdrop-filter: blur(12px);
+    }
+    .edex-stat span {
+      display: block;
+      font-size: 2rem;
+      line-height: 1;
+      font-weight: 900;
+      color: #053b36;
+    }
+    .edex-stat p {
+      margin-top: 0.45rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #64748b;
+      font-weight: 700;
+    }
+    .edex-toolbar {
+      margin-top: 1.75rem;
+      padding-top: 1.35rem;
+      border-top: 1px solid rgba(148, 163, 184, 0.18);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .edex-filter-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .edex-filter {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      background: rgba(255, 255, 255, 0.82);
+      color: #1f2937;
+      padding: 0.72rem 1rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 700;
+      transition: transform 180ms ease, box-shadow 180ms ease, color 180ms ease, background 180ms ease, border-color 180ms ease;
+      box-shadow: 0 10px 22px rgba(15, 23, 42, 0.06);
+    }
+    .edex-filter:hover,
+    .edex-filter:focus-visible {
+      transform: translateY(-2px);
+      border-color: rgba(15, 118, 110, 0.28);
+      color: #0f766e;
+    }
+    .edex-filter.is-active {
+      background: #053b36;
+      color: #ffffff;
+      border-color: #053b36;
+      box-shadow: 0 16px 30px rgba(5, 59, 54, 0.22);
+    }
+    .edex-layout {
+      margin-top: 1.65rem;
+      display: grid;
+      grid-template-columns: minmax(320px, 0.95fr) minmax(0, 1.25fr);
+      gap: 1.5rem;
+      align-items: start;
+    }
+    .edex-spotlight {
+      --spotlight-accent: var(--edex-emerald);
+      --spotlight-accent-soft: rgba(15, 118, 110, 0.16);
+      position: sticky;
+      top: calc(5rem + 1.5rem);
+      padding: 1.5rem;
+      border-radius: 1.65rem;
+      border: 1px solid var(--spotlight-accent-soft);
+      background: rgba(255, 255, 255, 0.88);
+      box-shadow: 0 22px 48px rgba(15, 23, 42, 0.12);
+      backdrop-filter: blur(14px);
+      transition: transform 180ms ease, opacity 180ms ease, border-color 180ms ease;
+      overflow: hidden;
+    }
+    .edex-spotlight.is-swapping {
+      transform: translateY(4px);
+      opacity: 0.94;
+    }
+    .edex-spotlight__glow {
+      position: absolute;
+      top: -2rem;
+      right: -2rem;
+      width: 13rem;
+      height: 13rem;
+      background: radial-gradient(circle, var(--spotlight-accent-soft) 0%, transparent 68%);
+      pointer-events: none;
+    }
+    .edex-spotlight__top {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .edex-spotlight__eyebrow {
+      font-size: 0.74rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--spotlight-accent);
+    }
+    .edex-spotlight__title {
+      margin-top: 0.7rem;
+      font-size: clamp(1.85rem, 3vw, 2.75rem);
+      line-height: 1.02;
+      font-weight: 900;
+      color: var(--edex-ink);
+      max-width: 10ch;
+    }
+    .edex-spotlight__org {
+      margin-top: 0.7rem;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #334155;
+    }
+    .edex-spotlight__logo-shell {
+      width: 5rem;
+      height: 5rem;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 1.3rem;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: 0 18px 32px rgba(15, 23, 42, 0.1);
+    }
+    .edex-spotlight__logo-shell img {
+      max-width: 72%;
+      max-height: 72%;
+      object-fit: contain;
+    }
+    .edex-spotlight__summary {
+      position: relative;
+      z-index: 1;
+      margin-top: 1.15rem;
+      line-height: 1.8;
+      color: #334155;
+    }
+    .edex-spotlight__meta,
+    .edex-spotlight__tags {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      margin-top: 1rem;
+    }
+    .edex-meta-pill,
+    .edex-tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.45rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .edex-meta-pill {
+      border: 1px solid rgba(148, 163, 184, 0.24);
+      background: rgba(255, 255, 255, 0.82);
+      color: #334155;
+    }
+    .edex-tag {
+      background: var(--spotlight-accent-soft);
+      color: var(--spotlight-accent);
+    }
+    .edex-spotlight__list {
+      position: relative;
+      z-index: 1;
+      margin-top: 1.2rem;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 0.9rem;
+    }
+    .edex-spotlight__list li {
+      position: relative;
+      padding-left: 1.1rem;
+      line-height: 1.7;
+      color: #334155;
+    }
+    .edex-spotlight__list li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.7rem;
+      width: 0.42rem;
+      height: 0.42rem;
+      border-radius: 999px;
+      background: var(--spotlight-accent);
+      box-shadow: 0 0 0 5px var(--spotlight-accent-soft);
+    }
+    .edex-rail {
+      position: relative;
+      display: grid;
+      gap: 1rem;
+      padding-left: 2.35rem;
+    }
+    .edex-rail__line {
+      position: absolute;
+      left: 0.85rem;
+      top: 0.85rem;
+      bottom: 0.85rem;
+      width: 2px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(15, 118, 110, 0.4), rgba(15, 118, 110, 0.08));
+    }
+    .edex-card {
+      position: relative;
+      padding: 1.15rem 1.15rem 1.2rem 1.25rem;
+      border-radius: 1.35rem;
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      background: rgba(255, 255, 255, 0.88);
+      box-shadow: 0 18px 36px rgba(15, 23, 42, 0.08);
+      cursor: pointer;
+      outline: none;
+      transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease, background 220ms ease, opacity 220ms ease;
+    }
+    .edex-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(135deg, var(--edex-accent-soft), transparent 45%);
+      opacity: 0;
+      transition: opacity 220ms ease;
+      pointer-events: none;
+    }
+    .edex-card::after {
+      content: '';
+      position: absolute;
+      left: -1.82rem;
+      top: 1.45rem;
+      width: 0.95rem;
+      height: 0.95rem;
+      border-radius: 999px;
+      background: var(--edex-accent);
+      box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.95), 0 0 0 11px var(--edex-accent-soft);
+    }
+    .edex-card:hover,
+    .edex-card:focus-visible,
+    .edex-card.is-active {
+      transform: translateY(-4px) translateX(4px);
+      border-color: var(--edex-accent-soft);
+      box-shadow: 0 24px 46px rgba(15, 23, 42, 0.14);
+    }
+    .edex-card:hover::before,
+    .edex-card:focus-visible::before,
+    .edex-card.is-active::before {
+      opacity: 1;
+    }
+    .edex-card.is-hidden {
+      display: none;
+    }
+    .edex-card__topline {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+    }
+    .edex-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.42rem 0.72rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .edex-pill--experience {
+      background: rgba(15, 118, 110, 0.12);
+      color: #0f766e;
+    }
+    .edex-pill--education {
+      background: rgba(185, 28, 28, 0.1);
+      color: #b91c1c;
+    }
+    .edex-card__range {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #64748b;
+    }
+    .edex-card__heading {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 4rem 1fr;
+      gap: 0.95rem;
+      align-items: center;
+      margin-top: 1rem;
+    }
+    .edex-card__logo {
+      width: 4rem;
+      height: 4rem;
+      display: grid;
+      place-items: center;
+      border-radius: 1.15rem;
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65), 0 12px 26px rgba(15, 23, 42, 0.08);
+    }
+    .edex-card__logo img {
+      max-width: 72%;
+      max-height: 72%;
+      object-fit: contain;
+    }
+    .edex-card__org {
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--edex-muted);
+    }
+    .edex-card__title {
+      margin-top: 0.25rem;
+      font-size: 1.25rem;
+      line-height: 1.2;
+      font-weight: 900;
+      color: var(--edex-ink);
+    }
+    .edex-card__teaser {
+      position: relative;
+      z-index: 1;
+      margin-top: 0.95rem;
+      line-height: 1.7;
+      color: #334155;
+    }
+    .edex-card__tags {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      margin-top: 1rem;
+    }
+    .edex-card__tags span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.4rem 0.68rem;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      background: var(--edex-accent-soft);
+      color: var(--edex-accent);
+    }
+    .edex-sidequest {
+      margin-top: 1.5rem;
+      display: grid;
+      grid-template-columns: minmax(280px, 0.76fr) minmax(0, 1.24fr);
+      gap: 2rem;
+      align-items: stretch;
+      padding: 2rem;
+      border-radius: 1.75rem;
+      background: linear-gradient(135deg, #0f172a 0%, #111827 45%, #053b36 100%);
+      color: #e2e8f0;
+      box-shadow: 0 24px 48px rgba(15, 23, 42, 0.18);
+    }
+    .edex-sidequest__copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-self: stretch;
+      max-width: 29rem;
+      padding: 0.5rem 0 0.5rem 0.2rem;
+    }
+    .edex-sidequest__kicker {
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--edex-amber);
+    }
+    .edex-sidequest__title {
+      margin-top: 0.75rem;
+      font-size: clamp(2.65rem, 4vw, 3.55rem);
+      line-height: 1.05;
+      font-weight: 900;
+      color: #f8fafc;
+      max-width: 10ch;
+    }
+    .edex-sidequest__desc {
+      margin-top: 1rem;
+      max-width: 26rem;
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: #cbd5e1;
+    }
+    .edex-sidequest__instructions {
+      margin-top: 1rem;
+      max-width: 27rem;
+      font-size: 1rem;
+      line-height: 1.65;
+      color: #e2e8f0;
+    }
+    .edex-sidequest__instructions strong {
+      color: #ffffff;
+    }
+    .edex-sidequest__note {
+      margin-top: 0.85rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--edex-amber);
+    }
+    .edex-sidequest__play {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: center;
+      gap: 1.25rem;
+      min-width: 0;
+    }
+    .edex-game-panel {
+      width: 100%;
+      max-width: 44rem;
+      margin-left: auto;
+      padding: 1.55rem 1.65rem;
+      border-radius: 1.55rem;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(148, 163, 184, 0.24);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 18px 34px rgba(15, 23, 42, 0.16);
+      position: relative;
+      overflow: hidden;
+    }
+    .edex-game-panel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), transparent 55%);
+      pointer-events: none;
+    }
+    .edex-game-panel h4 {
+      color: #f8fafc;
+      font-size: 1.05rem;
+    }
+    .edex-game-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 1.2rem;
+    }
+    .edex-sidequest #leaderboard {
+      min-height: 1.5rem;
+      color: #cbd5e1;
+      width: 100%;
+      max-height: 18rem;
+      overflow-y: auto;
+      margin: 0;
+      padding: 0 0.2rem 0 0;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(250, 193, 35, 0.45) rgba(255, 255, 255, 0.04);
+    }
+    .game-leaderboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(7.1rem, 1fr));
+      gap: 0.75rem;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+    .game-leaderboard__item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.55rem;
+      padding: 0.5rem 0.6rem;
+      border-radius: 0.9rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #e2e8f0;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+    }
+    .game-leaderboard__item span {
+      color: #cbd5e1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .game-leaderboard__item strong {
+      color: #fac123;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+    .game-leaderboard-empty {
+      color: #cbd5e1;
+      font-size: 0.8rem;
+      line-height: 1.6;
+    }
+    .edex-game-canvas {
+      width: 100%;
+      max-width: 44rem;
+      margin-left: auto;
+      height: auto;
+      border-radius: 1rem;
+      border-color: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 24px 40px rgba(15, 23, 42, 0.22);
+      display: block;
     }
     .resume-popover {
       position: fixed;
@@ -2023,9 +2704,11 @@
       box-shadow: 0 14px 32px rgba(0, 121, 107, 0.2);
     }
     .game-btn {
-      transition: background-color 200ms ease, transform 200ms ease;
-      font-weight: 600;
-      letter-spacing: 0.05em;
+      transition: background-color 200ms ease, transform 200ms ease, box-shadow 200ms ease;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      border-radius: 0.95rem;
+      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.18);
     }
     .game-btn-primary {
       background-color: #00796b;
@@ -2033,7 +2716,8 @@
     }
     .game-btn-primary:hover {
       background-color: #005f52;
-      transform: translateY(-1px);
+      transform: translateY(-2px);
+      box-shadow: 0 16px 26px rgba(0, 121, 107, 0.24);
     }
     .game-btn-secondary {
       background-color: #fac123;
@@ -2041,7 +2725,8 @@
     }
     .game-btn-secondary:hover {
       background-color: #e1a100;
-      transform: translateY(-1px);
+      transform: translateY(-2px);
+      box-shadow: 0 16px 26px rgba(250, 193, 35, 0.28);
     }
     body.mobile-nav-open {
       overflow: hidden;
@@ -2070,34 +2755,93 @@
       .mobile-menu-subcopy {
         font-size: 0.85rem;
       }
+      .edex-shell {
+        padding: 1.1rem;
+        border-radius: 1.4rem;
+      }
+      .edex-title {
+        font-size: 2.15rem;
+      }
+      .edex-filter-group {
+        width: 100%;
+      }
+      .edex-filter {
+        flex: 1 1 calc(33.333% - 0.5rem);
+        justify-content: center;
+        text-align: center;
+      }
+      .edex-spotlight__top {
+        flex-direction: column;
+      }
+      .edex-spotlight__logo-shell {
+        width: 4.25rem;
+        height: 4.25rem;
+      }
+      .edex-rail {
+        padding-left: 1.7rem;
+      }
+      .edex-rail__line {
+        left: 0.6rem;
+      }
+      .edex-card::after {
+        left: -1.45rem;
+      }
+      .edex-card__heading {
+        grid-template-columns: 3.5rem 1fr;
+      }
+      .edex-card__logo {
+        width: 3.5rem;
+        height: 3.5rem;
+      }
     }
     @media (max-width: 1024px) {
-      .timeline {
-        --timeline-line-left: clamp(3.5rem, 11vw, 5rem);
-        --timeline-line-transform: none;
+      .edex-header,
+      .edex-layout,
+      .edex-sidequest {
+        grid-template-columns: 1fr;
       }
-      .timeline-entry {
-        padding-left: calc(var(--timeline-line-left) + 2.25rem);
-        margin-left: 0;
+      .edex-toolbar {
+        align-items: flex-start;
       }
-      .timeline-entry > .flex,
-      .timeline-entry > .flex-row-reverse {
-        flex-direction: column !important;
-        align-items: flex-start !important;
-        gap: 1.25rem;
+      .edex-spotlight {
+        position: static;
       }
-      .timeline-entry .w-1/2 {
-        width: 100% !important;
+      .edex-sidequest__copy {
+        max-width: none;
+        padding-left: 0;
       }
-      .timeline-entry .pr-10,
-      .timeline-entry .pl-10 {
-        padding: 0 !important;
+      .edex-game-panel,
+      .edex-game-canvas {
+        max-width: none;
       }
-      .timeline-entry .text-right {
-        text-align: left;
+      .game-leaderboard {
+        grid-template-columns: repeat(auto-fit, minmax(6.75rem, 1fr));
       }
     }
     @media (max-width: 768px) {
+      .edex-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .edex-toolbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .edex-layout {
+        grid-template-columns: 1fr;
+      }
+      .edex-spotlight {
+        padding: 1.25rem;
+      }
+      .edex-sidequest {
+        padding: 1.35rem;
+        gap: 1.25rem;
+      }
+      .edex-sidequest__title {
+        font-size: 2.2rem;
+      }
+      .game-leaderboard {
+        grid-template-columns: repeat(auto-fit, minmax(6.1rem, 1fr));
+      }
       .projects-grid {
         grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       }

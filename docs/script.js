@@ -124,7 +124,23 @@ window.addEventListener('load', updateNavIndicator);
 const resumePopover = document.getElementById('resumePopover');
 const resumePopoverClose = document.getElementById('resumePopoverClose');
 const projectsGrid = document.getElementById('projectsGrid');
+const copyrightYear = document.getElementById('copyrightYear');
+const edexFilters = Array.from(document.querySelectorAll('.edex-filter'));
+const edexCards = Array.from(document.querySelectorAll('.edex-card'));
+const edexSpotlight = {
+    root: document.getElementById('edexSpotlight'),
+    eyebrow: document.getElementById('edexSpotlightEyebrow'),
+    title: document.getElementById('edexSpotlightTitle'),
+    org: document.getElementById('edexSpotlightOrg'),
+    summary: document.getElementById('edexSpotlightSummary'),
+    meta: document.getElementById('edexSpotlightMeta'),
+    tags: document.getElementById('edexSpotlightTags'),
+    highlights: document.getElementById('edexSpotlightHighlights'),
+    logo: document.getElementById('edexSpotlightLogo')
+};
 const RESUME_STORAGE_KEY = null;
+let activeEdexCard = null;
+let edexSpotlightTimer = null;
 
 function initResumePopover() {
     if (!resumePopover) return;
@@ -132,6 +148,122 @@ function initResumePopover() {
     resumePopoverClose?.addEventListener('click', () => {
         resumePopover.classList.remove('is-visible');
     });
+}
+
+function initCopyrightYear() {
+    if (!copyrightYear) return;
+    const currentYear = new Date().getFullYear();
+    copyrightYear.textContent = currentYear > 2024 ? `2024-${currentYear}` : String(currentYear);
+}
+
+function renderEdexCollection(container, values, className) {
+    if (!container) return;
+    container.innerHTML = '';
+    values.forEach(value => {
+        const chip = document.createElement('span');
+        chip.className = className;
+        chip.textContent = value;
+        container.appendChild(chip);
+    });
+}
+
+function renderEdexHighlights(values) {
+    if (!edexSpotlight.highlights) return;
+    edexSpotlight.highlights.innerHTML = '';
+    values.forEach(value => {
+        const item = document.createElement('li');
+        item.textContent = value;
+        edexSpotlight.highlights.appendChild(item);
+    });
+}
+
+function activateEdexCard(card, { animate = true } = {}) {
+    if (!card || card.classList.contains('is-hidden') || !edexSpotlight.root) return;
+    activeEdexCard = card;
+
+    edexCards.forEach(entry => {
+        const isActive = entry === card;
+        entry.classList.toggle('is-active', isActive);
+        entry.setAttribute('aria-pressed', String(isActive));
+    });
+
+    const accent = getComputedStyle(card).getPropertyValue('--edex-accent').trim() || '#0f766e';
+    const accentSoft = getComputedStyle(card).getPropertyValue('--edex-accent-soft').trim() || 'rgba(15,118,110,0.16)';
+    const categoryLabel = card.dataset.categoryLabel || card.dataset.category || 'Highlight';
+    const phase = card.dataset.phase ? `${categoryLabel} / ${card.dataset.phase}` : categoryLabel;
+    const meta = [card.dataset.period, card.dataset.location, card.dataset.mode].filter(Boolean);
+    const tags = (card.dataset.tags || '').split('|').map(value => value.trim()).filter(Boolean);
+    const highlights = (card.dataset.highlights || '').split('|').map(value => value.trim()).filter(Boolean);
+    const logoAlt = card.querySelector('.edex-card__logo img')?.alt || `${card.dataset.org || card.dataset.title || 'Active'} logo`;
+
+    edexSpotlight.root.style.setProperty('--spotlight-accent', accent);
+    edexSpotlight.root.style.setProperty('--spotlight-accent-soft', accentSoft);
+    if (edexSpotlight.eyebrow) edexSpotlight.eyebrow.textContent = phase;
+    if (edexSpotlight.title) edexSpotlight.title.textContent = card.dataset.title || '';
+    if (edexSpotlight.org) edexSpotlight.org.textContent = card.dataset.org || '';
+    if (edexSpotlight.summary) edexSpotlight.summary.textContent = card.dataset.summary || '';
+    if (edexSpotlight.logo) {
+        edexSpotlight.logo.src = card.dataset.logo || edexSpotlight.logo.src;
+        edexSpotlight.logo.alt = logoAlt;
+    }
+
+    renderEdexCollection(edexSpotlight.meta, meta, 'edex-meta-pill');
+    renderEdexCollection(edexSpotlight.tags, tags, 'edex-tag');
+    renderEdexHighlights(highlights);
+
+    if (!animate) return;
+    edexSpotlight.root.classList.add('is-swapping');
+    if (edexSpotlightTimer) {
+        clearTimeout(edexSpotlightTimer);
+    }
+    edexSpotlightTimer = window.setTimeout(() => {
+        edexSpotlight.root?.classList.remove('is-swapping');
+    }, 180);
+}
+
+function setEdexFilter(filter) {
+    if (!edexCards.length) return;
+
+    edexFilters.forEach(button => {
+        const isActive = button.dataset.filter === filter;
+        button.classList.toggle('is-active', isActive);
+        button.setAttribute('aria-pressed', String(isActive));
+    });
+
+    const visibleCards = edexCards.filter(card => {
+        const isVisible = filter === 'all' || card.dataset.category === filter;
+        card.classList.toggle('is-hidden', !isVisible);
+        card.setAttribute('aria-hidden', String(!isVisible));
+        return isVisible;
+    });
+
+    if (!visibleCards.length) return;
+    const nextActiveCard = visibleCards.includes(activeEdexCard) ? activeEdexCard : visibleCards[0];
+    activateEdexCard(nextActiveCard, { animate: false });
+}
+
+function initEdexSection() {
+    if (!edexCards.length || !edexSpotlight.root) return;
+
+    edexFilters.forEach(button => {
+        button.addEventListener('click', () => setEdexFilter(button.dataset.filter || 'all'));
+    });
+
+    edexCards.forEach(card => {
+        card.addEventListener('click', () => activateEdexCard(card));
+        card.addEventListener('focus', () => activateEdexCard(card, { animate: false }));
+        card.addEventListener('mouseenter', () => {
+            if (isCoarsePointer()) return;
+            activateEdexCard(card, { animate: false });
+        });
+        card.addEventListener('keydown', event => {
+            if (event.key !== 'Enter' && event.key !== ' ') return;
+            event.preventDefault();
+            activateEdexCard(card);
+        });
+    });
+
+    setEdexFilter('all');
 }
 
 // ====================
@@ -767,6 +899,8 @@ function buildProjectsGrid() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    initCopyrightYear();
+    initEdexSection();
     initSkillsSection();
     restartSkillsAutoCycle();
     buildProjectsGrid();
@@ -794,6 +928,19 @@ window.addEventListener('load', loadLeaderboardFromServer);
 
 resetLeaderboardBtn.addEventListener('click', resetLeaderboard);
 const ctx = gameCanvas.getContext('2d');
+const GAME_WIDTH = 680;
+const GAME_HEIGHT = 400;
+
+function configureGameCanvas() {
+    const dpr = window.devicePixelRatio || 1;
+    gameCanvas.width = Math.round(GAME_WIDTH * dpr);
+    gameCanvas.height = Math.round(GAME_HEIGHT * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.imageSmoothingEnabled = true;
+}
+
+configureGameCanvas();
+window.addEventListener('resize', configureGameCanvas);
 
 let score = 0;
 let lives = 2;
@@ -808,58 +955,116 @@ let isNotStarted = true;  // Ball not launched yet, attached to paddle
 let isLaunched = false;   // Ball launched after space press
 
 // Game settings
-const paddleHeight = 20;
-const paddleWidth = 75;
-let paddleX = (gameCanvas.width - paddleWidth) / 2;
+const paddleHeight = 18;
+const paddleWidth = 108;
+const paddleBottomOffset = 18;
+let paddleX = (GAME_WIDTH - paddleWidth) / 2;
 let rightPressed = false;
 let leftPressed = false;
-const paddleSpeed = 7;
+const paddleSpeed = 9;
 
-const ballRadius = 10;
-let x = gameCanvas.width / 2;
-let y = gameCanvas.height - paddleHeight - 10 - 50;
-let dx = 2;
-let dy = -2;
+const ballRadius = 9;
+const initialVelocity = { x: 2.8, y: -3.4 };
+let x = GAME_WIDTH / 2;
+let y = getPaddleY() - ballRadius - 32;
+let dx = initialVelocity.x;
+let dy = initialVelocity.y;
 
-const courses = [
-    "Deep Learning", "Machine Learning", "Embedded Systems", "Reinforcem. Learning", 
-    "Signals & Systems", "Software Design", "Logic Design", "Circuits", 
-    "Controls", "Probability, Stats & DS", "Computer Arch.", "CAD"
+const courseDeck = [
+    { title: 'Vis, Rob & Plan', code: 'SE740', tone: '#0f766e', fill: '#dff7f1' },
+    { title: 'Intro to R&AS', code: 'EK505', tone: '#0f766e', fill: '#ddf5ef' },
+    { title: 'Product Design in ECE', code: 'EC601', tone: '#b45309', fill: '#fff0d9' },
+    { title: 'Image/Video Computing', code: 'CS585', tone: '#2563eb', fill: '#e1efff' },
+    { title: 'Smart/Embedded Systems', code: 'EC444/535', tone: '#7c3aed', fill: '#f0e8ff' },
+    { title: 'Robot Learning', code: 'EC518', tone: '#0f766e', fill: '#dff7f1' },
+    { title: 'M.S. Thesis', code: 'ME954', tone: '#be123c', fill: '#ffe4ea' },
+    { title: 'ML', code: 'EC414', tone: '#1d4ed8', fill: '#e2ecff' },
+    { title: 'DL', code: 'EC523', tone: '#0f766e', fill: '#dff7f1' },
+    { title: 'RL', code: 'EC418', tone: '#b45309', fill: '#fff0d9' }
 ];
-let brickRowCount = 3;
-let brickColumnCount = 4;
-let brickWidth = 100;
-let brickHeight = 40;
-let brickPadding = 15;
-let brickOffsetTop = 30;
-let brickOffsetLeft = 15;
+const activeBrickCount = courseDeck.length;
+const brickColumnCount = 5;
+const brickRowCount = Math.ceil(activeBrickCount / brickColumnCount);
+const brickPadding = 12;
+const brickOffsetTop = 58;
+const brickOffsetLeft = 18;
+const brickHeight = 68;
+const brickWidth = Math.floor((GAME_WIDTH - (brickOffsetLeft * 2) - (brickPadding * (brickColumnCount - 1))) / brickColumnCount);
+const gameBoardTheme = {
+    backgroundTop: '#f8fbfb',
+    backgroundBottom: '#dff1ed',
+    grid: 'rgba(15, 118, 110, 0.08)',
+    hudFill: 'rgba(255, 255, 255, 0.82)',
+    hudStroke: 'rgba(15, 118, 110, 0.16)',
+    hudInk: '#0f172a',
+    statusFill: 'rgba(5, 59, 54, 0.92)',
+    statusInk: '#f8fafc',
+    paddleStart: '#053b36',
+    paddleEnd: '#0f766e',
+    paddleGlow: 'rgba(5, 59, 54, 0.28)',
+    ball: '#fac123',
+    ballCore: '#fff7d6',
+    boardGlow: 'rgba(250, 193, 35, 0.18)'
+};
 
-// More saturated purple colors
-const brickColors = [
-    "#8A2BE2", "#9400D3", "#9932CC", "#BA55D3",
-    "#800080", "#8B008B", "#4B0082", "#7B68EE",
-    "#6A5ACD", "#9370DB", "#5D3FD3", "#663399"
-];
+let bricks = createBrickGrid();
 
-gameCanvas.style.backgroundColor = "#333"; 
+const MAX_LEADERBOARD_NAME_LENGTH = 4;
 
-let bricks = [];
-for (let c = 0; c < brickColumnCount; c++) {
-    bricks[c] = [];
-    for (let r = 0; r < brickRowCount; r++) {
-        const courseIndex = c * brickRowCount + r;
-        bricks[c][r] = { 
-            x: 0, 
-            y: 0, 
-            status: 1, 
-            course: courses[courseIndex], 
-            color: brickColors[courseIndex % brickColors.length] || "#8A2BE2"
-        };
-    }
+function getPaddleY() {
+    return GAME_HEIGHT - paddleHeight - paddleBottomOffset;
 }
 
-const paddleImg = new Image();
-paddleImg.src = "assets/images/paddle.png"; // Provide your own paddle image
+function createBrickGrid() {
+    const nextBricks = [];
+    for (let c = 0; c < brickColumnCount; c++) {
+        nextBricks[c] = [];
+        for (let r = 0; r < brickRowCount; r++) {
+            const courseIndex = (r * brickColumnCount) + c;
+            const course = courseDeck[courseIndex];
+            nextBricks[c][r] = course ? {
+                x: 0,
+                y: 0,
+                status: 1,
+                course: course.title,
+                code: course.code,
+                tone: course.tone,
+                fill: course.fill
+            } : {
+                x: 0,
+                y: 0,
+                status: 0,
+                course: '',
+                code: '',
+                tone: '#0f172a',
+                fill: '#ffffff'
+            };
+        }
+    }
+    return nextBricks;
+}
+
+function sanitizeLeaderboardName(value) {
+    return String(value ?? '')
+        .toUpperCase()
+        .replace(/[^A-Z0-9]/g, '')
+        .slice(0, MAX_LEADERBOARD_NAME_LENGTH);
+}
+
+function isValidLeaderboardName(value) {
+    return Boolean(sanitizeLeaderboardName(value));
+}
+
+function normalizeLeaderboardEntries(entries) {
+    if (!Array.isArray(entries)) return [];
+    return entries
+        .map(entry => ({
+            initials: sanitizeLeaderboardName(entry?.initials),
+            score: Number.parseInt(entry?.score, 10) || 0
+        }))
+        .filter(entry => entry.initials)
+        .sort((left, right) => right.score - left.score || left.initials.localeCompare(right.initials));
+}
 
 // ===============================
 //  Leaderboard Server Integration
@@ -871,7 +1076,7 @@ const SERVER_URL = "https://portfolio-xoe6.onrender.com";
 async function loadLeaderboardFromServer() {
     try {
         const res = await fetch(`${SERVER_URL}/api/leaderboard`);
-        leaderboard = await res.json(); // array of {initials, score}
+        leaderboard = normalizeLeaderboardEntries(await res.json());
         updateLeaderboard();
     } catch (err) {
         console.error("Failed to load leaderboard from server:", err);
@@ -882,17 +1087,23 @@ async function loadLeaderboardFromServer() {
 
 // Save a new score
 async function saveScoreToServer(initials, newScore) {
+    const safeInitials = sanitizeLeaderboardName(initials);
+    if (!safeInitials) return;
+
     try {
         const res = await fetch(`${SERVER_URL}/api/leaderboard`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ initials, score: newScore })
+            body: JSON.stringify({ initials: safeInitials, score: newScore })
         });
+        if (!res.ok) {
+            throw new Error(`Leaderboard save failed with status ${res.status}`);
+        }
         const data = await res.json();
         if (data.leaderboard) {
-            leaderboard = data.leaderboard;
-            updateLeaderboard();
+            leaderboard = normalizeLeaderboardEntries(data.leaderboard);
         }
+        await loadLeaderboardFromServer();
     } catch (err) {
         console.error("Failed to save score:", err);
     }
@@ -924,7 +1135,23 @@ async function resetLeaderboardOnServer(passkey) {
 //  Generic Drawing Functions for the Breakout Elements
 // ====================================================
 
-function drawRoundedRect(x, y, width, height, radius, fillColor) {
+function drawRoundedRect(x, y, width, height, radius, fillColor, options = {}) {
+    const {
+        strokeColor = null,
+        strokeWidth = 1,
+        shadowColor = null,
+        shadowBlur = 0,
+        shadowOffsetX = 0,
+        shadowOffsetY = 0
+    } = options;
+
+    ctx.save();
+    if (shadowColor) {
+        ctx.shadowColor = shadowColor;
+        ctx.shadowBlur = shadowBlur;
+        ctx.shadowOffsetX = shadowOffsetX;
+        ctx.shadowOffsetY = shadowOffsetY;
+    }
     ctx.beginPath();
     ctx.moveTo(x + radius, y);
     ctx.lineTo(x + width - radius, y);
@@ -937,34 +1164,104 @@ function drawRoundedRect(x, y, width, height, radius, fillColor) {
     ctx.quadraticCurveTo(x, y, x + radius, y);
     ctx.fillStyle = fillColor;
     ctx.fill();
+    if (strokeColor) {
+        ctx.shadowColor = 'transparent';
+        ctx.lineWidth = strokeWidth;
+        ctx.strokeStyle = strokeColor;
+        ctx.stroke();
+    }
     ctx.closePath();
+    ctx.restore();
 }
 
-function drawWrappedText(ctx, text, x, y, maxWidth, lineHeight) {
+function wrapTextLines(text, maxWidth) {
     const words = text.split(' ');
+    const lines = [];
     let currentLine = '';
-    
-    for (let i = 0; i < words.length; i++) {
-        const testLine = currentLine + words[i] + ' ';
-        const metrics = ctx.measureText(testLine);
-        const testWidth = metrics.width;
-        
-        if (testWidth > maxWidth) {
-            ctx.fillText(currentLine, x, y);
-            currentLine = words[i] + ' ';
-            y += lineHeight;
+
+    words.forEach(word => {
+        const testLine = currentLine ? `${currentLine} ${word}` : word;
+        if (ctx.measureText(testLine).width > maxWidth && currentLine) {
+            lines.push(currentLine);
+            currentLine = word;
         } else {
             currentLine = testLine;
         }
+    });
+
+    if (currentLine) {
+        lines.push(currentLine);
     }
-    // Draw whatever remains
-    ctx.fillText(currentLine, x, y);
+
+    return lines;
+}
+
+function drawBoardBackground() {
+    ctx.save();
+
+    const background = ctx.createLinearGradient(0, 0, 0, GAME_HEIGHT);
+    background.addColorStop(0, gameBoardTheme.backgroundTop);
+    background.addColorStop(0.58, '#eff8f7');
+    background.addColorStop(1, gameBoardTheme.backgroundBottom);
+    ctx.fillStyle = background;
+    ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+
+    const glow = ctx.createRadialGradient(GAME_WIDTH * 0.82, 48, 0, GAME_WIDTH * 0.82, 48, 180);
+    glow.addColorStop(0, gameBoardTheme.boardGlow);
+    glow.addColorStop(1, 'rgba(250, 193, 35, 0)');
+    ctx.fillStyle = glow;
+    ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+
+    ctx.strokeStyle = gameBoardTheme.grid;
+    ctx.lineWidth = 1;
+    for (let gridX = 18; gridX < GAME_WIDTH; gridX += 28) {
+        ctx.beginPath();
+        ctx.moveTo(gridX, 0);
+        ctx.lineTo(gridX, GAME_HEIGHT);
+        ctx.stroke();
+    }
+    for (let gridY = 18; gridY < GAME_HEIGHT; gridY += 28) {
+        ctx.beginPath();
+        ctx.moveTo(0, gridY);
+        ctx.lineTo(GAME_WIDTH, gridY);
+        ctx.stroke();
+    }
+
+    drawRoundedRect(10, 10, GAME_WIDTH - 20, 36, 18, 'rgba(255, 255, 255, 0.74)', {
+        strokeColor: gameBoardTheme.hudStroke
+    });
+
+    ctx.restore();
+}
+
+function drawHudBadge(text, x, y, { align = 'left', fill = gameBoardTheme.hudFill, stroke = gameBoardTheme.hudStroke, color = gameBoardTheme.hudInk } = {}) {
+    ctx.save();
+    ctx.font = "700 11px 'Courier New', monospace";
+    const badgePaddingX = 12;
+    const badgeWidth = ctx.measureText(text).width + (badgePaddingX * 2);
+    let badgeX = x;
+
+    if (align === 'right') {
+        badgeX = x - badgeWidth;
+    } else if (align === 'center') {
+        badgeX = x - (badgeWidth / 2);
+    }
+
+    drawRoundedRect(badgeX, y, badgeWidth, 24, 12, fill, {
+        strokeColor: stroke
+    });
+
+    ctx.fillStyle = color;
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(text, badgeX + badgePaddingX, y + 13);
+    ctx.restore();
 }
 
 function drawBricks() {
     ctx.save();
-    ctx.font = "14px Arial";
-    ctx.textBaseline = "top";
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
 
     for (let c = 0; c < brickColumnCount; c++) {
         for (let r = 0; r < brickRowCount; r++) {
@@ -975,19 +1272,39 @@ function drawBricks() {
                 b.x = brickX;
                 b.y = brickY;
 
-                // Draw the brick
-                drawRoundedRect(brickX, brickY, brickWidth, brickHeight, 5, b.color);
+                const brickFill = ctx.createLinearGradient(brickX, brickY, brickX, brickY + brickHeight);
+                brickFill.addColorStop(0, 'rgba(255, 255, 255, 0.96)');
+                brickFill.addColorStop(1, b.fill);
 
-                // Text color
-                ctx.fillStyle = "#fff";
-                drawWrappedText(
-                    ctx,
-                    b.course,
-                    brickX + 8,
-                    brickY + 8,
-                    brickWidth - 16,
-                    16
-                );
+                drawRoundedRect(brickX, brickY, brickWidth, brickHeight, 12, brickFill, {
+                    strokeColor: 'rgba(255, 255, 255, 0.85)',
+                    shadowColor: 'rgba(15, 23, 42, 0.16)',
+                    shadowBlur: 12,
+                    shadowOffsetY: 8
+                });
+                drawRoundedRect(brickX + 9, brickY + 8, brickWidth - 18, 8, 4, b.tone);
+
+                ctx.font = "700 10px 'Courier New', monospace";
+                const codeWidth = Math.max(56, ctx.measureText(b.code).width + 20);
+                const codeX = brickX + ((brickWidth - codeWidth) / 2);
+                drawRoundedRect(codeX, brickY + 18, codeWidth, 18, 9, 'rgba(255, 255, 255, 0.94)', {
+                    strokeColor: 'rgba(15, 23, 42, 0.08)'
+                });
+                ctx.fillStyle = b.tone;
+                ctx.fillText(b.code, brickX + (brickWidth / 2), brickY + 28);
+
+                ctx.font = "700 11px 'Courier New', monospace";
+                const lines = wrapTextLines(b.course, brickWidth - 20).slice(0, 3);
+                const lineHeight = 12;
+                const titleBlockHeight = lines.length * lineHeight;
+                const titleAreaTop = brickY + 40;
+                const titleAreaHeight = brickHeight - 46;
+                const startY = titleAreaTop + ((titleAreaHeight - titleBlockHeight) / 2) + (lineHeight / 2);
+
+                ctx.fillStyle = b.tone;
+                lines.forEach((line, index) => {
+                    ctx.fillText(line, brickX + (brickWidth / 2), startY + (index * lineHeight));
+                });
             }
         }
     }
@@ -995,31 +1312,57 @@ function drawBricks() {
 }
 
 function drawBall() {
+    ctx.save();
     ctx.beginPath();
     ctx.arc(x, y, ballRadius, 0, Math.PI*2);
-    ctx.fillStyle = "#e6e6fa";
+    ctx.shadowColor = 'rgba(250, 193, 35, 0.4)';
+    ctx.shadowBlur = 16;
+    ctx.fillStyle = gameBoardTheme.ball;
     ctx.fill();
     ctx.closePath();
+    ctx.beginPath();
+    ctx.arc(x - 2, y - 2, ballRadius * 0.48, 0, Math.PI * 2);
+    ctx.fillStyle = gameBoardTheme.ballCore;
+    ctx.fill();
+    ctx.closePath();
+    ctx.restore();
 }
 
 function drawPaddle() {
-    if (paddleImg.complete && paddleImg.width > 0) {
-        ctx.drawImage(paddleImg, paddleX, gameCanvas.height - paddleHeight - 10, paddleWidth, paddleHeight);
-    } else {
-        drawRoundedRect(paddleX, gameCanvas.height - paddleHeight - 10, paddleWidth, paddleHeight, 5, "#9370DB");
-    }
+    const paddleY = getPaddleY();
+    const paddleGradient = ctx.createLinearGradient(paddleX, paddleY, paddleX, paddleY + paddleHeight);
+    paddleGradient.addColorStop(0, gameBoardTheme.paddleEnd);
+    paddleGradient.addColorStop(1, gameBoardTheme.paddleStart);
+
+    drawRoundedRect(paddleX, paddleY, paddleWidth, paddleHeight, paddleHeight / 2, paddleGradient, {
+        strokeColor: 'rgba(255, 255, 255, 0.38)',
+        shadowColor: gameBoardTheme.paddleGlow,
+        shadowBlur: 14,
+        shadowOffsetY: 6
+    });
+    drawRoundedRect(paddleX + 12, paddleY + 4, paddleWidth - 24, 4, 2, 'rgba(255, 255, 255, 0.35)');
 }
 
 function drawScore() {
-    ctx.font = "16px Arial";
-    ctx.fillStyle = "#fff";
-    ctx.fillText("Score: " + score, 8, 24);
+    drawHudBadge(`SCORE ${score}`, 16, 16);
 }
 
 function drawLives() {
-    ctx.font = "16px Arial";
-    ctx.fillStyle = "#fff";
-    ctx.fillText("Lives: " + lives, gameCanvas.width - 85, 24);
+    drawHudBadge(`LIVES ${lives}`, GAME_WIDTH - 16, 16, { align: 'right' });
+}
+
+function drawStatusBadge() {
+    const statusText = isPaused
+        ? 'PAUSED · SPACE TO RESUME'
+        : isNotStarted
+            ? 'SPACE TO LAUNCH'
+            : 'COURSEOUT';
+    drawHudBadge(statusText, GAME_WIDTH / 2, 16, {
+        align: 'center',
+        fill: gameBoardTheme.statusFill,
+        stroke: 'rgba(255, 255, 255, 0.16)',
+        color: gameBoardTheme.statusInk
+    });
 }
 
 // =======================
@@ -1065,7 +1408,7 @@ function collisionDetection() {
                     }
 
                     // Win check
-                    if (score === brickRowCount * brickColumnCount) {
+                    if (score === activeBrickCount) {
                         endGame(true);
                     }
                 }
@@ -1078,43 +1421,59 @@ function endGame(won) {
     isGameOver = true;
     cancelAnimationFrame(animationId);
 
-    let initials = prompt(
-      won ? "You won! Enter your initials:" : "Game Over! Enter your initials:"
-    );
-    if (!initials) initials = "???";
-    initials = initials.substring(0,4);
-
-    // Instead of localStorage, send to server
-    saveScoreToServer(initials, score);
+    let initials = '';
+    while (true) {
+        const response = prompt(
+            won
+                ? "You won! Enter a 1-4 character name or initials:"
+                : "Game over. Enter a 1-4 character name or initials:"
+        );
+        if (response === null) break;
+        initials = sanitizeLeaderboardName(response);
+        if (initials) {
+            saveScoreToServer(initials, score);
+            break;
+        }
+        alert('A name is required. Symbols-only entries are not allowed.');
+    }
 
     gameCanvas.style.display = 'none';
-    startScreen.style.display = 'inline-block';
+    startScreen.style.display = 'block';
 }
 
 function updateLeaderboard() {
-    // Clear existing
     leaderboardEl.innerHTML = "";
+    const normalizedEntries = normalizeLeaderboardEntries(leaderboard);
 
-    // Up to 20 entries
-    // We'll arrange them in a 5-column grid
+    if (!normalizedEntries.length) {
+        const emptyState = document.createElement('p');
+        emptyState.className = 'game-leaderboard-empty';
+        emptyState.textContent = 'No scores yet. Clear the courses and take the top spot.';
+        leaderboardEl.appendChild(emptyState);
+        return;
+    }
+
     const ul = document.createElement('ul');
-    ul.style.fontSize = "10px";
-    ul.style.listStyleType = 'none';
-    ul.style.margin = '0';
-    ul.style.padding = '0';
-    ul.style.display = 'grid';
-    ul.style.gridTemplateColumns = 'repeat(5, auto)';
-    ul.style.gap = '20px';
-    ul.style.alignItems = 'start';
+    ul.className = 'game-leaderboard';
 
-    for (let i = 0; i < leaderboard.length; i++) {
-        const entry = leaderboard[i];
+    for (let i = 0; i < normalizedEntries.length; i++) {
+        const entry = normalizedEntries[i];
         const li = document.createElement('li');
-        li.textContent = `${entry.initials}: ${entry.score}`;
+        li.className = 'game-leaderboard__item';
+
+        const initials = document.createElement('span');
+        initials.textContent = `#${i + 1} ${entry.initials}`;
+
+        const entryScore = document.createElement('strong');
+        entryScore.textContent = entry.score;
+
+        li.appendChild(initials);
+        li.appendChild(entryScore);
         ul.appendChild(li);
     }
 
     leaderboardEl.appendChild(ul);
+    leaderboard = normalizedEntries;
 }
 
 function resetLeaderboard() {
@@ -1177,18 +1536,20 @@ let animationId;
 function draw() {
     if (isGameOver) return;
 
-    ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+    ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+    drawBoardBackground();
 
     // Ball stuck to paddle if not launched
     if (isNotStarted) {
         x = paddleX + paddleWidth / 2;
-        y = gameCanvas.height - paddleHeight - 10 - ballRadius;
+        y = getPaddleY() - ballRadius;
     }
 
     drawBricks();
     drawPaddle();
     drawScore();
     drawLives();
+    drawStatusBadge();
 
     if (!isPaused) {
         drawBall();
@@ -1197,7 +1558,7 @@ function draw() {
         // If launched, update ball position
         if (isLaunched) {
             // Side walls
-            if (x + dx > gameCanvas.width - ballRadius || x + dx < ballRadius) {
+            if (x + dx > GAME_WIDTH - ballRadius || x + dx < ballRadius) {
                 dx = -dx;
             }
             // Top
@@ -1205,7 +1566,7 @@ function draw() {
                 dy = -dy;
             }
             // Bottom area -> check paddle
-            else if (y + dy > gameCanvas.height - ballRadius - paddleHeight - 10) {
+            else if (y + dy > getPaddleY() - ballRadius) {
                 if (x > paddleX && x < paddleX + paddleWidth) {
                     // More dynamic angles
                     const paddleCenter = paddleX + paddleWidth / 2;
@@ -1225,10 +1586,10 @@ function draw() {
                         return;
                     } else {
                         // Reset ball above paddle but keep game going
-                        x = gameCanvas.width/2;
-                        y = gameCanvas.height - paddleHeight - 10 - 50;
-                        dx = 2;
-                        dy = -2;
+                        x = GAME_WIDTH / 2;
+                        y = getPaddleY() - ballRadius - 32;
+                        dx = initialVelocity.x;
+                        dy = initialVelocity.y;
                         isNotStarted = true; 
                         isLaunched = false;
                     }
@@ -1236,7 +1597,7 @@ function draw() {
             }
 
             // Move paddle
-            if (rightPressed && paddleX < gameCanvas.width - paddleWidth) {
+            if (rightPressed && paddleX < GAME_WIDTH - paddleWidth) {
                 paddleX += paddleSpeed;
             } else if (leftPressed && paddleX > 0) {
                 paddleX -= paddleSpeed;
@@ -1248,52 +1609,64 @@ function draw() {
             } else {
                 // Ball stuck
                 x = paddleX + paddleWidth/2;
-                y = gameCanvas.height - paddleHeight - 10 - ballRadius;
+                y = getPaddleY() - ballRadius;
             }
 
         } else {
             // Not launched yet
-            if (rightPressed && paddleX < gameCanvas.width - paddleWidth) {
+            if (rightPressed && paddleX < GAME_WIDTH - paddleWidth) {
                 paddleX += paddleSpeed;
             } else if (leftPressed && paddleX > 0) {
                 paddleX -= paddleSpeed;
             }
             x = paddleX + paddleWidth/2;
-            y = gameCanvas.height - paddleHeight - 10 - ballRadius;
+            y = getPaddleY() - ballRadius;
             drawBall();
         }
 
     } else {
-        // Game is paused -> draw pause symbol
-        const pauseWidth = 10;
-        const pauseHeight = 40;
-        const gap = 10;
-        const centerX = gameCanvas.width / 2;
-        const centerY = gameCanvas.height / 2;
+        const centerX = GAME_WIDTH / 2;
+        const centerY = GAME_HEIGHT / 2;
 
-        drawRoundedRect(centerX - pauseWidth - gap/2, centerY - pauseHeight/2, pauseWidth, pauseHeight, 3, "#ffffff");
-        drawRoundedRect(centerX + gap/2, centerY - pauseHeight/2, pauseWidth, pauseHeight, 3, "#ffffff");
+        drawRoundedRect(centerX - 118, centerY - 40, 236, 80, 18, 'rgba(15, 23, 42, 0.72)', {
+            strokeColor: 'rgba(255, 255, 255, 0.14)'
+        });
+        ctx.save();
+        ctx.fillStyle = '#f8fafc';
+        ctx.font = "700 18px 'Courier New', monospace";
+        ctx.textAlign = 'center';
+        ctx.fillText('Paused', centerX, centerY - 6);
+        ctx.font = "600 11px 'Courier New', monospace";
+        ctx.fillStyle = 'rgba(248, 250, 252, 0.78)';
+        ctx.fillText('press space to resume', centerX, centerY + 18);
+        ctx.restore();
     }
 
     animationId = requestAnimationFrame(draw);
 }
 
 function startGame() {
+    if (animationId) {
+        cancelAnimationFrame(animationId);
+    }
+
     score = 0;
     lives = 2;
-    x = gameCanvas.width/2;
-    y = gameCanvas.height - paddleHeight - 10 - 50;
-    dx = 2;
-    dy = -2;
+    paddleX = (GAME_WIDTH - paddleWidth) / 2;
+    x = GAME_WIDTH / 2;
+    y = getPaddleY() - ballRadius - 32;
+    dx = initialVelocity.x;
+    dy = initialVelocity.y;
 
     isGameOver = false;
     isPaused = false;
     isNotStarted = true;
     isLaunched = false;
 
+    bricks = createBrickGrid();
     for (let c = 0; c < brickColumnCount; c++) {
         for (let r = 0; r < brickRowCount; r++) {
-            bricks[c][r].status = 1;
+            bricks[c][r].status = bricks[c][r].course ? 1 : 0;
         }
     }
 

@@ -1,3 +1,77 @@
+const THEME_STORAGE_KEY = 'darkmode';
+const themeRoot = document.documentElement;
+const themeToggleButtons = Array.from(document.querySelectorAll('[data-theme-toggle]'));
+const themeToggleLabels = Array.from(document.querySelectorAll('[data-theme-toggle-label]'));
+
+function getStoredTheme() {
+    try {
+        return localStorage.getItem(THEME_STORAGE_KEY);
+    } catch (error) {
+        return null;
+    }
+}
+
+function persistTheme(isDarkMode) {
+    try {
+        if (isDarkMode) {
+            localStorage.setItem(THEME_STORAGE_KEY, 'active');
+        } else {
+            localStorage.removeItem(THEME_STORAGE_KEY);
+        }
+    } catch (error) {}
+}
+
+function isDarkModeEnabled() {
+    return themeRoot.classList.contains('darkmode');
+}
+
+function updateThemeToggleState() {
+    const darkEnabled = isDarkModeEnabled();
+    const nextModeLabel = darkEnabled ? 'Switch to light mode' : 'Switch to dark mode';
+    const buttonLabel = darkEnabled ? 'Light mode' : 'Dark mode';
+
+    themeToggleButtons.forEach(button => {
+        button.setAttribute('aria-pressed', String(darkEnabled));
+        button.setAttribute('aria-label', nextModeLabel);
+        button.setAttribute('title', nextModeLabel);
+    });
+
+    themeToggleLabels.forEach(label => {
+        label.textContent = buttonLabel;
+    });
+}
+
+function enableDarkmode() {
+    themeRoot.classList.add('darkmode');
+    persistTheme(true);
+    updateThemeToggleState();
+}
+
+function disableDarkmode() {
+    themeRoot.classList.remove('darkmode');
+    persistTheme(false);
+    updateThemeToggleState();
+}
+
+function initThemeToggle() {
+    if (getStoredTheme() === 'active') {
+        themeRoot.classList.add('darkmode');
+    }
+
+    updateThemeToggleState();
+    themeToggleButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            if (isDarkModeEnabled()) {
+                disableDarkmode();
+                return;
+            }
+            enableDarkmode();
+        });
+    });
+}
+
+initThemeToggle();
+
 // Mobile navigation + indicator state
 const menuToggle = document.getElementById('menuToggle');
 const mobileMenu = document.getElementById('mobileMenu');

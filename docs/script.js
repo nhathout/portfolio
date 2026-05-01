@@ -358,13 +358,10 @@ const projectEntries = [
     },
     {
         title: 'TrashformerPro',
-        description: 'Next-stage smart waste-sorting system currently under active development. Full visuals and write-up unlock after the project is complete.',
-        upcoming: {
-            label: 'Build in progress',
-            note: 'The repo is public now; the rest stays locked until release.',
-            placeholderMark: 'TFP'
-        },
+        description: 'Low-cost Raspberry Pi smart-bin prototype that detects staged waste, classifies four categories with MobileNetV3-Large, and gives live feedback through a web app, LEDs, buzzer, and logs.',
+        image: 'assets/clips/trashpro.gif',
         links: [
+            { label: 'Report', href: 'assets/files/TrashformerPro_finalreport.pdf' },
             { label: 'Repository', href: 'https://github.com/nhathout/TrashformerPro' }
         ]
     },

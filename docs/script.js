@@ -379,13 +379,11 @@ const projectEntries = [
     },
     {
         title: 'PixelPose',
-        description: 'Camera pose regression research project currently in proposal stage. Final summary, media, and results unlock once the work is ready to publish.',
-        upcoming: {
-            label: 'Proposal stage',
-            note: 'The concept is set; public details stay locked for now.',
-            placeholderMark: 'POSE'
-        },
-        links: []
+        description: '6-DoF monocular camera pose regression study comparing CNN, ViT, and DINO backbones across indoor and outdoor datasets, with Grad-CAM and patch attribution to inspect learned spatial cues.',
+        image: 'assets/images/pixelpose.png',
+        links: [
+            { label: 'Report', href: 'assets/files/IVC_Final-1.pdf' }
+        ]
     },
     {
         title: 'TiltGolf',

@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A beginner-friendly personal portfolio starter.">
+    <meta name="theme-color" content="#f6f7f8">
+    <title>Portfolio Starter</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+      (() => {
+        try {
+          if (localStorage.getItem("portfolio-template-theme") === "dark") {
+            document.documentElement.dataset.theme = "dark";
+          }
+        } catch (error) {}
+      })();
+    </script>
+    <script defer src="content.js"></script>
+    <script defer src="script.js"></script>
+  </head>
+  <body>
+    <!--
+      Starter portfolio template adapted from Noah Hathout's portfolio repo.
+      Replace the sample content in content.js before publishing.
+    -->
+    <header class="site-header">
+      <a class="brand" href="#home" aria-label="Go to home">
+        <span class="brand-mark" id="brandInitials">YN</span>
+        <span id="brandName">Your Name</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="#about">About</a>
+        <a href="#timeline">Timeline</a>
+        <a href="#skills">Skills</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="icon-button" data-theme-toggle type="button" aria-label="Switch color theme">
+          <span class="theme-icon" aria-hidden="true">◐</span>
+        </button>
+        <button class="menu-button" id="menuToggle" type="button" aria-expanded="false" aria-controls="mobileMenu">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span class="sr-only">Open menu</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="mobile-menu" id="mobileMenu" hidden>
+      <a href="#about">About</a>
+      <a href="#timeline">Timeline</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </div>
+
+    <main id="home">
+      <section class="hero section">
+        <div class="hero-copy">
+          <p class="eyebrow" id="heroEyebrow">Portfolio Starter</p>
+          <h1 id="heroTitle">Build a portfolio that sounds like you.</h1>
+          <p class="hero-intro" id="heroIntro">
+            Replace this starter text with a quick introduction about who you are,
+            what you are learning, and what you want people to remember.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" id="resumeLink" href="#" target="_blank" rel="noopener noreferrer">Resume</a>
+            <a class="button secondary" href="#contact">Contact</a>
+          </div>
+          <dl class="quick-facts" id="quickFacts"></dl>
+        </div>
+
+        <aside class="profile-panel" aria-label="Profile summary">
+          <div class="profile-visual" id="profileVisual">
+            <span id="profileInitials">YN</span>
+          </div>
+          <div>
+            <p class="profile-name" id="profileName">Your Name</p>
+            <p class="profile-role" id="profileRole">Student and builder</p>
+          </div>
+          <div class="social-links" id="socialLinks"></div>
+        </aside>
+      </section>
+
+      <section class="section split-section" id="about">
+        <div>
+          <p class="eyebrow">About</p>
+          <h2 id="aboutHeading">A short, specific intro works best.</h2>
+        </div>
+        <div class="section-copy" id="aboutText"></div>
+      </section>
+
+      <section class="section" id="timeline">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Timeline</p>
+            <h2>Education and Experience</h2>
+          </div>
+          <div class="filter-buttons" aria-label="Filter timeline">
+            <button class="filter-button is-active" type="button" data-filter="all">All</button>
+            <button class="filter-button" type="button" data-filter="education">Education</button>
+            <button class="filter-button" type="button" data-filter="experience">Experience</button>
+          </div>
+        </div>
+        <div class="timeline-list" id="timelineList"></div>
+      </section>
+
+      <section class="section" id="skills">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Skills</p>
+            <h2>Tools and Focus Areas</h2>
+          </div>
+          <p class="heading-note">Group skills by topic so visitors can scan quickly.</p>
+        </div>
+        <div class="skills-grid" id="skillsGrid"></div>
+      </section>
+
+      <section class="section" id="projects">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Projects</p>
+            <h2>Selected Work</h2>
+          </div>
+          <p class="heading-note">Start with three strong projects. Add more when each has a clear story.</p>
+        </div>
+        <div class="projects-grid" id="projectsGrid"></div>
+      </section>
+
+      <section class="section" id="highlights">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Highlights</p>
+            <h2>Awards, Clubs, and Certifications</h2>
+          </div>
+        </div>
+        <div class="highlight-grid" id="highlightsGrid"></div>
+      </section>
+
+      <section class="section contact-section" id="contact">
+        <div>
+          <p class="eyebrow">Contact</p>
+          <h2 id="contactHeading">Say hello.</h2>
+          <p id="contactIntro">
+            Add the best places for people to reach you.
+          </p>
+        </div>
+        <div class="contact-links" id="contactLinks"></div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>
+        <span id="footerName">Your Name</span>
+        <span aria-hidden="true"> / </span>
+        <span id="copyrightYear"></span>
+      </p>
+      <a href="#home">Back to top</a>
+    </footer>
+  </body>
+</html>

@@ -32,6 +32,14 @@ export class Dialogue {
 
   /** Show a sequence of pages; resolves when the box closes. */
   show(lines) {
+    // if a dialogue is somehow already open, release its waiter first —
+    // otherwise the awaiting code hangs forever (soft-lock)
+    if (this._resolve) {
+      const r = this._resolve;
+      this._resolve = null;
+      r();
+    }
+    clearInterval(this._timer);
     this.pages = this.normalize(lines);
     if (!this.pages.length) return Promise.resolve();
     this.page = 0;

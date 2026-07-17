@@ -215,8 +215,9 @@ C_LEAF_L = hex_rgba("6cbb5e")
 # cols: [stand, stepA, stand, stepB]
 # ---------------------------------------------------------------------------
 
-FW, FH = 16, 24         # frame size
+FW, FH = 16, 28         # frame size (4 extra rows of headroom for the hat)
 TORSO_H = 18            # torso art rows 0..17, legs rows 18..23
+HEAD_PAD = 4            # body drawn this far down; the hat lives in the pad
 
 HER_DOWN = [
     "................",
@@ -468,11 +469,14 @@ HAT_PAL = {
     "R": hex_rgba("e8556a"),   # stripe
     "P": hex_rgba("f8a8c0"),   # pompom
 }
+# a proper kids' party cone: tall, striped, pompom on top
 HAT_ROWS = [
     ".......PP.......",
     ".......YY.......",
-    "......RYYR......",
     "......YYYY......",
+    "......RRRR......",
+    ".....YYYYYY.....",
+    ".....RRRRRR.....",
 ]
 HAT_DX = {"down": 0, "up": 0, "side": 1}
 
@@ -492,21 +496,22 @@ def compose_char(torsos, legsets, pal, extras=None, hat=False):
         frames = [legs["stand"], legs["a"], legs["stand"], mirror_rows(legs["a"])]
         for ci in range(4):
             f = Canvas(FW, FH)
-            f.blit_ascii(0, 0, torsos[dirname], pal)
-            f.blit_ascii(0, TORSO_H, frames[ci], pal)
+            f.blit_ascii(0, HEAD_PAD, torsos[dirname], pal)
+            f.blit_ascii(0, HEAD_PAD + TORSO_H, frames[ci], pal)
             if hat:
-                f.blit_ascii(HAT_DX[dirname], 0, HAT_ROWS, hatpal)
+                # base row of the cone rests ON the hair's top row
+                f.blit_ascii(HAT_DX[dirname], 1, HAT_ROWS, hatpal)
             f.outline(OUTLINE)
             sheet.blit(f, ci * FW, ri * FH)
     if extras:
         for ci, ex in enumerate(extras[:4]):
             f = Canvas(FW, FH)
-            f.blit_ascii(0, 0, ex["torso"], pal)
-            f.blit_ascii(0, TORSO_H, ex["legs"], pal)
+            f.blit_ascii(0, HEAD_PAD, ex["torso"], pal)
+            f.blit_ascii(0, HEAD_PAD + TORSO_H, ex["legs"], pal)
             if ex.get("overlay"):
-                f.blit_ascii(0, 0, ex["overlay"], pal)
+                f.blit_ascii(0, HEAD_PAD, ex["overlay"], pal)
             if hat:
-                f.blit_ascii(0, 0, HAT_ROWS, hatpal)
+                f.blit_ascii(0, 1, HAT_ROWS, hatpal)
             f.outline(OUTLINE)
             sheet.blit(f, ci * FW, 3 * FH)
     return sheet
@@ -705,16 +710,24 @@ def tile_grass(seed=3):
     return noise_tile(C_GRASS, [C_GRASS_D, C_GRASS_L], seed)
 
 
-def tile_flower(phase):
-    c = tile_grass(11)
-    pal = {"r": hex_rgba("e26a6a"), "y": hex_rgba("f0d264"),
-           "w": hex_rgba("f4f1e4"), "g": C_LEAF_D, "o": hex_rgba("e89b4a")}
-    if phase == 0:
-        c.blit_ascii(2, 3, ["ryr", ".g."], pal)
-        c.blit_ascii(10, 9, ["wow", ".g."], pal)
-    else:
-        c.blit_ascii(2, 3, [".g.", "ryr"], pal)
-        c.blit_ascii(10, 9, [".g.", "wow"], pal)
+def tile_flower(phase, variant=0):
+    c = tile_grass(11 + variant * 7)
+    pals = [
+        {"a": hex_rgba("e26a6a"), "b": hex_rgba("f0d264"), "c": hex_rgba("f4f1e4"),
+         "d": hex_rgba("e89b4a"), "g": C_LEAF_D},                       # red/yellow + white
+        {"a": hex_rgba("f278a2"), "b": hex_rgba("f8c8d8"), "c": hex_rgba("c78ae0"),
+         "d": hex_rgba("f4f1e4"), "g": C_LEAF_D},                       # pinks + lilac 🌸
+        {"a": hex_rgba("7a9ce8"), "b": hex_rgba("f4f1e4"), "c": hex_rgba("f0d264"),
+         "d": hex_rgba("aac8f4"), "g": C_LEAF_D},                       # blue + white
+    ]
+    pal = pals[variant % len(pals)]
+    spots = [(2, 3, "aba"), (10, 9, "cdc")] if variant != 1 else \
+            [(3, 2, "aba"), (9, 8, "cdc"), (5, 11, "bab")]
+    for x, y, colors in spots:
+        if phase == 0:
+            c.blit_ascii(x, y, [colors, ".g."], pal)
+        else:
+            c.blit_ascii(x, y, [".g.", colors], pal)
     return c
 
 
@@ -739,6 +752,53 @@ def tile_path(seed=5):
 
 def tile_sand(seed=9):
     return noise_tile(C_SAND, [C_SAND_D], seed, 7)
+
+
+# ---- auto-edged path/sand tiles (16 variants by NESW neighbor mask) --------
+# mask bits: 1 = N connected, 2 = E, 4 = S, 8 = W. Open sides get a wavy,
+# rustic grass edge with a darker rim — old-Pokémon style rounded paths.
+EDGE_WAVE = [2, 2, 1, 1, 2, 3, 3, 2, 2, 1, 1, 2, 3, 3, 2, 2]
+
+
+def _grass_px(x, y):
+    return C_GRASS_D if (x * 7 + y * 13) % 5 == 0 else C_GRASS
+
+
+def apply_grass_edges(c, mask, rim):
+    for x in range(16):
+        if not mask & 1:  # north open
+            d = EDGE_WAVE[x]
+            for y in range(d):
+                c.set(x, y, _grass_px(x, y))
+            c.set(x, d, rim)
+        if not mask & 4:  # south open
+            d = EDGE_WAVE[15 - x]
+            for y in range(d):
+                c.set(x, 15 - y, _grass_px(x, 15 - y))
+            c.set(x, 15 - d, rim)
+    for y in range(16):
+        if not mask & 2:  # east open
+            d = EDGE_WAVE[(y + 5) % 16]
+            for i in range(d):
+                c.set(15 - i, y, _grass_px(15 - i, y))
+            c.set(15 - d, y, rim)
+        if not mask & 8:  # west open
+            d = EDGE_WAVE[(y + 11) % 16]
+            for i in range(d):
+                c.set(i, y, _grass_px(i, y))
+            c.set(d, y, rim)
+
+
+def tile_path_m(mask):
+    c = noise_tile(C_PATH, [C_PATH_D], 5 + mask * 3, 7)
+    apply_grass_edges(c, mask, C_PATH_D)
+    return c
+
+
+def tile_sand_m(mask):
+    c = noise_tile(C_SAND, [C_SAND_D], 9 + mask * 3, 7)
+    apply_grass_edges(c, mask, C_SAND_D)
+    return c
 
 
 def tile_road():
@@ -826,6 +886,30 @@ def tile_bush():
     return c
 
 
+def tile_bush_b():
+    """rounder, berry-dotted bush variant"""
+    c = Canvas(16, 16)
+    pal = {"g": C_LEAF_D, "d": hex_rgba("2e6330"), "l": C_LEAF,
+           "b": hex_rgba("d05a70")}
+    art = [
+        ".....gggggg.....",
+        "...gggglgggggg..",
+        "..ggglgggggdggg.",
+        "..gdgggbggggggg.",
+        ".gggggggggglggg.",
+        ".ggblggdgggggbg.",
+        ".gggggggglggggg.",
+        "..ggdgggggggdg..",
+        "..gggglgbggggg..",
+        "...ggggggggdg...",
+        "....dggddggg....",
+        "................",
+    ]
+    c.blit_ascii(0, 2, art, pal)
+    c.outline(OUTLINE)
+    return c
+
+
 def tile_rock():
     c = Canvas(16, 16)
     pal = {"r": hex_rgba("a8a4a0"), "d": hex_rgba("828078"), "l": hex_rgba("c8c4bc")}
@@ -869,13 +953,13 @@ TILE_ORDER = [
     ("grass_a", lambda: tile_grass(3)),
     ("grass_b", lambda: tile_grass(17)),
     ("grass_c", lambda: noise_tile(C_GRASS, [C_GRASS_L], 23, 6)),
-    ("flower_0", lambda: tile_flower(0)),
-    ("flower_1", lambda: tile_flower(1)),
+    ("flower_0", lambda: tile_flower(0, 0)),
+    ("flower_1", lambda: tile_flower(1, 0)),
+    ("flower2_0", lambda: tile_flower(0, 1)),
+    ("flower2_1", lambda: tile_flower(1, 1)),
+    ("flower3_0", lambda: tile_flower(0, 2)),
+    ("flower3_1", lambda: tile_flower(1, 2)),
     ("tallgrass", tile_tallgrass),
-    ("path_a", lambda: tile_path(5)),
-    ("path_b", lambda: tile_path(19)),
-    ("sand_a", lambda: tile_sand(9)),
-    ("sand_b", lambda: tile_sand(21)),
     ("road", tile_road),
     ("road_dash", tile_road_dash),
     ("sidewalk", tile_sidewalk),
@@ -884,9 +968,11 @@ TILE_ORDER = [
     ("water_2", lambda: tile_water(2)),
     ("fence", tile_fence),
     ("bush", tile_bush),
+    ("bush_b", tile_bush_b),
     ("rock", tile_rock),
     ("sign", tile_sign),
-]
+] + [(f"path_{m}", (lambda mm: (lambda: tile_path_m(mm)))(m)) for m in range(16)] \
+  + [(f"sand_{m}", (lambda mm: (lambda: tile_sand_m(mm)))(m)) for m in range(16)]
 
 
 def build_tiles():
@@ -1299,27 +1385,28 @@ def prop_radio():
 
 
 def prop_horse():
-    """a chill brown horse, side view (beach horse ♥)"""
-    c = Canvas(26, 24)
+    """a chill brown horse, side view (beach horse ♥) — full muzzle + nostril"""
+    c = Canvas(28, 24)
     pal = {"b": hex_rgba("9c6a3c"), "B": hex_rgba("7a4e28"), "m": hex_rgba("4e3620"),
-           "w": hex_rgba("efe9db"), "e": hex_rgba("2a2018"), "p": hex_rgba("d8a878")}
+           "w": hex_rgba("efe9db"), "e": hex_rgba("2a2018"), "p": hex_rgba("d8a878"),
+           "n": hex_rgba("5e4326")}
     art = [
-        "................mm........",
-        "...............mmmm.......",
-        "...............mbbb.......",
-        "..............mbbbbb......",
-        "..............mbebb.......",
-        "..............mbbbb.......",
-        "...mm.........mbbp........",
-        "..mbbbbbbbbbbbbbbp........",
-        ".mbbbbbbbbbbbbbbb.........",
-        ".mbBbbbbbbbbbbbbb.........",
-        ".mbbbbbbbbbbbbbb..........",
-        "..mbbBbbbbbbbbbb..........",
-        "...bb.......bb.bb.........",
-        "...bb.......bb..bb........",
-        "...BB.......BB..BB........",
-        "...ww.......ww..ww........",
+        "...............mm...........",
+        "..............mmmm..........",
+        "..............mbbbb.........",
+        ".............mbbbbbb........",
+        ".............mbebbbbb.......",
+        ".............mbbbbppp.......",
+        "...mm........mbbbppnp.......",
+        "..mbbbbbbbbbbbbbbbppp.......",
+        ".mbbbbbbbbbbbbbbbb..........",
+        ".mbBbbbbbbbbbbbbb...........",
+        ".mbbbbbbbbbbbbbb............",
+        "..mbbBbbbbbbbbbb............",
+        "...bb.......bb.bb...........",
+        "...bb.......bb..bb..........",
+        "...BB.......BB..BB..........",
+        "...ww.......ww..ww..........",
     ]
     c.blit_ascii(0, 6, art, pal)
     c.outline(OUTLINE)
@@ -1420,6 +1507,170 @@ def prop_matryoshka():
     return c
 
 
+def prop_pisa():
+    """leaning tower of Pisa (Little Everywhere · Italy) — tiered, leaning right"""
+    c = Canvas(18, 34)
+    w = hex_rgba("f2ead8")
+    W = hex_rgba("d8cdb4")
+    d = hex_rgba("b5a888")
+    # (x, width, height) per tier, top first; x shrinks going down = top leans right
+    tiers = [(9, 5, 3), (8, 7, 4), (7, 7, 4), (6, 7, 4), (5, 7, 4), (4, 9, 5)]
+    y = 6
+    for (x, wdt, h) in tiers:
+        for j in range(h):
+            for i in range(wdt):
+                col = W if i >= wdt - 2 else w
+                if j == 0:
+                    col = d  # ring between tiers (the arcades)
+                c.set(x + i, y + j, col)
+        y += h
+    c.rect(10, 4, 3, 2, w)  # little bell chamber on top
+    c.outline(OUTLINE)
+    return c
+
+
+def prop_cactus():
+    """saguaro wearing a sombrero (Little Everywhere · Mexico)"""
+    c = Canvas(22, 28)
+    pal = {"g": hex_rgba("4e9e5c"), "G": hex_rgba("397a44"), "l": hex_rgba("6cbb74"),
+           "y": hex_rgba("e8c060"), "Y": hex_rgba("c89840"), "r": hex_rgba("cf4436")}
+    art = [
+        "........yyyy..........",
+        "......yyyyyyyy........",
+        "....yyYYryrYYyyy......",
+        "..yyyyyyyyyyyyyyyy....",
+        "........gGg...........",
+        "........gGg...........",
+        "..gg....glg....gg.....",
+        "..gG....glg....Gg.....",
+        "..gG....glg....Gg.....",
+        "..ggg...glg...ggg.....",
+        "...gggggglgggggg......",
+        "........glg...........",
+        "........glg...........",
+        "........gGg...........",
+        "........gGg...........",
+        "........gGg...........",
+    ]
+    c.blit_ascii(0, 10, art, pal)
+    c.outline(OUTLINE)
+    return c
+
+
+def prop_barrel():
+    """wine barrel with grapes on top (Little Everywhere · Moldova 🍇)"""
+    c = Canvas(16, 20)
+    pal = {"w": hex_rgba("a87c48"), "W": hex_rgba("845c30"), "k": hex_rgba("3a3540"),
+           "g": hex_rgba("7a4a8c"), "G": hex_rgba("5c3370"), "v": C_LEAF_D}
+    art = [
+        ".....v..........",
+        "....ggg.........",
+        "...gGggg........",
+        "....gGg.........",
+        "..wwwwwwwwww....",
+        ".wwwwwwwwwwww...",
+        ".kkkkkkkkkkkk...",
+        ".wwWwwwwwWwww...",
+        ".wwWwwwwwWwww...",
+        ".wwWwwwwwWwww...",
+        ".kkkkkkkkkkkk...",
+        ".wwwwwwwwwwww...",
+        "..wwwwwwwwww....",
+    ]
+    c.blit_ascii(0, 6, art, pal)
+    c.outline(OUTLINE)
+    return c
+
+
+def prop_blower():
+    """party blower for noah — 2 frames 16x8: rolled, fully extended"""
+    sheet = Canvas(32, 8)
+    pal = {"m": hex_rgba("e8c74a"), "r": hex_rgba("e8556a"), "y": hex_rgba("f0d264"),
+           "b": hex_rgba("7a9ce8")}
+    rolled = [
+        "mm.rr...",
+        "mmrrrr..",
+        "mm.rr...",
+    ]
+    a = Canvas(16, 8)
+    a.blit_ascii(1, 2, rolled, pal)
+    a.outline(OUTLINE)
+    sheet.blit(a, 0, 0)
+    extended = [
+        "mm.rryybbrry..",
+        "mmrryybbrryyr.",
+        "mm.rryybbrry..",
+    ]
+    b = Canvas(16, 8)
+    b.blit_ascii(1, 2, extended, pal)
+    b.outline(OUTLINE)
+    sheet.blit(b, 16, 0)
+    return sheet
+
+
+def prop_station():
+    """travel-log kiosk: wooden easel with a pinned map (Little Everywhere)"""
+    c = Canvas(24, 26)
+    pal = {"w": C_WOOD, "W": C_WOOD_D, "p": hex_rgba("efe9db"),
+           "g": hex_rgba("9ccf8c"), "b": hex_rgba("8ec4e8"),
+           "r": hex_rgba("e8556a"), "y": hex_rgba("f0c040"), "v": hex_rgba("8b5cf6")}
+    art = [
+        ".wwwwwwwwwwwwwwwwww.",
+        ".wppppppppppppppppw.",
+        ".wpbbggbbbgggbbbppw.",
+        ".wpbggggbbggggbrpw..",
+        ".wpbbgggybbgggbbpw..",
+        ".wpbgggbbbvggggbpw..",
+        ".wpbbbggbbbggbbbpw..",
+        ".wppppppppppppppppw.",
+        ".wwwwwwwwwwwwwwwwww.",
+        "...ww..........ww...",
+        "...ww..........ww...",
+        "..wWw..........wWw..",
+        "..ww..............ww",
+        "..ww..............ww",
+    ]
+    c.blit_ascii(1, 8, art, pal)
+    c.outline(OUTLINE)
+    return c
+
+
+def prop_garden():
+    """tomato patch, 2 frames 36x22: ripe / picked 🍅"""
+    sheet = Canvas(72, 22)
+    pal = {"w": C_WOOD, "W": C_WOOD_D, "s": hex_rgba("6e5230"), "S": hex_rgba("57401f"),
+           "g": C_LEAF, "G": C_LEAF_D, "l": C_LEAF_L, "t": hex_rgba("e04438"),
+           "T": hex_rgba("b02c24")}
+    for fi, ripe in enumerate((True, False)):
+        c = Canvas(36, 22)
+        # wooden bed + tilled soil
+        c.rect(1, 6, 34, 15, pal["w"])
+        c.rect(1, 6, 34, 1, pal["W"])
+        c.rect(1, 20, 34, 1, pal["W"])
+        c.rect(3, 8, 30, 11, pal["s"])
+        for j in range(9, 19, 3):
+            c.rect(3, j, 30, 1, pal["S"])
+        # tomato plants
+        plant = [
+            "..g..g..",
+            ".gglggG.",
+            "gGgggglg",
+            ".glgGgg.",
+        ]
+        for px in (4, 14, 24):
+            c.blit_ascii(px, 4, plant, pal)
+            if ripe:
+                c.set(px + 2, 6, pal["t"])
+                c.set(px + 3, 6, pal["t"])
+                c.set(px + 3, 7, pal["T"])
+                c.set(px + 6, 5, pal["t"])
+                c.set(px + 5, 8, pal["t"])
+                c.set(px + 6, 8, pal["T"])
+        c.outline(OUTLINE)
+        sheet.blit(c, fi * 36, 0)
+    return sheet
+
+
 def ride_sprites():
     """her + mookie on the quad — 3 cells 32x28: down, up, side(right)"""
     sheet = Canvas(96, 28)
@@ -1432,8 +1683,10 @@ def ride_sprites():
     }
     down = [
         "..............P.................",
-        ".............YY.................",
-        "...........hhYYhh...............",
+        "..............Y.................",
+        ".............RRR................",
+        ".............YYY................",
+        "...........hhhhhh...............",
         "..........hhhhhhhh..............",
         "..........hhsssshh..............",
         "..........hsessesh..............",
@@ -1452,8 +1705,10 @@ def ride_sprites():
     ]
     up = [
         "..............P.................",
-        ".............YY.................",
-        "...........hhYYhh...............",
+        "..............Y.................",
+        ".............RRR................",
+        ".............YYY................",
+        "...........hhhhhh...............",
         "..........hhhhhhhh..............",
         "..........hhhhhhhh..............",
         "..........hhhhhhhh..............",
@@ -1472,8 +1727,10 @@ def ride_sprites():
     ]
     side = [
         "..........P.....................",
-        ".........YY.....................",
-        ".......hhYYh....................",
+        "..........Y.....................",
+        ".........RRR....................",
+        ".........YYY....................",
+        ".......hhhhh....................",
         "......hhhhhhh...................",
         "......hhhssss...................",
         "......hhhssess..................",
@@ -1712,6 +1969,11 @@ def main():
     out["pyramid"] = prop_pyramid()
     out["cypress"] = prop_cypress()
     out["matryoshka"] = prop_matryoshka()
+    out["pisa"] = prop_pisa()
+    out["cactus"] = prop_cactus()
+    out["barrel"] = prop_barrel()
+    out["station"] = prop_station()
+    out["garden"] = prop_garden()
     out["quad_ride"] = ride_sprites()
     out["fx"] = prop_fx()
     out["shadow"] = prop_shadow()
@@ -1735,6 +1997,7 @@ def main():
                  ["tiles"],
                  ["tree", "palm", "figtree", "lamp", "bench", "quad", "sailboat"],
                  ["quad_ride", "horse", "column", "pyramid", "cypress", "matryoshka", "radio", "pumpkin"],
+                 ["pisa", "cactus", "barrel", "station", "garden"],
                  ["torii", "barrier", "fig", "fx", "shadow"],
                  ["la_home", "la_house_b", "taco_shop", "theater"],
                  ["apartment", "brownstone_b", "bu_building", "neu_building", "cafe"]]

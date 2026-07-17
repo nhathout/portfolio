@@ -56,6 +56,62 @@
         "(you picked a perfectly ripe fig. it's yours now.)"
       ]
     },
+    "garden": {
+      "title": "the tomato garden",
+      "lines": [
+        "A little raised bed, bursting with tomatoes. 🍅",
+        { "who": "noah", "text": "[TODO Noah: her tomato obsession — write it here. After this, pressing E on the garden picks a tomato (they regrow).]" }
+      ]
+    },
+    "travel_station": {
+      "title": "our travel log",
+      "lines": [
+        "A little easel with a map, covered in pins.",
+        { "who": "noah", "text": "every trip we take, you can log it here — it becomes a tiny monument on this road. our world grows with us ♥" }
+      ]
+    },
+    "lm_greece": {
+      "title": "Greece 🇬🇷",
+      "lines": [
+        "A marble column, quietly holding up the whole sky. The air smells like figs.",
+        { "who": "noah", "text": "[TODO Noah: one line about the Greece trip.]" }
+      ]
+    },
+    "lm_egypt": {
+      "title": "Egypt 🇪🇬",
+      "lines": [
+        "A pyramid! Four thousand years old and still the best-organized pile of rocks on earth.",
+        { "who": "noah", "text": "[TODO Noah: one line about Egypt / your heritage.]" }
+      ]
+    },
+    "lm_italy": {
+      "title": "Italy 🇮🇹",
+      "lines": [
+        "The tower leans. It has always leaned. It is doing its best.",
+        { "who": "noah", "text": "[TODO Noah: one line about Italy — the trip or the heritage.]" }
+      ]
+    },
+    "lm_mexico": {
+      "title": "Mexico 🇲🇽",
+      "lines": [
+        "A cactus in a sombrero. It has no worries whatsoever.",
+        { "who": "noah", "text": "[TODO Noah: one line about the Mexico trip.]" }
+      ]
+    },
+    "lm_moldova": {
+      "title": "Moldova 🇲🇩",
+      "lines": [
+        "A wine barrel with grapes on top — Moldova has more vineyards per person than anywhere on earth.",
+        { "who": "noah", "text": "[TODO Noah: one line about Moldova / her roots.]" }
+      ]
+    },
+    "lm_russia": {
+      "title": "Russia 🇷🇺",
+      "lines": [
+        "A matryoshka. Inside her is a smaller her, and inside that one, an even smaller one. Relatable.",
+        { "who": "noah", "text": "[TODO Noah: one line about her family / heritage.]" }
+      ]
+    },
     "route_quad": {
       "title": "the quad bike",
       "lines": [
@@ -153,6 +209,11 @@
     "la_neighbor": [
       [{ "text": "Lovely couple. You two remind me of me and my wife." },
        { "text": "Now shoo — you're standing on my sprinklers." }]
+    ],
+    "route_admirer": [
+      [{ "text": "(she squints at the pyramid, counting on her fingers)" },
+       { "text": "Greece, Italy, Egypt, Mexico, Moldova… all that together? I can't even commit to a coffee order." }],
+      [{ "text": "One little road, a whole world on it. You two collect countries like I collect parking tickets." }]
     ],
     "route_hiker": [
       [{ "text": "Careful up ahead — someone on a quad bike went by screaming about figs." },

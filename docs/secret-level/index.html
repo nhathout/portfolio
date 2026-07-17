@@ -54,6 +54,24 @@
       </div>
     </div>
 
+    <!-- travel log form -->
+    <div id="travel" class="overlay hidden">
+      <div class="title-card">
+        <div class="title-hearts">✈</div>
+        <h1>our travel log</h1>
+        <p>add a place we've been (or just went!) —<br/>a little monument appears in Little Everywhere.</p>
+        <form id="travel-form">
+          <input id="tv-country" type="text" maxlength="24" placeholder="country / place" autocomplete="off" />
+          <textarea id="tv-msg" maxlength="160" rows="3" placeholder="a tiny memory from the trip…"></textarea>
+          <div>
+            <button type="submit" class="pixel-btn">add ♥</button>
+            <button type="button" id="tv-cancel" class="pixel-btn pixel-btn--dim">not now</button>
+          </div>
+        </form>
+        <p class="tiny">it lands on a random free spot · walk up + E to reread it</p>
+      </div>
+    </div>
+
     <!-- pause menu -->
     <div id="pause" class="overlay hidden">
       <div class="title-card">
@@ -93,6 +111,40 @@
     <div id="fader"></div>
   </div>
 
+  <script>
+    // crash reporter: kaplay swallows errors into its blue screen, but it
+    // logs them via console.error first — capture that, plus window errors,
+    // show a copyable strip and remember the last one in localStorage.
+    (() => {
+      function report(msg) {
+        try { localStorage.setItem("sl_lasterror", `${new Date().toISOString()} ${msg}`); } catch {}
+        let el = document.getElementById("crash-strip");
+        if (!el) {
+          el = document.createElement("div");
+          el.id = "crash-strip";
+          el.style.cssText =
+            "position:fixed;left:0;right:0;bottom:0;z-index:99999;background:#8c1f2e;" +
+            "color:#fff;font:11px/1.6 monospace;padding:8px 34px 8px 10px;word-break:break-all;";
+          const x = document.createElement("span");
+          x.textContent = "✕";
+          x.style.cssText = "position:absolute;right:10px;top:8px;cursor:pointer;";
+          x.onclick = () => el.remove();
+          el.appendChild(x);
+          document.body.appendChild(el);
+        }
+        el.insertBefore(document.createTextNode(`the game hiccuped — tell noah: ${msg} `), el.firstChild);
+      }
+      const orig = console.error.bind(console);
+      console.error = (...a) => {
+        orig(...a);
+        const m = a.map((x) => (x && x.stack) || String(x)).join(" ");
+        if (/error/i.test(m)) report(m.slice(0, 500));
+      };
+      window.addEventListener("error", (e) => report(`${e.message} @ ${e.filename}:${e.lineno}`));
+      window.addEventListener("unhandledrejection", (e) =>
+        report(String((e.reason && (e.reason.stack || e.reason.message)) || e.reason).slice(0, 500)));
+    })();
+  </script>
   <script src="lib/kaplay.js"></script>
   <script type="module" src="src/main.js"></script>
 </body>

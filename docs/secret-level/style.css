@@ -258,6 +258,24 @@ html, body {
 #gate-msg { min-height: 16px; }
 #gate-msg.err { color: var(--coral) !important; }
 
+/* ---------- travel log form ---------- */
+#travel-form { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; align-items: center; }
+#travel-form input,
+#travel-form textarea {
+  font-family: inherit;
+  font-size: 11px;
+  line-height: 1.8;
+  padding: 12px 10px;
+  background: var(--paper);
+  border: 3px solid var(--ink);
+  border-radius: 3px;
+  color: var(--ink);
+  width: 100%;
+  max-width: 340px;
+}
+#travel-form textarea { resize: none; }
+#travel-form .pixel-btn { margin-top: 4px; }
+
 /* ---------- fader ---------- */
 #fader {
   position: absolute;

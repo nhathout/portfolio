@@ -23,6 +23,11 @@ const NPC_FALLBACK = {
     [{ text: "Careful past here — I saw someone on a quad bike screaming about figs." },
      { text: "…wait. Was that YOU two?" }],
   ],
+  route_admirer: [
+    [{ text: "(she squints at the pyramid, counting on her fingers)" },
+     { text: "Greece, Italy, Egypt, Mexico, Moldova… all that together? I can't even commit to a coffee order." }],
+    [{ text: "One little road, a whole world on it. You two collect countries like I collect parking tickets." }],
+  ],
   bos_student: [
     [{ text: "Is that a cat following you? Lucky." },
      { text: "My cat won't even make eye contact with me." }],
@@ -455,6 +460,99 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
     state.cutscene = false;
   }
 
+  // ------------------------------------------------------------ tomato garden 🍅
+  async function pickTomato() {
+    const g = k.get("gardenProp")[0];
+    if (!g) return;
+    if (g.frame === 0) {
+      g.frame = 1;
+      audio.pickup();
+      sparkleBurst(g.pos.add(0, -12), 6);
+      heartBurst(g.pos.add(0, -14), 2, 10);
+      const n = (parseInt(localStorage.getItem("sl_tomatoes") || "0", 10) || 0) + 1;
+      localStorage.setItem("sl_tomatoes", String(n));
+      toast(`TOMATO!! 🍅 (${n} picked)`);
+      setTimeout(() => { if (g.exists()) g.frame = 0; }, 40000); // they regrow
+    } else {
+      await dialogue.show([{ text: "(the tomatoes are still growing… patience, farmer.)" }]);
+    }
+  }
+
+  // ------------------------------------------------------------ travel log ✈
+  function travelEntries() {
+    try { return JSON.parse(localStorage.getItem("sl_travels") || "[]"); } catch { return []; }
+  }
+
+  function travelDataURL(country, id) {
+    const cv = document.createElement("canvas");
+    cv.width = 16; cv.height = 26;
+    const g = cv.getContext("2d");
+    let h = 0;
+    for (const ch of `${country}${id}`) h = ((h * 31 + ch.charCodeAt(0)) >>> 0);
+    const pals = [["#e8556a", "#f0d264"], ["#7a9ce8", "#f4f1e4"], ["#5fae6f", "#f0d264"],
+      ["#c78ae0", "#f8c8d8"], ["#e8913c", "#f4f1e4"], ["#4fc4b8", "#2b2028"]];
+    const [c1, c2] = pals[h % pals.length];
+    g.fillStyle = "#74747c"; g.fillRect(3, 24, 10, 2);   // pedestal
+    g.fillStyle = "#8f8f97"; g.fillRect(4, 21, 8, 3);
+    g.fillStyle = "#8a683c"; g.fillRect(7, 5, 2, 17);    // pole
+    g.fillStyle = "#2b2028"; g.fillRect(6, 4, 4, 1);     // finial
+    g.fillStyle = c1; g.fillRect(9, 5, 7, 7);            // flag
+    g.fillStyle = c2;
+    const style = (h >> 3) % 3;
+    if (style === 0) g.fillRect(9, 8, 7, 2);
+    else if (style === 1) g.fillRect(12, 5, 2, 7);
+    else g.fillRect(11, 7, 3, 3);
+    g.fillStyle = "#2b2028"; g.fillRect(9, 12, 7, 1);    // flag shadow line
+    return cv.toDataURL();
+  }
+
+  const loadedTravelSprites = new Set();
+  function spawnTravel(e) {
+    const name = `t_${e.id}`;
+    if (!loadedTravelSprites.has(name)) {
+      k.loadSprite(name, travelDataURL(e.country, e.id));
+      loadedTravelSprites.add(name);
+    }
+    k.add([
+      k.sprite(name), k.pos(e.x * T + 8, e.y * T + 16), k.anchor("bot"),
+      k.area({ shape: new k.Rect(k.vec2(-5, -5), 10, 5) }),
+      k.body({ isStatic: true }), k.z(e.y * T + 16),
+      "signpost", { lines: [`✈ ${e.country}`, e.msg] },
+    ]);
+  }
+
+  function travelFreeSpot(def) {
+    const entries = travelEntries();
+    const taken = new Set(entries.map((e) => `${e.x},${e.y}`));
+    for (let i = 0; i < 400; i++) {
+      const x = 2 + Math.floor(Math.random() * (def.ground[0].length - 4));
+      const y = 2 + Math.floor(Math.random() * (def.ground.length - 4));
+      if (def.ground[y][x] !== "." || def.objects[y][x] !== ".") continue;
+      if ("T" === def.objects[y - 1]?.[x] || "T" === def.objects[y + 1]?.[x]) continue;
+      let bad = taken.has(`${x},${y}`);
+      for (const p of def.props || []) if (Math.abs(p.x - x) <= 1 && Math.abs(p.y - y) <= 1) bad = true;
+      for (const pt of def.points || []) if (x >= pt.x - 1 && x <= pt.x + pt.w && y >= pt.y - 1 && y <= pt.y + pt.h) bad = true;
+      for (const f of [...(def.figs || []), ...(def.pumpkins || [])]) if (f.x === x && f.y === y) bad = true;
+      if (!bad) return { x, y };
+    }
+    return { x: 21, y: 6 }; // guaranteed-clear fallback
+  }
+
+  function addTravelEntry(country, msg) {
+    const def = MAPS.route;
+    const spot = travelFreeSpot(def);
+    const entry = { id: Date.now(), country, msg, ...spot };
+    const entries = travelEntries();
+    entries.push(entry);
+    localStorage.setItem("sl_travels", JSON.stringify(entries));
+    if (state.map === "route") {
+      spawnTravel(entry);
+      heartBurst(k.vec2(entry.x * T + 8, entry.y * T + 6), 5, 12);
+    }
+    audio.fanfare();
+    toast(`✈ ${country} — added to our little world ♥`);
+  }
+
   // ------------------------------------------------------------ NPC talk
   async function talkNoah() {
     const n = state.noah;
@@ -514,6 +612,8 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
     const id = zone.pointId;
     if (id === "apartment" && finaleReady() && !save.finale) return runFinale();
     if (id === "route_quad" && save.seen.has(id)) return mount(); // seen the memory → ride
+    if (id === "garden" && save.seen.has(id)) return pickTomato();
+    if (id === "travel_station" && save.seen.has(id)) return ui.openTravelForm(addTravelEntry);
     if (id === "radio") { audio.kpop(); heartBurst(zone.focusPos.clone(), 7, 16, [162, 108, 255]); }
     if (id === "beach_horse") { audio.neigh(); heartBurst(zone.focusPos.clone(), 3, 10); }
     audio.confirm();
@@ -529,11 +629,13 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
       persist();
       checkFinaleReady();
       if (id === "route_quad") mount(); // first time: memory, then she rides off
+      if (id === "garden") pickTomato();
+      if (id === "travel_station") ui.openTravelForm(addTravelEntry);
     }
   }
 
   function doInteract() {
-    if (!state.started) return;
+    if (!state.started || ui.travelOpen?.()) return;
     if (dialogue.advance()) return;
     if (state.cutscene || state.transitioning || state.paused) return;
     if (state.mounted) return dismount();
@@ -563,16 +665,28 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
       const h = (x * 31 + y * 17 + x * y) % 10;
       return h < 7 ? F.grass_a : h < 9 ? F.grass_b : F.grass_c;
     };
+    // neighbor-mask autotiling: open sides of paths/sand get wavy grass edges
+    const PATHY = new Set(["-", "k", "r", "R", "s"]);
+    const SANDY = new Set(["s", "w", "-", "k", "r", "R"]);
+    const maskAt = (x, y, set) => {
+      const at = (a, b) => {
+        const row = def.ground[b];
+        if (!row || a < 0 || a >= row.length) return true; // map edge = connected
+        return set.has(row[a]);
+      };
+      return (at(x, y - 1) ? 1 : 0) | (at(x + 1, y) ? 2 : 0) | (at(x, y + 1) ? 4 : 0) | (at(x - 1, y) ? 8 : 0);
+    };
+    const FLOWER_ANIMS = ["flower", "flower2", "flower3"];
     k.addLevel(def.ground, {
       tileWidth: T, tileHeight: T,
       tiles: {}, // required by kaplay even when only wildcardTile is used
       wildcardTile: (sym, p) => {
         switch (sym) {
           case ".": return [k.sprite("tiles", { frame: grassVar(p.x, p.y) })];
-          case "*": return [k.sprite("tiles", { anim: "flower" })];
+          case "*": return [k.sprite("tiles", { anim: FLOWER_ANIMS[(p.x * 3 + p.y * 5) % 3] })];
           case "t": return [k.sprite("tiles", { frame: F.tallgrass })];
-          case "-": return [k.sprite("tiles", { frame: (p.x * 13 + p.y * 7) % 3 ? F.path_a : F.path_b })];
-          case "s": return [k.sprite("tiles", { frame: (p.x * 13 + p.y * 7) % 3 ? F.sand_a : F.sand_b })];
+          case "-": return [k.sprite("tiles", { frame: F[`path_${maskAt(p.x, p.y, PATHY)}`] })];
+          case "s": return [k.sprite("tiles", { frame: F[`sand_${maskAt(p.x, p.y, SANDY)}`] })];
           case "r": return [k.sprite("tiles", { frame: F.road })];
           case "R": return [k.sprite("tiles", { frame: F.road_dash })];
           case "k": return [k.sprite("tiles", { frame: F.sidewalk })];
@@ -620,7 +734,8 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
       [...row].forEach((ch, x) => {
         const o = OBJ[ch];
         if (!o) return;
-        const [name, frame, ox, w, h] = o;
+        let [name, frame, ox, w, h] = o;
+        if (ch === "b") frame = (x * 7 + y * 11) % 2 ? F.bush : F.bush_b; // variety
         const comps = [
           frame === null ? k.sprite(name) : k.sprite(name, { frame }),
           k.pos(x * T + 8, y * T + T),
@@ -655,6 +770,10 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
       matryoshka: { ox: -4, w: 8, h: 5 },
       radio: { ox: -6, w: 12, h: 6 },
       horse: { ox: -10, w: 20, h: 8 },
+      pisa: { ox: -5, w: 10, h: 6 },
+      cactus: { ox: -6, w: 12, h: 6 },
+      barrel: { ox: -6, w: 12, h: 6 },
+      station: { ox: -10, w: 20, h: 8 },
     };
     for (const p of def.props || []) {
       const px = (p.x + 0.5) * T;
@@ -668,6 +787,13 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
         ]);
       } else if (p.type === "quad") {
         if (!save.mounted) spawnQuadParked(px, py); // she rode it off somewhere
+      } else if (p.type === "garden") {
+        k.add([
+          k.sprite("garden", { frame: 0 }),
+          k.pos(px, py), k.anchor("bot"),
+          k.area({ shape: new k.Rect(k.vec2(-17, -14), 34, 14) }),
+          k.body({ isStatic: true }), k.z(py), "gardenProp",
+        ]);
       } else if (DECOR[p.type]) {
         const d = DECOR[p.type];
         k.add([
@@ -760,6 +886,9 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
       });
     }
 
+    // ---- her travel log ✈ (auto-generated monuments on Little Everywhere)
+    if (map === "route") for (const e of travelEntries()) spawnTravel(e);
+
     // ---- exits
     for (const e of def.exits) {
       k.add([
@@ -834,11 +963,11 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
     // ---- exclamation bubble over posted noah
     if (state.noah && !save.met) {
       const n = state.noah;
-      const ex = k.add([k.sprite("fx", { frame: 5 }), k.pos(n.pos.x, n.pos.y - 26), k.anchor("bot"), k.z(1e5), { t: 0 }]);
+      const ex = k.add([k.sprite("fx", { frame: 5 }), k.pos(n.pos.x, n.pos.y - 30), k.anchor("bot"), k.z(1e5), { t: 0 }]);
       ex.onUpdate(() => {
         if (save.met) return ex.destroy();
         ex.t += k.dt();
-        ex.pos.y = n.pos.y - 26 + Math.sin(ex.t * 3) * 2;
+        ex.pos.y = n.pos.y - 30 + Math.sin(ex.t * 3) * 2;
       });
     }
 
@@ -861,7 +990,7 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
         }
         if (state.noah) {
           const d = state.noah.pos.dist(player.pos);
-          if (d < 26 && d < bestD) { bestD = d; best = { kind: "noah", obj: state.noah, focusPos: state.noah.pos, yOff: -28 }; }
+          if (d < 26 && d < bestD) { bestD = d; best = { kind: "noah", obj: state.noah, focusPos: state.noah.pos, yOff: -32 }; }
         }
         if (state.mookie) {
           const d = state.mookie.pos.dist(player.pos);
@@ -869,7 +998,7 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
         }
         for (const t of k.get("townsfolk")) {
           const d = t.pos.dist(player.pos);
-          if (d < 26 && d < bestD) { bestD = d; best = { kind: "npc", obj: t, focusPos: t.pos, yOff: -28 }; }
+          if (d < 26 && d < bestD) { bestD = d; best = { kind: "npc", obj: t, focusPos: t.pos, yOff: -32 }; }
         }
         for (const s of k.get("signpost")) {
           const d = s.pos.dist(player.pos);
@@ -961,6 +1090,10 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
     if (tag === "INPUT" || tag === "TEXTAREA") return; // let the gate type
     const key = ev.key.toLowerCase();
     held.add(key);
+    if (ui.travelOpen?.()) { // the travel-log form is typing-first
+      if (key === "escape") ui.closeTravelForm();
+      return;
+    }
     if (key === "escape") { if (!ev.repeat) setPaused(!state.paused); return; }
     if (state.paused) return;
     if (INTERACT.has(key)) { ev.preventDefault(); if (!ev.repeat) doInteract(); }

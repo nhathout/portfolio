@@ -42,6 +42,8 @@ k.loadSprite("tiles", "assets/tiles.png", {
   anims: {
     water: { from: F.water_0, to: F.water_2, speed: 2, loop: true, pingpong: true },
     flower: { from: F.flower_0, to: F.flower_1, speed: 1.6, loop: true },
+    flower2: { from: F.flower2_0, to: F.flower2_1, speed: 1.4, loop: true },
+    flower3: { from: F.flower3_0, to: F.flower3_1, speed: 1.8, loop: true },
   },
 });
 
@@ -81,13 +83,14 @@ k.loadSprite("pumpkin", "assets/pumpkin.png", {
   anims: { twinkle: { from: 0, to: 1, speed: 1.6, loop: true } },
 });
 k.loadSprite("quad_ride", "assets/quad_ride.png", { sliceX: 3, sliceY: 1 });
+k.loadSprite("garden", "assets/garden.png", { sliceX: 2, sliceY: 1 });
 k.loadSprite("fx", "assets/fx.png", {
   sliceX: 6, sliceY: 1,
   anims: { sparkle: { from: 2, to: 3, speed: 3.5, loop: true } },
 });
 for (const n of ["tree", "palm", "figtree", "lamp", "bench", "quad", "torii",
   "barrier", "sailboat", "shadow", "radio", "horse", "column", "pyramid",
-  "cypress", "matryoshka",
+  "cypress", "matryoshka", "pisa", "cactus", "barrel", "station",
   "b_la_home", "b_la_house_b", "b_taco_shop", "b_theater", "b_apartment",
   "b_brownstone_b", "b_bu_building", "b_neu_building", "b_cafe"]) {
   if (n === "figtree") k.loadSprite(n, `assets/${n}.png`, { sliceX: 2, sliceY: 1 });
@@ -117,6 +120,20 @@ const ui = {
     $("btn-resume").addEventListener("click", () => setPaused(false));
     $("btn-exit").addEventListener("click", () => location.assign("../"));
   },
+  travelOpen() {
+    return !$("travel").classList.contains("hidden");
+  },
+  openTravelForm(onAdd) {
+    this._travelAdd = onAdd;
+    $("tv-country").value = "";
+    $("tv-msg").value = "";
+    $("travel").classList.remove("hidden");
+    setTimeout(() => $("tv-country").focus(), 50);
+  },
+  closeTravelForm() {
+    $("travel").classList.add("hidden");
+    document.activeElement?.blur?.();
+  },
   setMuted(m) {
     $("mute-btn").classList.toggle("muted", m);
   },
@@ -140,6 +157,16 @@ const ui = {
     $("btn-a").addEventListener("pointerdown", (e) => { e.preventDefault(); onInteract(); });
   },
 };
+
+$("travel-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const country = $("tv-country").value.trim();
+  const msg = $("tv-msg").value.trim() || "we were here ♥";
+  if (!country) return $("tv-country").focus();
+  ui.closeTravelForm();
+  ui._travelAdd?.(country, msg);
+});
+$("tv-cancel").addEventListener("click", () => ui.closeTravelForm());
 
 $("mute-btn").addEventListener("click", () => ui.setMuted(audio.toggle()));
 ui.setMuted(audio.muted);

@@ -45,6 +45,14 @@ Both fade to `/secret-level/`, which asks for the password.
 - 📻 a **boombox** on the Boston esplanade plays a suspiciously catchy song
   and bursts purple hearts. 💜
 - 🪧 **signs** near map edges are readable (E) and show directions + distances.
+- 🍅 the **tomato garden** by Noah's LA house: after its memory, E picks a
+  tomato (they regrow; total picked is remembered).
+- 🌍 **Little Everywhere** has one landmark per country (Greece, Egypt, Italy,
+  Mexico, Moldova, Russia) — each gives a short brief + a `[TODO Noah]` line.
+- ✈ the **travel-log easel** on Little Everywhere: she can log a new trip
+  (country + a tiny memory) and an auto-generated flag monument appears on a
+  random free spot. Entries live in her browser's localStorage (`sl_travels`)
+  — device-local, so they stay on the machine she plays on.
 - ⏸ **ESC** pauses, with a button back to the website.
 - Talk to **Noah** near the start — he'll follow her. **Mookie** always follows.
   Both are pettable/talkable. **Townsfolk** (grey/orange/purple NPCs) around the

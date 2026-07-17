@@ -69,6 +69,7 @@ export class Chip {
   engine(alt) { this.tone(alt ? 82 : 74, 0.07, "square", 0.045); this.tone(46, 0.07, "sawtooth", 0.028); }
   rev() { this.tone(70, 0.4, "sawtooth", 0.06, 0, 160); this.tone(110, 0.3, "square", 0.04, 0.1, 120); }
   neigh() { this.tone(620, 0.28, "sawtooth", 0.035, 0, -320); this.tone(430, 0.22, "triangle", 0.03, 0.06, -200); }
+  toot() { this.tone(340, 0.16, "sawtooth", 0.035, 0, 240); this.tone(500, 0.2, "square", 0.02, 0.05, 120); }
   kpop() { [523, 659, 784, 659, 880, 784, 1047, 880].forEach((f, i) => this.tone(f, 0.11, "square", 0.05, i * 0.11)); }
   noahVoice() { this.playSample("noah", 0.6); }
   confirm() { this.tone(660, 0.07); this.tone(990, 0.09, "square", 0.035, 0.07); }

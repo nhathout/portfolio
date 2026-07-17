@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Secret Level</title>
+  <link rel="icon" href="assets/favicon.png" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="stage">
+    <canvas id="game"></canvas>
+
+    <!-- HUD -->
+    <div id="hud" class="hidden">
+      <div class="hud-chip"><span class="hud-icon hud-heart"></span><span id="hud-mem">0/0</span></div>
+      <div class="hud-chip"><span class="hud-icon hud-fig"></span><span id="hud-fig">0/0</span></div>
+      <div class="hud-chip"><span class="hud-icon hud-pump"></span><span id="hud-pump">0/0</span></div>
+    </div>
+    <button id="mute-btn" class="hidden" aria-label="Toggle sound">♪</button>
+
+    <!-- map name toast -->
+    <div id="toast" class="hidden"></div>
+
+    <!-- dialogue -->
+    <div id="dialogue" class="hidden">
+      <div id="dlg-name" class="hidden"></div>
+      <div id="dlg-text"></div>
+      <div id="dlg-more">▼</div>
+    </div>
+
+    <!-- touch controls -->
+    <div id="touch-ui" class="hidden">
+      <div id="dpad">
+        <button data-dir="up" class="pad-btn pad-up">▲</button>
+        <button data-dir="left" class="pad-btn pad-left">◀</button>
+        <button data-dir="right" class="pad-btn pad-right">▶</button>
+        <button data-dir="down" class="pad-btn pad-down">▼</button>
+      </div>
+      <button id="btn-a" class="pad-btn">A</button>
+    </div>
+
+    <!-- title screen -->
+    <div id="title" class="overlay hidden">
+      <div class="title-card">
+        <div class="title-hearts">♥ ♥ ♥</div>
+        <h1 id="title-name">…</h1>
+        <p id="title-sub"></p>
+        <button id="btn-start" class="pixel-btn">Start</button>
+        <button id="btn-continue" class="pixel-btn hidden">Continue</button>
+        <p id="title-hint" class="tiny">arrows / WASD to walk · E to interact · shift to run</p>
+        <p class="tiny"><a href="#" id="btn-reset" class="hidden">start over</a></p>
+      </div>
+    </div>
+
+    <!-- pause menu -->
+    <div id="pause" class="overlay hidden">
+      <div class="title-card">
+        <div class="title-hearts">❚❚</div>
+        <h1>paused</h1>
+        <p>take your time. mookie will wait.</p>
+        <button id="btn-resume" class="pixel-btn">resume</button>
+        <button id="btn-exit" class="pixel-btn pixel-btn--dim">back to the website</button>
+        <p class="tiny">esc to resume · progress auto-saves</p>
+      </div>
+    </div>
+
+    <!-- finale banner -->
+    <div id="finale-banner" class="overlay hidden">
+      <div class="title-card">
+        <div class="title-hearts big" id="finale-hearts">♥</div>
+        <h1 id="finale-title"></h1>
+        <p id="finale-sub"></p>
+        <button id="btn-finale-close" class="pixel-btn">♥</button>
+      </div>
+    </div>
+
+    <!-- password gate -->
+    <div id="gate" class="overlay">
+      <div class="title-card">
+        <div class="gate-lock">♥</div>
+        <h1 class="gate-h">psst… you found a secret level</h1>
+        <p class="gate-p">this one’s not for everyone.<br/>whisper the magic word:</p>
+        <form id="gate-form">
+          <input id="gate-input" type="password" autocomplete="off" spellcheck="false" placeholder="password" />
+          <button type="submit" class="pixel-btn">unlock</button>
+        </form>
+        <p id="gate-msg" class="tiny"></p>
+      </div>
+    </div>
+
+    <div id="fader"></div>
+  </div>
+
+  <script src="lib/kaplay.js"></script>
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,200 @@
+{
+  "meta": {
+    "title": "our little world",
+    "subtitle": "a tiny game about us. happy birthday ♥",
+    "playerName": "Sasha",
+    "noahName": "Noah",
+    "catName": "Mookie",
+    "intro": [
+      "Mini-LA. The sun is out, the ocean is doing its thing…",
+      "…and someone with a familiar face is waiting for you by the path.",
+      "(walk with the arrow keys or WASD. press E next to sparkles, people, and cats.)"
+    ]
+  },
+
+  "points": {
+    "la_home": {
+      "title": "Noah's house",
+      "lines": [
+        { "who": "noah", "text": "[TODO Noah: this is 'my house' in Mini-LA — write the memory or story you want here. e.g. what you'd have shown her if she visited hometown-you.]" }
+      ]
+    },
+    "la_taco": {
+      "title": "the taco spot (rename me)",
+      "lines": [
+        { "who": "noah", "text": "[TODO Noah: LA landmark #2 — swap this building's meaning + write the inside joke. The sprite is a yellow shop with a red awning.]" }
+      ]
+    },
+    "la_theater": {
+      "title": "the theater (rename me)",
+      "lines": [
+        { "who": "noah", "text": "[TODO Noah: LA landmark #3 — another memory goes here.]" }
+      ]
+    },
+    "la_beach": {
+      "title": "the beach",
+      "lines": [
+        "The Pacific! It's cold and beautiful and full of surfers with better hair than Noah.",
+        { "who": "noah", "text": "[TODO Noah: beach memory or the first-time-she-visits-LA plan.]" }
+      ]
+    },
+    "beach_horse": {
+      "title": "a horse?! on the beach?!",
+      "lines": [
+        "A very calm horse is watching the waves. It seems to be waiting for a competition.",
+        { "who": "noah", "text": "[TODO Noah: the Miami beach horse-competition memory — she loves riding, write it here. (riding him in-game is coming in a later update.)]" }
+      ]
+    },
+
+    "route_figtree": {
+      "title": "the fig tree",
+      "lines": [
+        "An old fig tree leans over the path. It smells like a Greek summer.",
+        { "who": "noah", "text": "remember Greece? me, you, and one extremely rented quad bike." },
+        { "who": "noah", "text": "you'd yell FIG!! out of absolutely nowhere and I'd have to emergency-brake so you could raid a stranger's tree." },
+        { "who": "her", "text": "FIG!!!" },
+        "(you picked a perfectly ripe fig. it's yours now.)"
+      ]
+    },
+    "route_quad": {
+      "title": "the quad bike",
+      "lines": [
+        "It's THE quad bike. Somehow it followed you both home.",
+        { "who": "noah", "text": "[TODO Noah: the Greece quad-bike memory — the drive, the dust, the backseat commentary…]" }
+      ]
+    },
+    "route_pond": {
+      "title": "the pond",
+      "lines": [
+        "A little pond, still as glass. A couple of ducks judge you silently.",
+        { "who": "noah", "text": "[TODO Noah: optional pond memory — or delete this point from src/maps.js if you don't want it.]" }
+      ]
+    },
+
+    "bu": {
+      "title": "Boston University",
+      "lines": [
+        { "who": "noah", "text": "[TODO Noah: the BU building where it all started — write how you two met here.]" }
+      ]
+    },
+    "neu": {
+      "title": "Northeastern",
+      "lines": [
+        { "who": "noah", "text": "[TODO Noah: her school. Something nice about a Northeastern person, if such a thing can be written by a BU student.]" }
+      ]
+    },
+    "cafe": {
+      "title": "first date spot (rename me)",
+      "lines": [
+        { "who": "noah", "text": "[TODO Noah: the first date — where it was, what you actually remember, what she claims happened instead.]" }
+      ]
+    },
+    "esplanade": {
+      "title": "the esplanade",
+      "lines": [
+        "The Charles glitters. A sailboat drifts by, unbothered.",
+        { "who": "noah", "text": "[TODO Noah: river walk memory — or delete this point in src/maps.js if you don't want it.]" }
+      ]
+    },
+    "radio": {
+      "title": "someone's boombox",
+      "lines": [
+        "Someone left a boombox by the river. It is, of course, playing K-pop.",
+        { "who": "her", "text": "…is this? IT IS." },
+        { "who": "noah", "text": "[TODO Noah: her BTS / K-pop thing — the song, the story, the 💜. Write it proudly.]" }
+      ]
+    },
+    "apartment": {
+      "title": "our apartment",
+      "lines": [
+        { "who": "noah", "text": "[TODO Noah: your apartment — the memory of moving in / living together. (after all memories + figs are found, this door becomes the finale.)]" }
+      ]
+    },
+
+    "japan_gate": {
+      "title": "???",
+      "lines": [
+        "🚧 A huge red gate. The sign says: COMING SOON. 🚧",
+        { "who": "noah", "text": "[TODO Noah: the teaser — Japan trip? new kitten? Write the wink-wink hint here, save the real reveal for the finale.]" },
+        { "who": "noah", "text": "no spoilers. keep exploring ♥" }
+      ]
+    }
+  },
+
+  "noah": {
+    "greet_la": [
+      { "who": "noah", "text": "hey you. welcome to Mini-LA — I shrunk my hometown so you'd finally visit." },
+      { "who": "noah", "text": "see those sparkles? each one is something I remember. go poke them. I'll come with you." },
+      { "who": "noah", "text": "(and keep an eye out for figs. you'll know why.)" }
+    ],
+    "chat": [
+      [{ "who": "noah", "text": "the sparkles are memories. the figs are figs. the cat is a menace." }],
+      [{ "who": "noah", "text": "there's a road east of here. it leads somewhere that smells like Greece." }],
+      [{ "who": "noah", "text": "I hid figs in the tall grass. Mookie may or may not have moved some." }],
+      [{ "who": "noah", "text": "[TODO Noah: add more small talk lines — these cycle when she talks to you.]" }]
+    ],
+    "after": [
+      [{ "who": "noah", "text": "happy birthday ♥" }],
+      [{ "who": "noah", "text": "[TODO Noah: post-finale chatter.]" }]
+    ]
+  },
+
+  "mookie": {
+    "lines": [
+      "Mookie: mrrrp?",
+      "(Mookie headbutts your ankle, then acts like it never happened.)",
+      "Mookie: meow. meow meow. (a full speech. no notes.)",
+      "(Mookie is following you. He would follow you anywhere.)"
+    ]
+  },
+
+  "npcs": {
+    "_comment": "Background townsfolk. Each value is an array of pages, OR an array-of-arrays to cycle several on repeat talks. Delete any to fall back to the built-in defaults. [TODO Noah: optional — make these inside jokes if you want!]",
+    "la_neighbor": [
+      [{ "text": "Lovely couple. You two remind me of me and my wife." },
+       { "text": "Now shoo — you're standing on my sprinklers." }]
+    ],
+    "route_hiker": [
+      [{ "text": "Careful up ahead — someone on a quad bike went by screaming about figs." },
+       { "text": "…wait. Was that YOU two?" }]
+    ],
+    "bos_student": [
+      [{ "text": "Is that a cat following you? Lucky. Mine won't even look at me." }]
+    ],
+    "bos_runner": [
+      [{ "text": "Go Terriers! …or Huskies. I forget which school I go to." }]
+    ],
+    "bos_oldman": [
+      [{ "text": "The Charles is lovely this time of year. Don't drink it, though." }]
+    ]
+  },
+
+  "figs": {
+    "collect": "FIG!! ({n}/{total})",
+    "all": [
+      "(that's every fig on the map.)",
+      { "who": "noah", "text": "unstoppable. the strangers' trees of Greece never stood a chance." }
+    ]
+  },
+
+  "pumpkins": {
+    "collect": "PUMPKINN!! ({n}/{total})",
+    "all": [
+      "(that's every pumpkin. PUMPKINN!!)",
+      { "who": "noah", "text": "[TODO Noah: the pumpkin prize — the story behind PUMPKINN!, a link/QR to the clip, or a little reward reveal.]" }
+    ]
+  },
+
+  "finale": {
+    "prompt": [
+      { "who": "noah", "text": "hey… that's everything I hid. almost everything. meet me at our apartment? ♥" }
+    ],
+    "lines": [
+      "(Noah is fidgeting. He practiced this.)",
+      { "who": "noah", "text": "[TODO Noah: THE REVEAL. Japan flights? the kitten? Write the real thing here — this is the moment.]" },
+      { "who": "noah", "text": "happy birthday. I love you." }
+    ],
+    "title": "HAPPY BIRTHDAY ♥",
+    "subtitle": "love, noah (and mookie)"
+  }
+}

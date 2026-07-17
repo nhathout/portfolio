@@ -1,0 +1,27 @@
+{
+ "tileSize": 16,
+ "cols": 8,
+ "rows": 3,
+ "frames": {
+  "grass_a": 0,
+  "grass_b": 1,
+  "grass_c": 2,
+  "flower_0": 3,
+  "flower_1": 4,
+  "tallgrass": 5,
+  "path_a": 6,
+  "path_b": 7,
+  "sand_a": 8,
+  "sand_b": 9,
+  "road": 10,
+  "road_dash": 11,
+  "sidewalk": 12,
+  "water_0": 13,
+  "water_1": 14,
+  "water_2": 15,
+  "fence": 16,
+  "bush": 17,
+  "rock": 18,
+  "sign": 19
+ }
+}

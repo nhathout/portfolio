@@ -41,6 +41,117 @@ const NPC_FALLBACK = {
   ],
 };
 
+// ---------------------------------------------------------------- travel log
+// The landmarks already on Little Everywhere count as the couple's trip
+// baseline. Logging a country again at the easel gets a visit-number badge.
+const HERITAGE_LIST = [
+  { country: "Greece", flag: "🇬🇷", visited: true },
+  { country: "Egypt", flag: "🇪🇬", visited: true },
+  { country: "Italy", flag: "🇮🇹", visited: true },
+  // LA is her hometown → heritage; its map marker is the seeded Walk-of-Fame
+  // star trip (no static landmark, so the sprite isn't duplicated — the ×2
+  // badge on the star covers both).
+  { country: "Los Angeles", flag: "🌴", visited: true },
+  // (Mexico is a logged trip, not heritage — see SEED_TRIPS)
+  { country: "Moldova", flag: "🇲🇩", visited: false }, // soon ♥
+  { country: "Russia", flag: "🇷🇺", visited: false },  // soon ♥
+];
+
+// Starter entries for the travel log — trips already taken (+ NY planned).
+// Seeded once per browser via the sl_travels_seeded tombstone list, so a
+// demolished one never comes back. `sprite` overrides the country's default
+// monument (Egypt trip #2 was spent sleeping on a Nile boat ♥).
+const SEED_TRIPS = [
+  { id: 1, country: "Mexico", msg: "tacos, sun, and one very smug cactus. [TODO Noah: the Mexico trip ♥]" },
+  { id: 2, country: "Canada", msg: "maple syrup country. everyone was so polite. [TODO Noah: the Canada trip ♥]" },
+  { id: 3, country: "Egypt", sprite: "felucca", msg: "New Year's on the Nile — we literally slept on a boat. [TODO Noah: the rest of the story ♥]" },
+  { id: 4, country: "Puerto Rico", msg: "Old San Juan, garitas, and very loud coquís. [TODO Noah: the PR trip ♥]" },
+  { id: 5, country: "Los Angeles", msg: "the hometown tour: beaches, palms, and one very specific taco spot. [TODO Noah ♥]" },
+  { id: 6, country: "New York", soon: true, msg: "the city that never sleeps is waiting for us. soon ♥" },
+  { id: 7, country: "Boston", home: true, msg: "our city — where every trip starts and ends. home ♥" },
+  { id: 8, country: "Seattle", msg: "World Cup road trip — screaming for Egypt under the Space Needle. [TODO Noah: the Seattle trip ♥]" },
+  { id: 9, country: "Japan", soon: true, msg: "torii gates, vending machines, cherry blossoms — the pier teaser was a promise. soon ♥" },
+  { id: 10, country: "Korea", soon: true, msg: "seoul nights, street food, and a certain concert. soon ♥" },
+];
+
+// typed country/city (normalized) → premade monument sprite
+const COUNTRY_SPRITES = {
+  greece: "column", egypt: "pyramid", italy: "pisa", mexico: "cactus",
+  moldova: "barrel", russia: "matryoshka",
+  canada: "maple",
+  "puerto rico": "garita", puertorico: "garita",
+  boston: "lobster",
+  "new york": "liberty", newyork: "liberty", nyc: "liberty",
+  usa: "liberty", us: "liberty", america: "liberty", "united states": "liberty",
+  miami: "flamingo", florida: "flamingo",
+  "los angeles": "wofstar", la: "wofstar", hollywood: "wofstar", california: "wofstar",
+  seattle: "needle", washington: "needle",
+  korea: "seoulgate", "south korea": "seoulgate", southkorea: "seoulgate", seoul: "seoulgate",
+  france: "eiffel", paris: "eiffel",
+  uk: "bigben", england: "bigben", london: "bigben", "united kingdom": "bigben",
+  japan: "minitorii", tokyo: "minitorii", kyoto: "minitorii",
+  germany: "stein", berlin: "stein", munich: "stein",
+  turkey: "balloon", istanbul: "balloon", cappadocia: "balloon",
+  netherlands: "windmill", holland: "windmill", amsterdam: "windmill",
+  china: "lantern", beijing: "lantern", shanghai: "lantern",
+};
+
+// collision boxes for premade monuments (anchor "bot", like other props)
+const MONUMENT_HITS = {
+  column: { ox: -4, w: 8, h: 5 }, pyramid: { ox: -13, w: 26, h: 8 },
+  pisa: { ox: -5, w: 10, h: 6 }, cactus: { ox: -6, w: 12, h: 6 },
+  barrel: { ox: -6, w: 12, h: 6 }, matryoshka: { ox: -4, w: 8, h: 5 },
+  maple: { ox: -5, w: 10, h: 5 }, garita: { ox: -5, w: 10, h: 5 },
+  lobster: { ox: -7, w: 14, h: 5 }, liberty: { ox: -6, w: 12, h: 6 },
+  flamingo: { ox: -4, w: 8, h: 5 }, eiffel: { ox: -8, w: 16, h: 6 },
+  bigben: { ox: -5, w: 10, h: 6 }, minitorii: { ox: -8, w: 16, h: 5 },
+  stein: { ox: -5, w: 10, h: 5 }, balloon: { ox: -5, w: 10, h: 5 },
+  windmill: { ox: -6, w: 12, h: 6 }, lantern: { ox: -4, w: 8, h: 5 },
+  felucca: { ox: -8, w: 16, h: 5 }, wofstar: { ox: -7, w: 14, h: 6 },
+  needle: { ox: -5, w: 10, h: 5 }, seoulgate: { ox: -8, w: 16, h: 6 },
+};
+
+// tiny 3×5 pixel glyphs for the badges drawn on monuments (×N / soon / ♥)
+const BADGE_GLYPHS = {
+  0: ["111", "101", "101", "101", "111"], 1: ["010", "110", "010", "010", "111"],
+  2: ["111", "001", "111", "100", "111"], 3: ["111", "001", "011", "001", "111"],
+  4: ["101", "101", "111", "001", "001"], 5: ["111", "100", "111", "001", "111"],
+  6: ["111", "100", "111", "101", "111"], 7: ["111", "001", "010", "010", "010"],
+  8: ["111", "101", "111", "101", "111"], 9: ["111", "101", "111", "001", "111"],
+  "×": ["000", "101", "010", "101", "000"],
+  s: ["111", "100", "111", "001", "111"], o: ["111", "101", "101", "101", "111"],
+  n: ["110", "101", "101", "101", "101"],
+  "♥": ["01010", "11111", "11111", "01110", "00100"],
+};
+
+function badgeDataURL(text, color) {
+  const glyphs = [...text].map((ch) => BADGE_GLYPHS[ch]).filter(Boolean);
+  const w = glyphs.reduce((a, g) => a + g[0].length + 1, 1);
+  const cv = document.createElement("canvas");
+  cv.width = w; cv.height = 9;
+  const g = cv.getContext("2d");
+  g.fillStyle = "#2b2028";
+  g.fillRect(0, 0, w, 9);
+  g.fillStyle = color;
+  let x = 1;
+  for (const gl of glyphs) {
+    for (let r = 0; r < 5; r++)
+      for (let cx = 0; cx < gl[r].length; cx++)
+        if (gl[r][cx] === "1") g.fillRect(x + cx, 2 + r, 1, 1);
+    x += gl[0].length + 1;
+  }
+  return cv.toDataURL();
+}
+
+const normCountry = (s) =>
+  String(s || "").toLowerCase().normalize("NFKD")
+    .replace(/[^a-z ]/g, "").replace(/\s+/g, " ").trim();
+
+function monumentSprite(country) {
+  const n = normCountry(country);
+  return COUNTRY_SPRITES[n] || COUNTRY_SPRITES[n.replace(/ /g, "")] || null;
+}
+
 export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
   const F = tilesMeta.frames;
   const requiredIds = allPointIds();
@@ -479,8 +590,41 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
   }
 
   // ------------------------------------------------------------ travel log ✈
+  // seed starter trips exactly once per browser (tombstoned by id, so a
+  // demolished seed stays demolished — see phase-8/9 lesson)
+  let seedsChecked = false;
+  function applySeedTrips() {
+    let seeded, entries;
+    try { seeded = JSON.parse(localStorage.getItem("sl_travels_seeded") || "[]"); } catch { seeded = []; }
+    const missing = SEED_TRIPS.filter((s) => !seeded.includes(s.id));
+    if (!missing.length) return;
+    try { entries = JSON.parse(localStorage.getItem("sl_travels") || "[]"); } catch { entries = []; }
+    for (const s of missing) {
+      entries.push({ ...s, ...travelFreeSpot(MAPS.route, entries) });
+      seeded.push(s.id);
+    }
+    localStorage.setItem("sl_travels", JSON.stringify(entries));
+    localStorage.setItem("sl_travels_seeded", JSON.stringify(seeded));
+  }
+
   function travelEntries() {
-    try { return JSON.parse(localStorage.getItem("sl_travels") || "[]"); } catch { return []; }
+    if (!seedsChecked) {
+      seedsChecked = true;
+      applySeedTrips();
+    }
+    try {
+      const all = JSON.parse(localStorage.getItem("sl_travels") || "[]");
+      // one-time cleanup: an earlier build briefly seeded the heritage
+      // landmarks into this list — they're hand-placed map props again,
+      // so drop any stragglers to avoid duplicates
+      const entries = all.filter((e) => !e.heritage);
+      if (entries.length !== all.length) {
+        localStorage.setItem("sl_travels", JSON.stringify(entries));
+      }
+      return entries;
+    } catch {
+      return [];
+    }
   }
 
   function travelDataURL(country, id) {
@@ -506,23 +650,125 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
     return cv.toDataURL();
   }
 
-  const loadedTravelSprites = new Set();
-  function spawnTravel(e) {
-    const name = `t_${e.id}`;
-    if (!loadedTravelSprites.has(name)) {
-      k.loadSprite(name, travelDataURL(e.country, e.id));
-      loadedTravelSprites.add(name);
-    }
-    k.add([
-      k.sprite(name), k.pos(e.x * T + 8, e.y * T + 16), k.anchor("bot"),
-      k.area({ shape: new k.Rect(k.vec2(-5, -5), 10, 5) }),
-      k.body({ isStatic: true }), k.z(e.y * T + 16),
-      "signpost", { lines: [`✈ ${e.country}`, e.msg] },
-    ]);
+  /** visit number for an entry, counted among logged trips only — the
+   *  heritage landmarks are memories, not counts. "soon" entries are plans
+   *  and "home" is where we live, so neither counts either. */
+  function visitNumber(entry, entries) {
+    const n = normCountry(entry.country);
+    const prior = entries.filter((e) => !e.soon && !e.home && normCountry(e.country) === n && e.id < entry.id).length;
+    return prior + 1;
   }
 
-  function travelFreeSpot(def) {
-    const entries = travelEntries();
+  const loadedTravelSprites = new Set();
+  function spawnTravel(e) {
+    if (e.soon) return; // plans live in the menu only — no sprite until logged
+    // per-entry sprite override (e.g. the Nile felucca) → country's premade
+    // monument → procedural flag for unknown places
+    const premade = (e.sprite && MONUMENT_HITS[e.sprite] && e.sprite) || monumentSprite(e.country);
+    let spriteComp;
+    if (premade) {
+      spriteComp = k.sprite(premade);
+    } else {
+      const name = `t_${e.id}`;
+      if (!loadedTravelSprites.has(name)) {
+        k.loadSprite(name, travelDataURL(e.country, e.id));
+        loadedTravelSprites.add(name);
+      }
+      spriteComp = k.sprite(name);
+    }
+    const hit = (premade && MONUMENT_HITS[premade]) || { ox: -5, w: 10, h: 5 };
+    const visit = e.home ? 0 : visitNumber(e, travelEntries());
+    const title = e.home
+      ? `⌂ ${e.country} · home ♥`
+      : `✈ ${e.country}${visit > 1 ? ` · trip #${visit}` : ""}`;
+    const obj = k.add([
+      spriteComp, k.pos(e.x * T + 8, e.y * T + 16), k.anchor("bot"),
+      k.area({ shape: new k.Rect(k.vec2(hit.ox, -hit.h), hit.w, hit.h) }),
+      k.body({ isStatic: true }), k.z(e.y * T + 16),
+      "signpost", "travelmark", { lines: [title, e.msg] },
+    ]);
+    // tiny corner badge on the sprite itself: gold ×N for repeat trips,
+    // a little heart for home
+    const badge = e.home ? ["♥", "#ff7b93"]
+      : visit > 1 ? [`×${visit}`, "#f0d264"] : null;
+    if (badge) {
+      const name = `bdg_${badge[0]}`;
+      if (!loadedTravelSprites.has(name)) {
+        k.loadSprite(name, badgeDataURL(badge[0], badge[1]));
+        loadedTravelSprites.add(name);
+      }
+      const h = obj.height || 18;
+      k.add([
+        k.sprite(name), k.pos(e.x * T + 13, e.y * T + 18 - h),
+        k.anchor("center"), k.z(e.y * T + 17), "travelmark",
+      ]);
+    }
+  }
+
+  function refreshTravelObjs() {
+    if (state.map !== "route") return;
+    k.get("travelmark").forEach((o) => o.destroy());
+    for (const e of travelEntries()) spawnTravel(e);
+  }
+
+  /** handlers for the travel-log form: add, move (re-roll spot), demolish */
+  function travelManage() {
+    const saveEntries = (entries) => localStorage.setItem("sl_travels", JSON.stringify(entries));
+    const decorate = (entries) => {
+      for (const e of entries) e._visit = e.soon || e.home ? 0 : visitNumber(e, entries);
+      return entries;
+    };
+    // heritage rows carry only the heritage tag — logged trips are counted
+    // separately below, so going to Egypt once isn't shown as "twice"
+    const heritageRows = () =>
+      HERITAGE_LIST.map((h) => ({ country: h.country, flag: h.flag, visited: h.visited }));
+    return {
+      entries: decorate(travelEntries()),
+      heritage: heritageRows(),
+      onAdd: addTravelEntry,
+      onEdit: (id, msg) => {
+        const entries = travelEntries();
+        const e = entries.find((x) => x.id === id);
+        const next = String(msg || "").trim();
+        if (e && next) {
+          e.msg = next;
+          saveEntries(entries);
+          refreshTravelObjs();
+          audio.confirm();
+          toast(`✎ ${e.country} — message updated`);
+        }
+        return decorate(entries);
+      },
+      onMove: (id) => {
+        const entries = travelEntries();
+        const e = entries.find((x) => x.id === id);
+        if (e) {
+          const spot = travelFreeSpot(MAPS.route);
+          e.x = spot.x;
+          e.y = spot.y;
+          saveEntries(entries);
+          refreshTravelObjs();
+          audio.confirm();
+          toast(`✈ ${e.country} found a new spot`);
+        }
+        return decorate(entries);
+      },
+      onDelete: (id) => {
+        const all = travelEntries();
+        const e = all.find((x) => x.id === id);
+        const entries = all.filter((x) => x.id !== id);
+        saveEntries(entries);
+        if (e && state.map === "route") sparkleBurst(k.vec2(e.x * T + 8, e.y * T + 8), 8);
+        refreshTravelObjs();
+        audio.close();
+        toast(`💥 ${e ? e.country : "monument"} demolished`);
+        return decorate(entries);
+      },
+    };
+  }
+
+  function travelFreeSpot(def, entriesOverride) {
+    const entries = entriesOverride || travelEntries();
     const taken = new Set(entries.map((e) => `${e.x},${e.y}`));
     for (let i = 0; i < 400; i++) {
       const x = 2 + Math.floor(Math.random() * (def.ground[0].length - 4));
@@ -540,17 +786,32 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
 
   function addTravelEntry(country, msg) {
     const def = MAPS.route;
-    const spot = travelFreeSpot(def);
-    const entry = { id: Date.now(), country, msg, ...spot };
     const entries = travelEntries();
-    entries.push(entry);
+    // logging a country we'd planned as "soon" turns the plan into the real
+    // trip — its sprite finally appears on the map
+    const plan = entries.find((e) => e.soon && normCountry(e.country) === normCountry(country));
+    let entry;
+    if (plan) {
+      delete plan.soon;
+      plan.msg = msg;
+      Object.assign(plan, travelFreeSpot(def, entries));
+      entry = plan;
+    } else {
+      entry = { id: Date.now(), country, msg, ...travelFreeSpot(def, entries) };
+      entries.push(entry);
+    }
     localStorage.setItem("sl_travels", JSON.stringify(entries));
     if (state.map === "route") {
       spawnTravel(entry);
       heartBurst(k.vec2(entry.x * T + 8, entry.y * T + 6), 5, 12);
     }
+    const visit = visitNumber(entry, entries);
     audio.fanfare();
-    toast(`✈ ${country} — added to our little world ♥`);
+    toast(plan
+      ? `✈ ${entry.country} — we finally went! ♥`
+      : visit > 1
+        ? `✈ ${country} — trip #${visit}! ♥`
+        : `✈ ${country} — added to our little world ♥`);
   }
 
   // ------------------------------------------------------------ NPC talk
@@ -613,7 +874,7 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
     if (id === "apartment" && finaleReady() && !save.finale) return runFinale();
     if (id === "route_quad" && save.seen.has(id)) return mount(); // seen the memory → ride
     if (id === "garden" && save.seen.has(id)) return pickTomato();
-    if (id === "travel_station" && save.seen.has(id)) return ui.openTravelForm(addTravelEntry);
+    if (id === "travel_station" && save.seen.has(id)) return ui.openTravelForm(travelManage());
     if (id === "radio") { audio.kpop(); heartBurst(zone.focusPos.clone(), 7, 16, [162, 108, 255]); }
     if (id === "beach_horse") { audio.neigh(); heartBurst(zone.focusPos.clone(), 3, 10); }
     audio.confirm();
@@ -630,7 +891,7 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
       checkFinaleReady();
       if (id === "route_quad") mount(); // first time: memory, then she rides off
       if (id === "garden") pickTomato();
-      if (id === "travel_station") ui.openTravelForm(addTravelEntry);
+      if (id === "travel_station") ui.openTravelForm(travelManage());
     }
   }
 
@@ -645,7 +906,12 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
     else if (f.kind === "noah") talkNoah();
     else if (f.kind === "mookie") talkMookie();
     else if (f.kind === "npc") talkTownsfolk(f.obj);
-    else if (f.kind === "sign") { audio.blip(); dialogue.show(f.obj.lines.map((t) => ({ text: t }))); }
+    else if (f.kind === "sign") {
+      audio.blip();
+      // lines may already be {who,text} objects (heritage dialogue) — only
+      // plain strings (regular signs / simple travel postcards) get wrapped
+      dialogue.show(f.obj.lines.map((t) => (typeof t === "string" ? { text: t } : t)));
+    }
     else if (f.kind === "quad") mount();
   }
 

@@ -137,10 +137,10 @@ HER = {                                # the player <3
     "s": hex_rgba("fadcbe"),           # skin (light)
     "S": hex_rgba("e6bd98"),           # skin shade
     "e": hex_rgba("35241d"),           # eyes
-    "t": hex_rgba("f278a2"),           # top (pink — her favorite)
-    "T": hex_rgba("d1517f"),           # top shade
-    "d": hex_rgba("5271a3"),           # denim shorts
-    "D": hex_rgba("3e5780"),           # denim shade
+    "t": hex_rgba("f278a2"),           # dress bodice (pink — her favorite)
+    "T": hex_rgba("d1517f"),           # bodice shade
+    "d": hex_rgba("f6a8c8"),           # dress skirt (lighter pink)
+    "D": hex_rgba("d876a6"),           # skirt shade / hem
     "w": hex_rgba("f6ecf0"),           # shoes (pinkish white)
 }
 
@@ -215,9 +215,9 @@ C_LEAF_L = hex_rgba("6cbb5e")
 # cols: [stand, stepA, stand, stepB]
 # ---------------------------------------------------------------------------
 
-FW, FH = 16, 28         # frame size (4 extra rows of headroom for the hat)
+FW, FH = 16, 28         # frame size (4 rows of headroom, kept for engine offsets)
 TORSO_H = 18            # torso art rows 0..17, legs rows 18..23
-HEAD_PAD = 4            # body drawn this far down; the hat lives in the pad
+HEAD_PAD = 4            # body drawn this far down (headroom above)
 
 HER_DOWN = [
     "................",
@@ -317,6 +317,69 @@ LEGS_SIDE = {
         "......ssss......",
         ".....ss..ss.....",
         "....ww....ww....",
+        "................",
+    ],
+}
+
+# Sasha's puffy princess dress (Peach-style ♥) — puff sleeves on the torso,
+# bell skirt drawn in the leg rows so her shoes peek out while she walks.
+# The plain HER_* torsos + LEGS_* below stay in use for npc_woman.
+HER_DRESS_DOWN = HER_DOWN[:13] + [
+    "...hhtttttthh...",
+    "..tTttttttttTt..",
+    "..stttttttttts..",
+    "...sTttttttTs...",
+    "...dddddddddd...",
+]
+
+HER_DRESS_UP = HER_UP[:15] + [
+    "...sthhhhhhts...",
+    "...sThhhhhhTs...",
+    "...ddhhhhhhdd...",
+]
+
+HER_DRESS_SIDE = HER_SIDE[:13] + [
+    "....hhtttttt....",
+    "...httttttttt...",
+    "....htttttss....",
+    "...hdddddddd....",
+    "...dddddddddd...",
+]
+
+SKIRT_FRONT = {
+    "stand": [
+        "..dddddddddddd..",
+        ".ddDddddddddDdd.",
+        ".dddddddddddddd.",
+        ".DDDDDDDDDDDDDD.",
+        ".....ww..ww.....",
+        "................",
+    ],
+    "a": [
+        "..dddddddddddd..",
+        ".ddDddddddddDdd.",
+        ".dddddddddddddd.",
+        ".DDDDDDDDDDDDDD.",
+        "....ww.....ww...",
+        "................",
+    ],
+}
+
+SKIRT_SIDE = {
+    "stand": [
+        "..dddddddddddd..",
+        ".ddDddddddddDdd.",
+        ".dddddddddddddd.",
+        ".DDDDDDDDDDDDDD.",
+        "......ww.ww.....",
+        "................",
+    ],
+    "a": [
+        "..dddddddddddd..",
+        ".ddDddddddddDdd.",
+        ".dddddddddddddd.",
+        ".DDDDDDDDDDDDDD.",
+        ".....ww...ww....",
         "................",
     ],
 }
@@ -1671,6 +1734,431 @@ def prop_garden():
     return sheet
 
 
+# ---------------------------------------------------------------------------
+# TRAVEL MONUMENTS — premade sprites for countries/cities in the travel log.
+# world.js COUNTRY_SPRITES maps typed names ("canada", "new york", …) to these.
+# ---------------------------------------------------------------------------
+
+def mon_maple():
+    """Canada — a proud red maple leaf on a little plinth"""
+    c = Canvas(16, 20)
+    pal = {"r": hex_rgba("d63c3c"), "R": hex_rgba("a82828"), "s": hex_rgba("8f8f97"),
+           "S": hex_rgba("74747c")}
+    art = [
+        ".......r........",
+        "..r...rrr...r...",
+        ".rrr.rrrrr.rrr..",
+        ".rrrrrrrrrrrr...",
+        "..rrrrrRrrrr....",
+        "...rrrrrrrr.....",
+        ".rrrrrRrrrrrr...",
+        "..rrrrrrrrrr....",
+        "....rrRrrr......",
+        "......rr........",
+        "......rr........",
+    ]
+    c.blit_ascii(0, 3, art, pal)
+    c.rect(4, 15, 8, 2, pal["s"])
+    c.rect(3, 17, 10, 2, pal["S"])
+    c.outline(OUTLINE)
+    return c
+
+
+def mon_garita():
+    """Puerto Rico — an El Morro garita (stone sentry turret)"""
+    c = Canvas(14, 20)
+    pal = {"s": hex_rgba("e8dcc0"), "S": hex_rgba("c8b894"), "d": hex_rgba("a89870"),
+           "k": hex_rgba("3a3540")}
+    art = [
+        ".....ss.......",
+        "...sssss......",
+        "..sssssss.....",
+        "..sSsssSs.....",
+        "..sssssss.....",
+        "..ssskksss....",
+        "..ssskksss....",
+        "..sSskksSs....",
+        "..sssssss.....",
+        "..sSsssSs.....",
+        "..sssssss.....",
+        "..dddddddd....",
+    ]
+    c.blit_ascii(0, 6, art, pal)
+    c.set(6, 3, pal["d"])
+    c.outline(OUTLINE)
+    return c
+
+
+def mon_lobster():
+    """Boston — a very confident lobster"""
+    c = Canvas(18, 16)
+    pal = {"r": hex_rgba("d84838"), "R": hex_rgba("a83224"), "e": hex_rgba("2a2018"),
+           "w": hex_rgba("f0b8a8")}
+    art = [
+        ".rr.........rr....",
+        "rrrr.......rrrr...",
+        "rrRr.......rRrr...",
+        ".rr.........rr....",
+        "..rr..rrrr..rr....",
+        "...rrrreerrrr.....",
+        "....rrrrrrrr......",
+        "....RrrrrrrR......",
+        ".....rrrrrr.......",
+        "....rrRrrRrr......",
+        ".....rrrrrr.......",
+        "......rRRr........",
+        ".....rrrrrr.......",
+    ]
+    c.blit_ascii(0, 2, art, pal)
+    c.outline(OUTLINE)
+    return c
+
+
+def mon_liberty():
+    """New York — a mini Statue of Liberty"""
+    c = Canvas(16, 30)
+    pal = {"g": hex_rgba("6fb89a"), "G": hex_rgba("4f927a"), "y": hex_rgba("f0d264"),
+           "s": hex_rgba("b8ac90"), "S": hex_rgba("948a70")}
+    art = [
+        "............yy..",
+        "............yy..",
+        ".....g......gg..",
+        "....ggg.....gg..",
+        "...g.g.g....gg..",
+        "....ggg....gg...",
+        "....gGg...gg....",
+        "....ggggggg.....",
+        "....ggggg.......",
+        "....gGggg.......",
+        "....ggggg.......",
+        "...ggGgggg......",
+        "...ggggggg......",
+        "..gggGggggg.....",
+        "..ggggggggg.....",
+    ]
+    c.blit_ascii(0, 6, art, pal)
+    c.rect(3, 21, 10, 3, pal["s"])
+    c.rect(2, 24, 12, 3, pal["S"])
+    c.outline(OUTLINE)
+    return c
+
+
+def mon_flamingo():
+    """Miami — a pink flamingo (remember the beach horses?)"""
+    c = Canvas(14, 22)
+    pal = {"p": hex_rgba("f288a8"), "P": hex_rgba("d0608a"), "k": hex_rgba("2a2018"),
+           "y": hex_rgba("e8c060")}
+    art = [
+        "....pp........",
+        "...pppk.......",
+        "...pp.........",
+        "...pp.........",
+        "...pp.........",
+        "...pp..pppp...",
+        "...pppppppppp.",
+        "....pppPPppp..",
+        ".....pppppp...",
+        "......pppp....",
+        ".......pp.....",
+        ".......p......",
+        ".......p......",
+        "......pp......",
+    ]
+    c.blit_ascii(0, 4, art, pal)
+    c.set(7, 18, pal["y"])
+    c.set(7, 19, pal["y"])
+    c.outline(OUTLINE)
+    return c
+
+
+def mon_eiffel():
+    """Paris — the Eiffel Tower"""
+    c = Canvas(18, 30)
+    pal = {"i": hex_rgba("6a5f52"), "I": hex_rgba("4e4438"), "l": hex_rgba("8a7d6c")}
+    art = [
+        "........i.........",
+        "........i.........",
+        ".......iii........",
+        ".......ili........",
+        ".......iii........",
+        "......iiIii.......",
+        "......ii.ii.......",
+        ".....iii.iii......",
+        ".....ii...ii......",
+        "....iiiIiIiii.....",
+        "....ii.....ii.....",
+        "...iii.....iii....",
+        "...ii.......ii....",
+        "..iii..iii..iii...",
+        "..ii..ii.ii..ii...",
+        ".iii.ii...ii.iii..",
+        ".ii.ii.....ii.ii..",
+    ]
+    c.blit_ascii(0, 11, art, pal)
+    c.outline(OUTLINE)
+    return c
+
+
+def mon_bigben():
+    """London — Big Ben"""
+    c = Canvas(14, 30)
+    pal = {"t": hex_rgba("c8b088"), "T": hex_rgba("a08858"), "w": hex_rgba("f4f1e4"),
+           "k": hex_rgba("3a3540"), "g": hex_rgba("5f8f6f")}
+    art = [
+        ".....t........",
+        "....ttt.......",
+        "...ttttt......",
+        "...tTtTt......",
+        "...ttttt......",
+        "...twwwt......",
+        "...twkwt......",
+        "...twwwt......",
+        "...ttttt......",
+        "...tTtTt......",
+        "...ttttt......",
+        "...tTtTt......",
+        "...ttttt......",
+        "...tTtTt......",
+        "...ttttt......",
+        "..ttttttt.....",
+    ]
+    c.blit_ascii(0, 10, art, pal)
+    c.outline(OUTLINE)
+    return c
+
+
+def mon_minitorii():
+    """Japan — a little torii gate (the big one is still coming soon…)"""
+    c = Canvas(20, 18)
+    pal = {"r": hex_rgba("cf4436"), "R": hex_rgba("9c2e24"), "k": hex_rgba("2b2028")}
+    art = [
+        "kkkkkkkkkkkkkkkkkk..",
+        ".rrrrrrrrrrrrrrrr...",
+        ".RRrrrrrrrrrrrrRR...",
+        "...rr.........rr....",
+        "..rrrrrrrrrrrrrr....",
+        "...rr.........rr....",
+        "...rr.........rr....",
+        "...rR.........Rr....",
+        "...rr.........rr....",
+        "...rr.........rr....",
+        "..kkk.........kkk...",
+    ]
+    c.blit_ascii(0, 6, art, pal)
+    c.outline(OUTLINE)
+    return c
+
+
+def mon_stein():
+    """Germany — a beer stein with a proud head of foam"""
+    c = Canvas(14, 16)
+    pal = {"b": hex_rgba("7a9ce8"), "B": hex_rgba("5878c0"), "w": hex_rgba("f8f4e8"),
+           "y": hex_rgba("e8c060"), "Y": hex_rgba("c89840")}
+    art = [
+        "..www.w.......",
+        ".wwwwww.......",
+        ".wwwwwww......",
+        ".yyyyyyy......",
+        ".ybyByby.ww...",
+        ".ybbbbby.yy...",
+        ".ybyByby.yy...",
+        ".ybbbbbyyy....",
+        ".ybyByby......",
+        ".yyyyyyy......",
+        ".YyyyyyY......",
+    ]
+    c.blit_ascii(0, 4, art, pal)
+    c.outline(OUTLINE)
+    return c
+
+
+def mon_balloon():
+    """Turkey — a Cappadocia hot-air balloon"""
+    c = Canvas(14, 22)
+    pal = {"r": hex_rgba("e8556a"), "y": hex_rgba("f0d264"), "t": hex_rgba("4fc4b8"),
+           "k": hex_rgba("6e5230"), "K": hex_rgba("57401f")}
+    art = [
+        "....ryty......",
+        "..rrytyryy....",
+        ".rrytyrytyy...",
+        ".ryty.rytyy...",
+        ".rrytyrytyy...",
+        ".rryty.ytyy...",
+        "..rrytyryy....",
+        "...ryytyy.....",
+        "....k..k......",
+        "....k..k......",
+        "...kKKKKk.....",
+        "...kkkkkk.....",
+    ]
+    c.blit_ascii(0, 4, art, pal)
+    c.outline(OUTLINE)
+    return c
+
+
+def mon_windmill():
+    """Netherlands — a windmill with lattice sails"""
+    c = Canvas(20, 24)
+    pal = {"b": hex_rgba("b06a4e"), "B": hex_rgba("8c5038"), "s": hex_rgba("8a7d6c"),
+           "S": hex_rgba("6a5f52"), "w": hex_rgba("f4f1e4")}
+    art = [
+        "..s.......s.........",
+        "...s..s..s..........",
+        "....s.s.s...........",
+        ".....sss............",
+        "..sssSsSsss.........",
+        ".....sss............",
+        "....s.s.s...........",
+        "...s..s..s..........",
+        "..s...bbb...........",
+        "......bbb...........",
+        ".....bbbbb..........",
+        ".....bBbBb..........",
+        ".....bbwbb..........",
+        ".....bbbbb..........",
+        "....bbBbBbb.........",
+        "....bbbbbbb.........",
+    ]
+    c.blit_ascii(0, 7, art, pal)
+    c.outline(OUTLINE)
+    return c
+
+
+def mon_lantern():
+    """China — a red paper lantern"""
+    c = Canvas(12, 18)
+    pal = {"r": hex_rgba("d84040"), "R": hex_rgba("a82c2c"), "y": hex_rgba("f0c040"),
+           "Y": hex_rgba("c89830")}
+    art = [
+        "....yy......",
+        "...yyyy.....",
+        "..rrrrrr....",
+        ".rrRrrRrr...",
+        ".rrrrrrrr...",
+        ".rRrrrrRr...",
+        ".rrrrrrrr...",
+        ".rrRrrRrr...",
+        "..rrrrrr....",
+        "...yyyy.....",
+        "....yy......",
+        "....Yy......",
+        "....yY......",
+    ]
+    c.blit_ascii(0, 3, art, pal)
+    c.outline(OUTLINE)
+    return c
+
+
+def mon_felucca():
+    """Egypt, trip #2 — the Nile felucca they slept on for New Year's ♥"""
+    c = Canvas(20, 20)
+    pal = {"w": hex_rgba("f4f1e4"), "W": hex_rgba("d8d4c8"), "m": hex_rgba("5e4326"),
+           "h": hex_rgba("8a683c"), "H": hex_rgba("6e5230"), "b": hex_rgba("4f97d8")}
+    art = [
+        "..........w.........",
+        ".........ww.........",
+        "........wwwm........",
+        ".......wwwwm........",
+        "......wwwWwm........",
+        ".....wwwwwwm........",
+        "....wwwWwwwm........",
+        "...wwwwwwwwm........",
+        "......m....m........",
+        ".hhhhhhhhhhhhhh.....",
+        "..hHHHHHHHHHHh......",
+        "...hhhhhhhhhh.......",
+        "..b.bb.b..bb.b......",
+    ]
+    c.blit_ascii(0, 5, art, pal)
+    c.outline(OUTLINE)
+    return c
+
+
+def mon_wofstar():
+    """Los Angeles — a Walk of Fame star (her name on it, obviously)"""
+    c = Canvas(16, 16)
+    pal = {"k": hex_rgba("4a4550"), "K": hex_rgba("3a3540"), "p": hex_rgba("f288a8"),
+           "P": hex_rgba("d0608a"), "y": hex_rgba("e8c060")}
+    art = [
+        "kkkkkkkkkkkkkk",
+        "kKkkkkkpkkkkKk",
+        "kkkkkkppplkkkk".replace("l", "p"),
+        "kkkpppppppppkk",
+        "kkkkpppppppkkk",
+        "kkkkkpppppkkkk",
+        "kkkkpppKpppkkk",
+        "kkkppkkkkkppkk",
+        "kKkkkkkkkkkkKk",
+        "kkkkkkyykkkkkk",
+        "kkkkkkkkkkkkkk",
+    ]
+    c.blit_ascii(1, 3, art, pal)
+    c.outline(OUTLINE)
+    return c
+
+
+def mon_needle():
+    """Seattle — the Space Needle (World Cup trip, Egypt game!)"""
+    c = Canvas(14, 26)
+    pal = {"w": hex_rgba("f4f1e4"), "W": hex_rgba("c8c4b8"), "o": hex_rgba("e8913c"),
+           "r": hex_rgba("d84040")}
+    art = [
+        "......r.......",
+        "......w.......",
+        ".....ooo......",
+        "..wwwwwwwww...",
+        ".wWWWWWWWWWw..",
+        "..wwwwwwwww...",
+        "....w.w.w.....",
+        ".....wWw......",
+        ".....wWw......",
+        ".....wWw......",
+        ".....wWw......",
+        "....wwWww.....",
+        "....w.W.w.....",
+        "...wW.w.Ww....",
+        "..ww..w..ww...",
+        "..w...w...w...",
+    ]
+    c.blit_ascii(0, 8, art, pal)
+    c.outline(OUTLINE)
+    return c
+
+
+def mon_seoulgate():
+    """Korea — a little dancheong palace gate (soon ♥)"""
+    c = Canvas(18, 18)
+    pal = {"g": hex_rgba("3f9070"), "G": hex_rgba("2c6e54"), "r": hex_rgba("b04038"),
+           "w": hex_rgba("f4f1e4"), "s": hex_rgba("8f8f97"), "S": hex_rgba("74747c"),
+           "k": hex_rgba("2b2028")}
+    art = [
+        "g................g",
+        "gg.gggggggggggg.gg",
+        ".ggggGGGGGGGGgggg.",
+        "..gggggggggggggg..",
+        "...wwwwwwwwwwww...",
+        "...rr..rrrr..rr...",
+        "...rr..r..r..rr...",
+        "..ssssssssssssss..",
+        ".sssssSkkkkSsssss.",
+        ".sssssSkkkkSsssss.",
+        ".sssssSkkkkSsssss.",
+    ]
+    c.blit_ascii(0, 5, art, pal)
+    c.outline(OUTLINE)
+    return c
+
+
+MONUMENTS = {
+    "maple": mon_maple, "garita": mon_garita, "lobster": mon_lobster,
+    "liberty": mon_liberty, "flamingo": mon_flamingo, "eiffel": mon_eiffel,
+    "bigben": mon_bigben, "minitorii": mon_minitorii, "stein": mon_stein,
+    "balloon": mon_balloon, "windmill": mon_windmill, "lantern": mon_lantern,
+    "felucca": mon_felucca, "wofstar": mon_wofstar,
+    "needle": mon_needle, "seoulgate": mon_seoulgate,
+}
+
+
 def ride_sprites():
     """her + mookie on the quad — 3 cells 32x28: down, up, side(right)"""
     sheet = Canvas(96, 28)
@@ -1682,10 +2170,6 @@ def ride_sprites():
         "Y": HAT_PAL["Y"], "P": HAT_PAL["P"], "S": hex_rgba("8c8c94"),
     }
     down = [
-        "..............P.................",
-        "..............Y.................",
-        ".............RRR................",
-        ".............YYY................",
         "...........hhhhhh...............",
         "..........hhhhhhhh..............",
         "..........hhsssshh..............",
@@ -1704,10 +2188,6 @@ def ride_sprites():
         "......kkkk........kkkk..........",
     ]
     up = [
-        "..............P.................",
-        "..............Y.................",
-        ".............RRR................",
-        ".............YYY................",
         "...........hhhhhh...............",
         "..........hhhhhhhh..............",
         "..........hhhhhhhh..............",
@@ -1726,10 +2206,6 @@ def ride_sprites():
         "......kkkk........kkkk..........",
     ]
     side = [
-        "..........P.....................",
-        "..........Y.....................",
-        ".........RRR....................",
-        ".........YYY....................",
         ".......hhhhh....................",
         "......hhhhhhh...................",
         "......hhhssss...................",
@@ -1926,10 +2402,10 @@ def main():
     out = {}
 
     out["her"] = compose_char(
-        {"down": HER_DOWN, "up": HER_UP, "side": HER_SIDE},
-        {"front": LEGS_FRONT, "side": LEGS_SIDE}, HER, hat=True,
-        extras=[{"torso": HER_DOWN, "legs": LEGS_FRONT["stand"], "overlay": CHEER_ARMS},
-                {"torso": HER_DOWN, "legs": LEGS_FRONT["stand"]}])
+        {"down": HER_DRESS_DOWN, "up": HER_DRESS_UP, "side": HER_DRESS_SIDE},
+        {"front": SKIRT_FRONT, "side": SKIRT_SIDE}, HER,
+        extras=[{"torso": HER_DRESS_DOWN, "legs": SKIRT_FRONT["stand"], "overlay": CHEER_ARMS},
+                {"torso": HER_DRESS_DOWN, "legs": SKIRT_FRONT["stand"]}])
     out["noah"] = compose_char(
         {"down": NOAH_DOWN, "up": NOAH_UP, "side": NOAH_SIDE},
         {"front": NOAH_LEGS_FRONT, "side": NOAH_LEGS_SIDE}, NOAH,
@@ -1974,6 +2450,8 @@ def main():
     out["barrel"] = prop_barrel()
     out["station"] = prop_station()
     out["garden"] = prop_garden()
+    for mname, mfn in MONUMENTS.items():
+        out[mname] = mfn()
     out["quad_ride"] = ride_sprites()
     out["fx"] = prop_fx()
     out["shadow"] = prop_shadow()
@@ -1998,6 +2476,8 @@ def main():
                  ["tree", "palm", "figtree", "lamp", "bench", "quad", "sailboat"],
                  ["quad_ride", "horse", "column", "pyramid", "cypress", "matryoshka", "radio", "pumpkin"],
                  ["pisa", "cactus", "barrel", "station", "garden"],
+                 ["maple", "garita", "lobster", "liberty", "flamingo", "eiffel",
+                  "bigben", "minitorii", "stein", "balloon", "windmill", "lantern"],
                  ["torii", "barrier", "fig", "fx", "shadow"],
                  ["la_home", "la_house_b", "taco_shop", "theater"],
                  ["apartment", "brownstone_b", "bu_building", "neu_building", "cafe"]]

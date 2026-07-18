@@ -169,7 +169,6 @@ export const MAPS = {
       { type: "pisa", x: 3, y: 4 },         // Italy
       { type: "cypress", x: 2, y: 6 },      //   (little Italian garden)
       { type: "cypress", x: 5, y: 6 },
-      { type: "cactus", x: 19, y: 3 },      // Mexico
       { type: "barrel", x: 25, y: 12 },     // Moldova
       { type: "matryoshka", x: 23, y: 10 }, // Russia
       { type: "station", x: 14, y: 11 },    // ✈ the travel log
@@ -181,7 +180,6 @@ export const MAPS = {
       { id: "lm_greece", x: 10, y: 5, w: 3, h: 1, bonus: true },
       { id: "lm_egypt", x: 25, y: 6, w: 3, h: 1, bonus: true },
       { id: "lm_italy", x: 2, y: 5, w: 3, h: 1, bonus: true },
-      { id: "lm_mexico", x: 18, y: 4, w: 3, h: 1, bonus: true },
       { id: "lm_moldova", x: 24, y: 13, w: 3, h: 1, bonus: true },
       { id: "lm_russia", x: 22, y: 11, w: 3, h: 1, bonus: true },
       { id: "travel_station", x: 13, y: 12, w: 3, h: 1, bonus: true },

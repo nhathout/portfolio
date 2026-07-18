@@ -91,6 +91,10 @@ k.loadSprite("fx", "assets/fx.png", {
 for (const n of ["tree", "palm", "figtree", "lamp", "bench", "quad", "torii",
   "barrier", "sailboat", "shadow", "radio", "horse", "column", "pyramid",
   "cypress", "matryoshka", "pisa", "cactus", "barrel", "station",
+  // premade travel-log monuments
+  "maple", "garita", "lobster", "liberty", "flamingo", "eiffel",
+  "bigben", "minitorii", "stein", "balloon", "windmill", "lantern",
+  "felucca", "wofstar", "needle", "seoulgate",
   "b_la_home", "b_la_house_b", "b_taco_shop", "b_theater", "b_apartment",
   "b_brownstone_b", "b_bu_building", "b_neu_building", "b_cafe"]) {
   if (n === "figtree") k.loadSprite(n, `assets/${n}.png`, { sliceX: 2, sliceY: 1 });
@@ -123,12 +127,91 @@ const ui = {
   travelOpen() {
     return !$("travel").classList.contains("hidden");
   },
-  openTravelForm(onAdd) {
-    this._travelAdd = onAdd;
+  openTravelForm(handlers) {
+    this._travel = handlers;
     $("tv-country").value = "";
     $("tv-msg").value = "";
     $("travel").classList.remove("hidden");
+    this.renderTravelList(handlers.entries || []);
     setTimeout(() => $("tv-country").focus(), 50);
+  },
+  renderTravelList(entries) {
+    const el = $("tv-list");
+    el.innerHTML = "";
+    el.classList.remove("hidden");
+    const chip = (text, cls) => {
+      const c = document.createElement("span");
+      c.className = `tv-tag ${cls || ""}`;
+      c.textContent = text;
+      return c;
+    };
+
+    // --- the places already on the map (trip baseline) ---
+    const heritage = this._travel?.heritage || [];
+    if (heritage.length) {
+      const head = document.createElement("div");
+      head.className = "tv-head";
+      head.textContent = "our places";
+      el.appendChild(head);
+      for (const h of heritage) {
+        const row = document.createElement("div");
+        row.className = "tv-row";
+        const label = document.createElement("span");
+        label.textContent = `${h.flag} ${h.country}`;
+        row.append(label, chip("heritage", "tv-heritage"));
+        if (!h.visited) row.append(chip("soon ♥", "tv-soon"));
+        el.appendChild(row);
+      }
+    }
+
+    // --- logged trips (movable / demolishable) ---
+    const head2 = document.createElement("div");
+    head2.className = "tv-head";
+    head2.textContent = `logged trips (${entries.length})`;
+    el.appendChild(head2);
+    if (!entries.length) {
+      const empty = document.createElement("div");
+      empty.className = "tv-empty";
+      empty.textContent = "none yet — log your first trip above ♥";
+      el.appendChild(empty);
+      return;
+    }
+    for (const e of entries) {
+      const row = document.createElement("div");
+      row.className = "tv-row";
+      const label = document.createElement("span");
+      label.textContent = `${e.home ? "⌂" : "✈"} ${e.country}`;
+      row.append(label);
+      if (e.home) row.append(chip("home ♥", "tv-home"));
+      else if (e.soon) row.append(chip("soon ♥", "tv-soon"));
+      else if (e._visit > 1) row.append(chip(`trip #${e._visit}`, "tv-count"));
+      const edit = document.createElement("button");
+      edit.type = "button";
+      edit.textContent = "edit";
+      edit.addEventListener("click", () => {
+        const next = prompt(`new message for ${e.country}:`, e.msg || "");
+        if (next !== null) this.renderTravelList(this._travel.onEdit(e.id, next));
+      });
+      row.append(edit);
+      if (!e.soon) { // soon plans have no sprite on the map yet
+        const move = document.createElement("button");
+        move.type = "button";
+        move.textContent = "move";
+        move.addEventListener("click", () => this.renderTravelList(this._travel.onMove(e.id)));
+        row.append(move);
+      }
+      const del = document.createElement("button");
+      del.type = "button";
+      del.textContent = "demolish";
+      del.className = "tv-del";
+      del.addEventListener("click", () => {
+        if (confirm(`demolish the ${e.country} ${e.soon ? "plan" : "monument"}? (its message is lost)`)) {
+          this.renderTravelList(this._travel.onDelete(e.id));
+        }
+      });
+      row.append(del);
+      el.appendChild(row);
+    }
   },
   closeTravelForm() {
     $("travel").classList.add("hidden");
@@ -164,7 +247,7 @@ $("travel-form").addEventListener("submit", (e) => {
   const msg = $("tv-msg").value.trim() || "we were here ♥";
   if (!country) return $("tv-country").focus();
   ui.closeTravelForm();
-  ui._travelAdd?.(country, msg);
+  ui._travel?.onAdd?.(country, msg);
 });
 $("tv-cancel").addEventListener("click", () => ui.closeTravelForm());
 

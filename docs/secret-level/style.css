@@ -275,6 +275,57 @@ html, body {
 }
 #travel-form textarea { resize: none; }
 #travel-form .pixel-btn { margin-top: 4px; }
+#tv-list {
+  margin-top: 16px;
+  max-height: 130px;
+  overflow-y: auto;
+  border-top: 2px solid rgba(255, 253, 244, 0.25);
+  padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.tv-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 9px;
+  color: #cfc9e0;
+}
+.tv-row span { flex: 1; text-align: left; word-break: break-word; }
+.tv-row button {
+  font-family: inherit;
+  font-size: 8px;
+  padding: 5px 8px 4px;
+  background: var(--gold);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: 2px;
+  cursor: pointer;
+}
+.tv-row button.tv-del { background: #e8697f; }
+.tv-row button:hover { filter: brightness(1.1); }
+.tv-head {
+  font-size: 8px;
+  color: #8f88a8;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-align: left;
+  margin-top: 4px;
+}
+.tv-empty { font-size: 9px; color: #8f88a8; text-align: left; }
+.tv-tag {
+  font-size: 7px;
+  padding: 3px 5px 2px;
+  border-radius: 2px;
+  background: #4f4768;
+  color: #cfc9e0;
+  white-space: nowrap;
+}
+.tv-tag.tv-heritage { background: #2f7f6f; color: #fffdf4; }
+.tv-tag.tv-soon { background: #e8697f; color: #fffdf4; }
+.tv-tag.tv-count { background: var(--gold); color: var(--ink); }
+.tv-tag.tv-home { background: #c85a48; color: #fffdf4; }
 
 /* ---------- fader ---------- */
 #fader {

@@ -50,9 +50,16 @@ Both fade to `/secret-level/`, which asks for the password.
 - 🌍 **Little Everywhere** has one landmark per country (Greece, Egypt, Italy,
   Mexico, Moldova, Russia) — each gives a short brief + a `[TODO Noah]` line.
 - ✈ the **travel-log easel** on Little Everywhere: she can log a new trip
-  (country + a tiny memory) and an auto-generated flag monument appears on a
-  random free spot. Entries live in her browser's localStorage (`sl_travels`)
-  — device-local, so they stay on the machine she plays on.
+  (country + a tiny memory) and a monument appears on a random free spot.
+  **Known countries/cities get a hand-drawn monument** (Canada→maple leaf,
+  Puerto Rico→garita, Boston→lobster, New York/USA→Statue of Liberty,
+  Miami→flamingo, France→Eiffel, UK→Big Ben, Japan→mini torii, Germany→stein,
+  Turkey→hot-air balloon, Netherlands→windmill, China→lantern, plus the six
+  heritage sprites for repeat visits); unknown names get a generated flag.
+  The easel's list shows the six heritage countries as the trip baseline
+  (Moldova/Russia say "soon ♥") and repeat trips get a **trip #2 / #3 badge**.
+  Entries live in her browser's localStorage (`sl_travels`) — device-local,
+  so they stay on the machine she plays on.
 - ⏸ **ESC** pauses, with a button back to the website.
 - Talk to **Noah** near the start — he'll follow her. **Mookie** always follows.
   Both are pettable/talkable. **Townsfolk** (grey/orange/purple NPCs) around the

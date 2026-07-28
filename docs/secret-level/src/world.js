@@ -10,6 +10,72 @@ const FALLBACK_LINES = [
   { who: "noah", text: "…okay, embarrassing: I haven't written this memory yet. It's coming, I promise. ♥" },
 ];
 
+// Built-in copy for the newer spots so they read properly even before Noah
+// writes them into memories.json — anything he puts in `points` wins.
+const POINT_FALLBACK = {
+  la_home: [
+    "Your house. The big one, sun on it all day, pool out back.",
+    { who: "noah", text: "Santa Clarita. I knew every room in this place before I ever set foot in it." },
+    { who: "noah", text: "go on — everybody's inside. press E at the door ♥" },
+  ],
+  la_pool: [
+    "The pool. Perfectly still, absurdly blue, faintly smug about it.",
+    { who: "noah", text: "one day we're going to argue about whether the water is 'too cold' again. I'm going to lose again." },
+  ],
+  home_marina: [
+    { text: "Marina looks up from the counter and immediately starts wiping something that was already clean." },
+    { who: "her", text: "Marina!!" },
+    { text: "Marina: \"So. This is the boy. Hmph. …He is taller than the photo.\"" },
+    { text: "(she is smiling. she will deny this.)" },
+  ],
+  home_mom: [
+    { text: "Your mom hugs you the way moms do — like she's checking you're all still there." },
+    { text: "Mom: \"Are you eating? You're not eating. Sit, I'll make something.\"" },
+    { who: "noah", text: "…I love it here." },
+  ],
+  home_bro: [
+    { text: "Your brother does not look up from the screen." },
+    { text: "\"Hey. …Happy birthday. Don't make it weird.\"" },
+    { text: "(he makes it weird. he hugs you. it's very sweet.)" },
+  ],
+  home_leo: [
+    { text: "Leo, all seventeen pounds of orange menace, blinks at you slowly." },
+    { who: "noah", text: "he's judging me." },
+    { text: "(Leo decides he is coming too. Leo joined your little crowd! 🐱)" },
+  ],
+  home_charlie: [
+    { text: "Charlie spins in a full circle before you even say his name." },
+    { text: "(Charlie has decided this is the best day of his entire life.)" },
+    { text: "(Charlie joined your little crowd! 🐶)" },
+  ],
+  aruba_beach: [
+    "Past the barriers the road just… stops, and turns into white sand.",
+    "A little palapa bar stands in the sun. The board on it says CLOSED.",
+    { who: "noah", text: "yeah. closed. for one more week." },
+    { who: "noah", text: "then it's you, me, and an entire island. happy birthday, my love ♥" },
+  ],
+  aruba_turtle: [
+    "A sea turtle is sitting in the warm sand, entirely unbothered.",
+    { text: "Turtle: \"…\"" },
+    { text: "Turtle: \"one week.\"" },
+    { who: "her", text: "did the turtle just—" },
+    { text: "Turtle: \"see you on the beach.\" (he goes back to sleep.)" },
+  ],
+  lm_aruba: [
+    "A divi-divi tree, bent permanently southwest by wind that never stops blowing.",
+    { who: "noah", text: "this one isn't a memory yet. it's a promise — next week ♥" },
+  ],
+};
+
+// Animals she can recruit. `lag` = how far back on her breadcrumb trail they
+// aim; `side` = how far off to the side, so the crew spreads out into a little
+// herd instead of a conga line.
+const COMPANIONS = {
+  mookie: { sprite: "mookie", lag: 12, side: -9, speed: 78, name: "Mookie" },
+  leo: { sprite: "leo", lag: 17, side: 12, speed: 82, name: "Leo" },
+  charlie: { sprite: "charlie", lag: 21, side: -15, speed: 88, name: "Charlie" },
+};
+
 // Default townsfolk one-liners (Noah can override any of these in
 // memories.json → "npcs"). Each is an array of pages, or an array-of-arrays to
 // cycle through several on repeat interactions.
@@ -72,12 +138,14 @@ const SEED_TRIPS = [
   { id: 8, country: "Seattle", msg: "World Cup road trip — screaming for Egypt under the Space Needle. [TODO Noah: the Seattle trip ♥]" },
   { id: 9, country: "Japan", soon: true, msg: "torii gates, vending machines, cherry blossoms — the pier teaser was a promise. soon ♥" },
   { id: 10, country: "Korea", soon: true, msg: "seoul nights, street food, and a certain concert. soon ♥" },
+  { id: 11, country: "Aruba", soon: true, msg: "one island, one week, one birthday girl. the divi-divi trees are already leaning our way ♥" },
 ];
 
 // typed country/city (normalized) → premade monument sprite
 const COUNTRY_SPRITES = {
   greece: "column", egypt: "pyramid", italy: "pisa", mexico: "cactus",
   moldova: "barrel", russia: "matryoshka",
+  aruba: "divi", oranjestad: "divi",
   canada: "maple",
   "puerto rico": "garita", puertorico: "garita",
   boston: "lobster",
@@ -109,6 +177,7 @@ const MONUMENT_HITS = {
   windmill: { ox: -6, w: 12, h: 6 }, lantern: { ox: -4, w: 8, h: 5 },
   felucca: { ox: -8, w: 16, h: 5 }, wofstar: { ox: -7, w: 14, h: 6 },
   needle: { ox: -5, w: 10, h: 5 }, seoulgate: { ox: -8, w: 16, h: 6 },
+  divi: { ox: -8, w: 16, h: 6 },
 };
 
 // tiny 3×5 pixel glyphs for the badges drawn on monuments (×N / soon / ♥)
@@ -167,6 +236,7 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
         seen: new Set(raw.seen || []),
         figs: new Set(raw.figs || []),
         pumps: new Set(raw.pumps || []),
+        crew: new Set(raw.crew || []),
         met: !!raw.met,
         finale: !!raw.finale,
         introDone: !!raw.introDone,
@@ -175,14 +245,27 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
         pos: raw.pos || null,
       };
     } catch {
-      return { seen: new Set(), figs: new Set(), pumps: new Set(), met: false, finale: false, introDone: false, mounted: false, map: "la", pos: null };
+      return blankSave();
     }
   }
+  function blankSave() {
+    return {
+      seen: new Set(), figs: new Set(), pumps: new Set(), crew: new Set(),
+      met: false, finale: false, introDone: false, mounted: false,
+      map: "la", pos: null,
+    };
+  }
   function persist() {
+    // keep `save` the single source of truth — an earlier build read a stale
+    // save.mounted at every scene entry and kept re-mounting the ATV
+    save.mounted = state.mounted;
+    save.map = state.map;
+    save.pos = state.playerPos;
     localStorage.setItem(SAVE_KEY, JSON.stringify({
-      seen: [...save.seen], figs: [...save.figs], pumps: [...save.pumps], met: save.met,
-      finale: save.finale, introDone: save.introDone, mounted: state.mounted,
-      map: state.map, pos: state.playerPos,
+      seen: [...save.seen], figs: [...save.figs], pumps: [...save.pumps],
+      crew: [...save.crew], met: save.met,
+      finale: save.finale, introDone: save.introDone, mounted: save.mounted,
+      map: save.map, pos: save.pos,
     }));
   }
 
@@ -203,6 +286,7 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
     player: null,
     noah: null,
     mookie: null,
+    party: [],      // everyone currently following her (noah + the animals)
     trail: [],
   };
   const vkeys = { left: false, right: false, up: false, down: false };
@@ -247,8 +331,10 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
 
   function linesFor(id) {
     const p = memories.points?.[id];
-    if (!p || !p.lines || !p.lines.length) return FALLBACK_LINES;
-    return p.lines;
+    if (p?.lines?.length) return p.lines;
+    const built = POINT_FALLBACK[id];
+    if (built?.length) return built;
+    return FALLBACK_LINES;
   }
 
   // ------------------------------------------------------------ characters
@@ -324,55 +410,118 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
     return p;
   }
 
-  function addFollower(spriteName, px, py, lag, speed) {
+  // ---------------------------------------------------------------- the herd
+  // Everyone chases a point on her breadcrumb trail, offset sideways so the
+  // group fans out; then a small boids-style separation push keeps them from
+  // stacking on top of each other. Result: a little crowd that flows behind
+  // her and re-forms when she stops. ♥
+  const HERD_SEP = 15;      // personal space, px
+  const HERD_PUSH = 28;     // how hard they shove apart
+
+  function trailTarget(f) {
+    const idx = state.trail.length - 1 - f.lag;
+    if (idx < 0) return null;
+    const t = state.trail[idx];
+    // heading at that point on the trail → offset perpendicular to it
+    const prev = state.trail[Math.max(0, idx - 5)];
+    let hx = t.x - prev.x, hy = t.y - prev.y;
+    const hl = Math.hypot(hx, hy);
+    if (hl < 0.01) { hx = 0; hy = 1; } else { hx /= hl; hy /= hl; }
+    // y is squashed a bit: the world is top-down but reads isometric-ish
+    return k.vec2(t.x - hy * f.side, t.y + hx * f.side * 0.55);
+  }
+
+  function separation(f) {
+    let sx = 0, sy = 0;
+    for (const o of state.party) {
+      if (o === f || !o.exists() || o.hidden) continue;
+      const dx = f.pos.x - o.pos.x;
+      const dy = (f.pos.y - o.pos.y) * 1.5;
+      const d2 = dx * dx + dy * dy;
+      if (d2 < 0.01 || d2 > HERD_SEP * HERD_SEP) continue;
+      const d = Math.sqrt(d2);
+      const w = (HERD_SEP - d) / HERD_SEP;
+      sx += (dx / d) * w;
+      sy += (dy / d) * w;
+    }
+    return k.vec2(sx, sy);
+  }
+
+  function followerStep(f) {
+    f.z = f.pos.y;
+    const target = f.forcedTarget || trailTarget(f);
+    if (!target) { followerIdle(f); return; }
+    const d = target.sub(f.pos);
+    const dist = d.len();
+    const arriveAt = f.forcedTarget ? 2 : 5;
+    const sep = separation(f);
+    if (dist > arriveAt) {
+      // keep up with the ATV (Noah has to sprint, poor guy). Speed eases in
+      // with distance so nobody teleports when the group bunches up.
+      const urgency = Math.min(1, 0.45 + dist / 60);
+      const spd = f.speed * urgency * (state.mounted ? 2.15 : 1);
+      const step = Math.min(dist, spd * k.dt());
+      const v = d.unit().scale(step).add(sep.scale(HERD_PUSH * k.dt()));
+      f.pos = f.pos.add(v);
+      const dir = Math.abs(d.x) > Math.abs(d.y) ? (d.x > 0 ? "right" : "left") : d.y > 0 ? "down" : "up";
+      setAnim(f, true, dir);
+      f.idleT = 0;
+    } else if (f.forcedTarget) {
+      f.forcedTarget = null;
+      const cb = f.onArrive; f.onArrive = null;
+      setAnim(f, false, f.dir);
+      cb?.();
+    } else {
+      // still settle into personal space while idling, so the pile untangles
+      if (sep.x || sep.y) f.pos = f.pos.add(sep.scale(HERD_PUSH * 0.6 * k.dt()));
+      followerIdle(f);
+    }
+  }
+
+  function followerIdle(f) {
+    f.idleT += k.dt();
+    if (f.isPet && f.idleT > 4) {
+      if (f.curAnim() !== "sit-flick") f.play("sit-flick");
+    } else {
+      setAnim(f, false, f.dir);
+    }
+  }
+
+  function addFollower(spriteName, px, py, opts = {}) {
     const f = k.add([
       k.sprite(spriteName, { anim: "idle-down" }),
       k.pos(px, py),
       k.anchor("bot"),
       k.z(py),
       "npc",
-      { dir: "down", idleT: 0, lag, speed, forcedTarget: null, onArrive: null, isFollower: true },
+      {
+        dir: "down", idleT: 0,
+        lag: opts.lag ?? 14, side: opts.side ?? 0, speed: opts.speed ?? 76,
+        forcedTarget: null, onArrive: null, isFollower: true,
+        isPet: !!opts.isPet, crewId: opts.crewId || null,
+        talkKey: opts.talkKey || null,
+      },
     ]);
     addShadow(f);
-
-    f.onUpdate(() => {
-      f.z = f.pos.y;
-      let target = null;
-      if (f.forcedTarget) {
-        target = f.forcedTarget;
-      } else {
-        const idx = state.trail.length - 1 - f.lag;
-        if (idx >= 0) target = state.trail[idx];
-      }
-      if (!target && !f.forcedTarget) { idle(); return; }
-      const d = target.sub(f.pos);
-      const dist = d.len();
-      const arriveAt = f.forcedTarget ? 2 : 4;
-      if (dist > arriveAt) {
-        // keep up with the ATV (noah has to sprint, poor guy)
-        const step = Math.min(dist, f.speed * (state.mounted ? 2.15 : 1) * k.dt());
-        f.pos = f.pos.add(d.unit().scale(step));
-        const dir = Math.abs(d.x) > Math.abs(d.y) ? (d.x > 0 ? "right" : "left") : d.y > 0 ? "down" : "up";
-        setAnim(f, true, dir);
-        f.idleT = 0;
-      } else if (f.forcedTarget) {
-        f.forcedTarget = null;
-        const cb = f.onArrive; f.onArrive = null;
-        setAnim(f, false, f.dir);
-        cb?.();
-      } else {
-        idle();
-      }
-      function idle() {
-        f.idleT += k.dt();
-        if (spriteName === "mookie" && f.idleT > 4) {
-          if (f.curAnim() !== "sit-flick") f.play("sit-flick");
-        } else {
-          setAnim(f, false, f.dir);
-        }
-      }
-    });
+    state.party.push(f);
+    f.onUpdate(() => followerStep(f));
     return f;
+  }
+
+  /** an animal decided she's their person now ♥ */
+  function recruit(id, atPos) {
+    if (!COMPANIONS[id] || save.crew.has(id)) return;
+    save.crew.add(id);
+    const c = COMPANIONS[id];
+    const p = atPos || state.player.pos.add(-12, 8);
+    addFollower(c.sprite, p.x, p.y, {
+      lag: c.lag, side: c.side, speed: c.speed,
+      isPet: true, crewId: id, talkKey: id,
+    });
+    heartBurst(p.add(0, -12), 5, 12);
+    audio.fanfare();
+    toast(`${c.name} joined you! ♥`);
+    persist();
   }
 
   function walkTo(f, target) {
@@ -440,7 +589,8 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
     if (state.mounted) return;
     state.mounted = true;
     k.get("quadProp").forEach((q) => q.destroy());
-    if (state.mookie) state.mookie.hidden = true; // he's on the back rack ♥
+    // the animals ride on the back rack ♥
+    for (const p of state.party) if (p.crewId) p.hidden = true;
     const ride = k.add([
       k.sprite("quad_ride", { frame: 0 }),
       k.pos(state.player.pos), k.anchor("bot"), k.z(0), { t: 0 },
@@ -468,9 +618,12 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
     if (!state.mounted) return;
     state.mounted = false;
     state.player.hidden = false;
-    if (state.mookie) {
-      state.mookie.hidden = false;
-      state.mookie.pos = state.player.pos.add(-10, 4);
+    let n = 0;
+    for (const p of state.party) {
+      if (!p.crewId) continue;
+      p.hidden = false;
+      p.pos = state.player.pos.add(-10 + (n % 3) * 9, 4 + Math.floor(n / 3) * 7);
+      n++;
     }
     state.rideObj?.destroy();
     state.rideObj = null;
@@ -827,7 +980,8 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
       save.met = true;
       n.isPosted = false;
       if (n.has("body")) n.unuse("body");
-      n.lag = 14;
+      n.lag = 8;
+      if (!state.party.includes(n)) state.party.push(n);
       heartBurst(n.pos.add(0, -18), 3, 8);
       persist();
       state.cutscene = false;
@@ -846,11 +1000,27 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
     await dialogue.show(lines);
   }
 
-  async function talkMookie() {
-    const c = state.mookie;
-    audio.meow();
-    heartBurst(c.pos.add(0, -14), 1, 4);
-    const pool = memories.mookie?.lines || ["(mookie looks at you like you owe him money.)"];
+  // one-liner pools for the animals that joined her
+  const PET_CHATTER = {
+    leo: [
+      ["(Leo flops over sideways with total confidence that someone will catch him.)"],
+      ["Leo: mrrrp.", "(that was the whole speech.)"],
+      ["(Leo and Mookie exchange a long look. Diplomacy is ongoing.)"],
+    ],
+    charlie: [
+      ["(Charlie's whole back half is wagging. All of it.)"],
+      ["Charlie: !!!!!", "(he has no further comment.)"],
+      ["(Charlie tries to herd the cats. It is not going well. He is undeterred.)"],
+    ],
+  };
+
+  async function talkPet(pet) {
+    const id = pet.crewId || "mookie";
+    if (id === "mookie") audio.meow(); else audio.confirm();
+    heartBurst(pet.pos.add(0, -14), 1, 4);
+    let pool = id === "mookie"
+      ? (memories.mookie?.lines || ["(mookie looks at you like you owe him money.)"])
+      : (memories.pets?.[id] || PET_CHATTER[id] || [["(they are delighted to see you.)"]]);
     const lines = pool[state.catIdx % pool.length];
     state.catIdx++;
     await dialogue.show(lines);
@@ -862,6 +1032,28 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
     npc.dir = Math.abs(d.x) > Math.abs(d.y) ? (d.x > 0 ? "right" : "left") : d.y > 0 ? "down" : "up";
     setAnim(npc, false, npc.dir);
     audio.confirm();
+
+    // people with a `point` are memories: their lines come from memories.json
+    // and reading them ticks the ♥ counter.
+    if (npc.pointId) {
+      const first = !save.seen.has(npc.pointId);
+      await dialogue.show(linesFor(npc.pointId));
+      if (first) {
+        save.seen.add(npc.pointId);
+        if (npc.marker?.exists()) { sparkleBurst(npc.marker.pos.add(0, -4)); npc.marker.destroy(); }
+        updateHUD();
+        persist();
+      }
+      if (npc.joinId && !save.crew.has(npc.joinId)) {
+        const at = npc.pos.clone();
+        npc.destroy();
+        recruit(npc.joinId, at);
+      }
+      if (first) checkFinaleReady();
+      npc.dir = npc.homeDir;
+      return;
+    }
+
     let lines = memories.npcs?.[npc.npcId] || NPC_FALLBACK[npc.npcId] || [{ text: "(they smile and wave.)" }];
     if (lines.length && Array.isArray(lines[0])) lines = lines[npc.said++ % lines.length]; // multiple sets
     await dialogue.show(lines);
@@ -875,6 +1067,11 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
     if (id === "route_quad" && save.seen.has(id)) return mount(); // seen the memory → ride
     if (id === "garden" && save.seen.has(id)) return pickTomato();
     if (id === "travel_station" && save.seen.has(id)) return ui.openTravelForm(travelManage());
+    // a door she's already opened once just opens again
+    if (zone.enterTo && save.seen.has(id)) {
+      audio.confirm();
+      return goMap(zone.enterTo, zone.enterSpawn);
+    }
     if (id === "radio") { audio.kpop(); heartBurst(zone.focusPos.clone(), 7, 16, [162, 108, 255]); }
     if (id === "beach_horse") { audio.neigh(); heartBurst(zone.focusPos.clone(), 3, 10); }
     audio.confirm();
@@ -892,6 +1089,7 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
       if (id === "route_quad") mount(); // first time: memory, then she rides off
       if (id === "garden") pickTomato();
       if (id === "travel_station") ui.openTravelForm(travelManage());
+      if (zone.enterTo) goMap(zone.enterTo, zone.enterSpawn);
     }
   }
 
@@ -904,7 +1102,7 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
     if (!f) return;
     if (f.kind === "point") interactPoint(f.obj);
     else if (f.kind === "noah") talkNoah();
-    else if (f.kind === "mookie") talkMookie();
+    else if (f.kind === "pet") talkPet(f.obj);
     else if (f.kind === "npc") talkTownsfolk(f.obj);
     else if (f.kind === "sign") {
       audio.blip();
@@ -920,7 +1118,10 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
     const def = MAPS[map];
     state.map = map;
     state.trail = [];
+    state.party = [];   // objects were destroyed with the old scene
     state.focus = null;
+    state.noah = null;
+    state.mookie = null;
     validate(def, map);
 
     const cols = def.ground[0].length;
@@ -943,6 +1144,10 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
       return (at(x, y - 1) ? 1 : 0) | (at(x + 1, y) ? 2 : 0) | (at(x, y + 1) ? 4 : 0) | (at(x - 1, y) ? 8 : 0);
     };
     const FLOWER_ANIMS = ["flower", "flower2", "flower3"];
+    const woodVar = (x, y) => {
+      const h = (x * 13 + y * 7) % 3;
+      return h === 0 ? F.wood_a : h === 1 ? F.wood_b : F.wood_c;
+    };
     k.addLevel(def.ground, {
       tileWidth: T, tileHeight: T,
       tiles: {}, // required by kaplay even when only wildcardTile is used
@@ -957,17 +1162,27 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
           case "R": return [k.sprite("tiles", { frame: F.road_dash })];
           case "k": return [k.sprite("tiles", { frame: F.sidewalk })];
           case "w": return [k.sprite("tiles", { anim: "water" })];
+          // ---- interiors 🏡
+          case ",": return [k.sprite("tiles", { frame: woodVar(p.x, p.y) })];
+          case ";": return [k.sprite("tiles", { frame: F[`rug_${(p.x + p.y) % 2 ? "a" : "b"}`] })];
+          case ":": return [k.sprite("tiles", { frame: F.ktile })];
+          case "#": return [k.sprite("tiles", { frame: F.wallface })];
+          case "%": return [k.sprite("tiles", { frame: F.walltop })];
+          case "V": return [k.sprite("tiles", { frame: F.wallwin })];
+          case "C": return [k.sprite("tiles", { frame: F.wallpic })];
+          case "D": return [k.sprite("tiles", { frame: F.indoor })];
         }
       },
     });
 
-    // ---- water colliders (merge horizontal runs)
+    // ---- blocked ground (water outside, walls inside) — merge horizontal runs
+    const SOLID_GROUND = new Set(["w", "#", "%", "V", "C", "D"]);
     def.ground.forEach((row, y) => {
       let x = 0;
       while (x < row.length) {
-        if (row[x] === "w") {
+        if (SOLID_GROUND.has(row[x])) {
           let x2 = x;
-          while (x2 < row.length && row[x2] === "w") x2++;
+          while (x2 < row.length && SOLID_GROUND.has(row[x2])) x2++;
           solidRect(x * T, y * T, (x2 - x) * T, T);
           x = x2;
         } else x++;
@@ -1024,7 +1239,9 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
       k.add([k.sprite(b.sprite), k.pos(b.x * T + m.wt * 8, baseY), k.anchor("bot"), k.z(baseY)]);
       solidRect(b.x * T, baseY - m.ht * T, m.wt * T, m.ht * T);
       if (b.point) {
-        addPointZone({ id: b.point, x: b.x + Math.floor(m.wt / 2), y: b.y + 1, w: 1, h: 1 });
+        const doorCol = m.doorCol ?? Math.floor(m.wt / 2);
+        const zone = addPointZone({ id: b.point, x: b.x + doorCol, y: b.y + 1, w: 1, h: 1 });
+        if (b.enter) { zone.enterTo = b.enter.to; zone.enterSpawn = b.enter.spawn; }
       }
     }
 
@@ -1040,11 +1257,49 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
       cactus: { ox: -6, w: 12, h: 6 },
       barrel: { ox: -6, w: 12, h: 6 },
       station: { ox: -10, w: 20, h: 8 },
+      // 🇦🇼 Aruba
+      divi: { ox: -8, w: 16, h: 6 },
+      palapa: { ox: -22, w: 44, h: 11 },
+      beachsign: { ox: -6, w: 12, h: 5 },
+      // 🏡 interiors
+      in_sofa: { ox: -23, w: 46, h: 12 },
+      in_table: { ox: -25, w: 50, h: 16 },
+      in_counter: { ox: -32, w: 64, h: 20 },
+      in_fridge: { ox: -10, w: 20, h: 12 },
+      in_shelf: { ox: -13, w: 26, h: 14 },
+      in_plant: { ox: -7, w: 14, h: 8 },
+      in_lamp: { ox: -5, w: 10, h: 5 },
     };
+    // decor with no collider. FLOOR_* sits flat on the ground, so it draws
+    // underneath whoever is standing on it (pet beds, starfish…)
+    const FLOOR_DECOR = new Set(["starfish", "in_petbeds", "in_bowl"]);
+    const SOFT_DECOR = new Set(["lounger", ...FLOOR_DECOR]);
     for (const p of def.props || []) {
       const px = (p.x + 0.5) * T;
       const py = (p.y + 1) * T;
-      if (p.type === "figtree") {
+      if (p.type === "pool") {
+        const pool = k.add([
+          k.sprite("pool", { anim: "live" }), k.pos(px, py), k.anchor("bot"),
+          k.area({ shape: new k.Rect(k.vec2(-36, -34), 72, 26) }),
+          k.body({ isStatic: true }), k.z(py),
+        ]);
+        pool.z = py - 2; // she can stand on the near deck
+      } else if (p.type === "turtle") {
+        k.add([
+          k.sprite("turtle", { anim: "live" }), k.pos(px, py), k.anchor("bot"),
+          k.area({ shape: new k.Rect(k.vec2(-11, -8), 22, 8) }),
+          k.body({ isStatic: true }), k.z(py),
+        ]);
+      } else if (p.type === "in_tv" || p.type === "in_fire") {
+        k.add([
+          k.sprite(p.type, { anim: "live" }), k.pos(px, py), k.anchor("bot"),
+          k.area({ shape: new k.Rect(k.vec2(p.type === "in_fire" ? -20 : -17, -12), p.type === "in_fire" ? 40 : 34, 12) }),
+          k.body({ isStatic: true }), k.z(py),
+        ]);
+      } else if (SOFT_DECOR.has(p.type)) {
+        k.add([k.sprite(p.type), k.pos(px, py), k.anchor("bot"),
+          k.z(FLOOR_DECOR.has(p.type) ? py - 24 : py)]);
+      } else if (p.type === "figtree") {
         k.add([
           k.sprite("figtree", { frame: save.figs.has("fig_tree") ? 1 : 0 }),
           k.pos(px, py), k.anchor("bot"),
@@ -1128,8 +1383,10 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
       ]);
     }
 
-    // ---- townsfolk NPCs (background flavor)
+    // ---- townsfolk NPCs (background flavor + the house crew)
     for (const n of def.npcs || []) {
+      // an animal that already left with her isn't standing here any more
+      if (n.join && save.crew.has(n.join)) continue;
       const px = (n.x + 0.5) * T;
       const py = (n.y + 1) * T;
       const dir = n.dir || "down";
@@ -1140,16 +1397,84 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
         k.area({ shape: new k.Rect(k.vec2(-5, -8), 10, 8) }),
         k.body({ isStatic: true }),
         k.z(py), "townsfolk",
-        { npcId: n.id, dir, homeDir: dir, bobT: k.rand(0, 6), said: 0 },
+        {
+          npcId: n.id, dir, homeDir: dir, bobT: k.rand(0, 6), said: 0,
+          pointId: n.point || null, joinId: n.join || null, isPet: !!n.pet,
+        },
       ]);
       if (kind === "side") c.flipX = dir === "left";
       addShadow(c);
-      // subtle idle: occasional look-around
+      // people with a memory get the same sparkle as a memory spot
+      if (n.point && !save.seen.has(n.point)) {
+        const my = py - (n.pet ? 20 : 34);
+        const mk = k.add([
+          k.sprite("fx", { anim: "sparkle" }),
+          k.pos(px, my), k.anchor("bot"), k.z(1e5), { t: k.rand(0, 5) },
+        ]);
+        mk.onUpdate(() => { mk.t += k.dt(); mk.pos.y = my + Math.sin(mk.t * 2.5) * 2; });
+        c.marker = mk;
+      }
+      // subtle idle: pets settle into a loaf, people glance around
       c.onUpdate(() => {
         c.bobT += k.dt();
         if (state.focus?.kind === "npc" && state.focus.obj === c) return;
-        if (c.dir !== c.homeDir) setAnim(c, false, c.homeDir);
+        if (c.isPet) {
+          if (c.bobT > 5 && c.curAnim() !== "sit-flick") c.play("sit-flick");
+        } else if (c.dir !== c.homeDir) {
+          setAnim(c, false, c.homeDir);
+        }
       });
+    }
+
+    // ---- ambient wildlife: butterflies over the flowers, gulls over water
+    if (!def.interior) {
+      const flowerSpots = [];
+      const seaRows = new Map();   // row → [minX, maxX] of open water
+      def.ground.forEach((row, y) => {
+        [...row].forEach((ch, x) => {
+          if (ch === "*") flowerSpots.push([x, y]);
+          else if (ch === "w") {
+            const r = seaRows.get(y);
+            if (r) { r[0] = Math.min(r[0], x); r[1] = Math.max(r[1], x); }
+            else seaRows.set(y, [x, x]);
+          }
+        });
+      });
+      // gulls only over real open water — the little pond on the route would
+      // otherwise send them gliding across the whole tree line
+      const gullRows = [...seaRows.entries()].filter(([, [a, b]]) => b - a >= 2);
+      const pick = (list) => list[Math.floor(Math.random() * list.length)];
+
+      for (let i = 0; i < Math.min(7, flowerSpots.length); i++) {
+        const [hx, hy] = pick(flowerSpots);
+        const b = k.add([
+          k.sprite("critters", { anim: "flutter" }),
+          k.pos(hx * T + 8, hy * T + 6), k.anchor("center"), k.z(1e4),
+          { t: k.rand(0, 9), hx: hx * T + 8, hy: hy * T + 6, r: k.rand(10, 26) },
+        ]);
+        b.onUpdate(() => {
+          b.t += k.dt() * 0.6;
+          b.pos.x = b.hx + Math.cos(b.t * 1.7) * b.r;
+          b.pos.y = b.hy + Math.sin(b.t * 2.3) * b.r * 0.55 + Math.sin(b.t * 9) * 1.5;
+          b.flipX = Math.sin(b.t * 1.7) > 0;
+        });
+      }
+      for (let i = 0; i < Math.min(3, gullRows.length); i++) {
+        const [gy, [ax, bx]] = pick(gullRows);
+        const x0 = ax * T - 12;
+        const x1 = (bx + 1) * T + 12;
+        const g = k.add([
+          k.sprite("critters", { anim: "glide" }),
+          k.pos(x0, gy * T), k.anchor("center"), k.z(1e4),
+          { t: k.rand(0, 12), gy: gy * T + 6, x0, span: x1 - x0 },
+        ]);
+        g.onUpdate(() => {
+          g.t += k.dt() * 0.3;
+          const u = (g.t % 2) / 2;                      // sweep across, then wrap
+          g.pos.x = g.x0 + u * g.span;
+          g.pos.y = g.gy + Math.sin(g.t * 3) * 4;
+        });
+      }
     }
 
     // ---- her travel log ✈ (auto-generated monuments on Little Everywhere)
@@ -1170,9 +1495,24 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
     state.player = player;
     for (let i = 0; i < 24; i++) state.trail.push(player.pos.clone());
 
-    state.mookie = addFollower("mookie", sx - 14, sy + 6, 26, 78);
+    // ---- the crowd: Mookie always, Noah once met, plus every recruited animal
+    // (spread carefully — `sprite`/`name` would collide with kaplay's own
+    // component fields, so only the tuning numbers get copied across)
+    state.mookie = addFollower("mookie", sx - 14, sy + 6, {
+      lag: COMPANIONS.mookie.lag, side: COMPANIONS.mookie.side,
+      speed: COMPANIONS.mookie.speed,
+      isPet: true, crewId: "mookie", talkKey: "mookie",
+    });
+    for (const id of save.crew) {
+      const c = COMPANIONS[id];
+      if (!c) continue;
+      addFollower(c.sprite, sx + c.side, sy + 8, {
+        lag: c.lag, side: c.side, speed: c.speed,
+        isPet: true, crewId: id, talkKey: id,
+      });
+    }
     if (save.met) {
-      state.noah = addFollower("noah", sx - 8, sy + 14, 14, 74);
+      state.noah = addFollower("noah", sx - 8, sy + 14, { lag: 8, side: 10, speed: 76 });
     } else if (def.noahPost) {
       const [nx, ny] = def.noahPost;
       state.noah = k.add([
@@ -1180,11 +1520,15 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
         k.pos(nx * T + 8, ny * T + 12), k.anchor("bot"),
         k.area({ shape: new k.Rect(k.vec2(-5, -8), 10, 8) }), k.body({ isStatic: true }),
         k.z(ny * T + 12),
-        "npc", { dir: "down", isPosted: true, lag: 14, speed: 74, forcedTarget: null, onArrive: null, isFollower: false },
+        "npc", {
+          dir: "down", isPosted: true, idleT: 0, lag: 8, side: 10, speed: 76,
+          forcedTarget: null, onArrive: null, isFollower: false, isPet: false,
+        },
       ]);
       addShadow(state.noah);
       // posted noah gets follower behavior after being met (talkNoah converts him)
       const n = state.noah;
+      state.party.push(n);
       n.onUpdate(() => {
         n.z = n.pos.y;
         if (n.isPosted) {
@@ -1200,30 +1544,6 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
       });
     } else {
       state.noah = null;
-    }
-
-    // shared follower logic for converted posted noah
-    function followerStep(f) {
-      let target = null;
-      if (f.forcedTarget) target = f.forcedTarget;
-      else {
-        const idx = state.trail.length - 1 - f.lag;
-        if (idx >= 0) target = state.trail[idx];
-      }
-      if (!target) return;
-      const d = target.sub(f.pos);
-      const dist = d.len();
-      if (dist > (f.forcedTarget ? 2 : 4)) {
-        f.pos = f.pos.add(d.unit().scale(Math.min(dist, f.speed * (state.mounted ? 2.15 : 1) * k.dt())));
-        setAnim(f, true, Math.abs(d.x) > Math.abs(d.y) ? (d.x > 0 ? "right" : "left") : d.y > 0 ? "down" : "up");
-      } else if (f.forcedTarget) {
-        f.forcedTarget = null;
-        const cb = f.onArrive; f.onArrive = null;
-        setAnim(f, false, f.dir);
-        cb?.();
-      } else {
-        setAnim(f, false, f.dir);
-      }
     }
 
     // ---- exclamation bubble over posted noah
@@ -1258,9 +1578,10 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
           const d = state.noah.pos.dist(player.pos);
           if (d < 26 && d < bestD) { bestD = d; best = { kind: "noah", obj: state.noah, focusPos: state.noah.pos, yOff: -32 }; }
         }
-        if (state.mookie) {
-          const d = state.mookie.pos.dist(player.pos);
-          if (d < 20 && d < bestD) { bestD = d; best = { kind: "mookie", obj: state.mookie, focusPos: state.mookie.pos, yOff: -18 }; }
+        for (const pet of state.party) {
+          if (!pet.crewId || !pet.exists() || pet.hidden) continue;
+          const d = pet.pos.dist(player.pos);
+          if (d < 20 && d < bestD) { bestD = d; best = { kind: "pet", obj: pet, focusPos: pet.pos, yOff: -18 }; }
         }
         for (const t of k.get("townsfolk")) {
           const d = t.pos.dist(player.pos);
@@ -1303,7 +1624,7 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
     // ---- entry
     state.mounted = false; // scene objects were rebuilt; remount fresh if needed
     state.rideObj = null;
-    if (save.mounted) mount(true); // she arrived on the ATV
+    if (save.mounted && !def.interior) mount(true); // she arrived on the ATV
     state.exitCooldown = 0.8;
     state.transitioning = false;
     fade(false);
@@ -1378,10 +1699,18 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
   return {
     start(fresh) {
       if (fresh) {
-        save.seen.clear(); save.figs.clear();
-        save.met = false; save.finale = false; save.introDone = false;
-        save.map = "la"; save.pos = null;
+        // wipe EVERY progress field — pumpkins, the crew and the ATV used to
+        // survive a New Game, which is what made restarting look broken
+        Object.assign(save, blankSave());
         state.playerPos = null;
+        state.mounted = false;
+        state.rideObj = null;
+        state.promptShown = false;
+        state.chatIdx = 0;
+        state.catIdx = 0;
+        state.cutscene = false;
+        state.transitioning = false;
+        state.map = "la";
         localStorage.removeItem(SAVE_KEY);
       }
       state.started = true;

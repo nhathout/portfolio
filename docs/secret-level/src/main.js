@@ -59,21 +59,23 @@ const CHAR_ANIMS = {
 };
 k.loadSprite("her", "assets/her.png", { sliceX: 4, sliceY: 4, anims: CHAR_ANIMS });
 k.loadSprite("noah", "assets/noah.png", { sliceX: 4, sliceY: 4, anims: CHAR_ANIMS });
-for (const npc of ["npc_woman", "npc_man", "npc_old"]) {
+for (const npc of ["npc_woman", "npc_man", "npc_old",
+  "npc_marina", "npc_mom", "npc_bro"]) {
   k.loadSprite(npc, `assets/${npc}.png`, { sliceX: 4, sliceY: 4, anims: CHAR_ANIMS });
 }
-k.loadSprite("mookie", "assets/mookie.png", {
-  sliceX: 4, sliceY: 4,
-  anims: {
-    "idle-down": 0,
-    "walk-down": { from: 0, to: 3, speed: 7, loop: true },
-    "idle-up": 4,
-    "walk-up": { from: 4, to: 7, speed: 7, loop: true },
-    "idle-side": 8,
-    "walk-side": { from: 8, to: 11, speed: 7, loop: true },
-    "sit-flick": { from: 12, to: 15, speed: 2.5, loop: true },
-  },
-});
+// cats + dogs share a frame layout (row 4 is the sit/idle fidget)
+const PET_ANIMS = {
+  "idle-down": 0,
+  "walk-down": { from: 0, to: 3, speed: 7, loop: true },
+  "idle-up": 4,
+  "walk-up": { from: 4, to: 7, speed: 7, loop: true },
+  "idle-side": 8,
+  "walk-side": { from: 8, to: 11, speed: 7, loop: true },
+  "sit-flick": { from: 12, to: 15, speed: 2.5, loop: true },
+};
+for (const pet of ["mookie", "leo", "charlie"]) {
+  k.loadSprite(pet, `assets/${pet}.png`, { sliceX: 4, sliceY: 4, anims: PET_ANIMS });
+}
 k.loadSprite("fig", "assets/fig.png", {
   sliceX: 2, sliceY: 1,
   anims: { twinkle: { from: 0, to: 1, speed: 1.6, loop: true } },
@@ -84,9 +86,23 @@ k.loadSprite("pumpkin", "assets/pumpkin.png", {
 });
 k.loadSprite("quad_ride", "assets/quad_ride.png", { sliceX: 3, sliceY: 1 });
 k.loadSprite("garden", "assets/garden.png", { sliceX: 2, sliceY: 1 });
+// two-frame ambient props (pool shimmer, turtle blink, TV flicker, fire)
+for (const [n, speed] of [["pool", 1.4], ["turtle", 0.7], ["in_tv", 2.2], ["in_fire", 3.5]]) {
+  k.loadSprite(n, `assets/${n}.png`, {
+    sliceX: 2, sliceY: 1,
+    anims: { live: { from: 0, to: 1, speed, loop: true } },
+  });
+}
 k.loadSprite("fx", "assets/fx.png", {
   sliceX: 6, sliceY: 1,
   anims: { sparkle: { from: 2, to: 3, speed: 3.5, loop: true } },
+});
+k.loadSprite("critters", "assets/critters.png", {
+  sliceX: 4, sliceY: 1,
+  anims: {
+    flutter: { from: 0, to: 1, speed: 9, loop: true },
+    glide: { from: 2, to: 3, speed: 2.2, loop: true },
+  },
 });
 for (const n of ["tree", "palm", "figtree", "lamp", "bench", "quad", "torii",
   "barrier", "sailboat", "shadow", "radio", "horse", "column", "pyramid",
@@ -95,6 +111,11 @@ for (const n of ["tree", "palm", "figtree", "lamp", "bench", "quad", "torii",
   "maple", "garita", "lobster", "liberty", "flamingo", "eiffel",
   "bigben", "minitorii", "stein", "balloon", "windmill", "lantern",
   "felucca", "wofstar", "needle", "seoulgate",
+  // Aruba 🇦🇼
+  "divi", "palapa", "lounger", "starfish", "beachsign",
+  // interiors 🏡
+  "in_sofa", "in_table", "in_counter", "in_fridge", "in_shelf",
+  "in_plant", "in_petbeds", "in_bowl", "in_lamp",
   "b_la_home", "b_la_house_b", "b_taco_shop", "b_theater", "b_apartment",
   "b_brownstone_b", "b_bu_building", "b_neu_building", "b_cafe"]) {
   if (n === "figtree") k.loadSprite(n, `assets/${n}.png`, { sliceX: 2, sliceY: 1 });
@@ -284,6 +305,7 @@ if (params.get("map")) {
     for (const id of allPointIds()) game.save.seen.add(id);
     for (const id of allFigIds()) game.save.figs.add(id);
     game.save.met = true;
+    for (const id of ["leo", "charlie"]) game.save.crew.add(id); // full herd
   }
   $("title").classList.add("hidden");
   $("hud").classList.remove("hidden");

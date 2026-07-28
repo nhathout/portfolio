@@ -5,6 +5,12 @@
 //   -  path                     s  sand                 w  water (blocked)
 //   r  road                     R  road w/ center dash  k  sidewalk
 //
+// INTERIOR ground characters (maps with `interior: true`):
+//   ,  wood floor (random plank variant)   ;  rug        :  kitchen tile
+//   #  wall face (solid)                   %  wall top (solid)
+//   V  wall + window (solid)               C  wall + framed photo (solid)
+//   D  the front door, from inside (solid — the tile below it is the exit)
+//
 // OBJECT characters ('.' = nothing):
 //   T tree   P palm   f fence   b bush   r rock   l lamp post
 //   n bench  s sign   c construction barrier
@@ -17,9 +23,11 @@
 
 export const TILE = 16;
 
-// wall footprint per building sprite (must mirror tools/make_sprites.py)
+// wall footprint per building sprite (must mirror tools/make_sprites.py).
+// `doorCol` = which tile column inside the sprite holds the door (defaults to
+// the middle) — that's where the interact zone goes.
 export const BUILDING_META = {
-  b_la_home: { wt: 5, ht: 2 },
+  b_la_home: { wt: 8, ht: 3, doorCol: 6 },
   b_la_house_b: { wt: 4, ht: 2 },
   b_taco_shop: { wt: 4, ht: 2 },
   b_theater: { wt: 5, ht: 2 },
@@ -39,13 +47,13 @@ export const MAPS = {
       "wwwsss..**......*........**......*...",
       "wwwsss.....*.........*.........*.....",
       "wwwsss.*.........*.........*.........",
-      "wwwsss......------.....**............",
-      "wwwsss.....--....--.........*........",
-      "wwwsss.....-......-..............*...",
-      "wwwss*.....-.....-.........*.........",
-      "wwwsss......-...-.......*............",
-      "wwwsss......-...-...........**.......",
-      "wwwsss.......---.................*...",
+      "wwwsss..........................*....",
+      "wwwsss.....................**........",
+      "wwwsss...............................",
+      "wwwss*....---------..................",
+      "wwwsss....-...........*..............",
+      "wwwsss....-........*.................",
+      "wwwsss....-...............*.......*..",
       "wwwsss------------------.......------",
       "wwwsss......*........----------------",
       "wwwsss.*............---....**........",
@@ -66,10 +74,10 @@ export const MAPS = {
       ".....b............................T..",
       "..........................r.......b..",
       "....P.............................T..",
-      ".........b.........b................T",
-      "....r....ff...fff.........b..........",
-      "........................b.........T..",
-      ".....P.........b..................b.T",
+      ".........................b.........T.",
+      "....r................................",
+      ".................................T...",
+      ".....P....................b.......b.T",
       "......n...............b..............",
       "...b...............................T.",
       "..........l.......l........l...l.....",
@@ -87,23 +95,29 @@ export const MAPS = {
       "......T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T",
     ],
     buildings: [
-      { sprite: "b_la_home", x: 10, y: 5, point: "la_home" },
-      { sprite: "b_la_house_b", x: 17, y: 5 },
+      // her house ♥ — E on the door fades into the interior scene
+      { sprite: "b_la_home", x: 9, y: 6, point: "la_home",
+        enter: { to: "la_house_in", spawn: "door" } },
+      { sprite: "b_la_house_b", x: 29, y: 6 },
       { sprite: "b_taco_shop", x: 19, y: 11, point: "la_taco" },
       { sprite: "b_theater", x: 24, y: 18, point: "la_theater" },
     ],
     props: [
-      { type: "horse", x: 4, y: 15 }, // beach horse (Miami ♥)
-      { type: "garden", x: 8, y: 9 }, // tomato patch 🍅
+      { type: "horse", x: 4, y: 15 },    // beach horse (Miami ♥)
+      { type: "garden", x: 7, y: 16 },   // tomato patch 🍅
+      { type: "pool", x: 21, y: 7 },     // the pool out back
+      { type: "lounger", x: 25, y: 7 },
+      { type: "lounger", x: 25, y: 10 },
     ],
     points: [
       { id: "la_beach", x: 3, y: 8, w: 3, h: 4 },
       { id: "beach_horse", x: 3, y: 16, w: 3, h: 1, bonus: true },
-      { id: "garden", x: 7, y: 10, w: 3, h: 1, bonus: true },
+      { id: "garden", x: 6, y: 17, w: 3, h: 1, bonus: true },
+      { id: "la_pool", x: 19, y: 8, w: 5, h: 1, bonus: true },
     ],
     figs: [
       { id: "fig_la", x: 9, y: 20 },
-      { id: "fig_la_2", x: 31, y: 4 },
+      { id: "fig_la_2", x: 34, y: 3 },
     ],
     pumpkins: [
       { id: "pk_la_1", x: 8, y: 2 },
@@ -116,8 +130,8 @@ export const MAPS = {
       "33,11": ["→ Little Everywhere (300m)", "→ Mini Boston (4,982km… worth it)"],
     },
     exits: [{ x: 35, y: 11, w: 1, h: 3, to: "route", spawn: "west" }],
-    spawns: { start: [12, 9], west: [33, 12] },
-    noahPost: [14, 9],
+    spawns: { start: [13, 8], west: [33, 12], door: [15, 8] },
+    noahPost: [17, 8],
   },
 
   // ------------------------------------------------------------- THE ROUTE
@@ -171,6 +185,8 @@ export const MAPS = {
       { type: "cypress", x: 5, y: 6 },
       { type: "barrel", x: 25, y: 12 },     // Moldova
       { type: "matryoshka", x: 23, y: 10 }, // Russia
+      { type: "divi", x: 20, y: 12 },       // Aruba 🇦🇼 — next stop ♥
+      { type: "starfish", x: 22, y: 13 },
       { type: "station", x: 14, y: 11 },    // ✈ the travel log
     ],
     points: [
@@ -182,6 +198,7 @@ export const MAPS = {
       { id: "lm_italy", x: 2, y: 5, w: 3, h: 1, bonus: true },
       { id: "lm_moldova", x: 24, y: 13, w: 3, h: 1, bonus: true },
       { id: "lm_russia", x: 22, y: 11, w: 3, h: 1, bonus: true },
+      { id: "lm_aruba", x: 19, y: 13, w: 3, h: 1, bonus: true },
       { id: "travel_station", x: 13, y: 12, w: 3, h: 1, bonus: true },
     ],
     figs: [
@@ -215,16 +232,16 @@ export const MAPS = {
       "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
       "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
       "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
-      "........*..........-.......*.....*....",
-      "....**....*........-......**....*......",
-      ".....*.......*.....-....*.......*......",
-      "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
-      "RRRRRRRRRRRRRRRRRRkkRRRRRRRRRRRRRRRRRR",
-      "rrrrrrrrrrrrrrrrrrkkrrrrrrrrrrrrrrrrrr",
-      "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
-      "......*............-......*...........",
-      "...**......*.......-....*......**.....",
-      ".....*...........--....*..............",
+      "........*..........-.......*..ssssss..",
+      "....**....*........-......**.sssssssss",
+      ".....*.......*.....-....*...ssssssssss",
+      "kkkkkkkkkkkkkkkkkkkkkkkkkkksssssssssss",
+      "RRRRRRRRRRRRRRRRRRkkRRRRRRRsssssssssss",
+      "rrrrrrrrrrrrrrrrrrkkrrrrrrrsssssssssss",
+      "kkkkkkkkkkkkkkkkkkkkkkkkkkksssssssssss",
+      "......*............-......ssssssssssss",
+      "...**......*.......-....*.....ssssssss",
+      ".....*...........--....*.........sssss",
       "....*...........--.....*....*.........",
       "...*...........--...........*.........",
       "....----------.........------------...",
@@ -241,16 +258,16 @@ export const MAPS = {
       "......................................",
       "......................................",
       "......................................",
-      "T....b...............................T",
-      "...T..l...n..T..l.....T.l...n...l..T..",
-      "ffffffffffffffffff..ffffffffffffffffff",
-      "......................................",
-      ".................................c....",
-      ".................................c....",
-      "..s..............................s....",
-      ".....l.....b...l....b....l.......b....",
-      ".T.......b...........................T",
-      "....b....b.....b.......b.......b......",
+      "T....b......................P........T",
+      "...T..l...n..T..l.....T.l....P...P....",
+      "ffffffffffffffffff..fffffff.P.........",
+      "..............................P.......",
+      "..........................c...........",
+      "..........................c...........",
+      "..s.......................c.......P...",
+      ".....l.....b...l....b....l..........P.",
+      ".T.......b...........................P",
+      "....b....b.....b.......b.......P......",
       "T........................b...........T",
       "...b..................b..........b....",
       ".T...................................T",
@@ -271,14 +288,22 @@ export const MAPS = {
       { sprite: "b_brownstone_b", x: 20, y: 21 },
     ],
     props: [
-      { type: "torii", x: 34.5, y: 9 },
+      // 🇦🇼 the paradise oasis past the barriers — opening in one week ♥
+      { type: "palapa", x: 32, y: 6 },
+      { type: "beachsign", x: 29, y: 9 },
+      { type: "turtle", x: 34, y: 11 },
+      { type: "lounger", x: 30, y: 12 },
+      { type: "divi", x: 36, y: 12 },
+      { type: "starfish", x: 36, y: 8 },
+      { type: "starfish", x: 35, y: 13 },
       { type: "sailboat", x: 14, y: 2, drift: true },
       { type: "sailboat", x: 30, y: 1, drift: true },
       { type: "radio", x: 21, y: 5 }, // someone left a boombox by the river…
     ],
     points: [
-      { id: "japan_gate", x: 31, y: 7, w: 2, h: 4, bonus: true },
-      { id: "esplanade", x: 26, y: 4, w: 3, h: 2 },
+      { id: "aruba_beach", x: 30, y: 8, w: 4, h: 1 },
+      { id: "aruba_turtle", x: 33, y: 12, w: 3, h: 1 },
+      { id: "esplanade", x: 25, y: 4, w: 3, h: 2 },
       { id: "radio", x: 20, y: 4, w: 3, h: 2, bonus: true },
     ],
     figs: [
@@ -294,13 +319,73 @@ export const MAPS = {
       "2,10": ["← Little Everywhere (300m)", "← Mini LA (a long walk)"],
     },
     npcs: [
-      { id: "bos_student", sprite: "npc_woman", x: 24, y: 13, dir: "down" },
+      { id: "bos_student", sprite: "npc_woman", x: 22, y: 13, dir: "down" },
       { id: "bos_runner", sprite: "npc_man", x: 8, y: 5, dir: "down" },
-      { id: "bos_oldman", sprite: "npc_old", x: 30, y: 12, dir: "left" },
+      { id: "bos_oldman", sprite: "npc_old", x: 14, y: 12, dir: "left" },
     ],
     exits: [{ x: 0, y: 7, w: 1, h: 4, to: "route", spawn: "east" }],
-    spawns: { west: [2, 9] },
+    spawns: { west: [2, 9], beach: [32, 10] }, // `beach` is a dev shortcut
     noahPost: [13, 21], // only used if she somehow got here without him
+  },
+
+  // ------------------------------------------------------- INSIDE HER HOUSE
+  // One big warm room: kitchen on the left, living room in the middle,
+  // dining + fireplace on the right. Marina, her mom and her little brother
+  // are here, and so are Leo and Charlie (who will happily leave with her).
+  la_house_in: {
+    name: "home ♥",
+    interior: true,
+    ground: [
+      "%%%%%%%%%%%%%%%%%%%%",
+      "##V##C###V###C##V###",
+      "#,,,,,,,,,,,,,,,,,,#",
+      "#,,,,,,,,,,,,,,,,,,#",
+      "#,,,;;;;;;,,,,,,,,,#",
+      "#,,,;;;;;;,,,,,,,,,#",
+      "#,,,;;;;;;,,,,,,,,,#",
+      "#,,,,,,,,,,,,,,,,,,#",
+      "#:::::,,,,,,,,,,,,,#",
+      "#:::::,,,,,,,,,,,,,#",
+      "#,,,,,,,,,,,,,,,,,,#",
+      "#,,,,,,,,,,,,,,,,,,#",
+      "########DD##########",
+    ],
+    objects: [],
+    buildings: [],
+    props: [
+      { type: "in_counter", x: 3, y: 9 },
+      { type: "in_fridge", x: 1, y: 7 },
+      { type: "in_sofa", x: 6, y: 4 },
+      { type: "in_tv", x: 6, y: 8 },
+      { type: "in_lamp", x: 10, y: 4 },
+      { type: "in_table", x: 13, y: 6 },
+      { type: "in_fire", x: 16, y: 3 },
+      { type: "in_shelf", x: 17, y: 9 },
+      { type: "in_plant", x: 1, y: 4 },
+      { type: "in_plant", x: 18, y: 6 },
+      { type: "in_petbeds", x: 15, y: 11 },
+      { type: "in_bowl", x: 12, y: 11 },
+    ],
+    points: [],
+    figs: [{ id: "fig_home", x: 2, y: 11 }],
+    pumpkins: [{ id: "pk_home", x: 18, y: 2 }],
+    // everyone lives here — talking to each one is a memory (♥ counter),
+    // and the two with `join` come along afterwards
+    npcs: [
+      { id: "home_marina", sprite: "npc_marina", x: 3, y: 7, dir: "down",
+        point: "home_marina" },
+      { id: "home_mom", sprite: "npc_mom", x: 12, y: 8, dir: "down",
+        point: "home_mom" },
+      // parked in front of the TV, obviously
+      { id: "home_bro", sprite: "npc_bro", x: 7, y: 10, dir: "up",
+        point: "home_bro" },
+      { id: "home_leo", sprite: "leo", pet: true, x: 14, y: 11, dir: "down",
+        point: "home_leo", join: "leo" },
+      { id: "home_charlie", sprite: "charlie", pet: true, x: 16, y: 11, dir: "down",
+        point: "home_charlie", join: "charlie" },
+    ],
+    exits: [{ x: 8, y: 11, w: 2, h: 1, to: "la", spawn: "door" }],
+    spawns: { door: [9, 10] },
   },
 };
 
@@ -316,12 +401,14 @@ for (const def of Object.values(MAPS)) {
   def.objects = obj.map(fit);
 }
 
-/** every memory point id, in "story order" (japan_gate is a bonus, not required) */
+/** every memory point id, in "story order" (bonus spots don't gate the finale) */
 export function allPointIds() {
   const ids = [];
   for (const def of Object.values(MAPS)) {
     for (const b of def.buildings) if (b.point) ids.push(b.point);
     for (const p of def.points) if (!p.bonus) ids.push(p.id);
+    // people are memories too — the house crew fills the ♥ counter
+    for (const n of def.npcs || []) if (n.point && !n.bonus) ids.push(n.point);
   }
   return ids;
 }

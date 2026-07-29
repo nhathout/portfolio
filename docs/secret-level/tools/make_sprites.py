@@ -207,6 +207,34 @@ BRO = {                                # her little brother — blonde, hoodie
     "S": hex_rgba("d7b493"), "e": hex_rgba("35241d"), "t": hex_rgba("58a05f"),
     "T": hex_rgba("3f7d47"), "W": hex_rgba("efe9db"), "d": hex_rgba("46536e"),
     "D": hex_rgba("343e55"), "w": hex_rgba("e2ddcf"),
+    "R": hex_rgba("a9793e"), "L": hex_rgba("d8dde2"),   # fishing rod + reel
+}
+
+# ---- the second house 🌻 ---------------------------------------------------
+JACK = {                               # Jack — her big brother. tall, wide,
+    "h": hex_rgba("352c36"),           # black hair…
+    "H": hex_rgba("4e4250"),           # …and the beard, a shade up so the two
+    "s": hex_rgba("e8bd94"), "S": hex_rgba("c39468"), "e": hex_rgba("241d1c"),
+    "t": hex_rgba("94604a"),           # flannel shirt (rust)
+    "T": hex_rgba("6e4232"),
+    "W": hex_rgba("e6d8bc"),           # shirt placket
+    "d": hex_rgba("3f4a5e"), "D": hex_rgba("2e3849"),  # work jeans
+    "w": hex_rgba("6b5844"),           # boots
+}
+
+WIFE = {                               # his wife — curly brown hair
+    "h": hex_rgba("6b431f"), "H": hex_rgba("946235"), "s": hex_rgba("f2d2b0"),
+    "S": hex_rgba("d4ac89"), "e": hex_rgba("3d2a1c"), "t": hex_rgba("d18a3f"),
+    "T": hex_rgba("a3652a"), "d": hex_rgba("5f7a5a"), "D": hex_rgba("46604a"),
+    "w": hex_rgba("efe9db"),
+}
+
+CHAKRA = {                             # Chakra — the big black dog 🖤
+    "g": hex_rgba("4d4857"),           # coat
+    "G": hex_rgba("332f3c"),           # ears / legs / shadow
+    "l": hex_rgba("7a7389"),           # the shine along her back
+    "w": hex_rgba("d6d2de"),           # muzzle, chest blaze, paw tips
+    "p": hex_rgba("d98a94"), "e": hex_rgba("e8b44a"), "n": hex_rgba("1e1b24"),
 }
 
 LEO = {                                # Leo — big orange tabby 🐱
@@ -752,6 +780,172 @@ def mirror_rows(rows):
     return [r[::-1] for r in rows]
 
 
+def merge_rows(base, over):
+    """paint `over` on top of `base` ('.' in over = keep the base pixel)"""
+    out = []
+    for j in range(max(len(base), len(over))):
+        b = base[j] if j < len(base) else ""
+        o = over[j] if j < len(over) else ""
+        row = ""
+        for i in range(max(len(b), len(o))):
+            oc = o[i] if i < len(o) else "."
+            row += oc if oc != "." else (b[i] if i < len(b) else ".")
+        out.append(row)
+    return out
+
+
+# ---- her brother, take two: no TV, a fishing rod instead 🎣 ----------------
+# The rod lives in the headroom above the kid frame, so his torso art moves up
+# (head_pad 2 + torso_h 20) and his feet stay exactly where they were.
+BRO_TORSO_H = 20
+BRO_HEAD_PAD = 2
+_BRO_PAD = ["." * 16] * 6
+
+ROD_OVERLAY = [
+    "................",
+    "................",
+    "................",
+    "...............R",
+    "...............R",
+    "...............R",
+    "...............R",
+    "...............R",
+    "..............R.",
+    "..............R.",
+    "..............R.",
+    "..............R.",
+    "..............R.",
+    "..............R.",
+    "..............R.",
+    "..............R.",
+    ".............RRL",
+    "..............L.",
+    "................",
+    "................",
+]
+
+BRO_DOWN = merge_rows(_BRO_PAD + KID_DOWN, ROD_OVERLAY)
+BRO_UP = merge_rows(_BRO_PAD + KID_UP, ROD_OVERLAY)
+BRO_SIDE = merge_rows(_BRO_PAD + KID_SIDE, ROD_OVERLAY)
+
+
+# ---- Jack: tall, broad, black hair and a full beard -----------------------
+# 21 rows of torso at head_pad 1 → he stands three pixels taller than everyone
+# else while his boots land on the same ground line.
+JACK_TORSO_H = 21
+JACK_HEAD_PAD = 1
+
+JACK_DOWN = [
+    "................",
+    "....hhhhhhhh....",
+    "...hhhhhhhhhh...",
+    "..hhhhhhhhhhhh..",
+    "..hHhhhhhhhhHh..",
+    "..hhhhhhhhhhhh..",
+    "..hhsssssssshh..",
+    "..hssssssssssh..",
+    "..hhseesseeshh..",
+    "..hhseesseeshh..",
+    "..hhsssssssshh..",
+    "..hhHHssssHHhh..",
+    "..hHHHHHHHHHHh..",
+    "...HHHHHHHHHH...",
+    "....HHHHHHHH....",
+    ".tttttttttttttt.",
+    ".tttttttttttttt.",
+    ".ttttttWWtttttt.",
+    "stttttttttttttts",
+    "sTttttttttttttTs",
+    ".TTTTTTTTTTTTTT.",
+]
+
+JACK_UP = [
+    "................",
+    "....hhhhhhhh....",
+    "...hhhhhhhhhh...",
+    "..hhhhhhhhhhhh..",
+    "..hhHhhhhhhHhh..",
+    "..hhhhhhhhhhhh..",
+    "..hhhhhhhhhhhh..",
+    "..hhhhhhhhhhhh..",
+    "..hhhhhhhhhhhh..",
+    "..hhhHhhhhHhhh..",
+    "..hhhhhhhhhhhh..",
+    "..hhhhhhhhhhhh..",
+    "...hhhhhhhhhh...",
+    "...hhhhhhhhhh...",
+    "....hhhhhhhh....",
+    ".tttttttttttttt.",
+    ".tttttttttttttt.",
+    ".tttttttttttttt.",
+    "stttttttttttttts",
+    "sTttttttttttttTs",
+    ".TTTTTTTTTTTTTT.",
+]
+
+JACK_SIDE = [   # facing right
+    "................",
+    "...hhhhhhhh.....",
+    "..hhhhhhhhhh....",
+    "..hhhhhhhhhhh...",
+    "..hhHhhhhhhhh...",
+    "..hhhhhhhhhhh...",
+    "..hhhhhhhssss...",
+    "..hhhhhhsssssss.",
+    "..hhhhhhssseess.",
+    "..hhhhhhssseess.",
+    "..hhhhhhsssssss.",
+    "..hhhHHHHsssss..",
+    "..hhHHHHHHHss...",
+    "..hHHHHHHHHH....",
+    "...HHHHHHHH.....",
+    "..tttttttttttt..",
+    "..tttttttttttt..",
+    "..tttttttttttt..",
+    ".tttttttttttttss",
+    ".tTtttttttttttss",
+    "..TTTTTTTTTTTT..",
+]
+
+JACK_LEGS_FRONT = {
+    "stand": [
+        "...dddddddddd...",
+        "...dDddddddDd...",
+        "....dd....dd....",
+        "....dd....dd....",
+        "....ww....ww....",
+        "................",
+    ],
+    "a": [
+        "...dddddddddd...",
+        "...dDddddddDd...",
+        "....dd....dd....",
+        "....ww....dd....",
+        "..........ww....",
+        "................",
+    ],
+}
+
+JACK_LEGS_SIDE = {
+    "stand": [
+        "....dddddddd....",
+        "....dDddddDd....",
+        ".....dddddd.....",
+        ".....dddddd.....",
+        ".....wwwwww.....",
+        "................",
+    ],
+    "a": [
+        "....dddddddd....",
+        "....dDddddDd....",
+        ".....dddddd.....",
+        "....dd....dd....",
+        "...ww......ww...",
+        "................",
+    ],
+}
+
+
 # tiny party hat, drawn over the top of the head (birthday girl only ♥)
 HAT_PAL = {
     "Y": hex_rgba("f0c040"),   # cone
@@ -1113,6 +1307,159 @@ DOG = {
 }
 
 
+# ---------------------------------------------------------------------------
+# CHAKRA — the big black dog. Same 16x16 / 4x4 layout, but she fills the whole
+# frame: broader chest, longer legs, a proper blocky head.
+# ---------------------------------------------------------------------------
+
+BIGDOG = {
+    "down": [
+        "................",
+        "...llllllllll...",
+        ".GGlgggggggglGG.",
+        ".GGgeggggggegGG.",
+        ".GGggggggggggGG.",
+        ".GGgggllllgggGG.",
+        ".GGgglwnnwlggGG.",
+        "..Ggllwwwwllg...",
+        "...gllllllllg...",
+        "....gggwwggg....",
+        "..llgggwwgggll..",
+        "..gggggwwggggg..",
+        "..gggggwwggggg.G",
+        "..gggggggggggg..",
+        "..GG........GG..",
+        "..ww........ww..",
+    ],
+    "down_a": [
+        "................",
+        "...llllllllll...",
+        ".GGlgggggggglGG.",
+        ".GGgeggggggegGG.",
+        ".GGggggggggggGG.",
+        ".GGgggllllgggGG.",
+        ".GGgglwnnwlggGG.",
+        "..Ggllwwwwllg...",
+        "...gllllllllg...",
+        "....gggwwggg...G",
+        "..llgggwwgggll.G",
+        "..gggggwwggggg..",
+        "..gggggwwggggg..",
+        "..gggggggggggg..",
+        ".GG..........GG.",
+        ".ww..........ww.",
+    ],
+    "up": [
+        "................",
+        "...llllllllll...",
+        ".lGggggggggggGl.",
+        ".lGggggggggggGl.",
+        ".lGggggggggggGl.",
+        ".GGggggggggggGG.",
+        ".GGggggggggggGG.",
+        "..GggggggggggG..",
+        "...gggggggggg...",
+        "....llllllll....",
+        "..llgggggggggg..",
+        "..gggggggggggg..",
+        "..gggggggggggg.G",
+        "..gggggggggggg..",
+        "..GG........GG..",
+        "..ww........ww..",
+    ],
+    "up_a": [
+        "................",
+        "...llllllllll...",
+        ".lGggggggggggGl.",
+        ".lGggggggggggGl.",
+        ".lGggggggggggGl.",
+        ".GGggggggggggGG.",
+        ".GGggggggggggGG.",
+        "..GggggggggggG..",
+        "...gggggggggg...",
+        "....llllllll...G",
+        "..llgggggggggg.G",
+        "..gggggggggggg..",
+        "..gggggggggggg..",
+        "..gggggggggggg..",
+        ".GG..........GG.",
+        ".ww..........ww.",
+    ],
+    "side": [   # facing right
+        "................",
+        "................",
+        ".......gggggggg.",
+        "G.....gggggggggg",
+        "GG....gGgggeggww",
+        ".GG...gGgggggwwn",
+        "..GGllgGgggwwwwn",
+        "...llllgGgggwww.",
+        "..llgggggggggww.",
+        "..gggggggggggg..",
+        ".ggggggggggggg..",
+        ".gggggggglwwlg..",
+        ".gggggggggggg...",
+        ".GG......GGG....",
+        ".ww......www....",
+        "................",
+    ],
+    "side_a": [
+        "................",
+        "................",
+        ".......gggggggg.",
+        "G.....gggggggggg",
+        "GG....gGgggeggww",
+        "GG....gGgggggwwn",
+        ".GGGllgGgggwwwwn",
+        "...llllgGgggwww.",
+        "..llgggggggggww.",
+        "..gggggggggggg..",
+        ".ggggggggggggg..",
+        ".gggggggglwwlg..",
+        ".gggggggggggg...",
+        "GG........GGG...",
+        "ww........www...",
+        "................",
+    ],
+    "sit": [
+        "................",
+        "...llllllllll...",
+        ".GGlgggggggglGG.",
+        ".GGgeggggggegGG.",
+        ".GGggggggggggGG.",
+        ".GGgggllllgggGG.",
+        ".GGgglwnnwlggGG.",
+        "..Ggllwwwwllg...",
+        "...gllllllllg...",
+        "..llgggwwgggll..",
+        "..gggggwwggggg..",
+        "..gggggwwggggg..",
+        "..gggggggggggg.G",
+        "..gggggggggggg.G",
+        "..ww........ww..",
+        "................",
+    ],
+    "sit_b": [
+        "................",
+        "...llllllllll...",
+        ".GGlgggggggglGG.",
+        ".GGggggggggggGG.",
+        ".GGggggggggggGG.",
+        ".GGgggllllgggGG.",
+        ".GGgglwnnwlggGG.",
+        "..Ggllwwwwllg...",
+        "...gllllllllg...",
+        "..llgggwwgggll.G",
+        "..gggggwwggggg.G",
+        "..gggggwwggggg..",
+        "..gggggggggggg..",
+        "..gggggggggggg..",
+        "..ww........ww..",
+        "................",
+    ],
+}
+
+
 def compose_quad(grids, pal):
     """4x4 sheet for a 16x16 four-legged friend (cats + dogs)."""
     sheet = Canvas(16 * 4, 16 * 4)
@@ -1426,10 +1773,14 @@ TILE_ORDER = [
     ("ktile", lambda: tile_ktile()),
     ("rug_a", lambda: tile_rugf(0)),
     ("rug_b", lambda: tile_rugf(1)),
+    ("boho_a", lambda: tile_boho(0)),
+    ("boho_b", lambda: tile_boho(1)),
     ("walltop", lambda: tile_walltop()),
     ("wallface", lambda: tile_wallface()),
     ("wallwin", lambda: tile_wallwin()),
     ("wallpic", lambda: tile_wallpic()),
+    ("wallmac", lambda: tile_wallmac()),
+    ("wallherb", lambda: tile_wallherb()),
     ("indoor", lambda: tile_indoor()),
 ] + [(f"path_{m}", (lambda mm: (lambda: tile_path_m(mm)))(m)) for m in range(16)] \
   + [(f"sand_{m}", (lambda mm: (lambda: tile_sand_m(mm)))(m)) for m in range(16)]
@@ -2521,6 +2872,431 @@ def big_house():
     return c
 
 
+def jack_house():
+    """Jack's place, a few streets down: long low ranch with a shingled gable,
+    sage board-and-batten siding, a covered porch and a stone chimney.
+    Same 8x3 footprint as her house, deliberately a different animal."""
+    wt, ht = 8, 3
+    W = wt * 16
+    roof_h = 22
+    wallH = ht * 16
+    H = roof_h + wallH + 2
+    c = Canvas(W, H)
+    wall = hex_rgba("8fa77e")          # sage board-and-batten
+    wall_d = hex_rgba("6e8560")
+    wall_l = hex_rgba("a8be96")
+    roof = hex_rgba("5c5148")          # cedar shingles
+    roof_d = hex_rgba("453c35")
+    roof_l = hex_rgba("74675c")
+    trim = hex_rgba("f4efdf")
+    win = hex_rgba("9fd6ef")
+    win_hi = hex_rgba("e4f6ff")
+    win_d = hex_rgba("6b9fbe")
+    door = hex_rgba("4f7a52")
+    door_d = hex_rgba("3a5c3d")
+    stone = hex_rgba("9a968f")
+    stone_d = hex_rgba("74716b")
+
+    # ---- chimney behind the roof (drawn first so shingles overlap its base)
+    c.rect(14, 0, 14, roof_h, stone)
+    c.rect(14, 0, 14, 2, stone_d)
+    for j in range(3, roof_h, 4):
+        c.rect(14, j, 14, 1, stone_d)
+    c.rect(16, 2, 3, 3, hex_rgba("bab6ae"))
+
+    # ---- gabled shingle roof (steeper than hers, with a centre gable)
+    for j in range(roof_h):
+        inset = max(0, (roof_h - 6 - j) * 2)
+        if inset >= W // 2:
+            continue
+        c.rect(inset, j, W - inset * 2, 1, roof)
+        if j % 3 == 2:                       # shingle courses
+            c.rect(inset, j, W - inset * 2, 1, roof_d)
+        for i in range(inset + (j % 6), W - inset, 6):
+            c.set(i, j, roof_l)
+    c.rect(0, roof_h - 3, W, 3, roof_d)
+    c.rect(0, roof_h - 1, W, 1, OUTLINE)
+
+    y0 = roof_h
+    c.rect(0, y0, W, wallH, wall)
+    c.rect(0, y0, W, 2, wall_d)
+    for i in range(3, W, 7):                 # vertical battens
+        c.rect(i, y0 + 2, 1, wallH - 4, wall_l)
+
+    # ---- chimney continues down the left wall
+    c.rect(14, y0, 14, wallH, stone)
+    for j in range(y0 + 2, y0 + wallH, 4):
+        c.rect(14, j, 14, 1, stone_d)
+        for i in range(14 + (j % 8) // 4 * 4, 28, 8):
+            c.rect(i, j - 3, 1, 3, stone_d)
+
+    # ---- windows: two big ones left, a wide one right of the porch
+    for wx, ww in ((32, 20), (56, 14), (108, 14)):
+        c.rect(wx, y0 + 8, ww, 15, OUTLINE)
+        c.rect(wx + 1, y0 + 9, ww - 2, 13, win)
+        c.rect(wx + 1, y0 + 9, ww - 2, 3, win_hi)
+        c.rect(wx + 1, y0 + 18, ww - 2, 3, win_d)
+        c.rect(wx + ww // 2 - 1, y0 + 9, 2, 13, trim)
+        c.rect(wx - 1, y0 + 23, ww + 2, 1, trim)
+        # window box of flowers ♥
+        c.rect(wx - 1, y0 + 24, ww + 2, 4, hex_rgba("8a683c"))
+        c.rect(wx - 1, y0 + 24, ww + 2, 1, hex_rgba("b08a56"))
+        for i in range(wx, wx + ww, 4):
+            c.rect(i, y0 + 22, 2, 2, C_LEAF)
+            c.set(i + 1, y0 + 21, hex_rgba("f278a2") if i % 8 else hex_rgba("f0d264"))
+
+    # ---- covered porch: posts + beam + the front door
+    py = y0 + 18
+    c.rect(72, py, 40, 3, trim)                 # beam
+    c.rect(72, py + 3, 40, 1, hex_rgba("cfc7b6"))
+    for px in (73, 106):
+        c.rect(px, py + 3, 4, wallH - 21, trim)
+        c.rect(px + 3, py + 3, 1, wallH - 21, hex_rgba("cfc7b6"))
+    dx, dh = 84, 20
+    dy = y0 + wallH - dh
+    c.rect(dx - 2, dy - 3, 18, 3, trim)
+    c.rect(dx - 1, dy - 1, 16, dh + 1, OUTLINE)
+    c.rect(dx, dy, 14, dh, door)
+    c.rect(dx + 2, dy + 3, 10, 6, door_d)
+    c.rect(dx + 3, dy + 4, 8, 4, win)           # little window in the door
+    c.set(dx + 11, dy + 12, hex_rgba("e8c74a"))
+    # porch light + a hanging plant off the beam
+    c.rect(80, py + 5, 3, 4, hex_rgba("f0d264"))
+    c.rect(101, py + 4, 6, 3, hex_rgba("c2704e"))
+    c.rect(102, py + 7, 4, 3, C_LEAF_D)
+    c.rect(101, py + 6, 6, 2, C_LEAF)
+    # porch step
+    c.rect(dx - 5, y0 + wallH - 3, 24, 3, hex_rgba("cfc7b6"))
+
+    c.rect(0, y0 + wallH - 2, W, 2, wall_d)
+    c.outline(OUTLINE)
+    return c
+
+
+# ---------------------------------------------------------------------------
+# THE GARDEN 🌻 — Jack's plot: raised beds, corn, sunflowers, a fire pit
+# ---------------------------------------------------------------------------
+
+def _leaf_blob(c, x, y, main, dark, light, r=4):
+    """a round bushy plant"""
+    for j in range(-r, r + 1):
+        w = max(0, r - (abs(j) + 1) // 2)
+        c.rect(x - w, y + j, w * 2 + 1, 1, main)
+    c.rect(x - r + 1, y - r + 2, 2, 1, light)
+    c.set(x - 1, y - r + 1, light)
+    c.set(x + r - 2, y + r - 2, dark)
+    c.set(x + 1, y + 1, dark)
+
+
+def prop_vegbed(kind=0):
+    """raised bed — tomatoes on stakes + lettuce, or carrots + peppers"""
+    c = Canvas(40, 28)
+    soil = hex_rgba("58402c")
+    soil_d = hex_rgba("43301f")
+    soil_l = hex_rgba("6d5138")
+    wood = hex_rgba("b08a56")
+    wood_d = hex_rgba("8a683c")
+    stake = hex_rgba("c9a066")
+
+    c.rect(2, 13, 36, 11, soil)
+    c.rect(2, 13, 36, 2, soil_l)
+    for i in range(3, 37, 5):
+        c.set(i, 17 + (i % 3), soil_d)
+        c.set(i + 2, 20 - (i % 2), soil_d)
+
+    if kind == 0:
+        for sx in (8, 30):                       # tomato vines up two stakes
+            c.rect(sx, 1, 1, 15, stake)
+            for j in range(3, 15, 3):
+                c.rect(sx - 3, j, 7, 1, C_LEAF_D)
+                c.rect(sx - 2, j - 1, 5, 1, C_LEAF)
+            for j, dx in ((5, -4), (9, 3), (12, -3)):
+                c.rect(sx + dx, j, 3, 3, hex_rgba("d8452f"))
+                c.set(sx + dx, j, hex_rgba("f06a4a"))
+        for lx, ly in ((18, 11), (25, 12), (15, 17), (21, 18), (29, 17)):
+            _leaf_blob(c, lx, ly, C_LEAF, C_LEAF_D, C_LEAF_L, 4)
+    else:
+        for x in range(6, 37, 6):                # carrot tops
+            for j in range(6):
+                c.set(x + j - 3, 13 - j, C_LEAF_D)
+                c.set(x - j + 3, 13 - j, C_LEAF)
+                c.set(x, 12 - j, C_LEAF_L)
+            c.rect(x - 2, 12, 5, 2, C_LEAF)
+        for px, py in ((11, 18), (23, 19), (33, 18)):
+            _leaf_blob(c, px, py, C_LEAF_D, C_LEAF_D, C_LEAF, 3)
+            c.rect(px - 1, py + 1, 3, 5, hex_rgba("e8913c"))
+            c.set(px - 1, py + 1, hex_rgba("f4b06a"))
+
+    # the frame goes on last so the plants read as sitting inside it
+    c.rect(0, 19, 40, 6, wood)
+    c.rect(0, 19, 40, 1, hex_rgba("cba274"))
+    c.rect(0, 22, 40, 1, wood_d)
+    c.rect(0, 24, 40, 2, wood_d)
+    for i in (0, 37):
+        c.rect(i, 17, 3, 9, wood_d)
+        c.rect(i, 17, 3, 1, wood)
+    c.outline(OUTLINE)
+    return c
+
+
+def prop_corn():
+    c = Canvas(24, 38)
+    stalk = hex_rgba("6aa84f")
+    stalk_d = hex_rgba("4d7f39")
+    silk = hex_rgba("e8c74a")
+    for i, (x, top) in enumerate(((4, 8), (12, 2), (19, 11))):
+        c.rect(x, top, 2, 38 - top, stalk)
+        c.rect(x, top, 1, 38 - top, stalk_d)
+        for j in range(4):                       # tassel
+            c.set(x - 1 + j % 2, top - 4 + j, silk)
+            c.set(x + 2 - j % 2, top - 3 + j, silk)
+        for kk, ly in enumerate(range(top + 5, 34, 7)):
+            side = -1 if (kk + i) % 2 == 0 else 1
+            for j in range(6):
+                c.set(x + side * (j + 1), ly + j // 2, C_LEAF_D if j % 2 else C_LEAF)
+                c.set(x + side * (j + 1), ly + j // 2 + 1, C_LEAF)
+        if i != 2:                               # an ear, husk peeled back
+            ey = top + 15
+            c.rect(x + 2, ey, 3, 8, hex_rgba("f0d264"))
+            c.rect(x + 2, ey, 1, 8, hex_rgba("d8b03c"))
+            c.rect(x + 1, ey - 2, 4, 3, C_LEAF_D)
+    c.outline(OUTLINE)
+    return c
+
+
+def prop_sunflower():
+    c = Canvas(22, 38)
+    stem = hex_rgba("5f9440")
+    stem_d = hex_rgba("47772f")
+    petal = hex_rgba("f5c542")
+    petal_d = hex_rgba("d99b1f")
+    heart = hex_rgba("6b4423")
+    heart_d = hex_rgba("4d2f18")
+    for x, top in ((5, 10), (15, 4), (10, 19)):
+        cy = top + 2
+        c.rect(x, cy, 2, 38 - cy, stem)
+        c.rect(x, cy, 1, 38 - cy, stem_d)
+        for ly, side in ((cy + 10, -1), (cy + 16, 1)):
+            for j in range(5):
+                px = x + (2 + j if side > 0 else -1 - j)
+                c.rect(px, ly + j // 2, 1, 3 - j // 3, C_LEAF if j % 2 else C_LEAF_D)
+        for j in range(-6, 7):                   # petals
+            w = 6 - abs(j) // 2
+            c.rect(x - w + 1, cy + j, w * 2, 1, petal)
+        for j in range(-4, 5):
+            w = 4 - abs(j) // 3
+            c.rect(x - w + 1, cy + j, w * 2, 1, petal_d)
+        for j in range(-3, 4):
+            c.rect(x - 2, cy + j, 6, 1, heart)
+        c.rect(x - 1, cy - 2, 3, 3, heart_d)
+        c.set(x + 2, cy + 2, heart_d)
+    c.outline(OUTLINE)
+    return c
+
+
+def prop_firepit():
+    """stone ring, crossed logs, and a proper fire — 2 frames of flicker"""
+    sheet = Canvas(72, 30)
+    stone = hex_rgba("9a968f")
+    stone_d = hex_rgba("74716b")
+    stone_l = hex_rgba("bab6ae")
+    ash = hex_rgba("4a4542")
+    log = hex_rgba("7a5636")
+    log_d = hex_rgba("583d26")
+    for fi in range(2):
+        c = Canvas(36, 30)
+        c.rect(4, 14, 28, 12, ash)                 # the pit
+        c.rect(6, 12, 24, 4, ash)
+        for i, (sx, sy, w, h) in enumerate(         # back of the ring
+                ((1, 12, 8, 8), (8, 10, 8, 8), (15, 9, 8, 8),
+                 (22, 10, 8, 8), (28, 12, 7, 8))):
+            c.rect(sx, sy, w, h, stone if i % 2 == 0 else stone_l)
+            c.rect(sx, sy + h - 2, w, 2, stone_d)
+        c.rect(8, 20, 20, 4, log)                   # logs
+        c.rect(8, 23, 20, 1, log_d)
+        c.rect(11, 16, 14, 5, log_d)
+        c.rect(11, 16, 14, 1, log)
+        flame = ["....##....", "...####...", "...####...", "..#####...",
+                 "..######..", ".#######..", ".########.", "##########",
+                 ".########.", "..######.."] if fi == 0 else \
+                ["...##.....", "..####....", "..####....", "..#####...",
+                 ".######...", ".#######..", "#########.", "##########",
+                 ".#######..", "..#####..."]
+        for j, row in enumerate(flame):
+            for i, ch in enumerate(row):
+                if ch == "#":
+                    c.set(13 + i, 6 + j,
+                          hex_rgba("f4d24a") if j < 4 else
+                          (hex_rgba("f0a03c") if j < 8 else hex_rgba("e8556a")))
+        for i, (sx, sy, w, h) in enumerate(         # front of the ring, on top
+                ((0, 18, 8, 9), (7, 20, 9, 9), (15, 21, 9, 9),
+                 (23, 20, 9, 9), (30, 18, 6, 9))):
+            c.rect(sx, sy, w, h, stone_l if i % 2 == 0 else stone)
+            c.rect(sx, sy + h - 2, w, 2, stone_d)
+        c.outline(OUTLINE)
+        sheet.blit(c, fi * 36, 0)
+    return sheet
+
+
+def prop_logseat():
+    c = Canvas(24, 14)
+    bark = hex_rgba("7a5636")
+    bark_d = hex_rgba("583d26")
+    ring = hex_rgba("c9a066")
+    ring_d = hex_rgba("a37f47")
+    c.rect(1, 2, 22, 8, bark)
+    c.rect(1, 8, 22, 3, bark_d)
+    for i in range(3, 21, 4):
+        c.rect(i, 3, 1, 5, bark_d)
+    c.rect(18, 1, 5, 10, ring)                   # sawn end
+    c.rect(19, 3, 3, 6, ring_d)
+    c.set(20, 5, ring)
+    c.rect(3, 10, 3, 3, bark_d)                  # feet
+    c.rect(16, 10, 3, 3, bark_d)
+    c.outline(OUTLINE)
+    return c
+
+
+def prop_hammock():
+    c = Canvas(46, 32)
+    post = hex_rgba("8a683c")
+    post_d = hex_rgba("6a4d2a")
+    rope = hex_rgba("efe4cc")
+    stripes = [hex_rgba("e8556a"), hex_rgba("f0d264"), hex_rgba("4f8f8a"), hex_rgba("efe4cc")]
+    for x in (1, 40):
+        c.rect(x, 4, 5, 25, post)
+        c.rect(x + 3, 4, 2, 25, post_d)
+        c.rect(x - 1, 27, 7, 3, post_d)
+    for i in range(6, 40):
+        u = (i - 6) / 33.0
+        y = 6 + int(12 * (1 - (2 * u - 1) ** 2))
+        if i < 10 or i > 35:
+            c.rect(i, y, 1, 2, rope)
+        else:
+            col = stripes[(i // 3) % 4]
+            c.rect(i, y, 1, 7, col)
+            c.rect(i, y + 6, 1, 1, tuple(max(0, v - 45) for v in col[:3]) + (255,))
+    c.outline(OUTLINE)
+    return c
+
+
+def prop_trellis():
+    c = Canvas(30, 40)
+    wood = hex_rgba("c9a066")
+    wood_d = hex_rgba("9a744c")
+    for x in (3, 13, 23):
+        c.rect(x, 2, 2, 36, wood)
+        c.rect(x + 1, 2, 1, 36, wood_d)
+    for y in range(5, 38, 7):
+        c.rect(2, y, 25, 2, wood)
+        c.rect(2, y + 1, 25, 1, wood_d)
+    path = [4, 5, 6, 8, 10, 12, 14, 15, 16, 17, 18, 20, 22, 23, 24, 24, 23, 22,
+            20, 18, 16, 14, 12, 10, 8, 7, 6, 5, 5, 6, 8, 10, 12, 14, 16, 18]
+    for j, x in enumerate(path):
+        y = 3 + j
+        c.set(x, y, C_LEAF_D)
+        c.set(x + 1, y, C_LEAF)
+        if j % 4 == 0:
+            c.rect(x - 3, y, 3, 2, C_LEAF)
+            c.rect(x + 2, y - 1, 3, 2, C_LEAF_L)
+        if j % 9 == 5:
+            c.rect(x + 2, y + 1, 2, 3, hex_rgba("d8452f"))
+    c.outline(OUTLINE)
+    return c
+
+
+def prop_herbpots():
+    c = Canvas(28, 20)
+    pot = hex_rgba("c2704e")
+    pot_d = hex_rgba("9a5238")
+    pot_l = hex_rgba("d88a68")
+    for i, (x, w, h) in enumerate(((1, 10, 9), (12, 8, 7), (21, 6, 6))):
+        top = 19 - h
+        c.rect(x, top, w, h, pot)
+        c.rect(x, top, w, 2, pot_l)
+        c.rect(x, top + h - 2, w, 2, pot_d)
+        _leaf_blob(c, x + w // 2, top - 3, C_LEAF if i != 1 else C_LEAF_D,
+                   C_LEAF_D, C_LEAF_L, 3 + (1 if i == 0 else 0))
+    c.outline(OUTLINE)
+    return c
+
+
+def prop_dreamcatcher():
+    """a dreamcatcher on a shepherd's hook, turning slowly in the yard"""
+    c = Canvas(20, 36)
+    post = hex_rgba("8a683c")
+    post_d = hex_rgba("6a4d2a")
+    hoop = hex_rgba("c9884a")
+    hoop_d = hex_rgba("9a5f2c")
+    web = hex_rgba("f4ead6")
+    bead = hex_rgba("4f8f8a")
+    c.rect(14, 2, 3, 32, post)                  # post
+    c.rect(16, 2, 1, 32, post_d)
+    c.rect(12, 33, 7, 3, post_d)
+    c.rect(6, 1, 9, 2, post)                    # the hook arm
+    c.rect(6, 3, 9, 1, post_d)
+    c.rect(5, 1, 2, 4, post)
+    c.rect(6, 4, 1, 3, hoop_d)                  # the cord down to the hoop
+    # the hoop: a ring of 12 px around (6, 13) with radius 6
+    ring = [(6, 7), (8, 8), (10, 9), (11, 11), (12, 13), (11, 15), (10, 17),
+            (8, 18), (6, 19), (4, 18), (2, 17), (1, 15), (0, 13), (1, 11),
+            (2, 9), (4, 8)]
+    for i, (x, y) in enumerate(ring):
+        c.rect(x, y, 2, 2, hoop if i % 2 else hoop_d)
+    for j in range(-4, 5):                      # the web inside
+        c.set(6 + j, 13 + (abs(j) // 2), web)
+        c.set(6 + j, 13 - (abs(j) // 2), web)
+    c.rect(5, 12, 2, 2, bead)
+    for x, h in ((2, 5), (6, 7), (10, 4)):      # feathers
+        c.rect(x, 20, 1, h, web)
+        c.rect(x - 1, 20 + h, 3, 4, hex_rgba("e8dcc8"))
+        c.set(x, 21 + h, hex_rgba("c9b48c"))
+        c.set(x, 23 + h, hex_rgba("c9b48c"))
+    c.outline(OUTLINE)
+    return c
+
+
+def prop_bus():
+    """the van. of course they have a van."""
+    c = Canvas(46, 30)
+    body = hex_rgba("4f9e8f")
+    body_d = hex_rgba("3a7a6e")
+    cream = hex_rgba("f2ead8")
+    cream_d = hex_rgba("d6cdb8")
+    glass = hex_rgba("9fd6ef")
+    glass_d = hex_rgba("6b9fbe")
+    tire = hex_rgba("2f2c34")
+    hub = hex_rgba("cfc7b6")
+    c.rect(3, 1, 40, 12, cream)                  # roof + upper half
+    c.rect(3, 1, 40, 2, hex_rgba("fdf8ec"))
+    c.rect(2, 12, 42, 11, body)
+    c.rect(2, 20, 42, 3, body_d)
+    for x, w in ((5, 12), (19, 9), (30, 11)):    # windows
+        c.rect(x, 4, w, 8, glass)
+        c.rect(x, 9, w, 3, glass_d)
+        c.rect(x, 4, w, 2, hex_rgba("dff2ff"))
+    c.rect(17, 4, 2, 8, cream_d)
+    c.rect(28, 4, 2, 8, cream_d)
+    c.rect(19, 4, 4, 8, hex_rgba("e8913c"))      # a curtain, half drawn
+    for i, col in enumerate((hex_rgba("e8556a"), hex_rgba("f0a03c"), hex_rgba("f0d264"),
+                             hex_rgba("6aa84f"), hex_rgba("6f9ec4"))):
+        c.rect(5 + i * 2, 13, 2, 9, col)         # rainbow stripe ♥
+    c.rect(29, 13, 10, 9, cream)                 # peace sign
+    c.rect(30, 14, 8, 7, body_d)
+    c.rect(33, 14, 2, 7, cream)
+    for j in range(3):
+        c.rect(31 + j, 18 + j, 2, 1, cream)
+        c.rect(35 - j + 2, 18 + j, 2, 1, cream)
+    c.rect(2, 22, 42, 2, hex_rgba("d8d4c8"))     # bumper
+    for wx in (7, 31):                           # wheels
+        c.rect(wx, 21, 9, 8, tire)
+        c.rect(wx + 2, 23, 5, 4, hub)
+        c.rect(wx + 3, 24, 3, 2, hex_rgba("9c948a"))
+    c.rect(41, 15, 3, 3, hex_rgba("f0d264"))     # headlight
+    c.outline(OUTLINE)
+    return c
+
+
 # ---------------------------------------------------------------------------
 # INTERIORS — furniture props for the house scenes
 # ---------------------------------------------------------------------------
@@ -2619,6 +3395,69 @@ def tile_wallpic():
     c.rect(8, 4, 2, 4, hex_rgba("2f7f6f"))
     c.rect(5, 3, 2, 2, hex_rgba("e5b954"))
     c.rect(8, 3, 2, 1, hex_rgba("2e2226"))
+    return c
+
+
+def tile_boho(kind=0):
+    """woven kilim rug for the garden house — earthy, stripey, a bit hippy"""
+    c = Canvas(16, 16)
+    base = hex_rgba("c9784e")
+    dark = hex_rgba("9c5334")
+    cream = hex_rgba("efdcb4")
+    teal = hex_rgba("4f8f8a")
+    c.rect(0, 0, 16, 16, base)
+    if kind == 0:
+        for j in range(0, 16, 4):
+            c.rect(0, j, 16, 1, dark)
+        for j in range(2, 16, 4):
+            for i in range(1, 16, 4):
+                c.set(i, j, cream)
+                c.set(i + 1, j, teal)
+    else:   # diamond block
+        c.rect(0, 1, 16, 14, dark)
+        for j in range(7):
+            c.rect(7 - j, 1 + j, 2 + j * 2, 1, cream)
+        for j in range(7):
+            c.rect(1 + j, 8 + j, 14 - j * 2, 1, teal)
+        c.rect(0, 0, 16, 1, base)
+        c.rect(0, 15, 16, 1, base)
+    return c
+
+
+def tile_wallmac():
+    """macramé wall hanging — a dowel, knotted cotton, a fringe"""
+    c = tile_wallface()
+    cord = hex_rgba("f4ead6")
+    cord_d = hex_rgba("c8b795")
+    dowel = hex_rgba("b08a56")
+    c.rect(1, 1, 14, 2, dowel)
+    c.rect(1, 2, 14, 1, hex_rgba("8a683c"))
+    for i in range(2, 15, 2):
+        c.rect(i, 3, 1, 3, cord)
+    for j, (x0, w) in enumerate(((2, 12), (3, 10), (4, 8))):
+        c.rect(x0, 5 + j * 2, w, 1, cord_d)
+        c.rect(x0, 6 + j * 2, w, 1, cord)
+    for i in range(3, 14, 2):
+        c.rect(i, 11, 1, 4, cord)
+        c.set(i, 14, cord_d)
+    return c
+
+
+def tile_wallherb():
+    """a little wall shelf: jars of dried herbs and a trailing pothos"""
+    c = tile_wallface()
+    shelf = hex_rgba("9a744c")
+    glass = hex_rgba("bcd8c8")
+    c.rect(1, 7, 14, 2, shelf)
+    c.rect(1, 9, 14, 1, hex_rgba("74512d"))
+    for x, col in ((2, glass), (6, hex_rgba("d8c48c")), (10, hex_rgba("cf9f8c"))):
+        c.rect(x, 3, 3, 4, col)
+        c.rect(x, 2, 3, 1, hex_rgba("b08a56"))
+    c.rect(13, 2, 2, 5, C_LEAF)
+    for j in range(10, 15):
+        c.set(12 + (j % 2), j, C_LEAF_D)
+    c.rect(2, 10, 3, 2, C_LEAF)
+    c.set(3, 12, C_LEAF_D)
     return c
 
 
@@ -2862,6 +3701,324 @@ def in_lamp():
     c.rect(3, 9, 10, 2, hex_rgba("d4b874"))
     c.rect(7, 11, 2, 17, hex_rgba("8f8f97"))
     c.rect(4, 27, 8, 3, hex_rgba("74747c"))
+    c.outline(OUTLINE)
+    return c
+
+
+# ---- her brother's corner of the living room 🎣 ⚽ -------------------------
+
+def in_rods():
+    """two fishing rods leaning in the corner + a tackle box"""
+    c = _furn(26, 40)
+    rod = hex_rgba("a9793e")
+    rod_d = hex_rgba("7d5827")
+    reel = hex_rgba("d8dde2")
+    box = hex_rgba("2f7f6f")
+    box_d = hex_rgba("1f5d51")
+    for j in range(30):                          # rod one, leaning left
+        c.rect(4 + j // 4, 2 + j, 2, 1, rod)
+        c.set(4 + j // 4, 2 + j, rod_d)
+    for j in range(26):                          # rod two, leaning right
+        c.rect(18 - j // 5, 6 + j, 2, 1, rod)
+        c.set(19 - j // 5, 6 + j, rod_d)
+    c.rect(8, 22, 4, 5, reel)                    # reels
+    c.rect(8, 22, 4, 1, hex_rgba("9c948a"))
+    c.rect(14, 18, 4, 4, reel)
+    c.rect(3, 28, 20, 10, box)                   # tackle box
+    c.rect(3, 28, 20, 2, hex_rgba("4f9e8f"))
+    c.rect(3, 32, 20, 1, box_d)
+    c.rect(3, 36, 20, 2, box_d)
+    c.rect(10, 25, 6, 3, hex_rgba("9c948a"))     # handle
+    c.rect(11, 26, 4, 2, TRANSPARENT)
+    c.rect(18, 33, 3, 2, hex_rgba("f0d264"))     # a lure clipped to the side
+    c.outline(OUTLINE)
+    return c
+
+
+def in_ball():
+    """a football. the good kind."""
+    c = _furn(14, 14)
+    white = hex_rgba("f4f1e4")
+    dark = hex_rgba("3a3540")
+    shade = hex_rgba("cfc7b6")
+    for j in range(-5, 6):
+        w = 5 - abs(j) // 3
+        c.rect(7 - w, 7 + j, w * 2, 1, white)
+    c.rect(5, 5, 4, 4, dark)
+    c.rect(2, 9, 3, 2, dark)
+    c.rect(9, 9, 3, 2, dark)
+    c.rect(6, 2, 3, 2, dark)
+    c.rect(3, 10, 8, 2, shade)
+    c.outline(OUTLINE)
+    return c
+
+
+# ---- the garden house, inside 🌿 ------------------------------------------
+
+def in_sofa2():
+    """low earthy couch with a woven throw over the arm"""
+    c = _furn(50, 28)
+    body = hex_rgba("a86a4a")
+    body_d = hex_rgba("834f36")
+    cush = hex_rgba("c48b62")
+    leg = hex_rgba("6e5230")
+    c.rect(0, 3, 50, 14, body_d)
+    c.rect(1, 4, 48, 11, body)
+    for i in (3, 19, 35):
+        c.rect(i, 6, 13, 8, cush)
+    c.rect(0, 15, 50, 9, body_d)
+    c.rect(1, 16, 48, 7, body)
+    for i in (2, 18, 34):
+        c.rect(i, 17, 14, 5, cush)
+    c.rect(0, 7, 5, 17, body_d)
+    c.rect(45, 7, 5, 17, body_d)
+    c.rect(2, 24, 4, 3, leg)
+    c.rect(44, 24, 4, 3, leg)
+    for j, col in enumerate((hex_rgba("e8556a"), hex_rgba("f0d264"),
+                             hex_rgba("4f8f8a"), hex_rgba("efe4cc"))):
+        c.rect(0, 5 + j * 3, 8, 3, col)          # the throw
+    c.rect(36, 8, 9, 8, hex_rgba("6f9ec4"))      # cushion
+    c.rect(37, 9, 7, 6, hex_rgba("a8c2f0"))
+    c.outline(OUTLINE)
+    return c
+
+
+def in_record():
+    """record player on a crate, vinyl leaning against it"""
+    c = _furn(28, 26)
+    crate = hex_rgba("b08a56")
+    crate_d = hex_rgba("8a683c")
+    deck = hex_rgba("4a4048")
+    plate = hex_rgba("2b2028")
+    c.rect(2, 12, 24, 12, crate)
+    c.rect(2, 12, 24, 2, hex_rgba("cba274"))
+    c.rect(2, 18, 24, 1, crate_d)
+    c.rect(2, 22, 24, 2, crate_d)
+    c.rect(3, 5, 22, 8, deck)                    # the deck
+    c.rect(3, 5, 22, 1, hex_rgba("6a6072"))
+    for j in range(-3, 4):                       # platter
+        w = 6 - abs(j) // 2
+        c.rect(11 - w // 2 + 2, 9 + j, w, 1, plate)
+    c.rect(11, 8, 3, 3, hex_rgba("e8556a"))
+    c.rect(20, 4, 2, 6, hex_rgba("cfc7b6"))      # tone arm
+    c.rect(18, 9, 4, 1, hex_rgba("cfc7b6"))
+    c.rect(23, 13, 4, 11, plate)                 # a record leaning on the crate
+    c.rect(24, 17, 2, 2, hex_rgba("f0d264"))
+    c.outline(OUTLINE)
+    return c
+
+
+def in_guitar():
+    c = _furn(18, 38)
+    wood = hex_rgba("c9884a")
+    wood_d = hex_rgba("9a5f2c")
+    neck = hex_rgba("6e4d2a")
+    for j in range(-8, 9):                       # lower bout
+        w = 8 - abs(j) // 3
+        c.rect(9 - w, 26 + j, w * 2, 1, wood)
+    for j in range(-6, 7):                       # upper bout
+        w = 6 - abs(j) // 3
+        c.rect(9 - w, 14 + j, w * 2, 1, wood)
+    c.rect(4, 19, 10, 2, wood)                   # the waist
+    c.rect(3, 21, 12, 1, wood_d)
+    c.rect(6, 22, 6, 6, hex_rgba("2b2028"))      # sound hole
+    c.rect(7, 23, 4, 4, hex_rgba("4a3a2a"))
+    c.rect(8, 2, 3, 11, neck)                    # neck
+    c.rect(8, 2, 1, 11, hex_rgba("543a1e"))
+    c.rect(7, 0, 5, 3, wood_d)                   # headstock
+    for i in (8, 10):
+        c.set(i, 1, hex_rgba("cfc7b6"))
+    c.rect(8, 13, 3, 17, hex_rgba("e8dcc8"))     # strings
+    c.rect(9, 13, 1, 17, hex_rgba("b8ac98"))
+    c.rect(5, 33, 8, 3, hex_rgba("74747c"))      # stand
+    c.rect(3, 35, 12, 2, hex_rgba("55555c"))
+    c.outline(OUTLINE)
+    return c
+
+
+def in_hangplant():
+    """a pothos in a macramé hanger — grows down from the ceiling"""
+    c = _furn(22, 34)
+    cord = hex_rgba("efe4cc")
+    cord_d = hex_rgba("cbbb9c")
+    pot = hex_rgba("c2704e")
+    pot_d = hex_rgba("9a5238")
+    c.rect(10, 0, 2, 6, cord)
+    c.rect(4, 6, 14, 1, cord_d)
+    for j in range(6):                           # the knotted cradle
+        c.set(4 + j // 2, 7 + j, cord)
+        c.set(17 - j // 2, 7 + j, cord)
+    c.rect(5, 12, 12, 8, pot)
+    c.rect(5, 12, 12, 2, hex_rgba("d88a68"))
+    c.rect(5, 18, 12, 2, pot_d)
+    c.rect(4, 20, 14, 1, cord_d)
+    trail = [(3, 20), (2, 23), (3, 26), (2, 29), (4, 31),
+             (18, 20), (19, 23), (18, 26), (19, 29), (17, 31)]
+    for j, (x, y) in enumerate(trail):
+        c.rect(x, y, 2, 3, C_LEAF if j % 2 else C_LEAF_D)
+        c.set(x + (1 if x < 10 else -1), y + 1, C_LEAF_L)
+    c.rect(6, 9, 10, 4, C_LEAF)                  # the crown of leaves
+    c.rect(4, 10, 14, 2, C_LEAF_D)
+    c.rect(7, 8, 7, 2, C_LEAF_L)
+    c.outline(OUTLINE)
+    return c
+
+
+def in_bigplant():
+    """monstera in a woven basket — the room's centrepiece"""
+    c = _furn(30, 40)
+    basket = hex_rgba("cba274")
+    basket_d = hex_rgba("a37c4c")
+    stem = hex_rgba("4a7a32")
+    leaves = [(7, 8, 5), (21, 6, 5), (14, 3, 6), (5, 18, 4), (23, 17, 4), (14, 14, 6)]
+    for x, y, r in leaves:
+        c.rect(14, y + r, 2, 26 - y - r, stem)
+        for j in range(-r, r + 1):
+            w = r - abs(j) // 2
+            c.rect(x - w, y + j, w * 2 + 1, 1, C_LEAF if (j + x) % 3 else C_LEAF_D)
+        c.rect(x - 1, y - r + 1, 2, 2, C_LEAF_L)
+        c.rect(x + r - 3, y - 1, 2, 3, TRANSPARENT)   # the monstera splits
+        c.rect(x - r + 1, y + 2, 2, 3, TRANSPARENT)
+    c.rect(6, 26, 18, 12, basket)
+    c.rect(6, 26, 18, 2, hex_rgba("e0bd92"))
+    for j in range(28, 38, 3):
+        c.rect(6, j, 18, 1, basket_d)
+    for i in range(7, 24, 4):
+        c.rect(i, 27, 1, 11, basket_d)
+    c.rect(6, 36, 18, 2, basket_d)
+    c.outline(OUTLINE)
+    return c
+
+
+def in_jars():
+    """open shelving: mason jars, dried herb bundles, a stack of bowls"""
+    c = _furn(30, 34)
+    wood = hex_rgba("9a744c")
+    wood_d = hex_rgba("74512d")
+    glass = hex_rgba("bcd8c8")
+    lid = hex_rgba("b08a56")
+    for sy in (8, 20):
+        c.rect(0, sy + 9, 30, 3, wood)
+        c.rect(0, sy + 11, 30, 1, wood_d)
+    c.rect(0, 6, 2, 26, wood_d)
+    c.rect(28, 6, 2, 26, wood_d)
+    fills = [hex_rgba("d8c48c"), hex_rgba("cf9f8c"), hex_rgba("8fb56a"),
+             hex_rgba("c9784e"), hex_rgba("e8dcc8")]
+    for i, x in enumerate((3, 10, 17, 24)):
+        c.rect(x, 11, 5, 6, glass)
+        c.rect(x, 14, 5, 3, fills[i % len(fills)])
+        c.rect(x, 10, 5, 2, lid)
+    for i, x in enumerate((3, 11)):
+        c.rect(x, 23, 6, 6, glass)
+        c.rect(x, 26, 6, 3, fills[(i + 2) % len(fills)])
+        c.rect(x, 22, 6, 2, lid)
+    for j, x in enumerate((20, 24)):             # hanging herb bundles
+        c.rect(x, 23, 1, 3, wood_d)
+        c.rect(x - 2, 25, 5, 5, C_LEAF_D)
+        c.rect(x - 1, 26, 3, 3, C_LEAF)
+    c.rect(0, 4, 30, 3, wood)                    # top board
+    c.rect(0, 6, 30, 1, wood_d)
+    c.rect(6, 0, 10, 4, hex_rgba("e8dcc8"))      # stacked bowls
+    c.rect(6, 2, 10, 1, hex_rgba("c6b79c"))
+    c.rect(18, 1, 8, 3, hex_rgba("cf9f8c"))
+    c.outline(OUTLINE)
+    return c
+
+
+def in_cushions():
+    """floor cushions round a low kilim — where everyone actually sits"""
+    c = _furn(34, 18)
+    for i, (x, y, w, h, col, hi) in enumerate((
+            (0, 5, 14, 10, hex_rgba("c9784e"), hex_rgba("e09a68")),
+            (12, 2, 12, 9, hex_rgba("4f8f8a"), hex_rgba("6fb5ae")),
+            (21, 6, 13, 10, hex_rgba("d8b03c"), hex_rgba("f0d264")))):
+        c.rect(x, y, w, h, col)
+        c.rect(x + 1, y + 1, w - 2, 3, hi)
+        c.rect(x + 1, y + h - 2, w - 2, 1, tuple(max(0, v - 40) for v in col[:3]) + (255,))
+        c.set(x + w // 2, y + h // 2, hi)
+    c.outline(OUTLINE)
+    return c
+
+
+def in_dogbed():
+    """Chakra's bed. it is enormous. she still hangs off the end."""
+    c = _furn(34, 18)
+    rim = hex_rgba("5f7a5a")
+    rim_l = hex_rgba("7c9b76")
+    inner = hex_rgba("c9b48c")
+    c.rect(0, 3, 34, 14, rim)
+    c.rect(1, 4, 32, 4, rim_l)
+    c.rect(3, 7, 28, 8, inner)
+    c.rect(4, 8, 26, 3, hex_rgba("ded0ab"))
+    c.rect(3, 14, 28, 1, hex_rgba("a89774"))
+    c.rect(0, 15, 34, 2, hex_rgba("47604a"))
+    c.outline(OUTLINE)
+    return c
+
+
+def in_stove():
+    """cast-iron wood stove with a pipe, 2 frames of firebox glow"""
+    sheet = Canvas(60, 40)
+    iron = hex_rgba("3f3b44")
+    iron_l = hex_rgba("585361")
+    iron_d = hex_rgba("2b2830")
+    for fi in range(2):
+        c = _furn(30, 40)
+        c.rect(12, 0, 6, 14, iron)               # flue
+        c.rect(12, 0, 2, 14, iron_l)
+        c.rect(9, 12, 12, 3, iron_d)
+        c.rect(3, 14, 24, 20, iron)              # body
+        c.rect(3, 14, 24, 3, iron_l)
+        c.rect(3, 30, 24, 2, iron_d)
+        c.rect(7, 19, 16, 11, iron_d)            # firebox door
+        c.rect(8, 20, 14, 9, hex_rgba("1e1a22"))
+        glow = ["..####..", ".######.", "..####.."] if fi == 0 else \
+               ["...##...", ".######.", "..####.."]
+        for j, row in enumerate(glow):
+            for i, ch in enumerate(row):
+                if ch == "#":
+                    c.set(11 + i, 22 + j,
+                          hex_rgba("f4d24a") if j == 0 else
+                          (hex_rgba("f0a03c") if j == 1 else hex_rgba("e8556a")))
+        c.rect(22, 23, 2, 3, hex_rgba("b08a56"))  # handle
+        c.rect(1, 33, 28, 4, iron_d)              # legs / ash lip
+        c.rect(4, 36, 4, 3, iron_d)
+        c.rect(22, 36, 4, 3, iron_d)
+        c.rect(5, 8, 10, 6, hex_rgba("b8bcc4"))   # the kettle, always on
+        c.rect(5, 8, 10, 2, hex_rgba("dfe3e8"))
+        c.rect(7, 4, 6, 2, hex_rgba("8f939c"))
+        c.rect(6, 5, 2, 3, hex_rgba("8f939c"))
+        c.rect(12, 5, 2, 3, hex_rgba("8f939c"))
+        c.rect(15, 9, 3, 2, hex_rgba("8f939c"))
+        c.outline(OUTLINE)
+        sheet.blit(c, fi * 30, 0)
+    return sheet
+
+
+def in_samovar():
+    """a samovar on a side table, two glasses waiting ♥"""
+    c = _furn(26, 30)
+    wood = hex_rgba("b58551")
+    wood_d = hex_rgba("8a6236")
+    brass = hex_rgba("d8a83c")
+    brass_l = hex_rgba("f0cc6a")
+    brass_d = hex_rgba("a87c22")
+    c.rect(1, 14, 24, 4, wood)                   # table top
+    c.rect(1, 17, 24, 1, wood_d)
+    c.rect(4, 18, 3, 10, wood_d)
+    c.rect(19, 18, 3, 10, wood_d)
+    c.rect(3, 27, 20, 2, wood_d)
+    c.rect(7, 4, 10, 10, brass)                  # the samovar body
+    c.rect(8, 5, 4, 8, brass_l)
+    c.rect(7, 12, 10, 2, brass_d)
+    c.rect(9, 1, 6, 3, brass)                    # the little teapot on top
+    c.rect(9, 0, 6, 1, brass_l)
+    c.rect(6, 8, 2, 3, brass_d)                  # tap + handles
+    c.rect(16, 8, 2, 3, brass_d)
+    c.rect(11, 13, 2, 2, brass_d)
+    for x in (19, 22):                           # tea glasses
+        c.rect(x, 10, 3, 4, hex_rgba("bcd8c8"))
+        c.rect(x, 12, 3, 2, hex_rgba("a1522c"))
     c.outline(OUTLINE)
     return c
 
@@ -3488,6 +4645,8 @@ def building(wt, ht, wall, wall_d, roof, roof_d, trim, door_col=None, style="hou
 BUILDINGS = {
     # LA — her house in Santa Clarita (8x3, the biggest sprite in the game)
     "la_home": big_house,
+    # LA — Jack's place down the road, behind the garden (also 8x3)
+    "la_jack": jack_house,
     "la_house_b": lambda: building(
         4, 2, hex_rgba("cfe3ea"), hex_rgba("aec7d0"),
         hex_rgba("6f8fa8"), hex_rgba("54718a"), hex_rgba("f4f1e4"), style="house"),
@@ -3551,11 +4710,21 @@ def main():
         {"down": MOM_DOWN, "up": MOM_UP, "side": MOM_SIDE},
         {"front": LEGS_FRONT, "side": LEGS_SIDE}, MOM)
     out["npc_bro"] = compose_char(
-        {"down": KID_DOWN, "up": KID_UP, "side": KID_SIDE},
+        {"down": BRO_DOWN, "up": BRO_UP, "side": BRO_SIDE},
         {"front": KID_LEGS_FRONT, "side": KID_LEGS_SIDE}, BRO,
-        torso_h=KID_TORSO_H, head_pad=KID_HEAD_PAD)
+        torso_h=BRO_TORSO_H, head_pad=BRO_HEAD_PAD)
     out["leo"] = compose_quad(MOOK, LEO)
     out["charlie"] = compose_quad(DOG, CHARLIE)
+
+    # ---- the garden house 🌻
+    out["npc_jack"] = compose_char(
+        {"down": JACK_DOWN, "up": JACK_UP, "side": JACK_SIDE},
+        {"front": JACK_LEGS_FRONT, "side": JACK_LEGS_SIDE}, JACK,
+        torso_h=JACK_TORSO_H, head_pad=JACK_HEAD_PAD)
+    out["npc_wife"] = compose_char(
+        {"down": MOM_DOWN, "up": MOM_UP, "side": MOM_SIDE},
+        {"front": LEGS_FRONT, "side": LEGS_SIDE}, WIFE)
+    out["chakra"] = compose_quad(BIGDOG, CHAKRA)
 
     # background townsfolk (no cheer/wave extras)
     out["npc_woman"] = compose_char(
@@ -3615,6 +4784,30 @@ def main():
     out["in_petbeds"] = in_petbeds()
     out["in_bowl"] = in_bowl()
     out["in_lamp"] = in_lamp()
+    out["in_rods"] = in_rods()
+    out["in_ball"] = in_ball()
+    # ---- the garden 🌻 + the house behind it
+    out["vegbed"] = prop_vegbed(0)
+    out["vegbed_b"] = prop_vegbed(1)
+    out["corn"] = prop_corn()
+    out["sunflower"] = prop_sunflower()
+    out["firepit"] = prop_firepit()
+    out["logseat"] = prop_logseat()
+    out["hammock"] = prop_hammock()
+    out["trellis"] = prop_trellis()
+    out["herbpots"] = prop_herbpots()
+    out["dreamcatcher"] = prop_dreamcatcher()
+    out["bus"] = prop_bus()
+    out["in_sofa2"] = in_sofa2()
+    out["in_record"] = in_record()
+    out["in_guitar"] = in_guitar()
+    out["in_hangplant"] = in_hangplant()
+    out["in_bigplant"] = in_bigplant()
+    out["in_jars"] = in_jars()
+    out["in_cushions"] = in_cushions()
+    out["in_dogbed"] = in_dogbed()
+    out["in_stove"] = in_stove()
+    out["in_samovar"] = in_samovar()
     for mname, mfn in MONUMENTS.items():
         out[mname] = mfn()
     out["quad_ride"] = ride_sprites()
@@ -3638,6 +4831,7 @@ def main():
     pad = 8
     row_items = [["her", "noah", "mookie", "npc_woman", "npc_man", "npc_old"],
                  ["npc_marina", "npc_mom", "npc_bro", "leo", "charlie"],
+                 ["npc_jack", "npc_wife", "chakra"],
                  ["tiles"],
                  ["tree", "palm", "figtree", "lamp", "bench", "quad", "sailboat"],
                  ["quad_ride", "horse", "column", "pyramid", "cypress", "matryoshka", "radio", "pumpkin"],
@@ -3648,8 +4842,12 @@ def main():
                  ["pool"],
                  ["in_sofa", "in_tv", "in_table", "in_counter", "in_fridge"],
                  ["in_shelf", "in_plant", "in_fire", "in_petbeds", "in_bowl", "in_lamp"],
+                 ["in_rods", "in_ball", "in_sofa2", "in_record", "in_guitar", "in_hangplant"],
+                 ["in_bigplant", "in_jars", "in_cushions", "in_dogbed", "in_stove", "in_samovar"],
+                 ["vegbed", "vegbed_b", "corn", "sunflower", "firepit"],
+                 ["logseat", "hammock", "trellis", "herbpots", "dreamcatcher", "bus"],
                  ["torii", "barrier", "fig", "fx", "shadow"],
-                 ["la_home", "la_house_b", "taco_shop", "theater"],
+                 ["la_home", "la_jack", "la_house_b", "taco_shop", "theater"],
                  ["apartment", "brownstone_b", "bu_building", "neu_building", "cafe"]]
     bcanv = {n: fn() for n, fn in BUILDINGS.items()}
     for n, cv in bcanv.items():

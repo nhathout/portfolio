@@ -34,9 +34,49 @@ const POINT_FALLBACK = {
     { who: "noah", text: "…I love it here." },
   ],
   home_bro: [
-    { text: "Your brother does not look up from the screen." },
+    { text: "Your brother is threading a line through a rod that already had a line in it." },
     { text: "\"Hey. …Happy birthday. Don't make it weird.\"" },
+    { text: "\"We're going out at five tomorrow. You can come. Only if you're quiet.\"" },
+    { who: "noah", text: "he scored four last weekend. FOUR. he told me twice." },
     { text: "(he makes it weird. he hugs you. it's very sweet.)" },
+  ],
+  // ---- Jack's place 🌻
+  jack_home: [
+    "Jack's house — the long low one behind all the sunflowers.",
+    { who: "noah", text: "you can smell the garden from the street. tomatoes and woodsmoke." },
+    { who: "noah", text: "go on, knock. nobody in there has ever knocked on anything ♥" },
+  ],
+  jack_garden: [
+    "Rows and rows of it: tomatoes up the stakes, corn taller than Jack, lettuce, peppers, herbs.",
+    { who: "noah", text: "they genuinely grow most of what ends up on that table." },
+    { who: "her", text: "…we're taking some home." },
+    { text: "(you were always taking some home.)" },
+  ],
+  jack_firepit: [
+    "A ring of stones, a proper fire, three logs pulled up close.",
+    { who: "noah", text: "this is the spot. this is where the night goes long and nobody notices." },
+    { who: "noah", text: "[TODO Noah: the story from the fire pit ♥]" },
+  ],
+  jack_bus: [
+    "The van. Rainbow down the side, peace sign on the panel, curtains half drawn.",
+    { text: "It has not moved in a while. It does not need to." },
+  ],
+  home_jack: [
+    { text: "Jack fills the doorway the way weather fills a sky." },
+    { text: "Jack: \"So! You brought him.\" (he has not let go of your shoulders yet)" },
+    { who: "noah", text: "he shook my hand and I felt it in my spine." },
+    { text: "Jack: \"Sit. Eat. We are not discussing it.\"" },
+  ],
+  home_jackwife: [
+    { text: "Jack's wife pushes a curl out of her face with the back of a floury hand." },
+    { text: "\"Ignore him, he's been loud since he was six.\"" },
+    { text: "(she hands you something warm before you've said a word.)" },
+  ],
+  home_chakra: [
+    { text: "Chakra crosses the whole room in about two steps." },
+    { who: "noah", text: "she's the size of a small horse and she thinks she's a lap dog." },
+    { text: "(Chakra leans her entire weight against your leg. This is affection. This is also a takeover.)" },
+    { text: "(Chakra joined your little crowd! 🖤)" },
   ],
   home_leo: [
     { text: "Leo, all seventeen pounds of orange menace, blinks at you slowly." },
@@ -74,6 +114,7 @@ const COMPANIONS = {
   mookie: { sprite: "mookie", lag: 12, side: -9, speed: 78, name: "Mookie" },
   leo: { sprite: "leo", lag: 17, side: 12, speed: 82, name: "Leo" },
   charlie: { sprite: "charlie", lag: 21, side: -15, speed: 88, name: "Charlie" },
+  chakra: { sprite: "chakra", lag: 26, side: 18, speed: 94, name: "Chakra" },
 };
 
 // Default townsfolk one-liners (Noah can override any of these in
@@ -1012,6 +1053,12 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
       ["Charlie: !!!!!", "(he has no further comment.)"],
       ["(Charlie tries to herd the cats. It is not going well. He is undeterred.)"],
     ],
+    chakra: [
+      ["(Chakra sits on your foot. Both of your feet. It's fine, you didn't need those.)"],
+      ["Chakra: whuff.", "(that was the deepest sound anyone has ever made.)"],
+      ["(Charlie has been trying to get Chakra to play for ten minutes. She has blinked once.)"],
+      ["(Chakra checks over her shoulder every few steps to make sure you're still there. 🖤)"],
+    ],
   };
 
   async function talkPet(pet) {
@@ -1165,18 +1212,21 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
           // ---- interiors 🏡
           case ",": return [k.sprite("tiles", { frame: woodVar(p.x, p.y) })];
           case ";": return [k.sprite("tiles", { frame: F[`rug_${(p.x + p.y) % 2 ? "a" : "b"}`] })];
+          case "~": return [k.sprite("tiles", { frame: F[`boho_${(p.x + p.y) % 2 ? "a" : "b"}`] })];
           case ":": return [k.sprite("tiles", { frame: F.ktile })];
           case "#": return [k.sprite("tiles", { frame: F.wallface })];
           case "%": return [k.sprite("tiles", { frame: F.walltop })];
           case "V": return [k.sprite("tiles", { frame: F.wallwin })];
           case "C": return [k.sprite("tiles", { frame: F.wallpic })];
+          case "M": return [k.sprite("tiles", { frame: F.wallmac })];
+          case "H": return [k.sprite("tiles", { frame: F.wallherb })];
           case "D": return [k.sprite("tiles", { frame: F.indoor })];
         }
       },
     });
 
     // ---- blocked ground (water outside, walls inside) — merge horizontal runs
-    const SOLID_GROUND = new Set(["w", "#", "%", "V", "C", "D"]);
+    const SOLID_GROUND = new Set(["w", "#", "%", "V", "C", "M", "H", "D"]);
     def.ground.forEach((row, y) => {
       let x = 0;
       while (x < row.length) {
@@ -1269,11 +1319,39 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
       in_shelf: { ox: -13, w: 26, h: 14 },
       in_plant: { ox: -7, w: 14, h: 8 },
       in_lamp: { ox: -5, w: 10, h: 5 },
+      in_rods: { ox: -10, w: 20, h: 9 },
+      // 🌻 the garden
+      vegbed: { ox: -19, w: 38, h: 12 },
+      vegbed_b: { ox: -19, w: 38, h: 12 },
+      corn: { ox: -8, w: 16, h: 7 },
+      sunflower: { ox: -7, w: 14, h: 6 },
+      logseat: { ox: -11, w: 22, h: 7 },
+      hammock: { ox: -22, w: 44, h: 10 },
+      trellis: { ox: -14, w: 28, h: 8 },
+      herbpots: { ox: -13, w: 26, h: 8 },
+      dreamcatcher: { ox: 0, w: 8, h: 4 },
+      bus: { ox: -22, w: 44, h: 12 },
+      // 🌿 …and the rooms behind it
+      in_sofa2: { ox: -25, w: 50, h: 13 },
+      in_record: { ox: -13, w: 26, h: 12 },
+      in_guitar: { ox: -8, w: 16, h: 8 },
+      in_bigplant: { ox: -10, w: 20, h: 12 },
+      in_jars: { ox: -14, w: 28, h: 14 },
+      in_samovar: { ox: -12, w: 24, h: 14 },
+    };
+    // two-frame props that just sit there and flicker
+    const FLICKER = {
+      in_tv: { ox: -17, w: 34, h: 12 },
+      in_fire: { ox: -20, w: 40, h: 12 },
+      in_stove: { ox: -13, w: 26, h: 14 },
+      firepit: { ox: -17, w: 34, h: 11 },
     };
     // decor with no collider. FLOOR_* sits flat on the ground, so it draws
     // underneath whoever is standing on it (pet beds, starfish…)
-    const FLOOR_DECOR = new Set(["starfish", "in_petbeds", "in_bowl"]);
-    const SOFT_DECOR = new Set(["lounger", ...FLOOR_DECOR]);
+    const FLOOR_DECOR = new Set(["starfish", "in_petbeds", "in_bowl",
+      "in_dogbed", "in_cushions", "in_ball"]);
+    // in_hangplant hangs off the ceiling — she walks under it, not through it
+    const SOFT_DECOR = new Set(["lounger", "in_hangplant", ...FLOOR_DECOR]);
     for (const p of def.props || []) {
       const px = (p.x + 0.5) * T;
       const py = (p.y + 1) * T;
@@ -1290,10 +1368,11 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
           k.area({ shape: new k.Rect(k.vec2(-11, -8), 22, 8) }),
           k.body({ isStatic: true }), k.z(py),
         ]);
-      } else if (p.type === "in_tv" || p.type === "in_fire") {
+      } else if (FLICKER[p.type]) {
+        const d = FLICKER[p.type];
         k.add([
           k.sprite(p.type, { anim: "live" }), k.pos(px, py), k.anchor("bot"),
-          k.area({ shape: new k.Rect(k.vec2(p.type === "in_fire" ? -20 : -17, -12), p.type === "in_fire" ? 40 : 34, 12) }),
+          k.area({ shape: new k.Rect(k.vec2(d.ox, -d.h), d.w, d.h) }),
           k.body({ isStatic: true }), k.z(py),
         ]);
       } else if (SOFT_DECOR.has(p.type)) {

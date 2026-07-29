@@ -42,10 +42,12 @@ Both fade to `/secret-level/`, which asks for the password.
 
 - ✨ **sparkles** mark memory spots — walk up and press E. The HUD heart counts
   them (12 required + bonus ones like the boombox and the beach horse).
-- 🍇 **figs** — 10 total: one from the fig tree on the route, the rest hidden
-  around the maps (tall grass and tree lines are good places to look).
-- 🎃 **PUMPKINN!!** — 5 pumpkins hidden across the maps; collecting all
-  triggers the pumpkin prize dialogue (fill it in `memories.json → pumpkins.all`).
+- 🍇 **figs** — one from the fig tree on the route, the rest hidden around the
+  maps and inside the houses (tall grass and tree lines are good places to
+  look). The HUD shows the live total, so adding more just raises the bar.
+- 🎃 **PUMPKINN!!** — pumpkins hidden across the maps and interiors; collecting
+  all of them triggers the pumpkin prize dialogue (fill it in
+  `memories.json → pumpkins.all`).
 - 🛵 **the ATV** — after reading the quad-bike memory on Little Everywhere,
   press E on the quad to ride it (Mookie hops on the back). It's fast, it
   works across maps, E parks it. Noah sprints to keep up.
@@ -54,10 +56,18 @@ Both fade to `/secret-level/`, which asks for the password.
   and bursts purple hearts. 💜
 - 🏡 **her house** (the big one she spawns at, Santa Clarita, pool out back):
   press **E** on the door and it fades into the **interior scene**. Inside are
-  **Marina**, her **mom**, her **little brother**, **Leo** 🐱 and **Charlie** 🐶.
-  Talking to each one counts as a memory (♥ counter) — and Leo + Charlie
-  **join the crowd** and follow her everywhere afterwards. Walk onto the door
-  tile to go back out.
+  **Marina**, her **mom**, her **little brother** (rods against the wall, ball
+  at his feet — he's going fishing at five and he scored four last weekend),
+  **Leo** 🐱 and **Charlie** 🐶. Talking to each one counts as a memory
+  (♥ counter) — and Leo + Charlie **join the crowd** and follow her everywhere
+  afterwards. Walk onto the door tile to go back out.
+- 🌻 **the garden house** — follow the path south out of the main LA block and
+  it opens into **Jack's place**: sage board-and-batten, stone chimney, and a
+  whole plot of garden in front of it (raised beds, corn, sunflowers, a
+  trellis, herb pots, a hammock, a dreamcatcher, a fire pit with logs pulled
+  up, and the van). The garden, the fire pit and the van are all readable
+  bonus spots. Inside are **Jack**, his **wife**, and **Chakra** 🖤 — the big
+  black dog, who joins the crowd exactly like Leo and Charlie did.
 - 🇦🇼 **the Aruba beach**, past the road barriers on the far east of Mini
   Boston: a palapa bar with a **CLOSED** board, a driftwood ARUBA sign, palms,
   starfish, and **a turtle she can talk to**. (There's a divi-divi tree on
@@ -105,10 +115,11 @@ python3 -m http.server 8321
 
 - If `data/memories.json` exists (it's **gitignored**), the gate is skipped and
   that plaintext file is used — that's your dev mode.
-- Dev URL params: `?map=la|route|boston|la_house_in&spawn=start` (skip title;
-  handy spawns: `boston&spawn=beach`, `la&spawn=door`, `la_house_in&spawn=door`),
-  `&all` (mark everything collected, Noah met, Leo + Charlie recruited → test
-  the finale and the herd), `?reset=1` (wipe save + cached password).
+- Dev URL params: `?map=la|route|boston|la_house_in|la_jack_in&spawn=start`
+  (skip title; handy spawns: `boston&spawn=beach`, `la&spawn=door`,
+  `la&spawn=jackdoor`, `la_house_in&spawn=door`, `la_jack_in&spawn=door`),
+  `&all` (mark everything collected, Noah met, Leo + Charlie + Chakra recruited
+  → test the finale and the herd), `?reset=1` (wipe save + cached password).
 - After editing `src/maps.js`, run `python tools/check_maps.py` — it catches
   bad row widths, props/points/spawns placed out of bounds or inside walls,
   missing sprites and broken exit→spawn links before you ever load the page.
@@ -201,7 +212,8 @@ cd tools && python3 make_sprites.py   # regenerates ../assets/*.png + preview.pn
   (`tile_tallgrass` in the generator)
 - Interiors for the **other** buildings (the taco shop, the theater, the cafe,
   the apartment). The plumbing is done — add a map with `interior: true`, then
-  `enter: { to, spawn }` on the building in `maps.js`. Copy `la_house_in`.
+  `enter: { to, spawn }` on the building in `maps.js`. Copy `la_house_in` or
+  `la_jack_in` (see "adding another house" below).
 - Day/night tint; background music (`src/audio.js` has the synth)
 - More idle animations (hair sway, Mookie loaf)
 
@@ -232,9 +244,34 @@ secret-level/
     └── preview.png            zoomed art contact sheet
 ```
 
+## 🏘 adding another house (one building at a time)
+
+The LA block grew southward for Jack's place — the pattern is repeatable:
+
+1. **Draw the exterior** in `make_sprites.py` (a `def <name>_house()` returning a
+   `Canvas`, registered in `BUILDINGS`) and add its footprint to
+   `BUILDING_META` in `maps.js` (`wt`/`ht` in tiles, `doorCol`).
+2. **Make room on the overworld** — append rows to the map's `ground` and
+   `objects` grids (append, never insert above existing content, or every
+   coordinate below shifts). Run a path down to the new front door.
+3. **Place the building** with `point:` (its door memory) and
+   `enter: { to: "<interior>", spawn: "door" }`, and add a spawn on the
+   overworld for coming back out (`jackdoor: [23, 27]`).
+4. **Author the interior** as a map with `interior: true` — one room, `%` wall
+   top, a row of `#/V/C/M/H` wall face, floor, and `DD` in the bottom wall with
+   the `exit` on the tile above it and the `door` spawn two above that.
+5. **Furnish it**: new props go in `make_sprites.py`, get loaded in `main.js`,
+   and need a hitbox in `DECOR` (or a spot in `FLICKER` / `SOFT_DECOR` /
+   `FLOOR_DECOR`) in `world.js`.
+6. `python tools/check_maps.py` before loading the page.
+
+Default dialogue for anything new lives in `POINT_FALLBACK` at the top of
+`world.js`; whatever Noah writes into `memories.json → points` wins.
+
 ## 🧑‍🤝‍🧑 adding another animal to the crowd
 
-1. Draw the 4×4 sheet in `make_sprites.py` (`compose_quad(MOOK|DOG, PALETTE)`).
+1. Draw the 4×4 sheet in `make_sprites.py` (`compose_quad(MOOK|DOG|BIGDOG, PALETTE)`
+   — `BIGDOG` is Chakra's frame, for anything larger than Charlie).
 2. Load it in `main.js` — add the name to the `for (const pet of [...])` loop.
 3. Add an entry to `COMPANIONS` in `world.js` (`lag` = how far back on her
    breadcrumb trail, `side` = how far off to the side — that's what makes the

@@ -58,7 +58,7 @@ for name, b in blocks.items():
         errs.append(f"{name}: {len(o)} object rows > {len(g)} ground rows")
 
     interior = "interior: true" in b
-    legal = set(",;:#%VCD" if interior else ".*t-srRkw")
+    legal = set(",;:~#%VCDMH" if interior else ".*t-srRkw")
     for i, r in enumerate(g):
         bad = set(r) - legal
         if bad:
@@ -94,7 +94,7 @@ for name, b in blocks.items():
         sx, sy = int(sm.group(2)), int(sm.group(3))
         if 0 <= sy < rows and 0 <= sx < w:
             ch = g[sy][sx] if sx < len(g[sy]) else "."
-            if ch in "w#%VCD":
+            if ch in "w#%VCDMH":
                 errs.append(f"{name}: spawn '{sm.group(1)}' at ({sx},{sy}) is inside solid '{ch}'")
         else:
             errs.append(f"{name}: spawn '{sm.group(1)}' at ({sx},{sy}) out of bounds")

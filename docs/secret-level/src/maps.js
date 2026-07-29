@@ -7,8 +7,10 @@
 //
 // INTERIOR ground characters (maps with `interior: true`):
 //   ,  wood floor (random plank variant)   ;  rug        :  kitchen tile
+//   ~  woven kilim rug (the garden house)
 //   #  wall face (solid)                   %  wall top (solid)
 //   V  wall + window (solid)               C  wall + framed photo (solid)
+//   M  wall + macramé hanging (solid)      H  wall + herb shelf (solid)
 //   D  the front door, from inside (solid — the tile below it is the exit)
 //
 // OBJECT characters ('.' = nothing):
@@ -28,6 +30,7 @@ export const TILE = 16;
 // the middle) — that's where the interact zone goes.
 export const BUILDING_META = {
   b_la_home: { wt: 8, ht: 3, doorCol: 6 },
+  b_la_jack: { wt: 8, ht: 3, doorCol: 4 },
   b_la_house_b: { wt: 4, ht: 2 },
   b_taco_shop: { wt: 4, ht: 2 },
   b_theater: { wt: 5, ht: 2 },
@@ -65,7 +68,18 @@ export const MAPS = {
       "wwwsss.tttttt.--.....*..--...........",
       "wwwsss.tttttt.-........--.......*....",
       "wwwsss....**..---....--......**......",
-      "wwwsss.......*..----.................",
+      // ---- down the road: Jack's place and the garden 🌻
+      "wwwsss..........-----................",
+      "wwwsss...........--..................",
+      "wwwsss....*......--.........*........",
+      "wwwsss...........--..................",
+      "wwwsss...........-------.............",
+      "wwwsss....-----------------..........",
+      "wwwsss..*.......*.......*....*.......",
+      "wwwsss.....*.......*.........*.......",
+      "wwwsss..*........*.....*.....*.......",
+      "wwwsss....*.....*.........*..........",
+      "wwwsss.......*.......................",
       "wwwsss...*.........*.......*.........",
     ],
     objects: [
@@ -91,7 +105,18 @@ export const MAPS = {
       "....r......b.........................",
       "..................b.............b.T..",
       "....P.......b..........b.............",
-      "...b...T.T.T.T.T.....T.T.T.T.T.T.T.T.",
+      // ---- the garden block (kept clear where the beds and the pit go)
+      "...b...T.....b..................T....",
+      ".....T........b.................T....",
+      "..T.........b..................b.....",
+      "......b.........T................T...",
+      "...T.....s.........................T.",
+      "........T..........................b.",
+      "..................................T..",
+      ".................................b...",
+      "...................................T.",
+      ".....................................",
+      "...b...T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.",
       "......T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T",
     ],
     buildings: [
@@ -101,6 +126,9 @@ export const MAPS = {
       { sprite: "b_la_house_b", x: 29, y: 6 },
       { sprite: "b_taco_shop", x: 19, y: 11, point: "la_taco" },
       { sprite: "b_theater", x: 24, y: 18, point: "la_theater" },
+      // Jack's place, five minutes down the road ♥
+      { sprite: "b_la_jack", x: 19, y: 25, point: "jack_home",
+        enter: { to: "la_jack_in", spawn: "door" } },
     ],
     props: [
       { type: "horse", x: 4, y: 15 },    // beach horse (Miami ♥)
@@ -108,12 +136,31 @@ export const MAPS = {
       { type: "pool", x: 21, y: 7 },     // the pool out back
       { type: "lounger", x: 25, y: 7 },
       { type: "lounger", x: 25, y: 10 },
+      // 🌻 the garden — they grow most of what they eat
+      { type: "corn", x: 7, y: 25 },
+      { type: "corn", x: 9, y: 26 },
+      { type: "sunflower", x: 12, y: 25 },
+      { type: "sunflower", x: 14, y: 26 },
+      { type: "dreamcatcher", x: 16, y: 26 },
+      { type: "vegbed", x: 8, y: 29 },
+      { type: "vegbed_b", x: 14, y: 29 },
+      { type: "vegbed", x: 11, y: 31 },
+      { type: "trellis", x: 7, y: 31 },
+      { type: "herbpots", x: 19, y: 28 },
+      { type: "firepit", x: 23, y: 30 },
+      { type: "logseat", x: 20, y: 30 },
+      { type: "logseat", x: 26, y: 30 },
+      { type: "hammock", x: 30, y: 24 },
+      { type: "bus", x: 31, y: 28 },
     ],
     points: [
       { id: "la_beach", x: 3, y: 8, w: 3, h: 4 },
       { id: "beach_horse", x: 3, y: 16, w: 3, h: 1, bonus: true },
       { id: "garden", x: 6, y: 17, w: 3, h: 1, bonus: true },
       { id: "la_pool", x: 19, y: 8, w: 5, h: 1, bonus: true },
+      { id: "jack_garden", x: 7, y: 30, w: 8, h: 1, bonus: true },
+      { id: "jack_firepit", x: 22, y: 31, w: 4, h: 1, bonus: true },
+      { id: "jack_bus", x: 30, y: 29, w: 4, h: 1, bonus: true },
     ],
     figs: [
       { id: "fig_la", x: 9, y: 20 },
@@ -128,9 +175,10 @@ export const MAPS = {
     ],
     signs: {
       "33,11": ["→ Little Everywhere (300m)", "→ Mini Boston (4,982km… worth it)"],
+      "9,26": ["🌻 THE GARDEN 🌻", "take what you need,", "leave the tomatoes alone. — Jack"],
     },
     exits: [{ x: 35, y: 11, w: 1, h: 3, to: "route", spawn: "west" }],
-    spawns: { start: [13, 8], west: [33, 12], door: [15, 8] },
+    spawns: { start: [13, 8], west: [33, 12], door: [15, 8], jackdoor: [23, 27] },
     noahPost: [17, 8],
   },
 
@@ -365,6 +413,9 @@ export const MAPS = {
       { type: "in_plant", x: 18, y: 6 },
       { type: "in_petbeds", x: 15, y: 11 },
       { type: "in_bowl", x: 12, y: 11 },
+      // her brother's corner: rods against the wall, ball at his feet 🎣 ⚽
+      { type: "in_rods", x: 11, y: 2 },
+      { type: "in_ball", x: 13, y: 3 },
     ],
     points: [],
     figs: [{ id: "fig_home", x: 2, y: 11 }],
@@ -376,8 +427,8 @@ export const MAPS = {
         point: "home_marina" },
       { id: "home_mom", sprite: "npc_mom", x: 12, y: 8, dir: "down",
         point: "home_mom" },
-      // parked in front of the TV, obviously
-      { id: "home_bro", sprite: "npc_bro", x: 7, y: 10, dir: "up",
+      // nowhere near the TV — he's re-rigging a rod for the weekend
+      { id: "home_bro", sprite: "npc_bro", x: 12, y: 3, dir: "down",
         point: "home_bro" },
       { id: "home_leo", sprite: "leo", pet: true, x: 14, y: 11, dir: "down",
         point: "home_leo", join: "leo" },
@@ -386,6 +437,67 @@ export const MAPS = {
     ],
     exits: [{ x: 8, y: 11, w: 2, h: 1, to: "la", spawn: "door" }],
     spawns: { door: [9, 10] },
+  },
+
+  // ------------------------------------------------- INSIDE JACK'S HOUSE
+  // Bigger and messier than her mom's: a kilim in the middle, plants in every
+  // corner, records and a guitar, jars of everything Jack's wife grew, and a
+  // wood stove that is on even in California. Chakra owns the place.
+  la_jack_in: {
+    name: "the garden house 🌻",
+    interior: true,
+    ground: [
+      "%%%%%%%%%%%%%%%%%%%%%%",
+      "##V##M###V##H###V##C##",
+      "#,,,,,,,,,,,,,,,,,,,,#",
+      "#,,,,,,,,,,,,,,,,,,,,#",
+      "#,,,~~~~~~,,,,,,,,,,,#",
+      "#,,,~~~~~~,,,,,,,,,,,#",
+      "#,,,~~~~~~,,,,,,,,,,,#",
+      "#,,,,,,,,,,,,,,,,,,,,#",
+      "#::::::,,,,,,,,,,,,,,#",
+      "#::::::,,,,,,,,,,,,,,#",
+      "#,,,,,,,,,,,,,,,,,,,,#",
+      "#,,,,,,,,,,,,,,,,,,,,#",
+      "#,,,,,,,,,,,,,,,,,,,,#",
+      "#,,,,,,,,,,,,,,,,,,,,#",
+      "##########DD##########",
+    ],
+    objects: [],
+    buildings: [],
+    props: [
+      { type: "in_counter", x: 3, y: 9 },
+      { type: "in_fridge", x: 1, y: 7 },
+      { type: "in_jars", x: 17, y: 9 },
+      { type: "in_sofa2", x: 6, y: 3 },
+      { type: "in_cushions", x: 6, y: 7 },
+      { type: "in_record", x: 11, y: 4 },
+      { type: "in_guitar", x: 14, y: 3 },
+      { type: "in_stove", x: 17, y: 4 },
+      { type: "in_samovar", x: 13, y: 7 },
+      { type: "in_lamp", x: 16, y: 7 },
+      { type: "in_table", x: 9, y: 12 },
+      { type: "in_bigplant", x: 1, y: 4 },
+      { type: "in_bigplant", x: 19, y: 12 },
+      { type: "in_hangplant", x: 9, y: 2 },
+      { type: "in_hangplant", x: 19, y: 2 },
+      { type: "in_dogbed", x: 16, y: 12 },
+      { type: "in_bowl", x: 14, y: 12 },
+    ],
+    points: [],
+    figs: [{ id: "fig_jack", x: 2, y: 13 }],
+    pumpkins: [{ id: "pk_jack", x: 20, y: 3 }],
+    npcs: [
+      { id: "home_jack", sprite: "npc_jack", x: 12, y: 10, dir: "down",
+        point: "home_jack" },
+      { id: "home_jackwife", sprite: "npc_wife", x: 6, y: 10, dir: "left",
+        point: "home_jackwife" },
+      // she is coming with us and there was never any doubt about it 🖤
+      { id: "home_chakra", sprite: "chakra", pet: true, x: 17, y: 11, dir: "down",
+        point: "home_chakra", join: "chakra" },
+    ],
+    exits: [{ x: 10, y: 13, w: 2, h: 1, to: "la", spawn: "jackdoor" }],
+    spawns: { door: [11, 12] },
   },
 };
 

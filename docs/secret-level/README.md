@@ -66,8 +66,40 @@ Both fade to `/secret-level/`, which asks for the password.
   whole plot of garden in front of it (raised beds, corn, sunflowers, a
   trellis, herb pots, a hammock, a dreamcatcher, a fire pit with logs pulled
   up, and the van). The garden, the fire pit and the van are all readable
-  bonus spots. Inside are **Jack**, his **wife**, and **Chakra** 🖤 — the big
+  bonus spots. Inside are **Jack**, **Dez** (his wife), and **Chakra** 🖤 — the big
   black dog, who joins the crowd exactly like Leo and Charlie did.
+- 🍔 **In-N-Out** off the main LA road — white box, red fascia, and the
+  crossed yellow **arrow sign** out by the kerb. Press **E** on the door and go
+  **inside**: red-and-white checker floor, white tile walls, the whole menu on
+  a red board (five items, 1976 prices), a stainless counter running the full
+  width of the room with the line working behind it — fry slicer, shake
+  spindles, soda fountain — and booths out front. **E at the till** places the
+  order: a lot of burgers, raw onion, extra cheese, extra spread, fries animal
+  style, two drinks, one shake with two straws, and — if you ask nicely — **two
+  paper hats**. The tray lands on a booth and stays there, and **she and Noah
+  wear the hats for the rest of the game** (saved, on every map). Two bonus
+  spots inside: the menu board and the fry station.
+- 🌊 **the beach** runs the whole west edge of Mini LA and is six tiles of
+  ocean plus six of sand: a **lifeguard tower**, a big umbrella and towel,
+  boards planted in the sand, a **volleyball net**, somebody's **sandcastle**,
+  loungers, starfish, palms, two sailboats out on the water, and the horse.
+  Three readable spots (the beach itself, the tower, the boards).
+- 🏢 **JVUE at the LMA** — her new apartment building in Mini Boston, five
+  tiles of glass with lit balconies and a slate **monument sign** out front.
+  This is the **finale** building (`point: "apartment"`).
+- 🌳 **the Charles River Esplanade** along the top of Mini Boston: the **Hatch
+  Shell**, weeping willows leaning over the water, sailboats drifting on the
+  river, lamps and benches on the bank, the park sign, and the boombox. One
+  readable spot; no interior by design.
+- 🏡 **her parents' place in Brookline** — the bottom half of a big duplex,
+  white clapboard with wood trim, covered porch, two front doors (theirs is
+  the lit one). Down the connector path south of JVUE, on its own street with
+  neighbours.
+- 🎓 **Northeastern** (brick, limestone arch, NU-red banners) and **BU** —
+  specifically the **robotics** wing, with an arm and a rover visible through
+  the ground-floor glass.
+- ☕ **Cafe Bene**, where they met: chocolate fascia, warm windows, and two
+  little silhouettes at the near table.
 - 🇦🇼 **the Aruba beach**, past the road barriers on the far east of Mini
   Boston: a palapa bar with a **CLOSED** board, a driftwood ARUBA sign, palms,
   starfish, and **a turtle she can talk to**. (There's a divi-divi tree on
@@ -116,13 +148,38 @@ python3 -m http.server 8321
 - If `data/memories.json` exists (it's **gitignored**), the gate is skipped and
   that plaintext file is used — that's your dev mode.
 - Dev URL params: `?map=la|route|boston|la_house_in|la_jack_in&spawn=start`
-  (skip title; handy spawns: `boston&spawn=beach`, `la&spawn=door`,
-  `la&spawn=jackdoor`, `la_house_in&spawn=door`, `la_jack_in&spawn=door`),
+  (skip title; handy spawns: `boston&spawn=beach|esplanade|brookline`,
+  `la&spawn=door`, `la&spawn=jackdoor`, `la_house_in&spawn=door`,
+  `la_jack_in&spawn=door`),
   `&all` (mark everything collected, Noah met, Leo + Charlie + Chakra recruited
   → test the finale and the herd), `?reset=1` (wipe save + cached password).
 - After editing `src/maps.js`, run `python tools/check_maps.py` — it catches
   bad row widths, props/points/spawns placed out of bounds or inside walls,
-  missing sprites and broken exit→spawn links before you ever load the page.
+  missing sprites, broken exit→spawn links, overlapping buildings, doors that
+  open into another building, and anything (bush, fig, NPC, spawn) buried
+  inside a building's footprint, before you ever load the page.
+
+### ⚡ how the ground is drawn (read this before touching `maps.js` tiles)
+
+Mini LA is 43×34 tiles. One game object per tile meant ~1,300 objects on that
+map alone and the frame rate showed it, so **the static floor is baked**:
+`bakeGround()` in `world.js` stamps every non-animated tile into one offscreen
+canvas and hands it to kaplay as a single sprite (`bake_<map>`), and all the
+water folds into one 3-frame sprite (`water_<map>`) covering the water's
+bounding box. Only flowers stay as individual objects. Per map that is
+1,462 → 57 objects for LA, 1,292 → 57 for Boston, 260 → 1 for an interior.
+Solid ground is merged the same way: horizontal runs first, then identical runs
+stacked vertically, so the whole LA ocean is one collider instead of 34.
+
+Consequences when you edit tiles:
+
+- Add a **new animated ground char** and you must exclude it from
+  `staticFrame()` (return `null`) and give it its own object, or it will be
+  baked as a single frozen frame.
+- `tilesMeta.image` (the raw `tiles.png`) is loaded in `main.js` purely so the
+  bake can `drawImage()` from it — don't remove it.
+- Baked sprites live in kaplay's asset store, so they survive scene rebuilds and
+  are built once per map per session. Hard-reload after changing tile art.
 
 ## ✍️ the content — what Noah still needs to do
 
@@ -190,6 +247,16 @@ cd tools && python3 make_sprites.py   # regenerates ../assets/*.png + preview.pn
 - **Colors** (her hair, Noah's hoodie, Mookie's fur…): edit the `HER` / `NOAH` /
   `MOOKIE` palette dicts at the top.
 - **Pixels**: edit the ASCII grids (`HER_DOWN`, `MOOK`, `prop_figtree`, …).
+- **Sign text**: `text3(canvas, x, y, "IN-N-OUT", colour)` draws the shared
+  3x5 cap font (`text3_centered` centres it, `scale=2` gives 6x10 caps).
+  Every storefront name in the game goes through it, so they all match.
+- **Hats**: a hat is a spec, not a flag — `compose_char(..., hat=PAPER_HAT)`
+  stamps it over the hair in every frame. `PAPER_HAT` is the In-N-Out cap,
+  `PARTY_HAT` is the birthday cone (drawn, not currently worn by anyone). `dy`
+  in the spec and `hat_dy=` at the call site line it up with a given head — her
+  hair sits a row lower than Noah's afro, hence `hat_dy=1` on hers. Hatted
+  sheets are separate sprites (`her_hat`, `noah_hat`) that `world.js` swaps in
+  when `save.hats` is set.
 - Check `tools/preview.png` (zoomed contact sheet) after regenerating.
 - Maps are ASCII too — `src/maps.js`, chars documented at the top of the file.
 - (If you ever want ready-made tiles instead, Kenney's CC0 "RPG Urban Pack"
@@ -210,10 +277,14 @@ cd tools && python3 make_sprites.py   # regenerates ../assets/*.png + preview.pn
 
 - Tall-grass tile reads a bit "striped" — could be redrawn fuller
   (`tile_tallgrass` in the generator)
-- Interiors for the **other** buildings (the taco shop, the theater, the cafe,
-  the apartment). The plumbing is done — add a map with `interior: true`, then
+- **Interiors, one at a time** — every exterior is placed and readable; the
+  insides still to do: **JVUE** (her apartment — that one is the finale room),
+  her **parents' place** in Brookline, **Cafe Bene**, plus the older
+  placeholders (taco shop, theater, BU, Northeastern). **In-N-Out is done.**
+  The plumbing is done — add a map with `interior: true`, then
   `enter: { to, spawn }` on the building in `maps.js`. Copy `la_house_in` or
   `la_jack_in` (see "adding another house" below).
+  (The esplanade and the beach deliberately have no interior.)
 - Day/night tint; background music (`src/audio.js` has the synth)
 - More idle animations (hair sway, Mookie loaf)
 

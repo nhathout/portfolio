@@ -8,6 +8,7 @@ src = open(os.path.join(ROOT, "src", "maps.js"), encoding="utf-8").read()
 assets = {f[:-4] for f in os.listdir(os.path.join(ROOT, "assets")) if f.endswith(".png")}
 
 errs, warns = [], []
+SOLID = "w#%VCDMHYIOKZ"   # ground chars the player can never stand on
 
 # ---- split into map blocks by "  name: {" at two-space indent
 blocks = {}
@@ -58,7 +59,7 @@ for name, b in blocks.items():
         errs.append(f"{name}: {len(o)} object rows > {len(g)} ground rows")
 
     interior = "interior: true" in b
-    legal = set(",;:~#%VCDMH" if interior else ".*t-srRkw")
+    legal = set(",;:~#%VCDMHxYIOKZ" if interior else ".*t-srRkw")
     for i, r in enumerate(g):
         bad = set(r) - legal
         if bad:
@@ -94,13 +95,16 @@ for name, b in blocks.items():
         sx, sy = int(sm.group(2)), int(sm.group(3))
         if 0 <= sy < rows and 0 <= sx < w:
             ch = g[sy][sx] if sx < len(g[sy]) else "."
-            if ch in "w#%VCDMH":
+            if ch in SOLID:
                 errs.append(f"{name}: spawn '{sm.group(1)}' at ({sx},{sy}) is inside solid '{ch}'")
         else:
             errs.append(f"{name}: spawn '{sm.group(1)}' at ({sx},{sy}) out of bounds")
 
 # buildings reference known sprites + meta
-meta = dict(re.findall(r"(b_\w+): \{ wt: (\d+)", src))
+meta = {}
+for m in re.finditer(r"(b_\w+): \{ ([^}]*)\}", src):
+    d = dict((k, int(v)) for k, v in re.findall(r"(wt|ht|doorCol): (\d+)", m.group(2)))
+    meta[m.group(1)] = d
 for name, b in blocks.items():
     for bd in objs(b, "buildings"):
         s = bd.get("sprite")
@@ -108,6 +112,53 @@ for name, b in blocks.items():
             errs.append(f"{name}: building sprite {s} missing from assets")
         if s and s not in meta:
             errs.append(f"{name}: building sprite {s} has no BUILDING_META")
+
+# ---- nothing may sit inside a building's wall footprint, and every door has
+# to open onto a tile that isn't inside one (this is the class of mistake you
+# only notice as "the fig is stuck in a wall" three playthroughs later)
+for name, b in blocks.items():
+    g = grid(b, "ground")
+    if not g:
+        continue
+    w, rows = len(g[0]), len(g)
+    walls = {}          # (x,y) -> sprite occupying it
+    doors = []
+    for bd in objs(b, "buildings"):
+        s = bd.get("sprite")
+        if s not in meta:
+            continue
+        m = meta[s]
+        bx, by = int(float(bd["x"])), int(float(bd["y"]))
+        for y in range(by - m["ht"] + 1, by + 1):
+            for x in range(bx, bx + m["wt"]):
+                if (x, y) in walls:
+                    errs.append(f"{name}: {s} overlaps {walls[(x, y)]} at ({x},{y})")
+                walls[(x, y)] = s
+        if bd.get("point"):
+            doors.append((s, bx + m.get("doorCol", m["wt"] // 2), by + 1))
+    def clash(x, y, what):
+        if (x, y) in walls:
+            errs.append(f"{name}: {what} at ({x},{y}) is inside {walls[(x, y)]}")
+    for p in objs(b, "props"):
+        clash(int(float(p["x"])), int(float(p["y"])), f"prop {p.get('type')}")
+    for p in objs(b, "points") + objs(b, "figs") + objs(b, "pumpkins"):
+        clash(int(float(p["x"])), int(float(p["y"])), f"point/pickup {p.get('id')}")
+    for n in objs(b, "npcs"):
+        clash(int(float(n["x"])), int(float(n["y"])), f"npc {n.get('id')}")
+    for i, row in enumerate(grid(b, "objects")):
+        for j, ch in enumerate(row):
+            if ch != ".":
+                clash(j, i, f"object '{ch}'")
+    for s, dx, dy in doors:
+        if not (0 <= dx < w and 0 <= dy < rows):
+            errs.append(f"{name}: {s} door zone ({dx},{dy}) is out of bounds")
+        elif (dx, dy) in walls:
+            errs.append(f"{name}: {s} door opens into {walls[(dx, dy)]} at ({dx},{dy})")
+        elif g[dy][dx] in SOLID:
+            errs.append(f"{name}: {s} door opens onto solid '{g[dy][dx]}' at ({dx},{dy})")
+    for sm in re.finditer(r"(\w+): \[(\d+), (\d+)\]",
+                          b.split("spawns:")[1].split("}")[0] if "spawns:" in b else ""):
+        clash(int(sm.group(2)), int(sm.group(3)), f"spawn '{sm.group(1)}'")
 
 print("maps:", ", ".join(blocks))
 for e in errs: print("ERROR:", e)

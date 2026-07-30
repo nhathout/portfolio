@@ -35,6 +35,14 @@ const k = kaplay({
 // ---------------------------------------------------------------- assets
 const tilesMeta = await (await fetch("assets/tiles.json")).json();
 const F = tilesMeta.frames;
+// world.js stamps each map's static floor into one texture at load; that needs
+// the tile sheet as a plain image it can drawImage() from.
+tilesMeta.image = await new Promise((resolve, reject) => {
+  const img = new Image();
+  img.onload = () => resolve(img);
+  img.onerror = reject;
+  img.src = "assets/tiles.png";
+});
 
 k.loadSprite("tiles", "assets/tiles.png", {
   sliceX: tilesMeta.cols,
@@ -60,9 +68,13 @@ const CHAR_ANIMS = {
 k.loadSprite("her", "assets/her.png", { sliceX: 4, sliceY: 4, anims: CHAR_ANIMS });
 k.loadSprite("noah", "assets/noah.png", { sliceX: 4, sliceY: 4, anims: CHAR_ANIMS });
 for (const npc of ["npc_woman", "npc_man", "npc_old",
-  "npc_marina", "npc_mom", "npc_bro", "npc_jack", "npc_wife"]) {
+  "npc_marina", "npc_mom", "npc_bro", "npc_jack", "npc_wife",
+  "npc_innout", "npc_innout2"]) {
   k.loadSprite(npc, `assets/${npc}.png`, { sliceX: 4, sliceY: 4, anims: CHAR_ANIMS });
 }
+// the same two of them, in In-N-Out paper hats, for after the burger run 🍔
+k.loadSprite("her_hat", "assets/her_hat.png", { sliceX: 4, sliceY: 4, anims: CHAR_ANIMS });
+k.loadSprite("noah_hat", "assets/noah_hat.png", { sliceX: 4, sliceY: 4, anims: CHAR_ANIMS });
 // cats + dogs share a frame layout (row 4 is the sit/idle fidget)
 const PET_ANIMS = {
   "idle-down": 0,
@@ -114,6 +126,10 @@ for (const n of ["tree", "palm", "figtree", "lamp", "bench", "quad", "torii",
   "felucca", "wofstar", "needle", "seoulgate",
   // Aruba 🇦🇼
   "divi", "palapa", "lounger", "starfish", "beachsign",
+  // the LA beach 🌊 + the burger place 🍔
+  "lifeguard", "umbrella", "surfboards", "volley", "sandcastle", "innoutsign",
+  // the Charles River esplanade 🦢
+  "bandshell", "willow", "esplsign", "jvuesign",
   // interiors 🏡
   "in_sofa", "in_table", "in_counter", "in_fridge", "in_shelf",
   "in_plant", "in_petbeds", "in_bowl", "in_lamp", "in_rods", "in_ball",
@@ -123,9 +139,12 @@ for (const n of ["tree", "palm", "figtree", "lamp", "bench", "quad", "torii",
   // …and in
   "in_sofa2", "in_record", "in_guitar", "in_hangplant", "in_bigplant",
   "in_jars", "in_cushions", "in_dogbed", "in_samovar",
+  // …and inside the burger place 🍔
+  "in_menuboard", "in_frystation", "in_shakes", "in_drinks", "in_till",
+  "in_hatstack", "in_booth", "in_tray",
   "b_la_home", "b_la_jack", "b_la_house_b", "b_taco_shop", "b_theater",
-  "b_apartment", "b_brownstone_b", "b_bu_building", "b_neu_building",
-  "b_cafe"]) {
+  "b_innout", "b_brownstone_b", "b_bu_building", "b_neu_building",
+  "b_cafe", "b_jvue", "b_duplex"]) {
   if (n === "figtree") k.loadSprite(n, `assets/${n}.png`, { sliceX: 2, sliceY: 1 });
   else k.loadSprite(n, `assets/${n}.png`);
 }
@@ -313,6 +332,7 @@ if (params.get("map")) {
     for (const id of allPointIds()) game.save.seen.add(id);
     for (const id of allFigIds()) game.save.figs.add(id);
     game.save.met = true;
+    game.save.hats = true;                                                 // 🍔 hats on
     for (const id of ["leo", "charlie", "chakra"]) game.save.crew.add(id); // full herd
   }
   $("title").classList.add("hidden");

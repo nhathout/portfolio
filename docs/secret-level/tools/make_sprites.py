@@ -126,6 +126,79 @@ def from_ascii(rows, pal):
 
 
 # ---------------------------------------------------------------------------
+# tiny 3x5 sign font — every storefront in the game spells its own name, and
+# hand-plotting caps per sign (the way ARUBA / CLOSED were done) doesn't scale
+# past three signs. Same shapes, just shared.
+# ---------------------------------------------------------------------------
+
+FONT3 = {
+    "A": "###/#.#/###/#.#/#.#", "B": "##./#.#/##./#.#/##.",
+    "C": "###/#../#../#../###", "D": "##./#.#/#.#/#.#/##.",
+    "E": "###/#../##./#../###", "F": "###/#../##./#../#..",
+    "G": "###/#../#.#/#.#/###", "H": "#.#/#.#/###/#.#/#.#",
+    "I": "###/.#./.#./.#./###", "J": "..#/..#/..#/#.#/###",
+    "K": "#.#/#.#/##./#.#/#.#", "L": "#../#../#../#../###",
+    "M": "#.#/###/###/#.#/#.#", "N": "##./#.#/#.#/#.#/#.#",
+    "O": "###/#.#/#.#/#.#/###", "P": "###/#.#/###/#../#..",
+    "Q": "###/#.#/#.#/###/..#", "R": "##./#.#/##./#.#/#.#",
+    "S": "###/#../###/..#/###", "T": "###/.#./.#./.#./.#.",
+    "U": "#.#/#.#/#.#/#.#/###", "V": "#.#/#.#/#.#/#.#/.#.",
+    "W": "#.#/#.#/###/###/#.#", "X": "#.#/#.#/.#./#.#/#.#",
+    "Y": "#.#/#.#/.#./.#./.#.", "Z": "###/..#/.#./#../###",
+    "0": "###/#.#/#.#/#.#/###", "1": ".#./##./.#./.#./###",
+    "2": "###/..#/###/#../###", "3": "###/..#/###/..#/###",
+    "4": "#.#/#.#/###/..#/..#", "5": "###/#../###/..#/###",
+    "6": "###/#../###/#.#/###", "7": "###/..#/..#/..#/..#",
+    "8": "###/#.#/###/#.#/###", "9": "###/#.#/###/..#/###",
+    "-": ".../.../###/.../...", ".": ".../.../.../.../.#.",
+    "'": ".#./.#./.../.../...", "!": ".#./.#./.#./.../.#.",
+    "&": ".#./#.#/.#./#.#/.##", "/": "..#/..#/.#./#../#..",
+    " ": ".../.../.../.../...",
+}
+
+
+def text3_w(s, spacing=1, scale=1, narrow_space=True):
+    """pixel width of `s` drawn by text3 (for centering)."""
+    w = 0
+    for ch in s.upper():
+        cw = 2 if (ch == " " and narrow_space) else 3
+        w += cw * scale + spacing * scale
+    return max(0, w - spacing * scale)
+
+
+def text3(c, x, y, s, color, spacing=1, scale=1, shadow=None,
+          narrow_space=True):
+    """draw `s` in the 3x5 font. `scale` fattens each pixel (2 = 6x10 caps).
+    `shadow` drops a 1px offset copy first — reads much better on busy signs."""
+    if shadow is not None:
+        text3(c, x + scale, y + scale, s, shadow, spacing, scale, None,
+              narrow_space)
+    cx = x
+    for ch in s.upper():
+        if ch == " ":
+            cx += (2 if narrow_space else 3) * scale + spacing * scale
+            continue
+        glyph = FONT3.get(ch)
+        if glyph is None:
+            raise KeyError(f"no 3x5 glyph for {ch!r}")
+        for j, row in enumerate(glyph.split("/")):
+            for i, px in enumerate(row):
+                if px != "#":
+                    continue
+                for jj in range(scale):
+                    for ii in range(scale):
+                        c.set(cx + i * scale + ii, y + j * scale + jj, color)
+        cx += 3 * scale + spacing * scale
+    return cx - spacing * scale
+
+
+def text3_centered(c, cx, y, s, color, spacing=1, scale=1, shadow=None):
+    """same, centered on `cx`."""
+    w = text3_w(s, spacing, scale)
+    return text3(c, cx - w // 2, y, s, color, spacing, scale, shadow)
+
+
+# ---------------------------------------------------------------------------
 # PALETTES — tweak here
 # ---------------------------------------------------------------------------
 
@@ -222,11 +295,31 @@ JACK = {                               # Jack — her big brother. tall, wide,
     "w": hex_rgba("6b5844"),           # boots
 }
 
-WIFE = {                               # his wife — curly brown hair
-    "h": hex_rgba("6b431f"), "H": hex_rgba("946235"), "s": hex_rgba("f2d2b0"),
+WIFE = {                               # Dez — Jack's wife. curls, near-black
+                                       # brown hair (h = mass, H = the highlight
+                                       # that keeps the curls legible at 1x)
+    "h": hex_rgba("2a1b14"), "H": hex_rgba("42291c"), "s": hex_rgba("f2d2b0"),
     "S": hex_rgba("d4ac89"), "e": hex_rgba("3d2a1c"), "t": hex_rgba("d18a3f"),
     "T": hex_rgba("a3652a"), "d": hex_rgba("5f7a5a"), "D": hex_rgba("46604a"),
     "w": hex_rgba("efe9db"),
+}
+
+# ---- the burger place 🍔 -----------------------------------------------------
+# White shirt, dark trousers, paper hat. The hat does all the work.
+INOUT_A = {                            # on the register
+    "h": hex_rgba("3a2a20"), "H": hex_rgba("55402f"), "s": hex_rgba("e3b58c"),
+    "S": hex_rgba("c1926a"), "e": hex_rgba("2b201c"),
+    "t": hex_rgba("f6f3e7"), "T": hex_rgba("d8d2c0"),
+    "d": hex_rgba("3a3f4a"), "D": hex_rgba("2b303a"),
+    "w": hex_rgba("f4f1e4"),
+}
+INOUT_B = {                            # on the fry station
+    "h": hex_rgba("241c1a"), "H": hex_rgba("3d302c"), "s": hex_rgba("8a5f3f"),
+    "S": hex_rgba("6e4a30"), "e": hex_rgba("1d1512"),
+    "t": hex_rgba("f6f3e7"), "T": hex_rgba("d8d2c0"),
+    "W": hex_rgba("da291c"),           # the red placket on the shirt
+    "d": hex_rgba("3a3f4a"), "D": hex_rgba("2b303a"),
+    "w": hex_rgba("f4f1e4"),
 }
 
 CHAKRA = {                             # Chakra — the big black dog 🖤
@@ -947,29 +1040,57 @@ JACK_LEGS_SIDE = {
 
 
 # tiny party hat, drawn over the top of the head (birthday girl only ♥)
-HAT_PAL = {
-    "Y": hex_rgba("f0c040"),   # cone
-    "R": hex_rgba("e8556a"),   # stripe
-    "P": hex_rgba("f8a8c0"),   # pompom
+# ---- hats. A hat is a spec, not a flag: {rows, pal, dy, dx}. `dy` is measured
+# from HEAD_PAD so it follows a character's head up or down, and `dx` nudges the
+# side-facing frames, whose heads sit one pixel over.
+PARTY_HAT = {
+    "pal": {
+        "Y": hex_rgba("f0c040"),   # cone
+        "R": hex_rgba("e8556a"),   # stripe
+        "P": hex_rgba("f8a8c0"),   # pompom
+    },
+    # a proper kids' party cone: tall, striped, pompom on top
+    "rows": [
+        ".......PP.......",
+        ".......YY.......",
+        "......YYYY......",
+        "......RRRR......",
+        ".....YYYYYY.....",
+        ".....RRRRRR.....",
+    ],
+    "dy": -3,
+    "dx": {"down": 0, "up": 0, "side": 1},
 }
-# a proper kids' party cone: tall, striped, pompom on top
-HAT_ROWS = [
-    ".......PP.......",
-    ".......YY.......",
-    "......YYYY......",
-    "......RRRR......",
-    ".....YYYYYY.....",
-    ".....RRRRRR.....",
-]
-HAT_DX = {"down": 0, "up": 0, "side": 1}
+
+# the folded paper cap the In-N-Out crew wear — white, red band. It's the
+# whole reason the burger run is worth doing 🍔
+PAPER_HAT = {
+    "pal": {
+        "N": hex_rgba("fbf8ee"),   # paper
+        "M": hex_rgba("ffffff"),   # the fold catching the light
+        "Q": hex_rgba("ded8c6"),   # paper shade
+        "R": hex_rgba("da291c"),   # the band
+        "V": hex_rgba("a81d13"),   # band shade
+    },
+    "rows": [
+        ".....MMMMMM.....",
+        "...MMNNNNNNMM...",
+        "..MNNNNNNNNNNQ..",
+        "..RRRRRRRRRRRR..",
+        "..VRRRRRRRRRRV..",
+    ],
+    "dy": -1,
+    "dx": {"down": 0, "up": 0, "side": 1},
+}
 
 
-def compose_char(torsos, legsets, pal, extras=None, hat=False,
-                 torso_h=TORSO_H, head_pad=HEAD_PAD):
+def compose_char(torsos, legsets, pal, extras=None, hat=None,
+                 torso_h=TORSO_H, head_pad=HEAD_PAD, hat_dy=0):
     """torsos: {down,up,side}; legsets: {front:{stand,a}, side:{stand,a}}
     torso_h/head_pad let shorter characters (kids) sit lower in the frame."""
     hatpal = dict(pal)
-    hatpal.update(HAT_PAL)
+    if hat:
+        hatpal.update(hat["pal"])
     sheet = Canvas(FW * 4, FH * 4)
     rows_spec = [
         ("down", "front"),
@@ -984,8 +1105,10 @@ def compose_char(torsos, legsets, pal, extras=None, hat=False,
             f.blit_ascii(0, head_pad, torsos[dirname], pal)
             f.blit_ascii(0, head_pad + torso_h, frames[ci], pal)
             if hat:
-                # base row of the cone rests ON the hair's top row
-                f.blit_ascii(HAT_DX[dirname], head_pad - 3, HAT_ROWS, hatpal)
+                # the hat's bottom row lands ON the hair's top rows, so it reads
+                # as sitting on the head rather than hovering over it
+                f.blit_ascii(hat["dx"][dirname], head_pad + hat["dy"] + hat_dy,
+                             hat["rows"], hatpal)
             f.outline(OUTLINE)
             sheet.blit(f, ci * FW, ri * FH)
     if extras:
@@ -996,7 +1119,7 @@ def compose_char(torsos, legsets, pal, extras=None, hat=False,
             if ex.get("overlay"):
                 f.blit_ascii(0, head_pad, ex["overlay"], pal)
             if hat:
-                f.blit_ascii(0, head_pad - 3, HAT_ROWS, hatpal)
+                f.blit_ascii(0, head_pad + hat["dy"] + hat_dy, hat["rows"], hatpal)
             f.outline(OUTLINE)
             sheet.blit(f, ci * FW, 3 * FH)
     return sheet
@@ -1782,6 +1905,14 @@ TILE_ORDER = [
     ("wallmac", lambda: tile_wallmac()),
     ("wallherb", lambda: tile_wallherb()),
     ("indoor", lambda: tile_indoor()),
+    # ---- the burger place 🍔
+    ("chk_a", lambda: tile_checker(0)),
+    ("chk_b", lambda: tile_checker(1)),
+    ("io_top", lambda: tile_io_top()),
+    ("io_face", lambda: tile_io_face()),
+    ("io_win", lambda: tile_io_win()),
+    ("io_door", lambda: tile_io_door()),
+    ("io_counter", lambda: tile_io_counter()),
 ] + [(f"path_{m}", (lambda mm: (lambda: tile_path_m(mm)))(m)) for m in range(16)] \
   + [(f"sand_{m}", (lambda mm: (lambda: tile_sand_m(mm)))(m)) for m in range(16)]
 
@@ -2738,6 +2869,372 @@ def prop_beachsign():
 
 
 # ---------------------------------------------------------------------------
+# THE LA BEACH 🌊 — the strip got six tiles wider, so it needed furniture
+# ---------------------------------------------------------------------------
+
+IN_YELLOW = hex_rgba("ffc72c")
+IN_YELLOW_D = hex_rgba("dfa513")
+IN_RED = hex_rgba("da291c")
+IN_RED_D = hex_rgba("a81d13")
+IN_WHITE = hex_rgba("fffdf4")
+
+
+def prop_innoutsign():
+    """The sign. Crossed yellow arrow, red caps, two poles — the one thing
+    that makes a white box read as In-N-Out from across the map."""
+    c = Canvas(40, 56)
+    pole = hex_rgba("b9b4ab")
+    pole_d = hex_rgba("8b867e")
+
+    # ---- the arrow: a stepped diagonal band, then a fat triangular head
+    for i in range(3, 30):
+        top = 5 + (i - 3) // 2
+        c.rect(i, top, 1, 7, IN_YELLOW)
+        c.set(i, top + 5, IN_YELLOW_D)
+        c.set(i, top + 6, IN_YELLOW_D)
+    for k in range(11):                     # apex right, base at x=28
+        half = 10 - k
+        c.rect(28 + k, 21 - half, 1, half * 2 + 1, IN_YELLOW)
+        c.set(28 + k, 21 + half, IN_YELLOW_D)
+        if half:
+            c.set(28 + k, 21 + half - 1, IN_YELLOW_D)
+    # In-N-Out's arrow is red-edged — outline the yellow before anything else
+    # lands on top of it, then the universal dark outline goes outside that.
+    c.outline(IN_RED)
+
+    # ---- the name plaque, crossing the arrow like it should
+    c.rect(1, 26, 38, 16, IN_WHITE)
+    c.rect(1, 26, 38, 1, IN_RED)
+    c.rect(1, 41, 38, 1, IN_RED)
+    c.rect(1, 26, 1, 16, IN_RED)
+    c.rect(38, 26, 1, 16, IN_RED)
+    text3_centered(c, 20, 29, "IN-N-OUT", IN_RED)
+    text3_centered(c, 20, 35, "BURGER", IN_RED)
+
+    # ---- poles
+    for px in (8, 28):
+        c.rect(px, 41, 4, 15, pole)
+        c.rect(px + 2, 41, 2, 15, pole_d)
+    c.outline(OUTLINE)
+    return c
+
+
+def prop_lifeguard():
+    """LA lifeguard tower: white hut, blue shed roof, red cross, up on stilts
+    with a ladder. Reads as 'this is a real beach' more than any palm does."""
+    c = Canvas(30, 42)
+    hut = hex_rgba("eef3f6")
+    hut_d = hex_rgba("c9d4dc")
+    blue = hex_rgba("3f7fc0")
+    blue_l = hex_rgba("62a2dd")
+    blue_d = hex_rgba("2d5f96")
+    wood = hex_rgba("9a6f42")
+    wood_d = hex_rgba("74512d")
+    glass = hex_rgba("aedcf0")
+    glass_d = hex_rgba("74a8c4")
+
+    # pennant on top
+    c.rect(14, 0, 2, 8, hex_rgba("cfc7b6"))
+    for j in range(5):
+        c.rect(16, 1 + j, 8 - j, 1, IN_RED if j < 4 else IN_RED_D)
+    # shed roof, sloping down to the right
+    for j in range(5):
+        c.rect(1 + j // 2, 7 + j, 28 - j // 2, 1, blue if j < 4 else blue_d)
+    c.rect(1, 7, 28, 1, blue_l)
+    # hut body
+    c.rect(3, 12, 24, 15, hut)
+    c.rect(3, 12, 24, 1, hex_rgba("fbfdff"))
+    c.rect(3, 25, 24, 2, hut_d)
+    # window band (where the guard actually sits)
+    c.rect(5, 15, 20, 8, glass_d)
+    c.rect(6, 16, 18, 6, glass)
+    c.rect(6, 16, 18, 2, hex_rgba("e8f8ff"))
+    c.rect(14, 15, 2, 8, hut)          # centre mullion
+    # red cross on the left panel
+    c.rect(7, 17, 5, 2, IN_RED)
+    c.rect(8, 15, 2, 6, IN_RED)
+    # deck + stilts
+    c.rect(1, 27, 28, 3, wood)
+    c.rect(1, 29, 28, 1, wood_d)
+    for sx in (4, 24):
+        c.rect(sx, 30, 3, 11, wood)
+        c.rect(sx + 2, 30, 1, 11, wood_d)
+    # ladder up the middle
+    c.rect(12, 30, 2, 11, wood)
+    c.rect(17, 30, 2, 11, wood)
+    for ry in (32, 35, 38):
+        c.rect(13, ry, 5, 1, wood_d)
+    c.outline(OUTLINE)
+    return c
+
+
+def prop_umbrella():
+    """big red-and-white umbrella with a towel and a cooler under it"""
+    c = Canvas(32, 38)
+    red = hex_rgba("e8433c")
+    white = hex_rgba("fbf7ea")
+    pole = hex_rgba("cfc7b6")
+    pole_d = hex_rgba("a8a091")
+    # domed canopy — a quarter-circle profile, not a flat awning
+    for j in range(12):
+        w = int(round(30 * (1 - (j / 12.4) ** 2) ** 0.5))
+        x0 = 16 - w // 2
+        for i in range(x0, x0 + w):
+            c.set(i, 1 + j, red if ((i - x0 + 1) // 4) % 2 == 0 else white)
+    for i in range(2, 30, 4):               # scalloped hem
+        c.set(i, 13, red)
+        c.set(i + 1, 13, red)
+    c.rect(15, 12, 2, 20, pole)
+    c.rect(16, 12, 1, 20, pole_d)
+    # towel spread on the sand
+    towel = hex_rgba("2fb3b3")
+    towel_l = hex_rgba("f6f2e2")
+    for j in range(5):
+        c.rect(2 + j, 30 + j, 17, 1, towel if j % 2 == 0 else towel_l)
+    # cooler
+    c.rect(22, 27, 9, 8, white)
+    c.rect(22, 27, 9, 3, hex_rgba("3f7fc0"))
+    c.rect(22, 33, 9, 2, hex_rgba("d6d0c0"))
+    c.rect(25, 29, 3, 1, hex_rgba("2d5f96"))
+    c.outline(OUTLINE)
+    return c
+
+
+def prop_surfboards():
+    """two boards planted nose-up in the sand, leaning apart"""
+    c = Canvas(32, 38)
+    teal = hex_rgba("2fb3b3")
+    teal_d = hex_rgba("1d8a8f")
+    coral = hex_rgba("f2705a")
+    coral_d = hex_rgba("c4503e")
+    cream = hex_rgba("f8f2e2")
+    # half-widths down the board: pointed nose, belly at ~45%, rounded tail
+    SHAPE = [1, 1, 2, 2, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 4, 4,
+             4, 4, 4, 3, 3, 3, 3, 2, 2, 2]
+
+    def board(cx0, top, body, dark, lean):
+        for j, half in enumerate(SHAPE):
+            x = cx0 + int(round(lean * j))
+            c.rect(x - half, top + j, half * 2, 1, body)
+            c.rect(x + half - 2, top + j, 2, 1, dark)
+            if 3 < j < len(SHAPE) - 4:      # stringer down the middle
+                c.set(x, top + j, cream)
+        # fin at the tail
+        fx = cx0 + int(round(lean * (len(SHAPE) - 1)))
+        c.rect(fx, top + len(SHAPE), 2, 4, dark)
+        c.rect(fx + 1, top + len(SHAPE), 1, 3, dark)
+
+    board(9, 1, teal, teal_d, -0.07)
+    board(23, 5, coral, coral_d, 0.06)
+    c.outline(OUTLINE)
+    return c
+
+
+def prop_volley():
+    """beach volleyball net + the ball, half-buried"""
+    c = Canvas(46, 32)
+    post = hex_rgba("cfc7b6")
+    post_d = hex_rgba("a29a8b")
+    net = hex_rgba("f4f1e4")
+    for px in (2, 40):
+        c.rect(px, 4, 4, 25, post)
+        c.rect(px + 2, 4, 2, 25, post_d)
+    c.rect(6, 6, 34, 2, net)                # top tape
+    c.rect(6, 19, 34, 1, net)               # bottom tape
+    for i in range(6, 40, 4):               # mesh
+        c.rect(i, 8, 1, 11, net)
+    for j in range(9, 19, 4):
+        c.rect(6, j, 34, 1, net)
+    # the ball
+    ball = hex_rgba("fbf7ea")
+    c.rect(21, 24, 8, 6, ball)
+    c.rect(22, 23, 6, 8, ball)
+    c.rect(23, 23, 4, 1, hex_rgba("e8433c"))
+    c.rect(21, 26, 8, 1, hex_rgba("3f7fc0"))
+    c.rect(24, 24, 1, 6, hex_rgba("d6d0c0"))
+    c.outline(OUTLINE)
+    return c
+
+
+def prop_sandcastle():
+    """somebody's afternoon: three towers, a gate, a flag, a bucket"""
+    c = Canvas(26, 22)
+    sand = hex_rgba("e6cd97")
+    sand_l = hex_rgba("f4e3b8")
+    sand_d = hex_rgba("c2a56c")
+    # towers
+    for tx, top in ((2, 8), (10, 4), (19, 9)):
+        w = 5 if tx != 10 else 6
+        c.rect(tx, top, w, 21 - top, sand)
+        c.rect(tx, top, w, 1, sand_l)
+        c.rect(tx + w - 2, top, 2, 21 - top, sand_d)
+        for i in range(tx, tx + w, 2):      # crenellations
+            c.set(i, top - 1, sand)
+            c.set(i, top - 2, sand)
+    # curtain wall between them
+    c.rect(6, 13, 15, 8, sand)
+    c.rect(6, 13, 15, 1, sand_l)
+    c.rect(6, 19, 15, 2, sand_d)
+    # arched gate
+    c.rect(12, 16, 4, 5, hex_rgba("8f7546"))
+    c.set(12, 16, sand)
+    c.set(15, 16, sand)
+    # flag on the middle tower
+    c.rect(12, 0, 1, 5, hex_rgba("8a683c"))
+    c.rect(13, 0, 5, 3, hex_rgba("e8433c"))
+    # bucket + spade beside it
+    c.rect(22, 16, 4, 5, hex_rgba("3f7fc0"))
+    c.rect(22, 16, 4, 1, hex_rgba("62a2dd"))
+    c.rect(21, 12, 1, 5, hex_rgba("e8c74a"))
+    c.rect(20, 10, 3, 3, hex_rgba("e8c74a"))
+    c.outline(OUTLINE)
+    return c
+
+
+# ---------------------------------------------------------------------------
+# MINI BOSTON 🦞 — the esplanade along the Charles
+# ---------------------------------------------------------------------------
+
+def prop_bandshell():
+    """the Hatch Shell: a half-dome of concentric limestone arcs over a stage"""
+    c = Canvas(52, 36)
+    stone = hex_rgba("e4dcc6")
+    stone_l = hex_rgba("f4eeda")
+    stone_d = hex_rgba("bfb49a")
+    dark = hex_rgba("3a3040")
+    import math
+
+    def arc(radius, y_base, fn):
+        """walk a round arch from the crown down to the springing line —
+        half-width = sqrt(r^2 - h^2), which bulges out fast under the crown
+        (a sine profile here comes out looking like a tent)"""
+        for j in range(radius + 1):
+            h = radius - j
+            half = int(round(math.sqrt(max(0, radius * radius - h * h))))
+            fn(half, y_base - radius + j)
+
+    # the shell itself
+    arc(25, 30, lambda half, y: c.rect(26 - half, y, half * 2, 1, stone))
+    # ribs — the Hatch Shell is a stack of concentric arches, and without them
+    # a filled dome just reads as a tunnel
+    for r in range(24, 8, -3):
+        arc(r, 30, lambda half, y: (c.set(26 - half, y, stone_d),
+                                    c.set(26 + half - 1, y, stone_d)))
+        arc(r - 1, 30, lambda half, y: (c.set(26 - half, y, stone_l),
+                                        c.set(26 + half - 1, y, stone_l)))
+    # the stage mouth
+    arc(14, 30, lambda half, y: c.rect(26 - half, y, half * 2, 1, dark))
+    # stage floor + apron
+    c.rect(8, 29, 36, 3, hex_rgba("9a7f5c"))
+    c.rect(8, 31, 36, 1, hex_rgba("74603f"))
+    c.rect(5, 32, 42, 3, stone)
+    c.rect(5, 34, 42, 1, stone_d)
+    c.outline(OUTLINE)
+    return c
+
+
+def prop_swanboat():
+    """A swan boat. SHELVED — the river already has sailboats on it and two
+    kinds of white thing bobbing around read as clutter. Kept because it's
+    finished art: add `out["swanboat"] = prop_swanboat()` in main() and put it
+    back in main.js's load list to bring it back (a lagoon would suit it)."""
+    c = Canvas(34, 26)
+    white = hex_rgba("fbf7ea")
+    white_l = hex_rgba("ffffff")
+    white_d = hex_rgba("cec7b4")
+    hull = hex_rgba("e8dcc0")
+    hull_d = hex_rgba("b8ac92")
+    orange = hex_rgba("e8913c")
+    wood = hex_rgba("9a7f5c")
+
+    # ---- the swan shell at the stern
+    BODY = [(20, 12), (18, 15), (17, 16), (17, 16), (17, 16), (18, 15),
+            (19, 14), (20, 12), (21, 10)]
+    for j, (x0, w) in enumerate(BODY):
+        c.rect(x0, 8 + j, w, 1, white)
+        c.rect(x0 + w - 3, 8 + j, 3, 1, white_d)
+    c.rect(18, 8, 12, 1, white_l)
+    # tail feathers flicking up at the back
+    for i, ty in ((30, 9), (31, 8), (32, 10)):
+        c.rect(i, ty, 2, 4, white_d)
+    # wing scallops along the flank
+    for i in range(19, 30, 3):
+        c.set(i, 13, white_d)
+        c.set(i + 1, 14, white_d)
+    # ---- neck: an unbroken S from the head down to the shell. Walk it from
+    # the head end so every row overlaps the next, and land the last row on
+    # the body's own first row (y=8, x=20) — otherwise the head floats.
+    for j, x in enumerate((15, 15, 16, 17, 18, 19, 20)):
+        c.rect(x, 2 + j, 2, 1, white)
+        c.set(x + 1, 2 + j, white_d)
+    c.rect(12, 0, 5, 4, white)                 # head
+    c.rect(12, 0, 5, 1, white_l)
+    c.set(16, 3, white_d)
+    c.rect(9, 1, 3, 2, orange)                 # beak
+    c.set(10, 3, hex_rgba("c26f24"))
+    c.set(14, 1, OUTLINE)                      # eye
+    # ---- hull, riding low
+    for j, (x0, w) in enumerate(((2, 30), (1, 32), (1, 32), (2, 30), (4, 26))):
+        c.rect(x0, 17 + j, w, 1, hull if j < 3 else hull_d)
+    c.rect(1, 19, 32, 1, hex_rgba("d6c9ae"))   # gunwale
+    c.rect(5, 13, 11, 4, wood)                 # the pedal bench
+    c.rect(5, 16, 11, 1, hex_rgba("74603f"))
+    c.rect(6, 11, 2, 3, wood)
+    c.outline(OUTLINE)
+    return c
+
+
+def prop_willow():
+    """weeping willow — the trees that lean over the Charles"""
+    c = Canvas(28, 40)
+    trunk = hex_rgba("7a5f3e")
+    trunk_d = hex_rgba("5a4529")
+    leaf = hex_rgba("7fb356")
+    leaf_l = hex_rgba("9fce74")
+    leaf_d = hex_rgba("5d8c3d")
+    c.rect(12, 22, 5, 17, trunk)
+    c.rect(15, 22, 2, 17, trunk_d)
+    c.rect(9, 36, 3, 3, trunk_d)               # root flare
+    c.rect(17, 36, 3, 3, trunk_d)
+    # crown
+    for j in range(14):
+        t = j / 13
+        half = int(round(13 * (0.45 + 0.55 * (1 - (t - 0.55) ** 2 * 2.4))))
+        half = max(4, min(13, half))
+        c.rect(14 - half, 4 + j, half * 2, 1, leaf)
+    for i in range(2, 27, 3):                  # dappled top
+        c.set(i, 5 + (i % 3), leaf_l)
+        c.set(i + 1, 8 + (i % 4), leaf_l)
+    # drooping fronds, different lengths
+    for i, ln in ((2, 7), (5, 12), (8, 9), (11, 14), (14, 10), (17, 15),
+                  (20, 8), (23, 12), (25, 6)):
+        c.rect(i, 17, 2, ln, leaf_d if i % 2 else leaf)
+        c.set(i, 17 + ln, leaf_d)
+    c.outline(OUTLINE)
+    return c
+
+
+def prop_esplsign():
+    """park sign at the top of the esplanade path"""
+    c = Canvas(60, 30)
+    board = hex_rgba("4a6b52")
+    board_l = hex_rgba("5f8464")
+    board_d = hex_rgba("35503c")
+    post = hex_rgba("8a683c")
+    ink = hex_rgba("f6f2e2")
+    for px in (14, 43):
+        c.rect(px, 16, 3, 13, post)
+        c.rect(px + 2, 16, 1, 13, hex_rgba("6e5230"))
+    c.rect(1, 2, 58, 16, board)
+    c.rect(1, 2, 58, 1, board_l)
+    c.rect(1, 16, 58, 2, board_d)
+    text3_centered(c, 30, 5, "CHARLES RIVER", ink)
+    text3_centered(c, 30, 11, "ESPLANADE", ink)
+    c.outline(OUTLINE)
+    return c
+
+
+# ---------------------------------------------------------------------------
 # THE BIG HOUSE — her place in Santa Clarita (pool, palms, the works)
 # ---------------------------------------------------------------------------
 
@@ -3469,6 +3966,394 @@ def tile_indoor():
     c.rect(4, 3, 8, 5, hex_rgba("5e4326"))
     c.rect(4, 10, 8, 4, hex_rgba("5e4326"))
     c.set(11, 9, hex_rgba("e8c74a"))
+    return c
+
+
+# ---------------------------------------------------------------------------
+# THE BURGER PLACE 🍔 — its own tile set. Reusing the house's wallpaper and
+# floorboards in here made it read as somebody's living room with a till in it.
+# ---------------------------------------------------------------------------
+
+IO_TILE = hex_rgba("f4f1e6")            # white wall/floor tile
+IO_TILE_L = hex_rgba("fdfbf3")
+IO_GROUT = hex_rgba("d9d3c2")
+IO_CHK = hex_rgba("c04a3e")             # the diner red, muted so a whole floor
+IO_CHK_D = hex_rgba("a13a30")           # of it doesn't shout over the booths
+
+
+def tile_checker(kind=0):
+    """One whole tile per square, so the checkerboard has a 16px pitch. At 8px
+    it read as noise and the red booths sank into the floor."""
+    c = Canvas(16, 16)
+    red = kind == 1
+    c.rect(0, 0, 16, 16, IO_CHK if red else IO_TILE)
+    if red:
+        c.rect(0, 0, 16, 1, hex_rgba("cf584b"))
+        c.rect(0, 15, 16, 1, IO_CHK_D)
+        c.rect(15, 0, 1, 16, IO_CHK_D)
+        for i, j in ((3, 5), (11, 9), (7, 13)):      # a little wear
+            c.set(i, j, hex_rgba("b5443a"))
+    else:
+        c.rect(0, 0, 16, 1, IO_TILE_L)
+        c.rect(0, 15, 16, 1, IO_GROUT)
+        c.rect(15, 0, 1, 16, IO_GROUT)
+        for i, j in ((5, 4), (12, 11)):
+            c.set(i, j, hex_rgba("e9e4d4"))
+    return c
+
+
+def _io_wall(stripe):
+    """white subway tile. `stripe` adds the red band that runs the room."""
+    c = Canvas(16, 16)
+    c.rect(0, 0, 16, 16, IO_TILE)
+    for j in range(0, 16, 4):                       # brick-bond grout
+        c.rect(0, j + 3, 16, 1, IO_GROUT)
+        c.rect(((j // 4) % 2) * 8, j, 1, 3, IO_GROUT)
+        c.rect(((j // 4) % 2) * 8 + 8, j, 1, 3, IO_GROUT)
+    if stripe:
+        c.rect(0, 9, 16, 4, IO_CHK)
+        c.rect(0, 9, 16, 1, hex_rgba("d75f50"))
+        c.rect(0, 12, 16, 1, IO_CHK_D)
+        c.rect(0, 14, 16, 2, IO_GROUT)              # skirting
+    return c
+
+
+def tile_io_top():
+    return _io_wall(False)
+
+
+def tile_io_face():
+    return _io_wall(True)
+
+
+def tile_io_win():
+    """the wall of glass every In-N-Out has, with a palm outside it"""
+    c = _io_wall(True)
+    c.rect(1, 0, 14, 10, OUTLINE)
+    c.rect(2, 1, 12, 8, hex_rgba("9fd6ef"))
+    c.rect(2, 1, 12, 3, hex_rgba("dff2ff"))
+    # a palm out in the lot, because of course there is one
+    pal_s = hex_rgba("6b9fbe")
+    c.rect(8, 4, 1, 5, pal_s)                       # trunk
+    c.rect(4, 3, 9, 1, pal_s)                       # fronds, drooping at the tips
+    c.set(3, 4, pal_s)
+    c.set(13, 4, pal_s)
+    c.set(5, 2, pal_s)
+    c.set(11, 2, pal_s)
+    c.rect(1, 9, 14, 1, hex_rgba("f8f5ea"))         # sill
+    return c
+
+
+def tile_io_counter():
+    """The service counter as a *tile*, so it can run the width of the room and
+    actually be solid. A 5-tile prop left gaps at both ends that she could walk
+    through into the fry station."""
+    c = Canvas(16, 16)
+    steel = hex_rgba("cfd4d9")
+    steel_l = hex_rgba("eef1f4")
+    steel_d = hex_rgba("9aa1a9")
+    c.rect(0, 0, 16, 4, hex_rgba("e8ebee"))     # the top she leans on
+    c.rect(0, 0, 16, 1, hex_rgba("fbfdff"))
+    c.rect(0, 3, 16, 2, steel_d)
+    c.rect(0, 5, 16, 8, steel)                  # fluted stainless front
+    for i in range(0, 16, 4):
+        c.rect(i, 5, 1, 8, steel_l)
+        c.rect(i + 1, 5, 1, 8, steel_d)
+    c.rect(0, 13, 16, 2, IN_RED)                # the red kick rail
+    c.rect(0, 15, 16, 1, IN_RED_D)
+    return c
+
+
+def tile_io_door():
+    """the glass door, from inside — the tile below it is the way out"""
+    c = _io_wall(True)
+    c.rect(1, 0, 14, 16, OUTLINE)
+    c.rect(2, 1, 12, 14, hex_rgba("aedcf0"))
+    c.rect(2, 1, 12, 3, hex_rgba("e8f8ff"))
+    c.rect(7, 1, 2, 14, IO_TILE)                    # centre stile
+    c.rect(2, 8, 5, 1, IN_RED)                      # push bars
+    c.rect(9, 8, 5, 1, IN_RED)
+    return c
+
+
+def in_ordercounter():
+    """SUPERSEDED by tile_io_counter — a 5-tile prop can't span the room, and
+    the gaps at its ends let her walk into the kitchen. Kept for reference."""
+    c = Canvas(80, 30)
+    steel = hex_rgba("cfd4d9")
+    steel_l = hex_rgba("eef1f4")
+    steel_d = hex_rgba("9aa1a9")
+    top = hex_rgba("e8ebee")
+    red = IN_RED
+    # counter top + stainless front with vertical flutes
+    c.rect(0, 6, 80, 5, top)
+    c.rect(0, 6, 80, 1, hex_rgba("fbfdff"))
+    c.rect(0, 10, 80, 2, steel_d)
+    c.rect(0, 12, 80, 16, steel)
+    for i in range(2, 79, 4):
+        c.rect(i, 12, 1, 15, steel_l)
+        c.rect(i + 1, 12, 1, 15, steel_d)
+    c.rect(0, 24, 80, 2, red)                   # the red kick rail
+    c.rect(0, 26, 80, 2, steel_d)
+    # till
+    c.rect(50, 0, 18, 7, hex_rgba("e6e2d6"))
+    c.rect(50, 0, 18, 1, hex_rgba("f6f3e7"))
+    c.rect(52, 1, 14, 3, hex_rgba("3f5a4a"))    # the little green screen
+    for i in range(52, 66, 3):
+        c.set(i, 5, steel_d)
+    # tray of receipts / order slips
+    c.rect(10, 2, 14, 5, hex_rgba("f6f3e7"))
+    c.rect(10, 2, 14, 1, red)
+    # napkin dispenser
+    c.rect(30, 1, 10, 6, steel_l)
+    c.rect(31, 2, 8, 2, hex_rgba("fbfdff"))
+    c.rect(30, 6, 10, 1, steel_d)
+    c.outline(OUTLINE)
+    return c
+
+
+def in_till():
+    """the register, sitting on the counter — marks where she orders"""
+    c = Canvas(22, 20)
+    body = hex_rgba("e6e2d6")
+    body_d = hex_rgba("c2bcac")
+    steel = hex_rgba("cfd4d9")
+    c.rect(2, 6, 18, 11, body)
+    c.rect(2, 6, 18, 1, hex_rgba("f6f3e7"))
+    c.rect(2, 15, 18, 2, body_d)
+    c.rect(4, 0, 14, 7, body)                   # the screen on its stalk
+    c.rect(4, 0, 14, 1, hex_rgba("f6f3e7"))
+    c.rect(6, 1, 10, 4, hex_rgba("3f5a4a"))
+    c.rect(6, 1, 10, 1, hex_rgba("5f7f6a"))
+    for j in range(2):                          # keypad
+        for i in range(4):
+            c.rect(4 + i * 4, 9 + j * 3, 3, 2, steel)
+    c.rect(1, 17, 20, 2, IN_RED)                # a red bumper, because In-N-Out
+    c.outline(OUTLINE)
+    return c
+
+
+def in_menuboard():
+    """the menu, spelled out. Prices deliberately 1970s — it's a love letter,
+    not an invoice."""
+    c = Canvas(76, 46)
+    board = hex_rgba("fbf8ee")
+    frame = IN_RED
+    frame_d = IN_RED_D
+    ink = hex_rgba("2f2a2a")
+    c.rect(0, 0, 76, 46, frame)
+    c.rect(0, 0, 76, 1, hex_rgba("ef4a3c"))
+    c.rect(0, 44, 76, 2, frame_d)
+    c.rect(2, 2, 72, 42, board)
+    c.rect(2, 2, 72, 1, hex_rgba("ffffff"))
+    # header
+    c.rect(3, 3, 70, 7, frame)
+    text3_centered(c, 38, 4, "IN-N-OUT BURGER", IN_WHITE)
+    rows = [
+        ("DOUBLE-DOUBLE", "2.45"),
+        ("CHEESEBURGER", "1.65"),
+        ("HAMBURGER", "1.45"),
+        ("FRENCH FRIES", "1.15"),
+        ("SHAKES", "1.40"),
+    ]
+    y = 12
+    for i, (name, price) in enumerate(rows):
+        text3(c, 5, y, name, ink)
+        text3(c, 74 - text3_w(price), y, price, frame)
+        if i < len(rows) - 1:
+            c.rect(5, y + 5, 66, 1, hex_rgba("e4dfd0"))
+        y += 6
+    c.outline(OUTLINE)
+    return c
+
+
+def in_frystation():
+    """potatoes going in whole at one end, fries coming out at the other"""
+    c = Canvas(48, 32)
+    steel = hex_rgba("cfd4d9")
+    steel_l = hex_rgba("eef1f4")
+    steel_d = hex_rgba("9aa1a9")
+    fry = hex_rgba("f0c65a")
+    fry_d = hex_rgba("cfa33c")
+    lamp = hex_rgba("f6d98a")
+    spud = hex_rgba("c9a274")
+    # heat lamp hood
+    c.rect(2, 0, 44, 4, steel_d)
+    c.rect(2, 4, 44, 2, lamp)
+    c.rect(3, 5, 42, 1, hex_rgba("f2bf5e"))
+    # counter
+    c.rect(0, 14, 48, 4, steel_l)
+    c.rect(0, 17, 48, 2, steel_d)
+    c.rect(0, 19, 48, 11, steel)
+    for i in range(2, 47, 4):
+        c.rect(i, 19, 1, 10, steel_l)
+    c.rect(0, 28, 48, 2, steel_d)
+    # a mound of fries in a paper tray, under the lamp
+    c.rect(6, 9, 16, 5, hex_rgba("f4f1e4"))
+    c.rect(6, 9, 16, 1, IN_RED)
+    for i, h in ((7, 5), (9, 7), (11, 6), (13, 8), (15, 6), (17, 7), (19, 5)):
+        c.rect(i, 14 - h, 1, h - 1, fry)
+        c.set(i, 14 - h, fry_d)
+    # the slicer, and the sack of potatoes beside it
+    c.rect(30, 6, 10, 9, steel)
+    c.rect(30, 6, 10, 1, steel_l)
+    c.rect(33, 8, 4, 5, steel_d)
+    c.rect(29, 14, 12, 2, steel_d)
+    c.rect(42, 9, 6, 5, spud)
+    c.rect(43, 7, 4, 3, spud)
+    c.outline(OUTLINE)
+    return c
+
+
+def in_drinks():
+    """soda fountain, cups stacked and ready"""
+    c = Canvas(36, 34)
+    steel = hex_rgba("cfd4d9")
+    steel_l = hex_rgba("eef1f4")
+    steel_d = hex_rgba("9aa1a9")
+    cup = hex_rgba("f6f3e7")
+    c.rect(2, 0, 32, 20, steel)
+    c.rect(2, 0, 32, 2, steel_l)
+    c.rect(2, 18, 32, 2, steel_d)
+    # flavour buttons
+    for i, col in enumerate((hex_rgba("6b3a24"), IN_RED, hex_rgba("e8913c"),
+                             hex_rgba("d8d2c0"))):
+        c.rect(5 + i * 7, 4, 5, 5, col)
+        c.rect(5 + i * 7, 8, 5, 1, OUTLINE)
+        c.rect(6 + i * 7, 13, 3, 4, steel_d)     # the nozzle
+    # drip tray
+    c.rect(0, 20, 36, 3, steel_d)
+    c.rect(1, 23, 34, 2, steel)
+    # a stack of cups on the left, one filled cup on the right
+    for j in range(3):
+        c.rect(3, 25 - j * 3, 9, 4, cup)
+        c.rect(3, 28 - j * 3, 9, 1, hex_rgba("d8d2c0"))
+    c.rect(3, 25, 9, 1, IN_RED)
+    c.rect(24, 24, 8, 9, cup)
+    c.rect(24, 24, 8, 2, IN_RED)
+    c.rect(25, 27, 6, 5, hex_rgba("6b3a24"))
+    c.rect(27, 20, 2, 5, hex_rgba("f4f1e4"))     # straw
+    c.outline(OUTLINE)
+    return c
+
+
+def in_shakes():
+    """milkshake machine — three spindles, one shake already going"""
+    c = Canvas(30, 32)
+    steel = hex_rgba("cfd4d9")
+    steel_l = hex_rgba("eef1f4")
+    steel_d = hex_rgba("9aa1a9")
+    shake = hex_rgba("f2c8b0")
+    c.rect(3, 0, 24, 6, steel_d)
+    c.rect(3, 0, 24, 1, steel_l)
+    c.rect(5, 6, 20, 4, steel)
+    for i in (7, 13, 19):                        # spindles
+        c.rect(i, 10, 2, 5, steel_d)
+    # the cup on the middle spindle, mid-spin
+    c.rect(11, 15, 8, 10, steel)
+    c.rect(11, 15, 8, 1, steel_l)
+    c.rect(12, 17, 6, 6, shake)
+    c.rect(12, 17, 6, 2, hex_rgba("f8ddcc"))
+    # base + a finished shake in a paper cup
+    c.rect(1, 25, 28, 3, steel_d)
+    c.rect(1, 28, 28, 2, steel)
+    c.rect(21, 16, 7, 9, hex_rgba("f6f3e7"))
+    c.rect(21, 16, 7, 2, IN_RED)
+    c.rect(22, 19, 5, 5, shake)
+    c.rect(24, 12, 2, 4, hex_rgba("f4f1e4"))     # straw
+    c.outline(OUTLINE)
+    return c
+
+
+def in_booth():
+    """a red booth: two benches and the table between them"""
+    c = Canvas(46, 34)
+    seat = hex_rgba("c8443c")
+    seat_l = hex_rgba("de5c52")
+    seat_d = hex_rgba("9d322c")
+    table = hex_rgba("e8dcc0")
+    table_d = hex_rgba("bfb49a")
+    steel = hex_rgba("bfc4c9")
+    # far bench (back to us)
+    c.rect(2, 0, 42, 9, seat)
+    c.rect(2, 0, 42, 2, seat_l)
+    c.rect(2, 7, 42, 2, seat_d)
+    for i in range(8, 40, 10):                   # button tufting
+        c.set(i, 4, seat_d)
+    # the table
+    c.rect(4, 10, 38, 8, table)
+    c.rect(4, 10, 38, 1, hex_rgba("f4f1e4"))
+    c.rect(4, 16, 38, 2, table_d)
+    c.rect(21, 18, 4, 6, steel)                  # pedestal
+    # near bench
+    c.rect(2, 22, 42, 10, seat)
+    c.rect(2, 22, 42, 2, seat_l)
+    c.rect(2, 30, 42, 2, seat_d)
+    for i in range(8, 40, 10):
+        c.set(i, 27, seat_d)
+    c.outline(OUTLINE)
+    return c
+
+
+def in_hatstack():
+    """the stack of paper hats by the till. Ask nicely and you get two."""
+    c = Canvas(24, 22)
+    for j in range(4):
+        y = 16 - j * 4
+        c.rect(3, y, 18, 3, hex_rgba("fbf8ee"))
+        c.rect(3, y, 18, 1, hex_rgba("ffffff"))
+        c.rect(3, y + 2, 18, 1, IN_RED)
+    c.rect(2, 19, 20, 2, hex_rgba("ded8c6"))
+    c.outline(OUTLINE)
+    return c
+
+
+def in_tray():
+    """their order, landed: burgers, animal-style fries, drinks, a shake ♥"""
+    c = Canvas(40, 24)
+    tray = IN_RED
+    tray_d = IN_RED_D
+    paper = hex_rgba("f8f5ea")
+    bun = hex_rgba("d9a25e")
+    bun_l = hex_rgba("efbf7e")
+    patty = hex_rgba("7a4a2c")
+    cheese = hex_rgba("f0b93c")
+    lettuce = hex_rgba("6fae4f")
+    onion = hex_rgba("f4eee2")
+    fry = hex_rgba("f0c65a")
+    shake = hex_rgba("f2c8b0")
+    # the tray
+    c.rect(0, 8, 40, 14, tray)
+    c.rect(0, 8, 40, 1, hex_rgba("ef4a3c"))
+    c.rect(0, 20, 40, 2, tray_d)
+    # two wrapped burgers, one unwrapped so you can see the stack
+    c.rect(2, 4, 13, 8, paper)
+    c.rect(2, 4, 13, 1, hex_rgba("ffffff"))
+    c.rect(3, 10, 11, 2, hex_rgba("e0d9c8"))
+    bx = 17
+    c.rect(bx, 3, 11, 3, bun_l)                  # crown
+    c.rect(bx, 5, 11, 1, bun)
+    c.rect(bx - 1, 6, 13, 1, lettuce)
+    c.rect(bx - 1, 7, 13, 1, onion)              # raw onion, as ordered
+    c.rect(bx, 8, 11, 1, cheese)
+    c.rect(bx, 9, 11, 2, patty)
+    c.rect(bx, 11, 11, 1, cheese)                # extra cheese ♥
+    c.rect(bx, 12, 11, 2, bun)
+    # animal-style fries under the near edge
+    c.rect(4, 13, 13, 7, paper)
+    for i, h in ((5, 6), (7, 8), (9, 7), (11, 9), (13, 6), (15, 7)):
+        c.rect(i, 13 - h + 6, 1, h - 2, fry)
+    c.rect(5, 16, 11, 2, hex_rgba("f0b93c"))     # spread + grilled onion
+    c.rect(6, 15, 3, 1, hex_rgba("cf8a3c"))
+    c.rect(11, 15, 4, 1, hex_rgba("cf8a3c"))
+    # a drink and a shake
+    c.rect(30, 5, 7, 9, hex_rgba("f6f3e7"))
+    c.rect(30, 5, 7, 2, IN_RED)
+    c.rect(31, 8, 5, 5, hex_rgba("6b3a24"))
+    c.rect(33, 1, 2, 4, hex_rgba("f4f1e4"))
+    c.rect(30, 14, 8, 7, hex_rgba("f6f3e7"))
+    c.rect(31, 16, 6, 4, shake)
+    c.outline(OUTLINE)
     return c
 
 
@@ -4456,7 +5341,8 @@ def ride_sprites():
         "K": hex_rgba("44444c"), "s": HER["s"], "h": HER["h"], "H": HER["H"],
         "e": HER["e"], "t": HER["t"], "T": HER["T"], "y": hex_rgba("f0d264"),
         "g": MOOKIE["g"], "G": MOOKIE["G"], "w": MOOKIE["w"], "p": MOOKIE["p"],
-        "Y": HAT_PAL["Y"], "P": HAT_PAL["P"], "S": hex_rgba("8c8c94"),
+        "Y": PARTY_HAT["pal"]["Y"], "P": PARTY_HAT["pal"]["P"],
+        "S": hex_rgba("8c8c94"),
     }
     down = [
         "...........hhhhhh...............",
@@ -4642,6 +5528,488 @@ def building(wt, ht, wall, wall_d, roof, roof_d, trim, door_col=None, style="hou
     return c
 
 
+def innout():
+    """In-N-Out: white box, red fascia, red base stripe, wall of glass.
+    5x2 tiles. The crossed-arrow sign is a separate prop out front."""
+    W, wallH, roof_h = 80, 32, 14
+    c = Canvas(W, roof_h + wallH + 2)
+    wall = IN_WHITE
+    wall_d = hex_rgba("ded8ca")
+    glass = hex_rgba("aedcf0")
+    glass_hi = hex_rgba("e8f8ff")
+    glass_d = hex_rgba("74a8c4")
+    warm = hex_rgba("f4d894")
+
+    # ---- parapet + red fascia band with the name
+    c.rect(0, 0, W, 2, hex_rgba("fffdf4"))
+    c.rect(1, 2, W - 2, 9, IN_RED)
+    c.rect(1, 2, W - 2, 1, hex_rgba("ef4a3c"))
+    c.rect(1, 10, W - 2, 1, IN_RED_D)
+    text3_centered(c, W // 2, 4, "IN-N-OUT BURGER", IN_WHITE)
+    c.rect(0, 11, W, 2, wall)
+    c.rect(0, roof_h - 1, W, 1, OUTLINE)
+
+    y0 = roof_h
+    c.rect(0, y0, W, wallH, wall)
+    c.rect(0, y0, W, 2, wall_d)
+    for i in range(0, W, 16):               # panel joints
+        c.rect(i, y0 + 2, 1, wallH - 6, wall_d)
+
+    # ---- storefront glass either side of the doors
+    for (gx, gw) in ((4, 30), (46, 30)):
+        c.rect(gx, y0 + 6, gw, 20, OUTLINE)
+        c.rect(gx + 1, y0 + 7, gw - 2, 18, glass)
+        c.rect(gx + 1, y0 + 7, gw - 2, 4, glass_hi)
+        c.rect(gx + 1, y0 + 20, gw - 2, 5, warm)     # warm room behind
+        c.rect(gx + 1, y0 + 19, gw - 2, 1, glass_d)
+        c.rect(gx + gw // 2 - 1, y0 + 7, 2, 18, wall)  # mullion
+    # ---- glass double doors
+    dx = 36
+    c.rect(dx, y0 + 8, 8, 24, OUTLINE)
+    c.rect(dx + 1, y0 + 9, 6, 22, glass)
+    c.rect(dx + 1, y0 + 9, 6, 3, glass_hi)
+    c.rect(dx + 3, y0 + 9, 1, 22, wall)
+    c.rect(dx + 1, y0 + 18, 6, 1, IN_RED)   # push bars
+    # ---- red base stripe
+    c.rect(0, y0 + wallH - 4, W, 4, IN_RED)
+    c.rect(0, y0 + wallH - 4, W, 1, hex_rgba("ef4a3c"))
+    c.outline(OUTLINE)
+    return c
+
+
+def jvue_tower():
+    """JVUE — her new place in the Longwood Medical Area. Glass curtain wall,
+    warm panels, balconies, a lit lobby. 5x4 tiles, the tallest thing around."""
+    W, wallH, roof_h = 80, 64, 16
+    c = Canvas(W, roof_h + wallH + 6)
+    frame = hex_rgba("48505e")
+    frame_l = hex_rgba("616b7c")
+    frame_d = hex_rgba("323842")
+    glass = hex_rgba("8fc9e8")
+    glass_hi = hex_rgba("c6e8f8")
+    glass_d = hex_rgba("5d9cc0")
+    warm = hex_rgba("f4d894")
+    panel = hex_rgba("c98a5e")             # the warm spandrel panels
+    panel_d = hex_rgba("a06843")
+    slab = hex_rgba("e4e0d6")
+
+    # ---- rooftop: mechanical box + parapet
+    c.rect(52, 0, 18, 7, frame)
+    c.rect(52, 0, 18, 1, frame_l)
+    c.rect(52, 5, 18, 2, frame_d)
+    c.rect(0, 7, W, roof_h - 8, frame)
+    c.rect(0, 7, W, 1, frame_l)
+    c.rect(0, roof_h - 3, W, 2, frame_d)
+    c.rect(0, roof_h - 1, W, 1, OUTLINE)
+
+    y0 = roof_h
+    c.rect(0, y0, W, wallH, frame)
+    # ---- four bays x four floors of glass
+    bays = [(4, 16), (23, 16), (42, 16), (61, 15)]
+    lit = {(0, 1), (1, 0), (2, 2), (3, 1), (1, 3), (3, 3)}
+    for fl in range(4):
+        fy = y0 + fl * 16
+        for bi, (bx, bw) in enumerate(bays):
+            c.rect(bx, fy + 3, bw, 11, glass_d)
+            c.rect(bx + 1, fy + 4, bw - 2, 9, glass)
+            c.rect(bx + 1, fy + 4, bw - 2, 3, glass_hi)
+            if (bi, fl) in lit:
+                c.rect(bx + 1, fy + 9, bw - 2, 4, warm)
+            c.rect(bx + bw // 2, fy + 3, 1, 11, frame)      # mullion
+        # spandrel band under each floor
+        c.rect(0, fy + 14, W, 2, panel)
+        c.rect(0, fy + 15, W, 1, panel_d)
+    # ---- balconies on the two middle bays, floors 1-3
+    for fl in (1, 2, 3):
+        fy = y0 + fl * 16
+        for bx, bw in (bays[1], bays[2]):
+            c.rect(bx - 1, fy + 13, bw + 2, 2, slab)
+            for i in range(bx, bx + bw, 3):
+                c.set(i, fy + 11, slab)
+                c.set(i, fy + 12, slab)
+
+    # ---- lit lobby + entry canopy at street level
+    ly = y0 + wallH - 16
+    c.rect(2, ly, W - 4, 14, hex_rgba("2b303a"))
+    c.rect(4, ly + 2, W - 8, 10, warm)
+    c.rect(4, ly + 2, W - 8, 2, hex_rgba("fbe8b8"))
+    for i in range(10, W - 8, 13):                          # lobby mullions
+        c.rect(i, ly + 2, 2, 10, hex_rgba("2b303a"))
+    dx = 34
+    c.rect(dx, ly + 2, 12, 12, hex_rgba("3d4450"))
+    c.rect(dx + 1, ly + 3, 10, 11, glass)
+    c.rect(dx + 1, ly + 3, 10, 3, glass_hi)
+    c.rect(dx + 5, ly + 3, 2, 11, hex_rgba("3d4450"))
+    c.rect(dx - 6, ly - 2, 24, 3, slab)                     # canopy
+    c.rect(dx - 6, ly, 24, 1, hex_rgba("bdb8ab"))
+    # (the name lives on the monument sign out front — prop_jvuesign)
+    # stoop
+    c.rect(dx - 4, y0 + wallH, 20, 3, C_WALK)
+    c.rect(dx - 4, y0 + wallH + 2, 20, 1, C_WALK_D)
+    c.rect(dx - 6, y0 + wallH + 3, 24, 3, C_WALK)
+    c.rect(dx - 6, y0 + wallH + 5, 24, 1, C_WALK_D)
+    c.outline(OUTLINE)
+    return c
+
+
+def prop_jvuesign():
+    """the monument sign out front — slate slab, cut metal letters"""
+    c = Canvas(50, 30)
+    slate = hex_rgba("353b46")
+    slate_l = hex_rgba("4a5260")
+    stone = hex_rgba("bdb8ab")
+    stone_d = hex_rgba("948f83")
+    steel = hex_rgba("e8eef2")
+    c.rect(2, 22, 46, 5, stone)             # base
+    c.rect(2, 25, 46, 2, stone_d)
+    c.rect(4, 2, 42, 21, slate)
+    c.rect(4, 2, 42, 1, slate_l)
+    c.rect(4, 21, 42, 2, hex_rgba("262b34"))
+    c.rect(5, 3, 40, 1, slate_l)
+    text3_centered(c, 25, 5, "JVUE", steel, spacing=2, scale=2)
+    c.rect(12, 16, 26, 1, hex_rgba("6f7a8a"))
+    text3_centered(c, 25, 18, "AT THE LMA", stone)
+    c.outline(OUTLINE)
+    return c
+
+
+def duplex_house():
+    """her parents' place in Brookline: the bottom half of a big duplex.
+    White clapboard, brown wood trim, covered porch, two front doors —
+    theirs is the lit one. 6x3 tiles."""
+    W, wallH, roof_h = 96, 48, 18
+    c = Canvas(W, roof_h + wallH + 4)
+    wall = hex_rgba("f7f5ee")
+    wall_d = hex_rgba("dcd8ca")
+    wood = hex_rgba("8a6a45")
+    wood_l = hex_rgba("a8865c")
+    wood_d = hex_rgba("6b5133")
+    shingle = hex_rgba("7d6042")
+    shingle_d = hex_rgba("5e472f")
+    shingle_l = hex_rgba("96754f")
+    glass = hex_rgba("9fd6ef")
+    glass_hi = hex_rgba("e4f6ff")
+    glass_d = hex_rgba("6b9fbe")
+    warm = hex_rgba("f4d894")
+
+    # ---- shingled gable roof
+    for j in range(roof_h):
+        inset = max(0, roof_h - 4 - j)
+        c.rect(inset, j, W - inset * 2, 1, shingle)
+        if j % 3 == 2:                      # shingle courses
+            c.rect(inset, j, W - inset * 2, 1, shingle_d)
+    c.rect(roof_h - 5, 0, W - (roof_h - 5) * 2, 1, shingle_l)
+    c.rect(0, roof_h - 4, W, 3, wood_d)     # fascia board
+    c.rect(0, roof_h - 1, W, 1, OUTLINE)
+    # little gable dormer over the porch
+    for j in range(7):
+        c.rect(40 - j, roof_h - 5 - j, 16 + j * 2, 1, shingle if j % 3 else shingle_d)
+    c.rect(42, roof_h - 6, 12, 5, wall)
+    c.rect(45, roof_h - 5, 6, 4, glass)
+    c.rect(45, roof_h - 5, 6, 1, glass_hi)
+
+    y0 = roof_h
+    c.rect(0, y0, W, wallH, wall)
+    for j in range(y0 + 2, y0 + wallH, 4):  # clapboard courses
+        c.rect(0, j, W, 1, wall_d)
+    c.rect(0, y0, W, 2, wall_d)             # eave shadow
+    for cx in (0, 92):                      # corner boards
+        c.rect(cx, y0, 4, wallH, wood)
+        c.rect(cx + 2, y0, 2, wallH, wood_d)
+
+    # ---- upstairs (the neighbours): three trimmed windows
+    for wx in (10, 41, 72):
+        c.rect(wx - 1, y0 + 5, 16, 15, wood)
+        c.rect(wx, y0 + 6, 14, 13, glass_d)
+        c.rect(wx + 1, y0 + 7, 12, 11, glass)
+        c.rect(wx + 1, y0 + 7, 12, 3, glass_hi)
+        c.rect(wx + 6, y0 + 7, 2, 11, wall)
+        c.rect(wx + 1, y0 + 12, 12, 1, wall)
+        c.rect(wx - 2, y0 + 20, 18, 2, wood_l)      # sill
+    # ---- belt course between the two halves
+    c.rect(0, y0 + 24, W, 3, wood)
+    c.rect(0, y0 + 26, W, 1, wood_d)
+
+    # ---- downstairs: theirs. bay window + porch + the two doors
+    c.rect(6, y0 + 31, 28, 15, wood)
+    c.rect(7, y0 + 32, 26, 13, glass_d)
+    c.rect(8, y0 + 33, 24, 11, glass)
+    c.rect(8, y0 + 33, 24, 3, glass_hi)
+    c.rect(8, y0 + 39, 24, 5, warm)                 # somebody's home
+    c.rect(19, y0 + 33, 2, 11, wood)
+    c.rect(5, y0 + 46, 30, 2, wood_l)
+
+    # covered porch: roof beam, a post at each end, railing in the gaps,
+    # and the two front doors side by side in the middle
+    c.rect(38, y0 + 27, 54, 3, wood_d)
+    c.rect(38, y0 + 27, 54, 1, wood_l)
+    for px in (39, 88):
+        c.rect(px, y0 + 30, 3, 18, wood)
+        c.rect(px + 2, y0 + 30, 1, 18, wood_d)
+    for rx0, rw in ((42, 7), (79, 9)):              # railing either side
+        c.rect(rx0, y0 + 38, rw, 2, wood)
+        c.rect(rx0, y0 + 44, rw, 2, wood)
+        for i in range(rx0 + 1, rx0 + rw, 3):
+            c.rect(i, y0 + 40, 2, 4, wood_l)
+    # theirs (left, lit) + the stairs-up door for the neighbours (right)
+    for ddx, tone, lit in ((50, hex_rgba("7d4a2c"), True),
+                           (65, hex_rgba("5f6a72"), False)):
+        c.rect(ddx - 1, y0 + 30, 14, 18, wood)
+        c.rect(ddx, y0 + 31, 12, 17, tone)
+        c.rect(ddx + 1, y0 + 35, 10, 6, warm if lit else glass_d)
+        c.rect(ddx + 1, y0 + 32, 10, 2, warm if lit else glass)   # transom
+        c.set(ddx + 9, y0 + 43, hex_rgba("e8c74a"))
+    c.rect(40, y0 + wallH - 2, 50, 2, C_WALK)
+    c.rect(0, y0 + wallH - 2, W, 2, wall_d)
+    c.outline(OUTLINE)
+    return c
+
+
+def neu_hall():
+    """Northeastern: red brick, limestone arch, NORTHEASTERN cut into the
+    lintel, and a pair of NU-red banners either side of the door. 6x3."""
+    W, wallH, roof_h = 96, 48, 16
+    c = Canvas(W, roof_h + wallH + 2)
+    brick = hex_rgba("9d4636")
+    brick_d = hex_rgba("7d3628")
+    brick_l = hex_rgba("b25644")
+    stone = hex_rgba("ded5c2")
+    stone_l = hex_rgba("f0e9d8")
+    stone_d = hex_rgba("b6ac97")
+    nured = hex_rgba("cc0000")
+    nured_d = hex_rgba("990000")
+    glass = hex_rgba("9fd6ef")
+    glass_hi = hex_rgba("e4f6ff")
+    glass_d = hex_rgba("6b9fbe")
+    door = hex_rgba("5e3f28")
+
+    # ---- limestone cornice / parapet
+    c.rect(0, 1, W, roof_h - 6, brick_d)
+    c.rect(0, roof_h - 7, W, 4, stone)
+    c.rect(0, roof_h - 4, W, 2, stone_d)
+    for i in range(2, W - 2, 6):            # dentils
+        c.rect(i, roof_h - 3, 3, 2, stone_l)
+    c.rect(0, roof_h - 1, W, 1, OUTLINE)
+
+    y0 = roof_h
+    c.rect(0, y0, W, wallH, brick)
+    for j in range(y0 + 2, y0 + wallH, 3):  # brick coursing
+        for i in range(((j // 3) % 2) * 3, W, 6):
+            c.set(i, j, brick_d)
+            c.set(i + 1, j, brick_l)
+
+    # ---- the name band
+    c.rect(2, y0 + 2, W - 4, 9, stone)
+    c.rect(2, y0 + 2, W - 4, 1, stone_l)
+    c.rect(2, y0 + 10, W - 4, 1, stone_d)
+    text3_centered(c, W // 2, y0 + 4, "NORTHEASTERN", hex_rgba("6b2a20"))
+
+    # ---- upper windows, limestone sills
+    for wx in (8, 26, 58, 76):
+        c.rect(wx, y0 + 15, 14, 16, stone_d)
+        c.rect(wx + 1, y0 + 16, 12, 14, glass)
+        c.rect(wx + 1, y0 + 16, 12, 4, glass_hi)
+        c.rect(wx + 1, y0 + 25, 12, 4, glass_d)
+        c.rect(wx + 6, y0 + 16, 2, 14, stone)
+        c.rect(wx - 1, y0 + 31, 16, 2, stone)
+
+    # ---- arched entrance, dead centre
+    ax, aw = 38, 20
+    for j in range(9):                      # limestone arch
+        t = j / 8
+        half = int(round((aw // 2 + 2) * (1 - (1 - t) ** 2) ** 0.5))
+        c.rect(ax + aw // 2 - half, y0 + 14 + j, half * 2, 1, stone)
+    c.rect(ax - 2, y0 + 22, aw + 4, 24, stone)
+    c.rect(ax, y0 + 22, aw, 22, door)
+    c.rect(ax + 1, y0 + 23, aw - 2, 8, hex_rgba("47301e"))
+    c.rect(ax + aw // 2 - 1, y0 + 22, 2, 22, stone_d)
+    c.set(ax + 7, y0 + 33, hex_rgba("e8c74a"))
+    c.set(ax + 12, y0 + 33, hex_rgba("e8c74a"))
+    c.rect(ax - 4, y0 + wallH - 3, aw + 8, 3, stone_l)      # steps
+    c.rect(ax - 6, y0 + wallH - 1, aw + 12, 1, stone_d)
+
+    # ---- the banners
+    for bx in (ax - 12, ax + aw + 4):
+        c.rect(bx, y0 + 14, 8, 20, nured)
+        c.rect(bx, y0 + 14, 8, 1, hex_rgba("e83a2a"))
+        c.rect(bx + 6, y0 + 14, 2, 20, nured_d)
+        for i in range(0, 8, 3):            # swallow-tail hem
+            c.set(bx + i, y0 + 34, nured)
+            c.set(bx + i + 1, y0 + 33, nured)
+        text3(c, bx + 2, y0 + 20, "N", stone_l)
+    c.rect(0, y0 + wallH - 2, W, 2, brick_d)
+    c.outline(OUTLINE)
+    return c
+
+
+def bu_robotics():
+    """BU — specifically the robotics lab: scarlet band, glass-fronted bay
+    with an arm and a rover behind it, dish on the roof. 6x3."""
+    W, wallH, roof_h = 96, 48, 16
+    c = Canvas(W, roof_h + wallH + 2)
+    stone = hex_rgba("d3c7b0")
+    stone_d = hex_rgba("ab9e88")
+    stone_l = hex_rgba("e8dfcb")
+    scarlet = hex_rgba("cc0000")
+    scarlet_d = hex_rgba("990000")
+    steel = hex_rgba("8f959e")
+    steel_d = hex_rgba("6a707a")
+    glass = hex_rgba("aedcf0")
+    glass_hi = hex_rgba("e8f8ff")
+    glass_d = hex_rgba("74a8c4")
+    lab = hex_rgba("2b3440")
+
+    # ---- roof: parapet, railing and a dish
+    c.rect(0, 6, W, roof_h - 7, stone_d)
+    c.rect(0, 6, W, 1, stone_l)
+    c.rect(0, roof_h - 3, W, 2, hex_rgba("8d8371"))
+    for i in range(2, W - 2, 5):            # roof railing
+        c.rect(i, 3, 1, 3, steel)
+    c.rect(1, 2, W - 2, 1, steel_d)
+    # antenna mast with two crossbars — reads cleaner than a 7px dish
+    c.rect(13, 0, 2, 7, steel)
+    c.rect(14, 0, 1, 7, steel_d)
+    c.rect(9, 2, 10, 1, steel)
+    c.rect(10, 4, 8, 1, steel)
+    c.set(13, 0, hex_rgba("e8433c"))
+    c.rect(11, 6, 6, 1, steel_d)
+    c.rect(0, roof_h - 1, W, 1, OUTLINE)
+
+    y0 = roof_h
+    c.rect(0, y0, W, wallH, stone)
+    for j in range(y0 + 4, y0 + wallH, 5):  # ashlar courses
+        c.rect(0, j, W, 1, stone_d)
+    c.rect(0, y0, W, 2, stone_d)
+
+    # ---- scarlet name band
+    c.rect(1, y0 + 2, W - 2, 10, scarlet)
+    c.rect(1, y0 + 2, W - 2, 1, hex_rgba("e83a2a"))
+    c.rect(1, y0 + 11, W - 2, 1, scarlet_d)
+    text3_centered(c, W // 2, y0 + 4, "BU ROBOTICS", IN_WHITE)
+
+    # ---- upper storey: ribbon of lab windows
+    c.rect(6, y0 + 16, 84, 13, glass_d)
+    c.rect(7, y0 + 17, 82, 11, glass)
+    c.rect(7, y0 + 17, 82, 3, glass_hi)
+    for i in range(6, 90, 12):
+        c.rect(i, y0 + 16, 2, 13, stone)
+    c.rect(5, y0 + 29, 86, 2, stone_l)
+
+    # ---- ground floor: the lab bay you can actually see into
+    bx, bw = 8, 44
+    c.rect(bx, y0 + 33, bw, 15, OUTLINE)
+    c.rect(bx + 1, y0 + 34, bw - 2, 13, lab)
+    c.rect(bx + 1, y0 + 34, bw - 2, 2, hex_rgba("3f4a58"))
+    # robot arm: base, two links, a gripper
+    ax = bx + 10
+    c.rect(ax - 3, y0 + 44, 8, 3, steel)
+    c.rect(ax, y0 + 38, 3, 6, steel)
+    c.rect(ax, y0 + 38, 1, 6, steel_d)
+    c.rect(ax + 2, y0 + 37, 9, 3, steel)
+    c.rect(ax + 2, y0 + 39, 9, 1, steel_d)
+    c.rect(ax + 10, y0 + 38, 2, 4, steel)
+    c.set(ax + 12, y0 + 38, hex_rgba("e8c74a"))
+    c.set(ax + 12, y0 + 41, hex_rgba("e8c74a"))
+    # a little rover on the bench beside it
+    rx = bx + 30
+    c.rect(rx, y0 + 41, 11, 5, steel)
+    c.rect(rx, y0 + 41, 11, 1, hex_rgba("b0b6bf"))
+    c.rect(rx + 3, y0 + 38, 5, 3, scarlet)
+    c.set(rx + 5, y0 + 37, steel)
+    for wx2 in (rx + 1, rx + 5, rx + 9):
+        c.rect(wx2, y0 + 46, 2, 2, hex_rgba("2b2028"))
+    c.rect(bx + 20, y0 + 34, 1, 13, hex_rgba("3f4a58"))
+    # ---- scarlet entrance, right of the bay
+    dx = 62
+    c.rect(dx - 2, y0 + 30, 22, 3, stone_l)
+    c.rect(dx, y0 + 33, 18, 15, OUTLINE)
+    c.rect(dx + 1, y0 + 34, 16, 14, scarlet)
+    c.rect(dx + 2, y0 + 35, 14, 6, glass)
+    c.rect(dx + 2, y0 + 35, 14, 2, glass_hi)
+    c.rect(dx + 8, y0 + 33, 2, 15, scarlet_d)
+    c.set(dx + 6, y0 + 43, hex_rgba("e8c74a"))
+    c.set(dx + 11, y0 + 43, hex_rgba("e8c74a"))
+    c.rect(0, y0 + wallH - 2, W, 2, stone_d)
+    c.outline(OUTLINE)
+    return c
+
+
+def cafe_bene():
+    """Cafe Bene — where they met, and where they still go to work. Chocolate
+    fascia, cream letters, warm windows with two people at the near table. 5x2."""
+    W, wallH, roof_h = 80, 32, 14
+    c = Canvas(W, roof_h + wallH + 2)
+    stucco = hex_rgba("efe3cf")
+    stucco_d = hex_rgba("cfc2aa")
+    choc = hex_rgba("4e352a")
+    choc_l = hex_rgba("6b4a37")
+    choc_d = hex_rgba("35231b")
+    cream = hex_rgba("f6efdc")
+    wood = hex_rgba("8a6a45")
+    warm = hex_rgba("f4cf84")
+    warm_d = hex_rgba("d9a95f")
+    glass_hi = hex_rgba("fbeec4")
+    green = hex_rgba("4a6b52")
+
+    # ---- cornice + the name board
+    c.rect(0, 0, W, 2, stucco)
+    c.rect(0, 1, W, 2, stucco_d)
+    c.rect(1, 3, W - 2, 9, choc)
+    c.rect(1, 3, W - 2, 1, choc_l)
+    c.rect(1, 11, W - 2, 1, choc_d)
+    text3_centered(c, W // 2, 5, "CAFE BENE", cream)
+    c.rect(0, roof_h - 2, W, 1, choc_d)
+    c.rect(0, roof_h - 1, W, 1, OUTLINE)
+
+    y0 = roof_h
+    c.rect(0, y0, W, wallH, stucco)
+    c.rect(0, y0, W, 2, stucco_d)
+
+    # ---- awning over the windows
+    ay = y0 + 2
+    for j in range(5):
+        for i in range(1, W - 1):
+            c.set(i, ay + j, choc if (i // 5) % 2 == 0 else cream)
+    c.rect(1, ay + 4, W - 2, 1, choc_d)
+    c.rect(0, ay + 5, W, 1, OUTLINE)
+
+    # ---- big warm windows: their table is the one on the left
+    for (gx, gw) in ((3, 30), (47, 30)):
+        c.rect(gx, y0 + 10, gw, 18, wood)
+        c.rect(gx + 1, y0 + 11, gw - 2, 16, warm)
+        c.rect(gx + 1, y0 + 11, gw - 2, 3, glass_hi)
+        c.rect(gx + 1, y0 + 24, gw - 2, 3, warm_d)
+        c.rect(gx + gw // 2 - 1, y0 + 11, 2, 16, wood)
+    # two silhouettes at the near table ♥
+    c.rect(8, y0 + 22, 5, 5, choc)          # her
+    c.rect(9, y0 + 19, 3, 3, choc)
+    c.rect(17, y0 + 21, 5, 6, choc)         # him
+    c.rect(18, y0 + 18, 3, 3, choc)
+    c.rect(13, y0 + 25, 4, 2, choc_l)       # the table between them
+    # a plant on the sill of the other window
+    c.rect(56, y0 + 21, 6, 6, green)
+    c.rect(57, y0 + 25, 4, 3, hex_rgba("9a6f42"))
+    # and their laptop table, because that's what they actually do here
+    c.rect(60, y0 + 22, 9, 2, choc_l)
+    c.rect(63, y0 + 24, 3, 4, choc_l)
+    c.rect(61, y0 + 19, 6, 3, choc)
+
+    # ---- door, right of centre
+    dx = 36
+    c.rect(dx, y0 + 12, 10, 20, choc_d)
+    c.rect(dx + 1, y0 + 13, 8, 19, choc)
+    c.rect(dx + 2, y0 + 14, 6, 8, warm)
+    c.rect(dx + 2, y0 + 14, 6, 2, glass_hi)
+    c.set(dx + 7, y0 + 24, hex_rgba("e8c74a"))
+    # planters + a chalkboard leaning by the door
+    for px in (33, 47):
+        c.rect(px, y0 + 27, 6, 5, wood)
+        c.rect(px, y0 + 25, 6, 2, green)
+    c.rect(0, y0 + wallH - 2, W, 2, stucco_d)
+    c.outline(OUTLINE)
+    return c
+
+
 BUILDINGS = {
     # LA — her house in Santa Clarita (8x3, the biggest sprite in the game)
     "la_home": big_house,
@@ -4659,26 +6027,18 @@ BUILDINGS = {
         hex_rgba("8465a8"), hex_rgba("64487f"), hex_rgba("e8c74a"), style="shop",
         sign_strip=True),
     # Boston
-    "apartment": lambda: building(
-        4, 3, hex_rgba("b06a4e"), hex_rgba("8c5038"),
-        hex_rgba("6a6a72"), hex_rgba("4e4e56"), hex_rgba("efe9db"), style="shop",
-        stoop=True),
     "brownstone_b": lambda: building(
         4, 3, hex_rgba("9c5e46"), hex_rgba("7a4634"),
         hex_rgba("5e5e66"), hex_rgba("46464e"), hex_rgba("efe9db"), style="shop",
         stoop=True),
-    "bu_building": lambda: building(
-        6, 2, hex_rgba("b8493f"), hex_rgba("933a32"),
-        hex_rgba("6a6a72"), hex_rgba("4e4e56"), hex_rgba("f4f1e4"), style="shop",
-        sign_strip=True),
-    "neu_building": lambda: building(
-        6, 2, hex_rgba("8f8f97"), hex_rgba("74747c"),
-        hex_rgba("46464e"), hex_rgba("32323a"), hex_rgba("cf4436"), style="shop",
-        sign_strip=True),
-    "cafe": lambda: building(
-        4, 2, hex_rgba("e8dcc8"), hex_rgba("ccc0aa"),
-        hex_rgba("5f8f6f"), hex_rgba("47705a"), hex_rgba("47705a"), style="shop",
-        awning=hex_rgba("5f8f6f"), awning_b=hex_rgba("f4f1e4"), sign_strip=True),
+    # LA — the burger place (5x2). The arrow sign is prop_innoutsign.
+    "innout": innout,
+    # Boston — the real ones ♥
+    "bu_building": bu_robotics,      # BU, robotics wing (6x3)
+    "neu_building": neu_hall,        # Northeastern (6x3)
+    "cafe": cafe_bene,               # Cafe Bene, where they met (5x2)
+    "jvue": jvue_tower,              # her new place, at the LMA (5x4)
+    "duplex": duplex_house,          # her parents', Brookline (6x3)
 }
 
 
@@ -4700,6 +6060,25 @@ def main():
         {"front": NOAH_LEGS_FRONT, "side": NOAH_LEGS_SIDE}, NOAH,
         extras=[{"torso": NOAH_DOWN, "legs": NOAH_LEGS_FRONT["stand"], "overlay": WAVE_ARM},
                 {"torso": NOAH_DOWN, "legs": NOAH_LEGS_FRONT["stand"]}])
+    # 🍔 the same two, in paper hats, for after the burger run. Her hair sits a
+    # row lower than his afro, hence the per-character hat_dy.
+    out["her_hat"] = compose_char(
+        {"down": HER_DRESS_DOWN, "up": HER_DRESS_UP, "side": HER_DRESS_SIDE},
+        {"front": SKIRT_FRONT, "side": SKIRT_SIDE}, HER, hat=PAPER_HAT, hat_dy=1,
+        extras=[{"torso": HER_DRESS_DOWN, "legs": SKIRT_FRONT["stand"], "overlay": CHEER_ARMS},
+                {"torso": HER_DRESS_DOWN, "legs": SKIRT_FRONT["stand"]}])
+    out["noah_hat"] = compose_char(
+        {"down": NOAH_DOWN, "up": NOAH_UP, "side": NOAH_SIDE},
+        {"front": NOAH_LEGS_FRONT, "side": NOAH_LEGS_SIDE}, NOAH, hat=PAPER_HAT,
+        extras=[{"torso": NOAH_DOWN, "legs": NOAH_LEGS_FRONT["stand"], "overlay": WAVE_ARM},
+                {"torso": NOAH_DOWN, "legs": NOAH_LEGS_FRONT["stand"]}])
+    out["npc_innout"] = compose_char(
+        {"down": HER_DOWN, "up": HER_UP, "side": HER_SIDE},
+        {"front": LEGS_FRONT, "side": LEGS_SIDE}, INOUT_A, hat=PAPER_HAT, hat_dy=1)
+    out["npc_innout2"] = compose_char(
+        {"down": NOAH_DOWN, "up": NOAH_UP, "side": NOAH_SIDE},
+        {"front": NOAH_LEGS_FRONT, "side": NOAH_LEGS_SIDE}, INOUT_B, hat=PAPER_HAT)
+
     out["mookie"] = compose_mookie(MOOKIE)
 
     # ---- the house crew 🏡
@@ -4771,6 +6150,18 @@ def main():
     out["starfish"] = prop_starfish()
     out["beachsign"] = prop_beachsign()
     out["critters"] = prop_critters()
+    # ---- the LA beach 🌊 + the burger place
+    out["innoutsign"] = prop_innoutsign()
+    out["lifeguard"] = prop_lifeguard()
+    out["umbrella"] = prop_umbrella()
+    out["surfboards"] = prop_surfboards()
+    out["volley"] = prop_volley()
+    out["sandcastle"] = prop_sandcastle()
+    # ---- the esplanade 🦆 + JVUE's monument sign
+    out["bandshell"] = prop_bandshell()
+    out["willow"] = prop_willow()
+    out["esplsign"] = prop_esplsign()
+    out["jvuesign"] = prop_jvuesign()
     # ---- house + interiors 🏡
     out["pool"] = prop_pool()
     out["in_sofa"] = in_sofa()
@@ -4808,6 +6199,15 @@ def main():
     out["in_dogbed"] = in_dogbed()
     out["in_stove"] = in_stove()
     out["in_samovar"] = in_samovar()
+    # ---- inside the burger place 🍔
+    out["in_till"] = in_till()
+    out["in_menuboard"] = in_menuboard()
+    out["in_frystation"] = in_frystation()
+    out["in_drinks"] = in_drinks()
+    out["in_shakes"] = in_shakes()
+    out["in_booth"] = in_booth()
+    out["in_hatstack"] = in_hatstack()
+    out["in_tray"] = in_tray()
     for mname, mfn in MONUMENTS.items():
         out[mname] = mfn()
     out["quad_ride"] = ride_sprites()
@@ -4832,6 +6232,7 @@ def main():
     row_items = [["her", "noah", "mookie", "npc_woman", "npc_man", "npc_old"],
                  ["npc_marina", "npc_mom", "npc_bro", "leo", "charlie"],
                  ["npc_jack", "npc_wife", "chakra"],
+                 ["her_hat", "noah_hat", "npc_innout", "npc_innout2"],
                  ["tiles"],
                  ["tree", "palm", "figtree", "lamp", "bench", "quad", "sailboat"],
                  ["quad_ride", "horse", "column", "pyramid", "cypress", "matryoshka", "radio", "pumpkin"],
@@ -4846,9 +6247,15 @@ def main():
                  ["in_bigplant", "in_jars", "in_cushions", "in_dogbed", "in_stove", "in_samovar"],
                  ["vegbed", "vegbed_b", "corn", "sunflower", "firepit"],
                  ["logseat", "hammock", "trellis", "herbpots", "dreamcatcher", "bus"],
+                 ["in_menuboard", "in_frystation", "in_till"],
+                 ["in_drinks", "in_shakes", "in_booth", "in_hatstack", "in_tray"],
                  ["torii", "barrier", "fig", "fx", "shadow"],
+                 ["innoutsign", "lifeguard", "umbrella", "surfboards", "volley",
+                  "sandcastle"],
+                 ["bandshell", "willow", "esplsign", "jvuesign"],
                  ["la_home", "la_jack", "la_house_b", "taco_shop", "theater"],
-                 ["apartment", "brownstone_b", "bu_building", "neu_building", "cafe"]]
+                 ["innout", "cafe", "brownstone_b"],
+                 ["bu_building", "neu_building", "duplex", "jvue"]]
     bcanv = {n: fn() for n, fn in BUILDINGS.items()}
     for n, cv in bcanv.items():
         cv.save(os.path.join(ASSETS, f"b_{n}.png"))

@@ -68,7 +68,7 @@ const POINT_FALLBACK = {
     { text: "Jack: \"Sit. Eat. We are not discussing it.\"" },
   ],
   home_jackwife: [
-    { text: "Jack's wife pushes a curl out of her face with the back of a floury hand." },
+    { text: "Dez pushes a curl out of her face with the back of a floury hand." },
     { text: "\"Ignore him, he's been loud since he was six.\"" },
     { text: "(she hands you something warm before you've said a word.)" },
   ],
@@ -105,6 +105,63 @@ const POINT_FALLBACK = {
     "A divi-divi tree, bent permanently southwest by wind that never stops blowing.",
     { who: "noah", text: "this one isn't a memory yet. it's a promise — next week ♥" },
   ],
+  // ---- 🍔 the burger place + the wider beach
+  innout: [
+    "White walls, red stripe, and a yellow arrow you can see from three blocks away.",
+    { who: "noah", text: "[TODO Noah: the In-N-Out order. Animal style? the whole thing.]" },
+    { who: "noah", text: "double-double, fries well done, and a twenty minute argument about the milkshake." },
+    { text: "(the arrow points down the road like it knows something.)" },
+  ],
+  la_lifeguard: [
+    "The tower's shutters are open and nobody's in it. Just the flag, snapping.",
+    { who: "noah", text: "we sat under one of these for four hours once and didn't go in the water a single time." },
+  ],
+  la_surf: [
+    "Two boards planted nose-up in the sand, still wet.",
+    { who: "noah", text: "[TODO Noah: whether either of us can actually surf ♥]" },
+  ],
+  // ---- 🦢 Boston
+  esplanade: [
+    "The Charles, flat and bright, and the shell sitting on the grass like a giant ear.",
+    { who: "noah", text: "the esplanade. we've walked this whole thing more times than I can count." },
+    { who: "noah", text: "willows, swan boats, someone's speaker, and about four miles of us talking." },
+    { who: "noah", text: "[TODO Noah: the walk along here that mattered most ♥]" },
+  ],
+  // ---- 🍔 inside the burger place
+  innout_order: [
+    { text: "The associate straightens her paper hat. \"Hi! What can I get started for you?\"" },
+    { who: "her", text: "okay. okay okay okay. …a LOT of burgers." },
+    { who: "noah", text: "she means it. don't round down." },
+    { who: "her", text: "raw onion. extra cheese. extra spread. on all of them." },
+    { text: "Associate, typing, entirely unbothered: \"…extra spread on all of them. Got it.\"" },
+    { who: "noah", text: "fries animal style. that's not optional, that's structural." },
+    { who: "her", text: "two drinks. and a shake." },
+    { who: "noah", text: "…one shake?" },
+    { who: "her", text: "one shake. two straws." },
+    { text: "(the associate looks up. the associate approves.)" },
+    { who: "her", text: "and — this is going to sound strange — could we have two of the hats?" },
+    { text: "Associate: \"Nobody has ever asked me that so politely.\"" },
+    { text: "She slides two folded paper hats across the counter, one for each of you." },
+    { text: "(you both put them on immediately. neither of you takes them off.)" },
+    { who: "noah", text: "[TODO Noah: what actually happened the first time we came here ♥]" },
+  ],
+  innout_menu: [
+    "Red board, white letters, five things on it and not one thing more.",
+    { who: "noah", text: "the whole menu fits on one sign and it's still the correct answer every time." },
+    { who: "her", text: "…the prices on this board are from 1976." },
+    { who: "noah", text: "it's my pixel restaurant. the double-double is two forty-five and I won't be taking questions." },
+  ],
+  innout_fries: [
+    "Whole potatoes going into the slicer at one end, fries coming out under the heat lamp at the other.",
+    { who: "her", text: "they cut them RIGHT THERE. every time this delights me." },
+    { who: "noah", text: "every time. I have watched you watch this." },
+  ],
+  parents_home: [
+    "White clapboard, wooden trim, the bottom half of a big Brookline duplex. The porch light is on.",
+    { who: "noah", text: "my parents' place. bottom floor's ours — the whole thing smells like whatever mom's cooking." },
+    { who: "noah", text: "they already love you. they asked about you before they asked about me." },
+    { text: "(the door isn't open yet — that comes later ♥)" },
+  ],
 };
 
 // Animals she can recruit. `lag` = how far back on her breadcrumb trail they
@@ -134,6 +191,23 @@ const NPC_FALLBACK = {
     [{ text: "(she squints at the pyramid, counting on her fingers)" },
      { text: "Greece, Italy, Egypt, Mexico, Moldova… all that together? I can't even commit to a coffee order." }],
     [{ text: "One little road, a whole world on it. You two collect countries like I collect parking tickets." }],
+  ],
+  io_cashier: [
+    [{ text: "\"Take your time. The board hasn't changed since 1948.\"" }],
+    [{ text: "\"…the hats suit you both, honestly.\"" }],
+  ],
+  io_cook: [
+    [{ text: "He turns a basket of fries without looking up." },
+     { text: "\"Animal style takes an extra minute. It's worth the extra minute.\"" }],
+  ],
+  io_customer: [
+    [{ text: "A man is halfway through a double-double and will not be interrupted." },
+     { text: "He raises the burger a few inches. That's the whole greeting." }],
+  ],
+  bos_neighbor: [
+    [{ text: "You're the one from downstairs' boy's girl, aren't you." },
+     { text: "…that came out wrong. Anyway. Welcome to Brookline." }],
+    [{ text: "Trash goes out Tuesday. Somebody had to tell you." }],
   ],
   bos_student: [
     [{ text: "Is that a cat following you? Lucky." },
@@ -279,6 +353,7 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
         pumps: new Set(raw.pumps || []),
         crew: new Set(raw.crew || []),
         met: !!raw.met,
+        hats: !!raw.hats,
         finale: !!raw.finale,
         introDone: !!raw.introDone,
         mounted: !!raw.mounted,
@@ -304,7 +379,7 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
     save.pos = state.playerPos;
     localStorage.setItem(SAVE_KEY, JSON.stringify({
       seen: [...save.seen], figs: [...save.figs], pumps: [...save.pumps],
-      crew: [...save.crew], met: save.met,
+      crew: [...save.crew], met: save.met, hats: save.hats,
       finale: save.finale, introDone: save.introDone, mounted: save.mounted,
       map: save.map, pos: save.pos,
     }));
@@ -400,7 +475,7 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
 
   function addPlayer(px, py) {
     const p = k.add([
-      k.sprite("her", { anim: "idle-down" }),
+      k.sprite(save.hats ? "her_hat" : "her", { anim: "idle-down" }),
       k.pos(px, py),
       k.anchor("bot"),
       k.area({ shape: new k.Rect(k.vec2(-5, -8), 10, 8) }),
@@ -682,7 +757,12 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
     const mh = def.ground.length * T;
     const cx = mw <= VIEW_W ? mw / 2 : k.clamp(p.pos.x, VIEW_W / 2, mw - VIEW_W / 2);
     const cy = mh <= VIEW_H ? mh / 2 : k.clamp(p.pos.y - 6, VIEW_H / 2, mh - VIEW_H / 2);
-    k.setCamPos(cx, cy);
+    // Snap to whole world pixels. The player moves in fractions of a pixel, and
+    // a fractional camera makes nearest-neighbour sampling pick a different
+    // source pixel for each sprite at slightly different moments — which reads
+    // as a shimmer/tear line crawling across the map while she walks. Rounding
+    // costs nothing and the camera still tracks her smoothly at this scale.
+    k.setCamPos(Math.round(cx), Math.round(cy));
   }
 
   // ------------------------------------------------------------ pumpkins
@@ -901,6 +981,7 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
 
   function refreshTravelObjs() {
     if (state.map !== "route") return;
+    respaceTravels();
     k.get("travelmark").forEach((o) => o.destroy());
     for (const e of travelEntries()) spawnTravel(e);
   }
@@ -961,21 +1042,52 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
     };
   }
 
+  // Monuments are wide sprites with readable signposts under them, so two of
+  // them on neighbouring tiles overlap into one unreadable pile. Every landmark
+  // — authored prop, logged trip, or NPC — needs a clear tile between it and
+  // the next one.
+  const GAP = 2; // Chebyshev tiles: 2 means "never directly adjacent"
+  const clearOf = (list, x, y) =>
+    !list.some((o) => Math.abs(o.x - x) < GAP && Math.abs(o.y - y) < GAP);
+
   function travelFreeSpot(def, entriesOverride) {
     const entries = entriesOverride || travelEntries();
-    const taken = new Set(entries.map((e) => `${e.x},${e.y}`));
+    const placed = entries.filter((e) => !e.soon && Number.isFinite(e.x));
     for (let i = 0; i < 400; i++) {
       const x = 2 + Math.floor(Math.random() * (def.ground[0].length - 4));
       const y = 2 + Math.floor(Math.random() * (def.ground.length - 4));
       if (def.ground[y][x] !== "." || def.objects[y][x] !== ".") continue;
       if ("T" === def.objects[y - 1]?.[x] || "T" === def.objects[y + 1]?.[x]) continue;
-      let bad = taken.has(`${x},${y}`);
-      for (const p of def.props || []) if (Math.abs(p.x - x) <= 1 && Math.abs(p.y - y) <= 1) bad = true;
+      if (!clearOf(placed, x, y)) continue;          // …and not beside a trip
+      if (!clearOf(def.props || [], x, y)) continue; // …or a heritage landmark
+      if (!clearOf(def.npcs || [], x, y)) continue;
+      let bad = false;
       for (const pt of def.points || []) if (x >= pt.x - 1 && x <= pt.x + pt.w && y >= pt.y - 1 && y <= pt.y + pt.h) bad = true;
       for (const f of [...(def.figs || []), ...(def.pumpkins || [])]) if (f.x === x && f.y === y) bad = true;
       if (!bad) return { x, y };
     }
     return { x: 21, y: 6 }; // guaranteed-clear fallback
+  }
+
+  /** Trips logged before the spacing rule existed can already be sitting on top
+   *  of each other. Re-home any that are, once, on load. */
+  function respaceTravels() {
+    const def = MAPS.route;
+    const entries = travelEntries();
+    const keep = [];
+    let moved = 0;
+    for (const e of entries) {
+      if (e.soon || !Number.isFinite(e.x)) { keep.push(e); continue; }
+      if (clearOf(keep.filter((o) => !o.soon && Number.isFinite(o.x)), e.x, e.y)
+          && clearOf(def.props || [], e.x, e.y)) {
+        keep.push(e);
+        continue;
+      }
+      Object.assign(e, travelFreeSpot(def, keep));
+      keep.push(e);
+      moved++;
+    }
+    if (moved) localStorage.setItem("sl_travels", JSON.stringify(entries));
   }
 
   function addTravelEntry(country, msg) {
@@ -1136,8 +1248,37 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
       if (id === "route_quad") mount(); // first time: memory, then she rides off
       if (id === "garden") pickTomato();
       if (id === "travel_station") ui.openTravelForm(travelManage());
+      if (id === "innout_order") collectOrder(zone);
       if (zone.enterTo) goMap(zone.enterTo, zone.enterSpawn);
     }
+  }
+
+  /** the tray lands, and the two of them get the paper hats 🍔 */
+  function collectOrder(zone) {
+    // the tray is a normal prop with `after: "innout_order"`, so it will be
+    // there on every later visit — this is just so it appears now, in front of
+    // her, instead of the next time she walks in
+    const tray = MAPS[state.map].props.find((p) => p.type === "in_tray");
+    if (tray) {
+      const py = (tray.y + 1) * T;
+      k.add([k.sprite("in_tray"), k.pos((tray.x + 0.5) * T, py),
+        k.anchor("bot"), k.z(py + 34)]);
+    }
+    audio.fanfare();
+    heartBurst(zone.focusPos.clone().add(0, -10), 7, 16);
+    wearHats();
+  }
+
+  /** swap her and Noah onto their hatted sheets. `use()` drops the current
+   *  animation, but the walk/idle state is re-derived every frame, so it snaps
+   *  back on the next tick. */
+  function wearHats() {
+    if (save.hats) return;
+    save.hats = true;
+    persist();
+    if (state.player) state.player.use(k.sprite("her_hat", { anim: "idle-down" }));
+    if (state.noah) state.noah.use(k.sprite("noah_hat", { anim: "idle-down" }));
+    toast("two paper hats, on the house 🍔♥");
   }
 
   function doInteract() {
@@ -1158,6 +1299,73 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
       dialogue.show(f.obj.lines.map((t) => (typeof t === "string" ? { text: t } : t)));
     }
     else if (f.kind === "quad") mount();
+  }
+
+  // --------------------------------------------------------- baked ground
+  // Drawing every tile as its own game object cost ~1,300 objects on Mini LA
+  // once the beach got wider, and the frame rate showed it. Instead each map's
+  // static floor is stamped into an offscreen canvas once and handed to kaplay
+  // as a single sprite; the animated tiles (water, flowers) are the only ones
+  // that stay as objects. Baked sprites live in kaplay's asset store, which
+  // survives scene rebuilds, so this runs once per map per session.
+  const BAKED = new Set();
+  const WATER_BOX = new Map();      // map name → [tileX, tileY] of the strip
+
+  function bakeGround(name, def, cols, rows, staticFrame) {
+    if (BAKED.has(name)) return;
+    const img = tilesMeta.image;
+    const at = (frame) =>
+      [(frame % tilesMeta.cols) * T, Math.floor(frame / tilesMeta.cols) * T];
+    const surface = (w, h) => {
+      const c = document.createElement("canvas");
+      c.width = w;
+      c.height = h;
+      const g = c.getContext("2d");
+      g.imageSmoothingEnabled = false;
+      return [c, g];
+    };
+
+    const [floor, fg] = surface(cols * T, rows * T);
+    let wx0 = Infinity, wy0 = Infinity, wx1 = -1, wy1 = -1;
+    for (let y = 0; y < rows; y++) {
+      const row = def.ground[y];
+      for (let x = 0; x < cols; x++) {
+        if (row[x] === "w") {       // note the extent, draw it separately
+          if (x < wx0) wx0 = x;
+          if (y < wy0) wy0 = y;
+          if (x > wx1) wx1 = x;
+          if (y > wy1) wy1 = y;
+          continue;
+        }
+        const frame = staticFrame(row[x], x, y);
+        if (frame == null) continue;
+        const [sx, sy] = at(frame);
+        fg.drawImage(img, sx, sy, T, T, x * T, y * T, T, T);
+      }
+    }
+    k.loadSprite(`bake_${name}`, floor, { singular: true });
+
+    if (wx1 >= 0) {
+      const ww = wx1 - wx0 + 1;
+      const wh = wy1 - wy0 + 1;
+      const [strip, sg] = surface(ww * T * 3, wh * T);
+      for (let phase = 0; phase < 3; phase++) {
+        const [sx, sy] = at(F[`water_${phase}`]);
+        for (let y = wy0; y <= wy1; y++) {
+          for (let x = wx0; x <= wx1; x++) {
+            if (def.ground[y][x] !== "w") continue;
+            sg.drawImage(img, sx, sy, T, T,
+              (phase * ww + x - wx0) * T, (y - wy0) * T, T, T);
+          }
+        }
+      }
+      k.loadSprite(`water_${name}`, strip, {
+        singular: true, sliceX: 3, sliceY: 1,
+        anims: { live: { from: 0, to: 2, speed: 2, loop: true, pingpong: true } },
+      });
+      WATER_BOX.set(name, [wx0, wy0]);
+    }
+    BAKED.add(name);
   }
 
   // ------------------------------------------------------------ scene builder
@@ -1195,49 +1403,89 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
       const h = (x * 13 + y * 7) % 3;
       return h === 0 ? F.wood_a : h === 1 ? F.wood_b : F.wood_c;
     };
-    k.addLevel(def.ground, {
-      tileWidth: T, tileHeight: T,
-      tiles: {}, // required by kaplay even when only wildcardTile is used
-      wildcardTile: (sym, p) => {
-        switch (sym) {
-          case ".": return [k.sprite("tiles", { frame: grassVar(p.x, p.y) })];
-          case "*": return [k.sprite("tiles", { anim: FLOWER_ANIMS[(p.x * 3 + p.y * 5) % 3] })];
-          case "t": return [k.sprite("tiles", { frame: F.tallgrass })];
-          case "-": return [k.sprite("tiles", { frame: F[`path_${maskAt(p.x, p.y, PATHY)}`] })];
-          case "s": return [k.sprite("tiles", { frame: F[`sand_${maskAt(p.x, p.y, SANDY)}`] })];
-          case "r": return [k.sprite("tiles", { frame: F.road })];
-          case "R": return [k.sprite("tiles", { frame: F.road_dash })];
-          case "k": return [k.sprite("tiles", { frame: F.sidewalk })];
-          case "w": return [k.sprite("tiles", { anim: "water" })];
-          // ---- interiors 🏡
-          case ",": return [k.sprite("tiles", { frame: woodVar(p.x, p.y) })];
-          case ";": return [k.sprite("tiles", { frame: F[`rug_${(p.x + p.y) % 2 ? "a" : "b"}`] })];
-          case "~": return [k.sprite("tiles", { frame: F[`boho_${(p.x + p.y) % 2 ? "a" : "b"}`] })];
-          case ":": return [k.sprite("tiles", { frame: F.ktile })];
-          case "#": return [k.sprite("tiles", { frame: F.wallface })];
-          case "%": return [k.sprite("tiles", { frame: F.walltop })];
-          case "V": return [k.sprite("tiles", { frame: F.wallwin })];
-          case "C": return [k.sprite("tiles", { frame: F.wallpic })];
-          case "M": return [k.sprite("tiles", { frame: F.wallmac })];
-          case "H": return [k.sprite("tiles", { frame: F.wallherb })];
-          case "D": return [k.sprite("tiles", { frame: F.indoor })];
-        }
-      },
-    });
+    // atlas frame for a tile, or null if that tile animates and therefore has
+    // to stay a real game object
+    const staticFrame = (sym, x, y) => {
+      switch (sym) {
+        case ".": return grassVar(x, y);
+        case "t": return F.tallgrass;
+        case "-": return F[`path_${maskAt(x, y, PATHY)}`];
+        case "s": return F[`sand_${maskAt(x, y, SANDY)}`];
+        case "r": return F.road;
+        case "R": return F.road_dash;
+        case "k": return F.sidewalk;
+        // ---- interiors 🏡
+        case ",": return woodVar(x, y);
+        case ";": return F[`rug_${(x + y) % 2 ? "a" : "b"}`];
+        case "~": return F[`boho_${(x + y) % 2 ? "a" : "b"}`];
+        case ":": return F.ktile;
+        case "#": return F.wallface;
+        case "%": return F.walltop;
+        case "V": return F.wallwin;
+        case "C": return F.wallpic;
+        case "M": return F.wallmac;
+        case "H": return F.wallherb;
+        case "D": return F.indoor;
+        // ---- the burger place 🍔
+        case "x": return (x + y) % 2 ? F.chk_a : F.chk_b;
+        case "Y": return F.io_top;
+        case "I": return F.io_face;
+        case "O": return F.io_win;
+        case "K": return F.io_counter;
+        case "Z": return F.io_door;
+        default: return null;   // "*" flowers and "w" water
+      }
+    };
+    bakeGround(map, def, cols, rows, staticFrame);
 
-    // ---- blocked ground (water outside, walls inside) — merge horizontal runs
-    const SOLID_GROUND = new Set(["w", "#", "%", "V", "C", "M", "H", "D"]);
+    // one sprite for the whole static floor instead of ~1,300 tile objects
+    k.add([k.sprite(`bake_${map}`), k.pos(0, 0), k.anchor("topleft"), k.z(-1000)]);
+    // …and one three-frame sprite for all the water, wherever it is
+    const wbox = WATER_BOX.get(map);
+    if (wbox) {
+      k.add([k.sprite(`water_${map}`, { anim: "live" }),
+        k.pos(wbox[0] * T, wbox[1] * T), k.anchor("topleft"), k.z(-999)]);
+    }
+    // flowers are the only ground tiles left that need their own object
+    for (let y = 0; y < rows; y++) {
+      const row = def.ground[y];
+      for (let x = 0; x < cols; x++) {
+        if (row[x] !== "*") continue;
+        k.add([k.sprite("tiles", { anim: FLOWER_ANIMS[(x * 3 + y * 5) % 3] }),
+          k.pos(x * T, y * T), k.anchor("topleft"), k.z(-998)]);
+      }
+    }
+
+    // ---- blocked ground (water outside, walls inside). Horizontal runs get
+    // merged, then identical runs stack vertically — the LA ocean goes from 34
+    // colliders down to one.
+    const SOLID_GROUND = new Set(["w", "#", "%", "V", "C", "M", "H", "D",
+      "Y", "I", "O", "K", "Z"]);
+    const slabs = [];
+    let openRuns = new Map();       // "x0,x1" → index into slabs
     def.ground.forEach((row, y) => {
+      const next = new Map();
       let x = 0;
       while (x < row.length) {
-        if (SOLID_GROUND.has(row[x])) {
-          let x2 = x;
-          while (x2 < row.length && SOLID_GROUND.has(row[x2])) x2++;
-          solidRect(x * T, y * T, (x2 - x) * T, T);
-          x = x2;
-        } else x++;
+        if (!SOLID_GROUND.has(row[x])) { x++; continue; }
+        let x2 = x;
+        while (x2 < row.length && SOLID_GROUND.has(row[x2])) x2++;
+        const key = `${x},${x2}`;
+        const prev = openRuns.get(key);
+        if (prev !== undefined && slabs[prev].y1 === y) {
+          slabs[prev].y1 = y + 1;
+          next.set(key, prev);
+        } else {
+          slabs.push({ x0: x, x1: x2, y0: y, y1: y + 1 });
+          next.set(key, slabs.length - 1);
+        }
+        x = x2;
       }
+      openRuns = next;
     });
+    for (const s of slabs) {
+      solidRect(s.x0 * T, s.y0 * T, (s.x1 - s.x0) * T, (s.y1 - s.y0) * T);
+    }
 
     // ---- map perimeter
     solidRect(-T, -T, cols * T + 2 * T, T);
@@ -1311,6 +1559,18 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
       divi: { ox: -8, w: 16, h: 6 },
       palapa: { ox: -22, w: 44, h: 11 },
       beachsign: { ox: -6, w: 12, h: 5 },
+      // 🌊 the LA beach + 🍔 the sign by the road
+      lifeguard: { ox: -13, w: 26, h: 11 },
+      umbrella: { ox: -4, w: 8, h: 5 },
+      surfboards: { ox: -10, w: 20, h: 6 },
+      volley: { ox: -21, w: 42, h: 6 },
+      sandcastle: { ox: -12, w: 24, h: 8 },
+      innoutsign: { ox: -12, w: 24, h: 6 },
+      // 🦢 the esplanade
+      bandshell: { ox: -24, w: 48, h: 12 },
+      willow: { ox: -6, w: 12, h: 6 },
+      esplsign: { ox: -13, w: 26, h: 6 },
+      jvuesign: { ox: -20, w: 40, h: 8 },
       // 🏡 interiors
       in_sofa: { ox: -23, w: 46, h: 12 },
       in_table: { ox: -25, w: 50, h: 16 },
@@ -1338,6 +1598,12 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
       in_bigplant: { ox: -10, w: 20, h: 12 },
       in_jars: { ox: -14, w: 28, h: 14 },
       in_samovar: { ox: -12, w: 24, h: 14 },
+      // 🍔 the burger place. The line sits behind a counter she can't cross, so
+      // these only need colliders deep enough to stop her clipping their fronts.
+      in_frystation: { ox: -24, w: 48, h: 10 },
+      in_shakes: { ox: -15, w: 30, h: 10 },
+      in_drinks: { ox: -18, w: 36, h: 10 },
+      in_booth: { ox: -23, w: 46, h: 24 },
     };
     // two-frame props that just sit there and flicker
     const FLICKER = {
@@ -1351,8 +1617,15 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
     const FLOOR_DECOR = new Set(["starfish", "in_petbeds", "in_bowl",
       "in_dogbed", "in_cushions", "in_ball"]);
     // in_hangplant hangs off the ceiling — she walks under it, not through it
-    const SOFT_DECOR = new Set(["lounger", "in_hangplant", ...FLOOR_DECOR]);
+    const SOFT_DECOR = new Set(["lounger", "in_hangplant", "in_menuboard",
+      "in_till", "in_hatstack", "in_tray", ...FLOOR_DECOR]);
+    // things that sit ON something else and have to beat its z to be seen: the
+    // tray is on a booth table, the till and the hats are on the counter
+    const ON_TOP = { in_tray: 34, in_till: 8, in_hatstack: 8 };
     for (const p of def.props || []) {
+      // `after` gates a prop on a memory being read — the burger tray doesn't
+      // exist until she's actually ordered it
+      if (p.after && !save.seen.has(p.after)) continue;
       const px = (p.x + 0.5) * T;
       const py = (p.y + 1) * T;
       if (p.type === "pool") {
@@ -1377,7 +1650,7 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
         ]);
       } else if (SOFT_DECOR.has(p.type)) {
         k.add([k.sprite(p.type), k.pos(px, py), k.anchor("bot"),
-          k.z(FLOOR_DECOR.has(p.type) ? py - 24 : py)]);
+          k.z(FLOOR_DECOR.has(p.type) ? py - 24 : py + (ON_TOP[p.type] || 0))]);
       } else if (p.type === "figtree") {
         k.add([
           k.sprite("figtree", { frame: save.figs.has("fig_tree") ? 1 : 0 }),
@@ -1404,7 +1677,8 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
       } else if (p.type === "torii") {
         k.add([k.sprite("torii"), k.pos(px, py), k.anchor("bot"), k.z(py)]);
       } else if (p.type === "sailboat") {
-        const boat = k.add([k.sprite("sailboat"), k.pos(px, py), k.anchor("bot"), k.z(py), { t: k.rand(0, 6) }]);
+        const boat = k.add([k.sprite("sailboat"), k.pos(px, py), k.anchor("bot"),
+          k.z(py), { t: k.rand(0, 6) }]);
         boat.onUpdate(() => {
           boat.t += k.dt();
           boat.pos.y = py + Math.sin(boat.t * 1.3) * 2;
@@ -1557,7 +1831,10 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
     }
 
     // ---- her travel log ✈ (auto-generated monuments on Little Everywhere)
-    if (map === "route") for (const e of travelEntries()) spawnTravel(e);
+    if (map === "route") {
+      respaceTravels();   // spread out anything logged before the spacing rule
+      for (const e of travelEntries()) spawnTravel(e);
+    }
 
     // ---- exits
     for (const e of def.exits) {
@@ -1591,11 +1868,12 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
       });
     }
     if (save.met) {
-      state.noah = addFollower("noah", sx - 8, sy + 14, { lag: 8, side: 10, speed: 76 });
+      state.noah = addFollower(save.hats ? "noah_hat" : "noah",
+        sx - 8, sy + 14, { lag: 8, side: 10, speed: 76 });
     } else if (def.noahPost) {
       const [nx, ny] = def.noahPost;
       state.noah = k.add([
-        k.sprite("noah", { anim: "idle-down" }),
+        k.sprite(save.hats ? "noah_hat" : "noah", { anim: "idle-down" }),
         k.pos(nx * T + 8, ny * T + 12), k.anchor("bot"),
         k.area({ shape: new k.Rect(k.vec2(-5, -8), 10, 8) }), k.body({ isStatic: true }),
         k.z(ny * T + 12),

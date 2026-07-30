@@ -46,6 +46,26 @@ html, body {
 
 .hidden { display: none !important; }
 
+/* ---------- full-screen minigames (aquarium / greenhouse) ---------- */
+/* Own canvas at the same 320x240 internal size as the game, laid straight
+   over it, so the pixels line up and it reads as one piece of software. */
+#minigame {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  background: #14101f;
+  touch-action: none;
+}
+#minigame canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  cursor: pointer;
+}
+
 /* ---------- HUD ---------- */
 #hud {
   position: absolute;
@@ -106,6 +126,7 @@ html, body {
 #mute-btn.muted { color: #6a6a72; text-decoration: line-through; }
 
 /* ---------- toast ---------- */
+/* above #minigame (15) so the greenhouse's harvest counter is visible */
 #toast {
   position: absolute;
   top: 14px;
@@ -115,7 +136,7 @@ html, body {
   border: 2px solid var(--paper);
   padding: 8px 14px;
   font-size: 11px;
-  z-index: 6;
+  z-index: 16;
   white-space: nowrap;
   box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.45);
   animation: toast-in 0.25s ease-out;

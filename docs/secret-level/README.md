@@ -41,7 +41,9 @@ Both fade to `/secret-level/`, which asks for the password.
 | M | mute (music + SFX) |
 
 - ✨ **sparkles** mark memory spots — walk up and press E. The HUD heart counts
-  them (12 required + bonus ones like the boombox and the beach horse).
+  them (38 required at the moment, plus bonus ones like the boombox and the
+  beach horse). The count is derived from `maps.js`, so adding a spot just
+  raises the bar — `bonus: true` keeps one out of the finale requirement.
 - 🍇 **figs** — one from the fig tree on the route, the rest hidden around the
   maps and inside the houses (tall grass and tree lines are good places to
   look). The HUD shows the live total, so adding more just raises the bar.
@@ -84,22 +86,73 @@ Both fade to `/secret-level/`, which asks for the password.
   boards planted in the sand, a **volleyball net**, somebody's **sandcastle**,
   loungers, starfish, palms, two sailboats out on the water, and the horse.
   Three readable spots (the beach itself, the tower, the boards).
-- 🏢 **JVUE at the LMA** — her new apartment building in Mini Boston, five
-  tiles of glass with lit balconies and a slate **monument sign** out front.
-  This is the **finale** building (`point: "apartment"`).
 - 🌳 **the Charles River Esplanade** along the top of Mini Boston: the **Hatch
   Shell**, weeping willows leaning over the water, sailboats drifting on the
   river, lamps and benches on the bank, the park sign, and the boombox. One
   readable spot; no interior by design.
-- 🏡 **her parents' place in Brookline** — the bottom half of a big duplex,
-  white clapboard with wood trim, covered porch, two front doors (theirs is
-  the lit one). Down the connector path south of JVUE, on its own street with
-  neighbours.
-- 🎓 **Northeastern** (brick, limestone arch, NU-red banners) and **BU** —
-  specifically the **robotics** wing, with an arm and a rover visible through
-  the ground-floor glass.
-- ☕ **Cafe Bene**, where they met: chocolate fascia, warm windows, and two
-  little silhouettes at the near table.
+
+### 🏙 the five Boston interiors
+
+Every building on the Mini Boston strip opens now — press **E** on the door,
+same as her house in LA. Walk onto the door tile inside to come back out.
+
+- 🏢 **JVUE at the LMA** (`bos_jvue_in`) — **their apartment**, eleven days
+  old. Flat white walls, pale wide-plank oak, floor-to-ceiling glass across the
+  top wall, the **TV on the left wall with the light grey sofa in front of it**,
+  a bed nook, the galley kitchen, and eleven boxes nobody has unpacked. Two
+  things in this room open **full-screen minigames** — see below. The **finale
+  happens at the window here** now (`point: "jvue_home"`) instead of on the
+  street, so she can always come back in for the fish.
+- 🏡 **the Brookline house** (`bos_parents_in`) — his parents' half of the
+  duplex. His **mom** (long brown curls, apron, flour everywhere) is at the
+  oven with a cooling rack of something; his **dad** (black hair, glasses) is
+  in his chair with a dad joke he has been holding since Monday. **Charlie the
+  border collie** — white with a black patch over one eye — joins the crowd
+  like Leo and Chakra did, side-eyes Mookie the whole way, and yes, that means
+  there are now **two Charlies**. **Mia and Brandon are at the gym**; their
+  bags are still by the door (a bonus spot), and so are Mia's shoes on the
+  stairs.
+- 🎓 **Northeastern** (`bos_neu_in`) — the **International Affairs** floor
+  (she's IA + political science). Terrazzo, limestone, NU red: a **pinned world
+  map** the length of one wall with red string between her five pins, the
+  **Model UN** horseshoe still set from this morning (she chaired; she picks up
+  the gavel), the **co-op board** that runs everyone's life, a row of flags,
+  and a floor globe she spins with her eyes shut.
+- 🤖 **BU Robotics** (`bos_bu_in`) — grey epoxy floor, painted block, a scarlet
+  safety stripe round the room. A **six-axis arm** sweeping through the same
+  pick-and-place it has run since 2019 (she makes it wave), **two 3D printers**
+  mid-job — one of them is very obviously printing a small pink heart, and he
+  hands it to her still warm — a bench with a scope and a soldering iron, a
+  wall of parts drawers, a tracked rover with three names, and a drone.
+- ☕ **Cafe Bene** (`bos_cafe_in`) — square parquet, chocolate wainscot, the
+  chalk menu, the espresso machine steaming. The **little two-top by the front
+  window, closest to the door**, is the memory: that is the exact table she was
+  sitting at the first time he saw her in real life, and they both sit back
+  down in the same two chairs. On the wall there's a **framed screenshot of the
+  Hinge profiles** with a brass plaque reading *THE ALGORITHM: 1, EVERY
+  WELL-MEANING FRIEND WE HAVE: 0* 💛
+
+### 🐠 the aquarium &nbsp; 🌱 the greenhouse
+
+Two full-screen minigames, both inside the JVUE apartment. They draw to their
+own 320×240 canvas laid over kaplay's (`src/minigames.js`, `#minigame` in
+`index.html`), so they look like part of the same game. **E / esc** leaves.
+
+- **the tank** — E on the aquarium table. Click open water to drop food and the
+  fish steer over and eat it; click a fish to say hi. **Fish are unlocked by
+  milestones she earns everywhere else**: memories read, figs found, pumpkins
+  collected, each animal that joins the crowd, the In-N-Out hats, herbs
+  harvested next door, and one last pair for finishing the story. The bottom
+  strip always shows the next locked one and how to earn it. Roster and unlock
+  rules live in `FISH` at the top of `world.js` — add a fish by adding an entry
+  with a `test(save, memoriesRead, totals)`.
+- **the greenhouse** — E on the planter under the windows. Six pots (basil,
+  tomato, mint, rosemary, chili, parsley). ← → ↑ ↓ picks a pot, **space**
+  waters it; three waterings grow it a stage, and at full growth space
+  **picks** it and it regrows. The soil stays wet for a few seconds between
+  waterings. **Things keep growing while she's away** — leave for five minutes
+  and everything creeps up a stage. Harvest five and a fish shows up in the
+  tank 🌱→🐠
 - 🇦🇼 **the Aruba beach**, past the road barriers on the far east of Mini
   Boston: a palapa bar with a **CLOSED** board, a driftwood ARUBA sign, palms,
   starfish, and **a turtle she can talk to**. (There's a divi-divi tree on
@@ -176,6 +229,18 @@ Consequences when you edit tiles:
 - Add a **new animated ground char** and you must exclude it from
   `staticFrame()` (return `null`) and give it its own object, or it will be
   baked as a single frozen frame.
+- A **new ground char** needs four edits in lockstep, or you get invisible
+  floors and walls you can walk through: the tile function + `TILE_ORDER` in
+  `make_sprites.py`, a `case` in `staticFrame()` and (if solid) an entry in
+  `SOLID_GROUND` in `world.js`, and the `legal` / `SOLID` strings in
+  `check_maps.py`. Each Boston interior has its own six-or-seven-char set —
+  JVUE `1 _ ^ ! 2 + 3 4`, Northeastern `5 7 6 8 9 0`, the lab `a Q q e u U`,
+  the cafe `g A G B J L` — see the legend at the top of `maps.js`.
+- **Wall-mounted band tiles** (windows, whiteboards, chalk menus) must be drawn
+  edge to edge with the mullion *inside* the tile. A 1px frame on each side
+  turns a row of them into a line of separate little panes instead of one long
+  window — the same reason floor tiles need their seams hard against the tile
+  edge or they tile into brickwork.
 - `tilesMeta.image` (the raw `tiles.png`) is loaded in `main.js` purely so the
   bake can `drawImage()` from it — don't remove it.
 - Baked sprites live in kaplay's asset store, so they survive scene rebuilds and
@@ -188,8 +253,17 @@ Consequences when you edit tiles:
 (next section). Every placeholder is marked `[TODO Noah: …]` — grep for `TODO`.
 
 1. `meta.playerName` — her name. `meta.title` / `subtitle` — the title screen.
-2. `points.*` — the 12 memory spots + `japan_gate` teaser. The **fig tree
-   (Greece / "FIG!!") is already written** — tweak to taste.
+2. `points.*` — the memory spots. The **fig tree (Greece / "FIG!!") is already
+   written** — tweak to taste. The five Boston interiors are written too, in
+   `POINT_FALLBACK` at the top of `world.js` rather than in `memories.json`:
+   `jvue_home` `jvue_tank` `jvue_herbs` `jvue_boxes` `jvue_tv`, `home_dad`
+   `home_hismom` `home_collie` `parents_gym` `parents_stairs` `parents_oven`,
+   `neu_map` `neu_un` `neu_globe` `neu_coop` `neu_flags`, `bu_arm` `bu_printer`
+   `bu_rover` `bu_bench` `bu_board`, `cafe_table` `cafe_hinge` `cafe_counter`
+   `cafe_pastry`. Anything you put in `memories.json` under the same id **wins**
+   over the built-in copy, so override the ones with a `[TODO Noah: …]` in them
+   (the cafe table, the dad joke, the first night in the apartment) and leave
+   the rest.
 3. `finale.lines` — **the reveal** (Japan trip? kitten? both?). This is the
    whole point. Also `finale.prompt/title/subtitle`.
 4. `noah.chat` / `noah.after`, `mookie.lines`, `npcs.*` — flavor lines
@@ -297,7 +371,8 @@ secret-level/
 ├── src/
 │   ├── main.js                boot: gate → assets → title → game
 │   ├── world.js               engine: player, followers, interactions, finale
-│   ├── maps.js                the three maps (ASCII) + building metadata
+│   ├── minigames.js           the aquarium 🐠 and the greenhouse 🌱 (own canvas)
+│   ├── maps.js                the maps (ASCII) + building metadata
 │   ├── dialogue.js            typewriter dialogue box
 │   ├── gate.js                password gate / AES-GCM decrypt
 │   └── audio.js               WebAudio chiptune SFX (no audio files)

@@ -11,6 +11,7 @@
 //   #  wall face (solid)                   %  wall top (solid)
 //   V  wall + window (solid)               C  wall + framed photo (solid)
 //   M  wall + macramé hanging (solid)      H  wall + herb shelf (solid)
+//   X  wall + the stairs up to Mia's floor (solid)
 //   D  the front door, from inside (solid — the tile below it is the exit)
 //
 // IN-N-OUT interior characters (la_innout_in):
@@ -18,6 +19,24 @@
 //   I  white tile wall + red stripe (solid)          O  I + a big window (solid)
 //   K  the service counter (solid — tiles across the whole room)
 //   Z  the glass door, from inside (solid — tile below it is the exit)
+//
+// JVUE interior (bos_jvue_in) — flat white walls, pale oak, tall glass:
+//   1  oak floor      _  the flat-weave rug     ^  white wall top (solid)
+//   !  white wall face (solid)                  2  floor-to-ceiling glass (solid)
+//   3  wall + the two prints (solid)            4  the apartment door (solid)
+//   +  the upper half of the glass, at ceiling height (solid)
+//
+// NORTHEASTERN interior (bos_neu_in) — terrazzo + limestone + NU red:
+//   5  terrazzo floor  7  wall top (solid)      6  wall face (solid)
+//   8  tall window (solid)   9  the pinned world map (solid)   0  door (solid)
+//
+// BU ROBOTICS interior (bos_bu_in) — epoxy floor, painted block, scarlet stripe:
+//   a  lab floor       Q  wall top (solid)      q  wall face (solid)
+//   e  corridor window (solid)   u  whiteboard (solid)   U  lab door (solid)
+//
+// CAFE BENE interior (bos_cafe_in) — herringbone + chocolate wainscot:
+//   g  parquet floor   A  wall top (solid)      G  wall face (solid)
+//   B  the storefront window (solid)   J  the chalk menu (solid)  L  door (solid)
 //
 // OBJECT characters ('.' = nothing):
 //   T tree   P palm   f fence   b bush   r rock   l lamp post
@@ -386,16 +405,22 @@ export const MAPS = {
       "..T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.",
     ],
     buildings: [
-      { sprite: "b_bu_building", x: 3, y: 15, point: "bu" },
-      { sprite: "b_cafe", x: 16, y: 15, point: "cafe" },
-      { sprite: "b_neu_building", x: 27, y: 15, point: "neu" },
-      // 🏢 JVUE at the LMA — her new place, and where the finale happens
-      { sprite: "b_jvue", x: 9, y: 21, point: "apartment" },
+      { sprite: "b_bu_building", x: 3, y: 15, point: "bu",
+        enter: { to: "bos_bu_in", spawn: "door" } },
+      { sprite: "b_cafe", x: 16, y: 15, point: "cafe",
+        enter: { to: "bos_cafe_in", spawn: "door" } },
+      { sprite: "b_neu_building", x: 27, y: 15, point: "neu",
+        enter: { to: "bos_neu_in", spawn: "door" } },
+      // 🏢 JVUE at the LMA — her new place. The finale happens upstairs now,
+      // so the door is just a door and she can come and go.
+      { sprite: "b_jvue", x: 9, y: 21, point: "apartment",
+        enter: { to: "bos_jvue_in", spawn: "door" } },
       { sprite: "b_brownstone_b", x: 15, y: 21 },
       { sprite: "b_brownstone_b", x: 20, y: 21 },
-      // 🏡 Brookline: her parents' half of the duplex, and the neighbours
+      // 🏡 Brookline: his parents' half of the duplex, and the neighbours
       { sprite: "b_la_house_b", x: 4, y: 27 },
-      { sprite: "b_duplex", x: 13, y: 27, point: "parents_home" },
+      { sprite: "b_duplex", x: 13, y: 27, point: "parents_home",
+        enter: { to: "bos_parents_in", spawn: "door" } },
       { sprite: "b_brownstone_b", x: 25, y: 27 },
     ],
     props: [
@@ -447,9 +472,12 @@ export const MAPS = {
       { id: "bos_neighbor", sprite: "npc_woman", x: 21, y: 26, dir: "down" },
     ],
     exits: [{ x: 0, y: 7, w: 1, h: 4, to: "route", spawn: "east" }],
-    // `beach` / `esplanade` / `brookline` are dev shortcuts
+    // `beach` / `esplanade` / `brookline` are dev shortcuts; the *door spawns
+    // are where each interior puts her back down on the street
     spawns: {
       west: [2, 9], beach: [32, 10], esplanade: [12, 6], brookline: [16, 28],
+      budoor: [7, 16], cafedoor: [18, 16], neudoor: [30, 16],
+      jvuedoor: [11, 22], parentsdoor: [16, 28],
     },
     // deliberately no `noahPost`: until she talks to him he stays put on
     // his bench in Mini LA, so he can't show up here having never met her
@@ -638,6 +666,304 @@ export const MAPS = {
     ],
     exits: [{ x: 8, y: 13, w: 2, h: 1, to: "la", spawn: "innoutdoor" }],
     spawns: { door: [9, 12] },
+  },
+
+  // ------------------------------------------------- INSIDE JVUE 🏢
+  // Their apartment, eleven days old. White walls, pale oak, glass across the
+  // whole top wall. TV on the left with the grey sofa in front of it, the
+  // aquarium on its own table on the right, and a planter under the windows.
+  // Two of the things in this room open onto their own little games ♥
+  bos_jvue_in: {
+    name: "our place ♥",
+    interior: true,
+    ground: [
+      "^^^^^^^^^++++^++++^^^^",
+      "!!!!!!!!32222!2222!3!!",
+      "!11111111111111111111!",
+      "!11111111111111111111!",
+      "!11111111111111111111!",
+      "!11111111111111111111!",
+      "!1______1111111111111!",
+      "!1______1111111111111!",
+      "!1______1111111111111!",
+      "!1______1111111111111!",
+      "!1______1111111111111!",
+      "!1______1111111111111!",
+      "!11111111111111111111!",
+      "!11111111111111111111!",
+      "!!!!!!!!!!44!!!!!!!!!!",
+    ],
+    objects: [],
+    buildings: [],
+    props: [
+      // the living end: TV on the left wall, sofa in front of it
+      { type: "in_tvmount", x: 3, y: 3 },
+      { type: "in_coffeetable", x: 3, y: 7 },
+      { type: "in_sofagray", x: 3, y: 10 },
+      { type: "in_lamp", x: 7, y: 5 },
+      // 🌱 the planter under the windows → the greenhouse
+      { type: "in_herbwindow", x: 10, y: 3 },
+      // 🐠 the tank on its stand → the aquarium
+      { type: "in_aquarium", x: 16, y: 5 },
+      // the rest of the flat
+      { type: "in_desk", x: 12, y: 9 },
+      { type: "in_bed", x: 8, y: 13 },
+      { type: "in_kitchen2", x: 17, y: 12 },
+      { type: "in_fridge", x: 19, y: 9 },
+      { type: "in_boxes", x: 5, y: 13 },
+      { type: "in_bigplant", x: 20, y: 3 },
+      { type: "in_hangplant", x: 1, y: 2 },
+      { type: "in_petbeds", x: 14, y: 13 },
+      { type: "in_bowl", x: 12, y: 13 },
+    ],
+    points: [
+      // standing at the window is where the finale happens, once she's found
+      // everything else — until then it's just their apartment ♥
+      { id: "jvue_home", x: 12, y: 2, w: 3, h: 1 },
+      { id: "jvue_tank", x: 15, y: 6, w: 3, h: 1 },
+      { id: "jvue_herbs", x: 9, y: 4, w: 3, h: 1 },
+      { id: "jvue_boxes", x: 4, y: 13, w: 3, h: 1, bonus: true },
+      { id: "jvue_tv", x: 2, y: 4, w: 3, h: 1, bonus: true },
+    ],
+    figs: [{ id: "fig_jvue", x: 20, y: 7 }],
+    pumpkins: [{ id: "pk_jvue", x: 1, y: 11 }],
+    npcs: [],
+    exits: [{ x: 10, y: 13, w: 2, h: 1, to: "boston", spawn: "jvuedoor" }],
+    spawns: { door: [11, 12] },
+  },
+
+  // ------------------------------------------- INSIDE HIS PARENTS' PLACE 🏡
+  // Brookline, bottom floor of the duplex. His mom is baking, his dad has a
+  // joke ready, and the other Charlie has been waiting by the door since the
+  // car pulled up. Mia and Brandon are at the gym — their bags aren't.
+  bos_parents_in: {
+    name: "the Brookline house 🏡",
+    interior: true,
+    ground: [
+      "%%%%%%%%%%%%%%%%%%%%%%",
+      "##V##C###V###C##V##X##",
+      "#,,,,,,,,,,,,,,,,,,,,#",
+      "#,,,,,,,,,,,,,,,,,,,,#",
+      "#,,,,,,,,,,,,,;;;;;;,#",
+      "#::::::,,,,,,,;;;;;;,#",
+      "#::::::,,,,,,,;;;;;;,#",
+      "#::::::,,,,,,,;;;;;;,#",
+      "#,,,,,,,,,,,,,,,,,,,,#",
+      "#,,,,,,,,,,,,,,,,,,,,#",
+      "#,,,,,,,,,,,,,,,,,,,,#",
+      "#,,,,,,,,,,,,,,,,,,,,#",
+      "#,,,,,,,,,,,,,,,,,,,,#",
+      "#,,,,,,,,,,,,,,,,,,,,#",
+      "##########DD##########",
+    ],
+    objects: [],
+    buildings: [],
+    props: [
+      // the kitchen end — something is always in that oven
+      { type: "in_counter", x: 3, y: 7 },
+      { type: "in_fridge", x: 1, y: 4 },
+      { type: "in_stove", x: 6, y: 4 },
+      { type: "in_bakerack", x: 4, y: 10 },
+      // the middle: the table everybody ends up around
+      { type: "in_table", x: 10, y: 9 },
+      { type: "in_hutch", x: 11, y: 3 },
+      { type: "in_lamp", x: 8, y: 4 },
+      // the living end
+      { type: "in_sofa", x: 17, y: 5 },
+      { type: "in_tv", x: 17, y: 9 },
+      { type: "in_recliner", x: 19, y: 7 },
+      { type: "in_bigplant", x: 1, y: 13 },
+      // 🏋 Mia and Brandon left about an hour ago
+      { type: "in_gymbags", x: 6, y: 13 },
+      // 🐶 and the other Charlie's corner
+      { type: "in_dogbed", x: 17, y: 13 },
+      { type: "in_bowl", x: 20, y: 13 },
+    ],
+    points: [
+      { id: "parents_gym", x: 5, y: 13, w: 3, h: 1, bonus: true },
+      { id: "parents_stairs", x: 18, y: 2, w: 2, h: 1, bonus: true },
+      { id: "parents_oven", x: 5, y: 8, w: 3, h: 1, bonus: true },
+    ],
+    figs: [{ id: "fig_parents", x: 2, y: 12 }],
+    pumpkins: [{ id: "pk_parents", x: 20, y: 3 }],
+    npcs: [
+      { id: "home_hismom", sprite: "npc_hismom", x: 6, y: 8, dir: "up",
+        point: "home_hismom" },
+      { id: "home_dad", sprite: "npc_dad", x: 16, y: 8, dir: "down",
+        point: "home_dad" },
+      // he is coming with us. he was always coming with us 🐕
+      { id: "home_collie", sprite: "collie", pet: true, x: 12, y: 12,
+        dir: "down", point: "home_collie", join: "collie" },
+    ],
+    exits: [{ x: 10, y: 13, w: 2, h: 1, to: "boston", spawn: "parentsdoor" }],
+    spawns: { door: [11, 12] },
+  },
+
+  // --------------------------------------------- INSIDE NORTHEASTERN 🎓
+  // The International Affairs floor. A pinned world map the length of one
+  // wall, the Model UN room mid-session, the co-op board that runs everyone's
+  // life, and a globe that has been spun approximately one million times.
+  bos_neu_in: {
+    name: "Northeastern · International Affairs 🎓",
+    interior: true,
+    ground: [
+      "7777777777777777777777",
+      "6688886669999966888866",
+      "6555555555555555555556",
+      "6555555555555555555556",
+      "6555555555555555555556",
+      "6555555555555555555556",
+      "6555555555555555555556",
+      "6555555555555555555556",
+      "6555555555555555555556",
+      "6555555555555555555556",
+      "6555555555555555555556",
+      "6555555555555555555556",
+      "6555555555555555555556",
+      "6555555555555555555556",
+      "6555555555555555555556",
+      "6666666666006666666666",
+    ],
+    objects: [],
+    buildings: [],
+    props: [
+      // 🌍 the wall she stands in front of every single day
+      { type: "in_worldwall", x: 11, y: 2 },
+      { type: "in_flagrow", x: 4, y: 4 },
+      // 🇺🇳 the horseshoe, placards still out from this morning's session
+      { type: "in_unhorseshoe", x: 10, y: 9 },
+      { type: "in_lectern", x: 17, y: 8 },
+      { type: "in_lecternrows", x: 15, y: 14 },
+      // the corner that decides everybody's next six months
+      { type: "in_coopboard", x: 2, y: 9 },
+      { type: "in_globe", x: 19, y: 5 },
+      { type: "in_shelf", x: 1, y: 14 },
+      { type: "in_bigplant", x: 20, y: 12 },
+    ],
+    points: [
+      { id: "neu_map", x: 10, y: 4, w: 4, h: 1 },
+      { id: "neu_un", x: 9, y: 10, w: 5, h: 1 },
+      { id: "neu_globe", x: 18, y: 6, w: 3, h: 1, bonus: true },
+      { id: "neu_coop", x: 1, y: 10, w: 3, h: 1, bonus: true },
+      { id: "neu_flags", x: 3, y: 5, w: 4, h: 1, bonus: true },
+    ],
+    figs: [{ id: "fig_neu", x: 20, y: 2 }],
+    pumpkins: [{ id: "pk_neu", x: 1, y: 6 }],
+    npcs: [
+      { id: "neu_prof", sprite: "npc_prof", x: 16, y: 11, dir: "left" },
+      { id: "neu_husky", sprite: "npc_husky", x: 5, y: 12, dir: "down" },
+    ],
+    exits: [{ x: 10, y: 14, w: 2, h: 1, to: "boston", spawn: "neudoor" }],
+    spawns: { door: [11, 13] },
+  },
+
+  // ------------------------------------------------- INSIDE BU ROBOTICS 🤖
+  // Epoxy floor, painted block, a scarlet safety stripe round the whole room,
+  // two printers running something that will definitely fail at 94%, and an
+  // arm that has been picking the same cube up since 2019.
+  bos_bu_in: {
+    name: "BU Robotics Lab 🤖",
+    interior: true,
+    ground: [
+      "QQQQQQQQQQQQQQQQQQQQQQ",
+      "qqeeeqqquuuuuuqqqeeeqq",
+      "qaaaaaaaaaaaaaaaaaaaaq",
+      "qaaaaaaaaaaaaaaaaaaaaq",
+      "qaaaaaaaaaaaaaaaaaaaaq",
+      "qaaaaaaaaaaaaaaaaaaaaq",
+      "qaaaaaaaaaaaaaaaaaaaaq",
+      "qaaaaaaaaaaaaaaaaaaaaq",
+      "qaaaaaaaaaaaaaaaaaaaaq",
+      "qaaaaaaaaaaaaaaaaaaaaq",
+      "qaaaaaaaaaaaaaaaaaaaaq",
+      "qaaaaaaaaaaaaaaaaaaaaq",
+      "qaaaaaaaaaaaaaaaaaaaaq",
+      "qaaaaaaaaaaaaaaaaaaaaq",
+      "qqqqqqqqqqUUqqqqqqqqqq",
+    ],
+    objects: [],
+    buildings: [],
+    props: [
+      // 🦾 the arm, on its own pedestal, roped off in spirit only
+      { type: "in_robotarm", x: 4, y: 7 },
+      // 🖨 the print farm (two of them, both mid-job)
+      { type: "in_printer3d", x: 9, y: 5 },
+      { type: "in_printer3d", x: 12, y: 5 },
+      { type: "in_workbench", x: 17, y: 9 },
+      { type: "in_partsbin", x: 19, y: 5 },
+      { type: "in_rover", x: 8, y: 12 },
+      { type: "in_drone", x: 14, y: 12 },
+      { type: "in_shelf", x: 1, y: 6 },
+      { type: "in_bigplant", x: 1, y: 13 },
+    ],
+    points: [
+      { id: "bu_arm", x: 3, y: 8, w: 3, h: 1 },
+      { id: "bu_printer", x: 9, y: 6, w: 5, h: 1 },
+      { id: "bu_rover", x: 7, y: 13, w: 3, h: 1, bonus: true },
+      { id: "bu_bench", x: 16, y: 10, w: 4, h: 1, bonus: true },
+      { id: "bu_board", x: 9, y: 2, w: 5, h: 1, bonus: true },
+    ],
+    figs: [{ id: "fig_bu", x: 19, y: 13 }],
+    pumpkins: [{ id: "pk_bu", x: 20, y: 2 }],
+    npcs: [
+      { id: "bu_grad", sprite: "npc_grad", x: 16, y: 6, dir: "down" },
+    ],
+    exits: [{ x: 10, y: 13, w: 2, h: 1, to: "boston", spawn: "budoor" }],
+    spawns: { door: [11, 12] },
+  },
+
+  // ------------------------------------------------- INSIDE CAFE BENE ☕
+  // Herringbone floor, chocolate wainscot, the chalk menu that hasn't changed
+  // in years — and the little two-top by the front window. That one's ours.
+  bos_cafe_in: {
+    name: "Cafe Bene ☕",
+    interior: true,
+    ground: [
+      "AAAAAAAAAAAAAAAAAAAA",
+      "GGGGGGGJJJGGGGGGGGGG",
+      "GggggggggggggggggggG",
+      "GggggggggggggggggggG",
+      "GggggggggggggggggggG",
+      "GggggggggggggggggggG",
+      "GggggggggggggggggggG",
+      "GggggggggggggggggggG",
+      "GggggggggggggggggggG",
+      "GggggggggggggggggggG",
+      "GggggggggggggggggggG",
+      "GggggggggggggggggggG",
+      "GggggggggggggggggggG",
+      "GGGGBBBBBLLBBBBBGGGG",
+    ],
+    objects: [],
+    buildings: [],
+    props: [
+      { type: "in_cafecounter", x: 8, y: 3 },
+      { type: "in_espresso", x: 12, y: 2 },
+      { type: "in_pastrycase", x: 4, y: 3 },
+      { type: "in_beanshelf", x: 17, y: 6 },
+      // 💛 the wall piece about how they actually met
+      { type: "in_hingeframe", x: 16, y: 2 },
+      // ☕ THE table — the two-top closest to the door and the front window
+      { type: "in_cafetable", x: 6, y: 11 },
+      { type: "in_cafetable", x: 14, y: 11 },
+      { type: "in_armchair", x: 2, y: 9 },
+      { type: "in_bigplant", x: 1, y: 12 },
+      { type: "in_hangplant", x: 18, y: 2 },
+    ],
+    points: [
+      { id: "cafe_table", x: 5, y: 12, w: 3, h: 1 },
+      { id: "cafe_hinge", x: 15, y: 4, w: 3, h: 1 },
+      { id: "cafe_counter", x: 8, y: 5, w: 4, h: 1, bonus: true },
+      { id: "cafe_pastry", x: 3, y: 5, w: 3, h: 1, bonus: true },
+    ],
+    figs: [{ id: "fig_cafe", x: 18, y: 11 }],
+    pumpkins: [{ id: "pk_cafe", x: 1, y: 3 }],
+    npcs: [
+      { id: "cafe_barista", sprite: "npc_barista", x: 13, y: 5, dir: "down" },
+      { id: "cafe_regular", sprite: "npc_old", x: 14, y: 9, dir: "down" },
+    ],
+    exits: [{ x: 9, y: 12, w: 2, h: 1, to: "boston", spawn: "cafedoor" }],
+    spawns: { door: [10, 11] },
   },
 };
 

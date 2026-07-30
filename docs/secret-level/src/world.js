@@ -1,6 +1,7 @@
 // World builder + gameplay systems.
 
 import { MAPS, BUILDING_META, TILE as T, allPointIds, allFigIds, allPumpkinIds } from "./maps.js";
+import { openTank, openGarden } from "./minigames.js";
 
 const VIEW_W = 320;
 const VIEW_H = 240;
@@ -160,7 +161,250 @@ const POINT_FALLBACK = {
     "White clapboard, wooden trim, the bottom half of a big Brookline duplex. The porch light is on.",
     { who: "noah", text: "my parents' place. bottom floor's ours — the whole thing smells like whatever mom's cooking." },
     { who: "noah", text: "they already love you. they asked about you before they asked about me." },
-    { text: "(the door isn't open yet — that comes later ♥)" },
+    { who: "noah", text: "go on. knock. …actually don't knock, just walk in, they'll be offended if you knock." },
+  ],
+
+  // ---- 🏢 JVUE, inside: their apartment, eleven days old
+  apartment: [
+    "Glass, warm panels, and a lobby light that's on at every hour you've ever walked past it.",
+    { who: "noah", text: "our building. OURS. I still say it weird every time." },
+    { who: "noah", text: "fourth floor, corner unit, and the windows face the good way." },
+    { who: "noah", text: "come up ♥" },
+  ],
+  jvue_home: [
+    "The whole top wall is glass. Longwood, a slice of sky, and the light coming in flat and gold.",
+    { who: "her", text: "…we live here." },
+    { who: "noah", text: "we live here." },
+    { who: "her", text: "there are still eleven boxes." },
+    { who: "noah", text: "we live here WITH eleven boxes. that's a detail." },
+    { text: "(you stand at the window for a while. Neither of you says anything. It's the good kind.)" },
+    { who: "noah", text: "[TODO Noah: the first night in this apartment ♥]" },
+  ],
+  jvue_tank: [
+    "The tank hums quietly on its stand. Gravel, a castle, a lot of very green plants.",
+    { who: "noah", text: "okay so. this started as 'one small fish'." },
+    { who: "her", text: "it is not one small fish." },
+    { who: "noah", text: "it's a whole little world. and every time we hit something together, it gets a new one." },
+    { text: "(press E again any time to sit in front of the tank ♥)" },
+  ],
+  jvue_herbs: [
+    "A shelf of terracotta under the windows. Soil, a trowel, one very earnest watering can.",
+    { who: "her", text: "I want to grow things. Actual things. Tomatoes. Basil." },
+    { who: "noah", text: "we are extremely going to grow things." },
+    { who: "noah", text: "this is the starter set. water them, pick them, and we'll scale up to the balcony in spring." },
+    { text: "(press E again any time to step into the little greenhouse 🌱)" },
+  ],
+  jvue_boxes: [
+    "Eleven boxes. One says MUGS. One just says US, in her handwriting.",
+    { who: "noah", text: "we'll do them this weekend." },
+    { who: "her", text: "you said that about last weekend." },
+    { who: "noah", text: "and I'll say it about next weekend. it's a tradition now." },
+  ],
+  jvue_tv: [
+    "The TV on the left wall, the grey sofa parked square in front of it, the blanket already crumpled.",
+    { who: "noah", text: "we have watched roughly four minutes of anything on this." },
+    { who: "her", text: "we talk through all of it." },
+    { who: "noah", text: "yeah. best four minutes of TV I've ever had." },
+  ],
+
+  // ---- 🏡 Brookline, inside
+  home_hismom: [
+    { text: "His mom turns around with flour on one cheek and a tray in both hands." },
+    { text: "\"There she IS.\" (the tray goes down. you do not.)" },
+    { text: "Mom: \"Sit, sit — no, first, taste this. Then sit.\"" },
+    { who: "noah", text: "she's been baking since eight this morning. for four people." },
+    { text: "Mom: \"There are SIX of us if Mia comes back hungry.\"" },
+    { text: "(she pushes a warm one into your hand before you can answer. It's perfect.)" },
+    { who: "noah", text: "[TODO Noah: what mom actually said about her ♥]" },
+  ],
+  home_dad: [
+    { text: "His dad looks up over his glasses, entirely delighted, and does not get up." },
+    { text: "Dad: \"Ah — you must be the famous Sasha.\"" },
+    { who: "her", text: "hi! it's so good to finally—" },
+    { text: "Dad: \"I hear you're studying international relations.\"" },
+    { who: "her", text: "…I am?" },
+    { text: "Dad: \"Good. Because relations in THIS house are strictly domestic.\"" },
+    { text: "(silence. he is thrilled with himself.)" },
+    { who: "noah", text: "he has been holding that one since Tuesday." },
+    { text: "Dad: \"Since MONDAY.\" (he shakes your hand with both of his.)" },
+    { text: "Dad: \"He talks about you constantly, you know. Constantly. It's become a whole thing.\"" },
+  ],
+  home_collie: [
+    { text: "A border collie comes around the corner at roughly the speed of sound." },
+    { text: "White, with black over one ear and most of one eye — so he always looks like he's asking a question." },
+    { who: "her", text: "oh he's BEAUTIFUL — what's his name?" },
+    { who: "noah", text: "…Charlie." },
+    { who: "her", text: "Charlie." },
+    { who: "noah", text: "Charlie." },
+    { who: "her", text: "we have two Charlies." },
+    { who: "noah", text: "we have two Charlies. nobody planned it. nobody's fixing it." },
+    { text: "(Charlie #2 does one lap of the whole room to celebrate.)" },
+    { text: "(He spots Mookie. He stops. He side-eyes Mookie the entire way past.)" },
+    { text: "(He decides you are his person now. Charlie joined your little crowd! 🐕)" },
+  ],
+  parents_gym: [
+    "Two gym bags dumped by the door, and a shaker bottle that rolled under the radiator.",
+    { who: "noah", text: "Mia and Brandon. they left about an hour ago." },
+    { who: "noah", text: "they go together every single day. it's genuinely impressive and slightly menacing." },
+    { who: "her", text: "…should we be going to the gym." },
+    { who: "noah", text: "we should be going to the gym. we are not going to the gym. we're eating whatever mom just made." },
+  ],
+  parents_stairs: [
+    "The stairs up to the rest of the house. Somebody's shoes are on the third step.",
+    { who: "noah", text: "Mia's floor. those are hers — she leaves them exactly there, every time." },
+    { who: "noah", text: "you'll meet her when she's back. fair warning: she'll like you more than she likes me inside ten minutes." },
+  ],
+  parents_oven: [
+    "The oven light is on. Something in there is going gold at the edges.",
+    { who: "her", text: "what is that." },
+    { who: "noah", text: "I don't know yet. that's the fun part." },
+    { text: "(His mom, without turning around: \"Twelve more minutes. Nobody opens it.\")" },
+  ],
+
+  // ---- 🎓 Northeastern
+  neu: [
+    "Red brick, a limestone arch, and two NU-red banners moving in the wind off Huntington.",
+    { who: "noah", text: "your school ♥ international affairs, up on the third floor." },
+    { who: "her", text: "and poli sci. and, briefly, economics. we don't talk about economics." },
+    { who: "noah", text: "we don't talk about economics." },
+  ],
+  neu_map: [
+    "A pinned world map the length of the wall, red string running between five thumbtacks.",
+    { who: "her", text: "this is the wall. everyone in the program has put a pin in this wall." },
+    { who: "noah", text: "which ones are yours?" },
+    { who: "her", text: "…all five of these, actually." },
+    { who: "noah", text: "of COURSE they are." },
+    { who: "her", text: "international affairs and political science. which mostly means I get very upset about places I've never been." },
+    { who: "noah", text: "and then you go to them. that's the part people miss." },
+    { text: "(she moves one pin two centimetres to the left. It was bothering her.)" },
+  ],
+  neu_un: [
+    "The Model UN room, still set from this morning: placards out, water glasses full, gavel unclaimed.",
+    { who: "her", text: "oh no." },
+    { who: "noah", text: "oh YES. which one were you?" },
+    { who: "her", text: "…I chaired." },
+    { who: "noah", text: "you CHAIRED." },
+    { who: "her", text: "somebody had to. two delegates were arguing about a comma." },
+    { text: "(She picks up the gavel. She absolutely should not. She does it anyway.)" },
+    { text: "*TOK*" },
+    { who: "her", text: "the motion carries." },
+    { who: "noah", text: "what motion" },
+    { who: "her", text: "the one where we get food after this." },
+    { text: "(Unanimous. The gavel goes back exactly where it was.)" },
+  ],
+  neu_globe: [
+    "A floor globe on a brass meridian, worn smooth around the equator by ten thousand hands.",
+    { text: "(She spins it, closes her eyes, and puts a finger down.)" },
+    { text: "…the middle of the Pacific Ocean." },
+    { who: "noah", text: "booking it." },
+  ],
+  neu_coop: [
+    "The co-op board. Six months on, six months off, and every posting has its tabs torn off.",
+    { who: "noah", text: "the famous co-op. this board runs this entire university." },
+    { who: "her", text: "it runs my entire LIFE. I have a spreadsheet." },
+    { who: "noah", text: "you have a spreadsheet about a corkboard." },
+    { who: "her", text: "I have a spreadsheet about a corkboard and it is COLOR CODED." },
+  ],
+  neu_flags: [
+    "A row of little flags on brass poles, none of them hanging quite level.",
+    { text: "One for every language taught on this floor." },
+    { who: "her", text: "I can order coffee wrong in four of these." },
+    { who: "noah", text: "that's four more than me." },
+  ],
+
+  // ---- 🤖 BU robotics
+  bu: [
+    "Scarlet band, ribbon of lab windows, and one very well-lit ground-floor bay.",
+    { who: "noah", text: "my building. well — the wing that matters." },
+    { who: "noah", text: "half of everything I know happened in that room and about a third of it was on a Sunday." },
+    { who: "noah", text: "come see ♥" },
+  ],
+  bu_arm: [
+    "A six-axis arm on a pedestal, sweeping slowly through the same arc, over and over.",
+    { who: "noah", text: "okay. this is the one. this is my favourite object in the building." },
+    { text: "He taps something. The arm swings out, closes on a little red cube, lifts it, sets it down half an inch to the left." },
+    { who: "noah", text: "it has been doing that since 2019." },
+    { who: "her", text: "…that's it? that's the whole thing?" },
+    { who: "noah", text: "that's the whole thing. and getting it to do THAT reliably is about nine hundred hours of somebody's life." },
+    { text: "(The arm sets the cube down. Perfectly. Again.)" },
+    { who: "her", text: "okay it's kind of beautiful." },
+    { who: "noah", text: "IT'S KIND OF BEAUTIFUL." },
+    { text: "(She makes it wave. It waves. She's delighted.)" },
+  ],
+  bu_printer: [
+    "Two printers running. Gantries tracking left and right, beds sliding, layers stacking up one at a time.",
+    { who: "her", text: "what are they making?" },
+    { who: "noah", text: "that one's a bracket. that one is… hm." },
+    { text: "(You both lean in. The part on the second bed is unmistakably a small pink heart.)" },
+    { who: "noah", text: "…somebody's calibrating." },
+    { who: "her", text: "somebody is NOT calibrating." },
+    { who: "noah", text: "somebody put that on the queue eleven minutes ago and I refuse to say who." },
+    { text: "(It finishes. He pops it off the bed with a spatula while it's still warm and hands it to you.)" },
+    { text: "(You put it in your pocket. It stays there.)" },
+  ],
+  bu_rover: [
+    "A tracked rover parked by the wall. There's masking tape on the side with a name on it — crossed out twice.",
+    { who: "noah", text: "it's had three names. currently it's 'ROOMBA (LEGALLY DISTINCT)'." },
+    { who: "her", text: "what were the other two?" },
+    { who: "noah", text: "we don't say the second one out loud in this building." },
+  ],
+  bu_bench: [
+    "The bench: an oscilloscope drawing a lazy green line, an iron still warm, and four spools of wire.",
+    { who: "noah", text: "I have burned myself on that iron more times than I've burned myself cooking." },
+    { who: "her", text: "you've burned yourself cooking a LOT." },
+    { who: "noah", text: "which is what makes the statistic impressive." },
+  ],
+  bu_board: [
+    "A whiteboard nobody has erased since March. Kinematics, a half-rubbed plot, and a doodle of a very angry robot.",
+    { text: "In the corner, small, in different handwriting: DO NOT ERASE (SERIOUSLY)" },
+    { who: "noah", text: "that's mine. and I no longer remember what it was for." },
+  ],
+
+  // ---- ☕ Cafe Bene 💛
+  cafe: [
+    "Chocolate fascia, cream letters, and two big warm windows you can see from down the block.",
+    { who: "noah", text: "Cafe Bene." },
+    { who: "noah", text: "…this is the one. this is where I actually saw you, in real life, for the first time." },
+    { who: "noah", text: "go in. the table's still there." },
+  ],
+  cafe_table: [
+    "The little two-top by the front window. Two chairs, a round marble top, and the good light.",
+    { who: "noah", text: "here." },
+    { who: "noah", text: "this table. this exact table." },
+    { who: "noah", text: "I came through that door, I was looking at my phone, and I looked up — and you were sitting right there in that chair." },
+    { who: "her", text: "I remember what I was wearing." },
+    { who: "noah", text: "I remember EVERYTHING you were wearing. I also remember walking straight past you and then standing at the counter for a full minute deciding whether to turn around." },
+    { who: "her", text: "you turned around." },
+    { who: "noah", text: "I turned around." },
+    { text: "(You both sit down in the same two chairs. It fits exactly the way it did.)" },
+    { who: "noah", text: "[TODO Noah: what you actually said when you turned around ♥]" },
+  ],
+  cafe_hinge: [
+    "A framed screenshot on the wall in a slightly-too-serious black frame, with a little brass plaque under it.",
+    { text: "It's two tiny profile cards side by side, with a heart between them." },
+    { who: "her", text: "…did they frame a dating app." },
+    { who: "noah", text: "the plaque says 'THE ALGORITHM: 1, EVERY WELL-MEANING FRIEND WE HAVE: 0'." },
+    { who: "her", text: "we met on HINGE." },
+    { who: "noah", text: "we met on Hinge! the app designed to be deleted! and we deleted it! it WORKED!" },
+    { who: "her", text: "your first message was about my third photo." },
+    { who: "noah", text: "it was a GOOD third photo. I thought about that message for twenty minutes." },
+    { who: "her", text: "it was eleven words." },
+    { who: "noah", text: "twenty minutes. eleven words. best return on investment of my entire life." },
+    { text: "(Somewhere out there is a server with the exact timestamp on it. Neither of you needs to look it up.)" },
+  ],
+  cafe_counter: [
+    "The counter: tip jar, card reader, a stack of cups, and a barista who has seen you two a lot.",
+    { text: "Barista: \"The usual? Cortado and the cold brew?\"" },
+    { who: "her", text: "…yes please." },
+    { text: "Barista, already making it: \"You always take the window table.\"" },
+    { who: "noah", text: "we always take the window table." },
+  ],
+  cafe_pastry: [
+    "The glass case. Two shelves, eight things, and one long-running argument.",
+    { who: "her", text: "the almond croissant." },
+    { who: "noah", text: "every time." },
+    { who: "her", text: "because it's the correct one." },
+    { who: "noah", text: "I'm not arguing. I'm noting the consistency." },
   ],
 };
 
@@ -172,7 +416,106 @@ const COMPANIONS = {
   leo: { sprite: "leo", lag: 17, side: 12, speed: 82, name: "Leo" },
   charlie: { sprite: "charlie", lag: 21, side: -15, speed: 88, name: "Charlie" },
   chakra: { sprite: "chakra", lag: 26, side: 18, speed: 94, name: "Chakra" },
+  // the OTHER Charlie 🐕 — Noah's border collie. Fastest thing in the herd and
+  // it is not close. Kept as `collie` internally because `charlie` was already
+  // taken by, well, Charlie.
+  collie: { sprite: "collie", lag: 15, side: -22, speed: 104, name: "Charlie",
+    joinToast: "Charlie joined you! ♥ (…the other Charlie 🐕)" },
 };
+
+// ---------------------------------------------------------------- the tank 🐠
+// Every fish in the apartment aquarium is a milestone she already earned
+// somewhere else in the world — walk into a memory, find a fig, pick up a
+// pumpkin, talk an animal into coming with you, and one more shows up in the
+// glass. `body`/`fin` are the two pixel colours; `kind` picks the silhouette.
+// test(save, memoriesRead, totals) — `totals` so "all of them" gates keep
+// working when a new fig or a new memory point gets added to the world.
+const FISH = [
+  {
+    id: "pip", name: "Pip", kind: "round", body: "#f0913c", fin: "#f6bb72",
+    hint: "he came with the tank",
+    line: "Pip does one confident lap and returns to exactly where he started.",
+    test: () => true,
+  },
+  {
+    id: "olive", name: "Olive", kind: "long", body: "#5fae6f", fin: "#8fd28f",
+    hint: "read 5 memories",
+    line: "Olive hangs near the plants and pretends she isn't watching you.",
+    test: (s, mem) => mem >= 5,
+  },
+  {
+    id: "fig", name: "Fig", kind: "round", body: "#8f5aa0", fin: "#c78ae0",
+    hint: "find 3 figs 🫒",
+    line: "Fig is purple, round, and has never once hurried.",
+    test: (s) => s.figs.size >= 3,
+  },
+  {
+    id: "gourd", name: "Gourd", kind: "puffer", body: "#e8913c", fin: "#f4c05a",
+    hint: "find 3 pumpkins 🎃",
+    line: "Gourd puffs up at his own reflection. Every day. Forever.",
+    test: (s) => s.pumps.size >= 3,
+  },
+  {
+    id: "mook", name: "Mook", kind: "long", body: "#a97f4f", fin: "#f2ead8",
+    hint: "read 8 memories",
+    line: "Mook is shaped like a cat's opinion of a fish.",
+    test: (s, mem) => mem >= 8,
+  },
+  {
+    id: "clem", name: "Clem", kind: "round", body: "#e8556a", fin: "#f8c8d8",
+    hint: "bring Leo home 🐱",
+    line: "Clem circles. Leo watches. Nobody blinks.",
+    test: (s) => s.crew.has("leo"),
+  },
+  {
+    id: "biscuit", name: "Biscuit", kind: "long", body: "#f6f2e6", fin: "#e8a0a8",
+    hint: "bring Charlie home 🐶",
+    line: "Biscuit is small, white and thrilled about everything.",
+    test: (s) => s.crew.has("charlie"),
+  },
+  {
+    id: "shadow", name: "Shadow", kind: "long", body: "#4d4857", fin: "#7a7389",
+    hint: "bring Chakra home 🖤",
+    line: "Shadow is twice everyone's size and gentle about it.",
+    test: (s) => s.crew.has("chakra"),
+  },
+  {
+    id: "sprint", name: "Sprint", kind: "long", body: "#f4efe2", fin: "#2c2731",
+    hint: "bring the collie home 🐕",
+    line: "Sprint crosses the tank twice while you read this.",
+    test: (s) => s.crew.has("collie"),
+  },
+  {
+    id: "patty", name: "Patty", kind: "puffer", body: "#da291c", fin: "#fbf8ee",
+    hint: "get the paper hats 🍔",
+    line: "Patty is red and white and refuses to explain herself.",
+    test: (s) => s.hats,
+  },
+  {
+    id: "basil", name: "Basil", kind: "round", body: "#3f8f5c", fin: "#9fd6a8",
+    hint: "harvest 5 herbs 🌱",
+    line: "Basil arrived the day the herbs did. No questions.",
+    test: () => (parseInt(localStorage.getItem("sl_harvest") || "0", 10) || 0) >= 5,
+  },
+  {
+    id: "atlas", name: "Atlas", kind: "angel", body: "#7a9ce8", fin: "#c6e0ff",
+    hint: "read 15 memories",
+    line: "Atlas drifts like he's due somewhere next week.",
+    test: (s, mem, tot) => mem >= Math.min(15, Math.ceil(tot.mem * 0.6)),
+  },
+  {
+    id: "koi", name: "Koi", kind: "angel", body: "#f0d264", fin: "#f8ecc4",
+    hint: "find every fig 🫒",
+    line: "Koi is gold. Koi knows.",
+    test: (s, mem, tot) => s.figs.size >= tot.figs,
+  },
+  {
+    id: "us", name: "Us", kind: "pair", body: "#f278a2", fin: "#2f7f6f",
+    hint: "finish the story ♥",
+    line: "One pink, one teal. They only swim side by side.",
+    test: (s) => s.finale,
+  },
+];
 
 // Default townsfolk one-liners (Noah can override any of these in
 // memories.json → "npcs"). Each is an array of pages, or an array-of-arrays to
@@ -219,6 +562,42 @@ const NPC_FALLBACK = {
   bos_oldman: [
     [{ text: "The Charles is beautiful this time of year." },
      { text: "Don't drink it, though. Trust me." }],
+  ],
+  // ---- 🎓 Northeastern
+  neu_prof: [
+    [{ text: "She looks up from a stack of position papers, glasses pushed into her hair." },
+     { text: "\"Ah — one of mine. Good. Tell me you finished the Moldova brief.\"" },
+     { text: "(You did. You finished it four days early. She already knows.)" }],
+    [{ text: "\"The trick isn't having an opinion. Everyone has an opinion.\"" },
+     { text: "\"The trick is being able to argue the other side well enough that it hurts.\"" }],
+  ],
+  neu_husky: [
+    [{ text: "\"Do you know if the spring co-op postings are up yet?\"" },
+     { text: "\"…they're not up yet. I've checked eleven times. I'm going to check again.\"" }],
+    [{ text: "\"Six months in class, six months at a desk, forever. It's a beautiful system.\"" },
+     { text: "\"I have no idea what month it is.\"" }],
+  ],
+  // ---- 🤖 BU robotics
+  bu_grad: [
+    [{ text: "A grad student surfaces from behind a monitor, holding a screwdriver like a pen." },
+     { text: "\"Oh — hey. Don't touch the arm.\" (a pause) \"…okay, touch the arm. It's fine. It's rated for it.\"" }],
+    [{ text: "\"Print's at ninety-four percent. It'll fail at ninety-six. It always fails at ninety-six.\"" },
+     { text: "\"I've stopped being sad about it. Now it's just a thing that happens, like weather.\"" }],
+    [{ text: "\"You're the one from the photo on his desk.\"" },
+     { text: "(you didn't know there was a photo on his desk.)" },
+     { text: "\"There's a photo on his desk.\"" }],
+  ],
+  // ---- ☕ Cafe Bene
+  cafe_barista: [
+    [{ text: "\"Window table's free.\" (she says it before either of you asks.)" },
+     { text: "\"It's always free when you two come in. I don't make the rules.\"" }],
+    [{ text: "\"You know you ordered the exact same thing the first time you sat there.\"" },
+     { text: "\"I remember because he ordered wrong twice.\"" }],
+  ],
+  cafe_regular: [
+    [{ text: "An older man with a newspaper he is not reading." },
+     { text: "\"Same table every time, you two.\"" },
+     { text: "\"Me too. Forty-one years with mine. Same booth. Keep the table.\"" }],
   ],
 };
 
@@ -636,7 +1015,7 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
     });
     heartBurst(p.add(0, -12), 5, 12);
     audio.fanfare();
-    toast(`${c.name} joined you! ♥`);
+    toast(c.joinToast || `${c.name} joined you! ♥`);
     persist();
   }
 
@@ -801,20 +1180,33 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
     if (!finaleReady() || save.finale || state.promptShown) return;
     state.promptShown = true;
     await wait(0.6);
+    // if she's inside the aquarium or the greenhouse, let her finish first
+    while (state.cutscene || dialogue.open) await wait(0.4);
     const prompt = memories.finale?.prompt ||
       [{ who: "noah", text: "hey… I have one more thing to show you. meet me at our apartment? ♥" }];
     await dialogue.show(prompt);
     addFinaleMarker();
   }
 
+  /** the floating heart that says "here". On the street it sits over JVUE's
+   *  door; upstairs it sits over the window, which is where it actually
+   *  happens now. */
   function addFinaleMarker() {
-    if (state.map !== "boston" || save.finale || !finaleReady()) return;
+    if (save.finale || !finaleReady()) return;
     if (k.get("finaleMarker").length) return;
-    const def = MAPS.boston;
-    const apt = def.buildings.find((b) => b.point === "apartment");
-    const m = BUILDING_META[apt.sprite];
-    const x = (apt.x + Math.floor(m.wt / 2)) * T + 8;
-    const y = (apt.y + 1) * T - 40;
+    let x, y;
+    if (state.map === "boston") {
+      const apt = MAPS.boston.buildings.find((b) => b.point === "apartment");
+      const m = BUILDING_META[apt.sprite];
+      x = (apt.x + Math.floor(m.wt / 2)) * T + 8;
+      y = (apt.y + 1) * T - 40;
+    } else if (state.map === "bos_jvue_in") {
+      const spot = MAPS.bos_jvue_in.points.find((p) => p.id === "jvue_home");
+      x = (spot.x + spot.w / 2) * T;
+      y = (spot.y + 1) * T - 4;   // floating over the floor in front of the glass
+    } else {
+      return;
+    }
     const h = k.add([
       k.sprite("fx", { frame: 0 }), k.pos(x, y), k.anchor("bot"), k.z(1e5), "finaleMarker", { t: 0 },
     ]);
@@ -1171,6 +1563,18 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
       ["(Charlie has been trying to get Chakra to play for ten minutes. She has blinked once.)"],
       ["(Chakra checks over her shoulder every few steps to make sure you're still there. 🖤)"],
     ],
+    collie: [
+      ["(Charlie — the collie one — has already run the length of the street twice.)",
+       "(He is back. He is somehow not tired.)"],
+      ["(He drops a stick at your feet. You did not throw a stick. He found a stick.)"],
+      ["(Charlie is very carefully herding the entire group into a tighter shape.)",
+       "(Nobody agreed to this. It is working anyway.)"],
+      ["(Charlie glances at Mookie. Mookie does not glance back.)",
+       "(Charlie decides to walk on the far side of you. Just in case. 👀)"],
+      ["(Two Charlies. You call one name and get two heads.)",
+       { who: "noah", text: "we've fully accepted it. they answer as a unit now." }],
+      ["Charlie: !!!", "(one eye is black, one eye is white, both eyes are locked on you.)"],
+    ],
   };
 
   async function talkPet(pet) {
@@ -1222,9 +1626,13 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
   // ------------------------------------------------------------ interaction
   async function interactPoint(zone) {
     const id = zone.pointId;
-    if (id === "apartment" && finaleReady() && !save.finale) return runFinale();
+    // the finale is at the apartment window now, not on the street outside —
+    // so the front door stays a door and she can always get back to the tank
+    if (id === "jvue_home" && finaleReady() && !save.finale) return runFinale();
     if (id === "route_quad" && save.seen.has(id)) return mount(); // seen the memory → ride
     if (id === "garden" && save.seen.has(id)) return pickTomato();
+    if (id === "jvue_tank" && save.seen.has(id)) return openAquarium();
+    if (id === "jvue_herbs" && save.seen.has(id)) return openGreenhouse();
     if (id === "travel_station" && save.seen.has(id)) return ui.openTravelForm(travelManage());
     // a door she's already opened once just opens again
     if (zone.enterTo && save.seen.has(id)) {
@@ -1249,8 +1657,41 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
       if (id === "garden") pickTomato();
       if (id === "travel_station") ui.openTravelForm(travelManage());
       if (id === "innout_order") collectOrder(zone);
+      if (id === "jvue_tank") openAquarium();
+      if (id === "jvue_herbs") openGreenhouse();
       if (zone.enterTo) goMap(zone.enterTo, zone.enterSpawn);
     }
+  }
+
+  // ------------------------------------------------------------ minigames 🐠🌱
+  // Both take over the whole screen (a DOM canvas over the top of kaplay), so
+  // the world has to know it's paused while one is open — otherwise she walks
+  // out of the room behind it.
+  function minigameCtx() {
+    return {
+      audio,
+      dialogue,
+      toast,
+      save,                              // read-only, for the unlock gates
+      onOpen: () => { state.cutscene = true; },
+      onClose: () => { state.cutscene = false; state.exitCooldown = 0.4; },
+    };
+  }
+  function openAquarium() {
+    audio.confirm();
+    openTank(minigameCtx(), unlockedFish());
+  }
+  function openGreenhouse() {
+    audio.confirm();
+    openGarden(minigameCtx());
+  }
+
+  /** Which fish are swimming, based on what she's actually done in the game.
+   *  Every milestone is something she earned somewhere else in the world ♥ */
+  function unlockedFish() {
+    const memCount = [...save.seen].filter((i) => requiredIds.includes(i)).length;
+    const totals = { mem: requiredIds.length, figs: figIds.length, pumps: pumpkinIds.length };
+    return FISH.map((f) => ({ ...f, unlocked: !!f.test(save, memCount, totals) }));
   }
 
   /** the tray lands, and the two of them get the paper hats 🍔 */
@@ -1403,6 +1844,10 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
       const h = (x * 13 + y * 7) % 3;
       return h === 0 ? F.wood_a : h === 1 ? F.wood_b : F.wood_c;
     };
+    const oakVar = (x, y) => {
+      const h = (x * 11 + y * 5) % 3;
+      return h === 0 ? F.jv_oak_a : h === 1 ? F.jv_oak_b : F.jv_oak_c;
+    };
     // atlas frame for a tile, or null if that tile animates and therefore has
     // to stay a real game object
     const staticFrame = (sym, x, y) => {
@@ -1425,6 +1870,7 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
         case "C": return F.wallpic;
         case "M": return F.wallmac;
         case "H": return F.wallherb;
+        case "X": return F.wallstair;
         case "D": return F.indoor;
         // ---- the burger place 🍔
         case "x": return (x + y) % 2 ? F.chk_a : F.chk_b;
@@ -1433,6 +1879,36 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
         case "O": return F.io_win;
         case "K": return F.io_counter;
         case "Z": return F.io_door;
+        // ---- JVUE 🏢
+        case "1": return oakVar(x, y);
+        case "_": return F.jv_rug;
+        case "^": return F.jv_top;
+        case "!": return F.jv_face;
+        case "2": return F.jv_win;
+        case "+": return F.jv_wintop;
+        case "3": return F.jv_art;
+        case "4": return F.jv_door;
+        // ---- Northeastern 🎓
+        case "5": return F.nu_floor;
+        case "7": return F.nu_top;
+        case "6": return F.nu_face;
+        case "8": return F.nu_win;
+        case "9": return F.nu_map;
+        case "0": return F.nu_door;
+        // ---- BU robotics 🤖
+        case "a": return F.lab_floor;
+        case "Q": return F.lab_top;
+        case "q": return F.lab_face;
+        case "e": return F.lab_win;
+        case "u": return F.lab_board;
+        case "U": return F.lab_door;
+        // ---- Cafe Bene ☕
+        case "g": return F.cf_floor;
+        case "A": return F.cf_top;
+        case "G": return F.cf_face;
+        case "B": return F.cf_win;
+        case "J": return F.cf_menu;
+        case "L": return F.cf_door;
         default: return null;   // "*" flowers and "w" water
       }
     };
@@ -1459,8 +1935,12 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
     // ---- blocked ground (water outside, walls inside). Horizontal runs get
     // merged, then identical runs stack vertically — the LA ocean goes from 34
     // colliders down to one.
-    const SOLID_GROUND = new Set(["w", "#", "%", "V", "C", "M", "H", "D",
-      "Y", "I", "O", "K", "Z"]);
+    const SOLID_GROUND = new Set(["w", "#", "%", "V", "C", "M", "H", "X", "D",
+      "Y", "I", "O", "K", "Z",
+      "^", "!", "2", "3", "4", "+",         // JVUE 🏢
+      "7", "6", "8", "9", "0",              // Northeastern 🎓
+      "Q", "q", "e", "u", "U",              // BU robotics 🤖
+      "A", "G", "B", "J", "L"]);            // Cafe Bene ☕
     const slabs = [];
     let openRuns = new Map();       // "x0,x1" → index into slabs
     def.ground.forEach((row, y) => {
@@ -1604,18 +2084,57 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
       in_shakes: { ox: -15, w: 30, h: 10 },
       in_drinks: { ox: -18, w: 36, h: 10 },
       in_booth: { ox: -23, w: 46, h: 24 },
+      // 🏢 JVUE — their apartment
+      in_sofagray: { ox: -24, w: 48, h: 12 },
+      in_coffeetable: { ox: -16, w: 32, h: 10 },
+      in_herbwindow: { ox: -17, w: 34, h: 10 },
+      in_boxes: { ox: -17, w: 34, h: 16 },
+      in_kitchen2: { ox: -32, w: 64, h: 20 },
+      in_bed: { ox: -22, w: 44, h: 24 },
+      in_desk: { ox: -21, w: 42, h: 14 },
+      // 🏡 Brookline
+      in_recliner: { ox: -14, w: 28, h: 14 },
+      in_bakerack: { ox: -17, w: 34, h: 10 },
+      in_hutch: { ox: -15, w: 30, h: 16 },
+      // 🎓 Northeastern
+      in_worldwall: { ox: -32, w: 64, h: 8 },
+      in_globe: { ox: -13, w: 26, h: 10 },
+      in_unhorseshoe: { ox: -34, w: 68, h: 14 },
+      in_flagrow: { ox: -26, w: 52, h: 6 },
+      in_coopboard: { ox: -22, w: 44, h: 8 },
+      in_lecternrows: { ox: -33, w: 66, h: 24 },
+      in_lectern: { ox: -12, w: 24, h: 14 },
+      // 🤖 BU robotics
+      in_workbench: { ox: -30, w: 60, h: 14 },
+      in_partsbin: { ox: -17, w: 34, h: 16 },
+      in_rover: { ox: -14, w: 28, h: 8 },
+      in_drone: { ox: -15, w: 30, h: 8 },
+      // ☕ Cafe Bene
+      in_cafetable: { ox: -14, w: 28, h: 16 },
+      in_cafecounter: { ox: -33, w: 66, h: 18 },
+      in_pastrycase: { ox: -17, w: 34, h: 12 },
+      in_hingeframe: { ox: -15, w: 30, h: 6 },
+      in_armchair: { ox: -14, w: 28, h: 14 },
+      in_beanshelf: { ox: -16, w: 32, h: 14 },
     };
-    // two-frame props that just sit there and flicker
+    // props with more than one frame that just sit there and cycle. The frame
+    // count and speed live in main.js (the loader); all any of them need here
+    // is a collision box — the anim is always called "live".
     const FLICKER = {
       in_tv: { ox: -17, w: 34, h: 12 },
       in_fire: { ox: -20, w: 40, h: 12 },
       in_stove: { ox: -13, w: 26, h: 14 },
       firepit: { ox: -17, w: 34, h: 11 },
+      in_tvmount: { ox: -21, w: 42, h: 12 },
+      in_aquarium: { ox: -23, w: 46, h: 16 },
+      in_robotarm: { ox: -12, w: 24, h: 12 },
+      in_printer3d: { ox: -15, w: 30, h: 12 },
+      in_espresso: { ox: -16, w: 32, h: 10 },
     };
     // decor with no collider. FLOOR_* sits flat on the ground, so it draws
     // underneath whoever is standing on it (pet beds, starfish…)
     const FLOOR_DECOR = new Set(["starfish", "in_petbeds", "in_bowl",
-      "in_dogbed", "in_cushions", "in_ball"]);
+      "in_dogbed", "in_cushions", "in_ball", "in_gymbags"]);
     // in_hangplant hangs off the ceiling — she walks under it, not through it
     const SOFT_DECOR = new Set(["lounger", "in_hangplant", "in_menuboard",
       "in_till", "in_hatstack", "in_tray", ...FLOOR_DECOR]);
@@ -1996,7 +2515,10 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
         if (memories.meta?.intro?.length && !dialogue.open) dialogue.show(memories.meta.intro);
       }, 700);
     }
-    if (map === "boston" && finaleReady() && !save.finale) addFinaleMarker();
+    // the heart marker: over JVUE's door on the street, over the window upstairs
+    if ((map === "boston" || map === "bos_jvue_in") && finaleReady() && !save.finale) {
+      addFinaleMarker();
+    }
   });
 
   function spawnPx(def, spawn, pos) {

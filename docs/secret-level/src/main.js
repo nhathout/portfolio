@@ -69,7 +69,9 @@ k.loadSprite("her", "assets/her.png", { sliceX: 4, sliceY: 4, anims: CHAR_ANIMS 
 k.loadSprite("noah", "assets/noah.png", { sliceX: 4, sliceY: 4, anims: CHAR_ANIMS });
 for (const npc of ["npc_woman", "npc_man", "npc_old",
   "npc_marina", "npc_mom", "npc_bro", "npc_jack", "npc_wife",
-  "npc_innout", "npc_innout2"]) {
+  "npc_innout", "npc_innout2",
+  // 🏡 Brookline + the three Boston interiors
+  "npc_dad", "npc_hismom", "npc_barista", "npc_prof", "npc_grad", "npc_husky"]) {
   k.loadSprite(npc, `assets/${npc}.png`, { sliceX: 4, sliceY: 4, anims: CHAR_ANIMS });
 }
 // the same two of them, in In-N-Out paper hats, for after the burger run 🍔
@@ -85,7 +87,8 @@ const PET_ANIMS = {
   "walk-side": { from: 8, to: 11, speed: 7, loop: true },
   "sit-flick": { from: 12, to: 15, speed: 2.5, loop: true },
 };
-for (const pet of ["mookie", "leo", "charlie", "chakra"]) {
+// (`collie` is the OTHER Charlie — Noah's border collie 🐕)
+for (const pet of ["mookie", "leo", "charlie", "chakra", "collie"]) {
   k.loadSprite(pet, `assets/${pet}.png`, { sliceX: 4, sliceY: 4, anims: PET_ANIMS });
 }
 k.loadSprite("fig", "assets/fig.png", {
@@ -98,12 +101,20 @@ k.loadSprite("pumpkin", "assets/pumpkin.png", {
 });
 k.loadSprite("quad_ride", "assets/quad_ride.png", { sliceX: 3, sliceY: 1 });
 k.loadSprite("garden", "assets/garden.png", { sliceX: 2, sliceY: 1 });
-// two-frame ambient props (pool shimmer, turtle blink, TV flicker, fires)
-for (const [n, speed] of [["pool", 1.4], ["turtle", 0.7], ["in_tv", 2.2],
-  ["in_fire", 3.5], ["in_stove", 3.2], ["firepit", 4]]) {
+// ambient props that cycle on their own — [name, speed, frames, pingpong].
+// world.js only knows the anim is called "live"; the frame counts live here.
+for (const [n, speed, frames = 2, pingpong = false] of [
+  ["pool", 1.4], ["turtle", 0.7], ["in_tv", 2.2],
+  ["in_fire", 3.5], ["in_stove", 3.2], ["firepit", 4],
+  // 🏢 the apartment, 🤖 the lab, ☕ the cafe
+  ["in_tvmount", 2.2], ["in_espresso", 3],
+  ["in_aquarium", 2.6, 4],
+  ["in_robotarm", 2.4, 4, true],
+  ["in_printer3d", 3.2, 4],
+]) {
   k.loadSprite(n, `assets/${n}.png`, {
-    sliceX: 2, sliceY: 1,
-    anims: { live: { from: 0, to: 1, speed, loop: true } },
+    sliceX: frames, sliceY: 1,
+    anims: { live: { from: 0, to: frames - 1, speed, loop: true, pingpong } },
   });
 }
 k.loadSprite("fx", "assets/fx.png", {
@@ -142,6 +153,19 @@ for (const n of ["tree", "palm", "figtree", "lamp", "bench", "quad", "torii",
   // …and inside the burger place 🍔
   "in_menuboard", "in_frystation", "in_shakes", "in_drinks", "in_till",
   "in_hatstack", "in_booth", "in_tray",
+  // 🏢 JVUE — their apartment
+  "in_sofagray", "in_coffeetable", "in_herbwindow", "in_boxes",
+  "in_kitchen2", "in_bed", "in_desk",
+  // 🏡 Brookline
+  "in_recliner", "in_bakerack", "in_gymbags", "in_hutch",
+  // 🎓 Northeastern
+  "in_worldwall", "in_globe", "in_unhorseshoe", "in_flagrow",
+  "in_coopboard", "in_lecternrows", "in_lectern",
+  // 🤖 BU robotics
+  "in_workbench", "in_partsbin", "in_rover", "in_drone",
+  // ☕ Cafe Bene
+  "in_cafetable", "in_cafecounter", "in_pastrycase", "in_hingeframe",
+  "in_armchair", "in_beanshelf",
   "b_la_home", "b_la_jack", "b_la_house_b", "b_taco_shop", "b_theater",
   "b_innout", "b_brownstone_b", "b_bu_building", "b_neu_building",
   "b_cafe", "b_jvue", "b_duplex"]) {
@@ -333,7 +357,7 @@ if (params.get("map")) {
     for (const id of allFigIds()) game.save.figs.add(id);
     game.save.met = true;
     game.save.hats = true;                                                 // 🍔 hats on
-    for (const id of ["leo", "charlie", "chakra"]) game.save.crew.add(id); // full herd
+    for (const id of ["leo", "charlie", "chakra", "collie"]) game.save.crew.add(id);
   }
   $("title").classList.add("hidden");
   $("hud").classList.remove("hidden");

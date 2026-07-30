@@ -8,7 +8,8 @@ src = open(os.path.join(ROOT, "src", "maps.js"), encoding="utf-8").read()
 assets = {f[:-4] for f in os.listdir(os.path.join(ROOT, "assets")) if f.endswith(".png")}
 
 errs, warns = [], []
-SOLID = "w#%VCDMHYIOKZ"   # ground chars the player can never stand on
+# ground chars the player can never stand on (walls, water, counters, doors)
+SOLID = "w#%VCDMHXYIOKZ" "!^234+" "67890" "qQeuU" "GABJL"
 
 # ---- split into map blocks by "  name: {" at two-space indent
 blocks = {}
@@ -59,7 +60,8 @@ for name, b in blocks.items():
         errs.append(f"{name}: {len(o)} object rows > {len(g)} ground rows")
 
     interior = "interior: true" in b
-    legal = set(",;:~#%VCDMHxYIOKZ" if interior else ".*t-srRkw")
+    legal = set(",;:~#%VCDMHXxYIOKZ" "1_!^234+" "567890" "aqQeuU" "gGABJL"
+                if interior else ".*t-srRkw")
     for i, r in enumerate(g):
         bad = set(r) - legal
         if bad:

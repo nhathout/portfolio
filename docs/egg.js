@@ -1,7 +1,6 @@
 // ♥ there is a secret level ♥
-// two ways in:
-//   1. type the cat's name (or the magic fruit) anywhere on the page
-//   2. find (and click) the tiny heart in the footer
+// ONE way in: find (and click) the tiny heart in the footer. It asks for a
+// password on the other side.
 (() => {
   const DEST = "./secret-level/";
   let launching = false;
@@ -31,20 +30,7 @@
     setTimeout(() => location.assign(DEST), 750);
   }
 
-  // --- 1. the magic words -------------------------------------------------
-  const WORDS = ["mookie", "fig"];
-  let buf = "";
-  document.addEventListener("keydown", (e) => {
-    if (e.target.matches("input, textarea, select") || e.metaKey || e.ctrlKey || e.altKey) return;
-    if (e.key.length !== 1) return;
-    buf = (buf + e.key.toLowerCase()).slice(-12);
-    if (WORDS.some((w) => buf.endsWith(w))) {
-      buf = "";
-      launch();
-    }
-  });
-
-  // --- 2. the tiny heart --------------------------------------------------
+  // --- the tiny heart -----------------------------------------------------
   const slot = document.getElementById("eggHeart");
   if (slot) {
     slot.innerHTML =

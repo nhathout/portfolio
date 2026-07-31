@@ -23,6 +23,20 @@
     <!-- map name toast -->
     <div id="toast" class="hidden"></div>
 
+    <!-- asset loading 🎒 -->
+    <div id="loading" class="overlay hidden">
+      <div class="title-card">
+        <div class="title-hearts">♥</div>
+        <h1 id="load-line">packing the suitcase…</h1>
+        <div class="load-bar"><i id="load-fill"></i></div>
+        <p class="tiny"><span id="load-pct">0</span>%</p>
+      </div>
+    </div>
+
+    <!-- only ever shown when data/memories.json is present, i.e. on your
+         machine — it is why the password screen didn't appear -->
+    <div id="devbadge" class="hidden">dev · plaintext memories.json · add <b>?gate</b> for the password screen</div>
+
     <!-- full-screen minigames (aquarium 🐠 / greenhouse 🌱) build their own
          320x240 canvas in here -->
     <div id="minigame" class="hidden"></div>
@@ -85,6 +99,8 @@
         <p>take your time. mookie will wait.</p>
         <button id="btn-resume" class="pixel-btn">resume</button>
         <button id="btn-exit" class="pixel-btn pixel-btn--dim">back to the website</button>
+        <!-- dev only: shown when the URL has ?dev — never on her copy -->
+        <button id="btn-test-ending" class="pixel-btn pixel-btn--dim hidden">🎂 test the ending</button>
         <p class="tiny">esc to resume · progress auto-saves</p>
       </div>
     </div>
@@ -97,6 +113,13 @@
         <p id="finale-sub"></p>
         <button id="btn-finale-close" class="pixel-btn">♥</button>
       </div>
+    </div>
+
+    <!-- party banner + end credits 🎂 -->
+    <div id="party-banner" class="hidden"><span></span></div>
+    <div id="credits" class="overlay hidden">
+      <div id="credits-scroll"></div>
+      <button id="btn-credits-skip" class="pixel-btn tiny-btn">skip ▸</button>
     </div>
 
     <!-- password gate -->

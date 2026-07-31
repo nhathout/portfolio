@@ -13,7 +13,7 @@ const FALLBACK_LINES = [
 
 // Built-in copy for the newer spots so they read properly even before Noah
 // writes them into memories.json — anything he puts in `points` wins.
-const POINT_FALLBACK = {
+export const POINT_FALLBACK = {
   la_home: [
     "Your house. The big one, sun on it all day, pool out back.",
     { who: "noah", text: "Santa Clarita. I knew every room in this place before I ever set foot in it." },
@@ -433,85 +433,85 @@ const COMPANIONS = {
 const FISH = [
   {
     id: "pip", name: "Pip", kind: "round", body: "#f0913c", fin: "#f6bb72",
-    hint: "he came with the tank",
+    hint: "being here from the start",
     line: "Pip does one confident lap and returns to exactly where he started.",
     test: () => true,
   },
   {
     id: "olive", name: "Olive", kind: "long", body: "#5fae6f", fin: "#8fd28f",
-    hint: "read 5 memories",
+    hint: "reading 5 memories ✨",
     line: "Olive hangs near the plants and pretends she isn't watching you.",
     test: (s, mem) => mem >= 5,
   },
   {
     id: "fig", name: "Fig", kind: "round", body: "#8f5aa0", fin: "#c78ae0",
-    hint: "find 3 figs 🫒",
+    hint: "finding 3 figs 🫒",
     line: "Fig is purple, round, and has never once hurried.",
     test: (s) => s.figs.size >= 3,
   },
   {
     id: "gourd", name: "Gourd", kind: "puffer", body: "#e8913c", fin: "#f4c05a",
-    hint: "find 3 pumpkins 🎃",
+    hint: "finding 3 pumpkins 🎃",
     line: "Gourd puffs up at his own reflection. Every day. Forever.",
     test: (s) => s.pumps.size >= 3,
   },
   {
     id: "mook", name: "Mook", kind: "long", body: "#a97f4f", fin: "#f2ead8",
-    hint: "read 8 memories",
+    hint: "reading 8 memories ✨",
     line: "Mook is shaped like a cat's opinion of a fish.",
     test: (s, mem) => mem >= 8,
   },
   {
     id: "clem", name: "Clem", kind: "round", body: "#e8556a", fin: "#f8c8d8",
-    hint: "bring Leo home 🐱",
+    hint: "meeting Leo, her house 🐱",
     line: "Clem circles. Leo watches. Nobody blinks.",
     test: (s) => s.crew.has("leo"),
   },
   {
     id: "biscuit", name: "Biscuit", kind: "long", body: "#f6f2e6", fin: "#e8a0a8",
-    hint: "bring Charlie home 🐶",
+    hint: "meeting Charlie at home 🐶",
     line: "Biscuit is small, white and thrilled about everything.",
     test: (s) => s.crew.has("charlie"),
   },
   {
     id: "shadow", name: "Shadow", kind: "long", body: "#4d4857", fin: "#7a7389",
-    hint: "bring Chakra home 🖤",
+    hint: "meeting Chakra, Jack's 🖤",
     line: "Shadow is twice everyone's size and gentle about it.",
     test: (s) => s.crew.has("chakra"),
   },
   {
     id: "sprint", name: "Sprint", kind: "long", body: "#f4efe2", fin: "#2c2731",
-    hint: "bring the collie home 🐕",
+    hint: "meeting the collie 🐕",
     line: "Sprint crosses the tank twice while you read this.",
     test: (s) => s.crew.has("collie"),
   },
   {
     id: "patty", name: "Patty", kind: "puffer", body: "#da291c", fin: "#fbf8ee",
-    hint: "get the paper hats 🍔",
+    hint: "ordering at In-N-Out 🍔",
     line: "Patty is red and white and refuses to explain herself.",
     test: (s) => s.hats,
   },
   {
     id: "basil", name: "Basil", kind: "round", body: "#3f8f5c", fin: "#9fd6a8",
-    hint: "harvest 5 herbs 🌱",
+    hint: "harvesting 5 herbs 🌱",
     line: "Basil arrived the day the herbs did. No questions.",
     test: () => (parseInt(localStorage.getItem("sl_harvest") || "0", 10) || 0) >= 5,
   },
   {
     id: "atlas", name: "Atlas", kind: "angel", body: "#7a9ce8", fin: "#c6e0ff",
-    hint: "read 15 memories",
+    hint: "reading 15 memories ✨",
     line: "Atlas drifts like he's due somewhere next week.",
     test: (s, mem, tot) => mem >= Math.min(15, Math.ceil(tot.mem * 0.6)),
   },
   {
     id: "koi", name: "Koi", kind: "angel", body: "#f0d264", fin: "#f8ecc4",
-    hint: "find every fig 🫒",
+    hint: "finding every fig 🫒",
     line: "Koi is gold. Koi knows.",
     test: (s, mem, tot) => s.figs.size >= tot.figs,
   },
   {
     id: "us", name: "Us", kind: "pair", body: "#f278a2", fin: "#2f7f6f",
-    hint: "finish the story ♥",
+    hint: "finishing the story ♥",
     line: "One pink, one teal. They only swim side by side.",
     test: (s) => s.finale,
   },
@@ -520,7 +520,7 @@ const FISH = [
 // Default townsfolk one-liners (Noah can override any of these in
 // memories.json → "npcs"). Each is an array of pages, or an array-of-arrays to
 // cycle through several on repeat interactions.
-const NPC_FALLBACK = {
+export const NPC_FALLBACK = {
   la_neighbor: [
     [{ text: "Lovely couple. You two remind me of me and my wife." },
      { text: "Now shoo — you're standing on my sprinklers." }],
@@ -1234,7 +1234,286 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
     persist();
     k.get("finaleMarker").forEach((m) => m.destroy());
     ui.showFinaleBanner(memories.finale?.title || "happy birthday ♥", memories.finale?.subtitle || "");
-    state.cutscene = false;
+    await ui.finaleBannerClosed();
+    // …and then everybody she has ever met is standing on a lawn 🎂
+    await fade(true);
+    k.go("party", { back: { map: state.map, spawn: "door" } });
+  }
+
+  /** replay the whole party on demand (dev: ?map=party) */
+  function runParty(back) {
+    k.go("party", { back: back || { map: state.map, spawn: "door" } });
+  }
+
+  // ------------------------------------------------------------ the party 🎂
+  // One screen, everyone in the game standing on it, and a cake that is far
+  // too large. Runs as its own scene so nothing follows, wanders or collides —
+  // every sprite is placed by hand and the camera never moves.
+
+  // back row → front row. Anyone missing from assets/ is skipped silently.
+  const PARTY_ROWS = [
+    { y: 76, xs: [26, 58, 90, 122, 186, 218, 250, 282] },
+    { y: 106, xs: [42, 74, 108, 212, 246, 278] },
+    { y: 136, xs: [46, 88, 272] },
+  ];
+  const PARTY_GUESTS = [
+    "npc_marina", "npc_mom", "npc_bro", "npc_jack", "npc_wife",
+    "npc_hismom", "npc_dad", "npc_innout", "npc_innout2", "npc_barista",
+    "npc_prof", "npc_grad", "npc_husky", "npc_woman", "npc_man", "npc_old",
+  ];
+  const PARTY_PETS = [
+    ["mookie", 36, 162], ["leo", 74, 162], ["charlie", 244, 162],
+    ["chakra", 282, 162], ["collie", 158, 166],
+  ];
+  const FIREWORK_COLORS = [
+    [244, 210, 74], [232, 85, 106], [111, 158, 196], [199, 138, 224],
+    [106, 168, 79], [240, 160, 60], [246, 236, 240],
+  ];
+
+  /** a rising shell that bursts into a ring of sparks */
+  function firework(x, y, delay = 0) {
+    setTimeout(() => {
+      if (state.map !== "party") return;   // the scene moved on
+      const col = FIREWORK_COLORS[Math.floor(k.rand(0, FIREWORK_COLORS.length))];
+      const shell = k.add([
+        k.rect(2, 3), k.color(...col), k.pos(x, VIEW_H + 6), k.anchor("center"),
+        k.z(9000), k.opacity(1), { vy: -(VIEW_H + 6 - y) / 0.75 },
+      ]);
+      shell.onUpdate(() => {
+        shell.pos.y += shell.vy * k.dt();
+        if (Math.random() < 0.5) {
+          const t = k.add([
+            k.rect(1, 2), k.color(...col), k.pos(shell.pos.x, shell.pos.y),
+            k.anchor("center"), k.z(8900), k.opacity(0.7), { t: 0 },
+          ]);
+          t.onUpdate(() => {
+            t.t += k.dt();
+            t.opacity = Math.max(0, 0.7 - t.t / 0.4);
+            if (t.t > 0.4) t.destroy();
+          });
+        }
+        if (shell.pos.y <= y) {
+          shell.destroy();
+          audio.pop();
+          // the flash
+          const flash = k.add([
+            k.rect(10, 10), k.color(255, 250, 242), k.pos(x, y),
+            k.anchor("center"), k.z(9100), k.opacity(1), { t: 0 },
+          ]);
+          flash.onUpdate(() => {
+            flash.t += k.dt();
+            flash.opacity = Math.max(0, 1 - flash.t / 0.18);
+            if (flash.t > 0.18) flash.destroy();
+          });
+          // two rings, so it reads as a burst and not a sprinkle
+          for (const [n, r0, r1, sz] of [[22, 58, 92, 3], [12, 30, 50, 2]]) {
+            for (let i = 0; i < n; i++) {
+              const a = (i / n) * Math.PI * 2 + k.rand(-0.08, 0.08);
+              const sp = k.rand(r0, r1);
+              const p = k.add([
+                k.rect(sz, sz), k.color(...col), k.pos(x, y), k.anchor("center"),
+                k.z(9000), k.opacity(1),
+                { vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, t: 0 },
+              ]);
+              p.onUpdate(() => {
+                p.t += k.dt();
+                p.pos.x += p.vx * k.dt();
+                p.pos.y += p.vy * k.dt() + 30 * p.t * k.dt();
+                p.opacity = Math.max(0, 1 - p.t / 1.5);
+                if (p.t > 1.5) p.destroy();
+              });
+            }
+          }
+        }
+      });
+    }, delay * 1000);
+  }
+
+  function confetti(n = 40) {
+    for (let i = 0; i < n; i++) {
+      const col = FIREWORK_COLORS[Math.floor(k.rand(0, FIREWORK_COLORS.length))];
+      const c = k.add([
+        k.rect(2, 3), k.color(...col), k.pos(k.rand(0, VIEW_W), k.rand(-40, -4)),
+        k.anchor("center"), k.z(8500), k.opacity(1), k.rotate(0),
+        { vy: k.rand(28, 58), sway: k.rand(8, 22), t: k.rand(0, 6) },
+      ]);
+      c.onUpdate(() => {
+        c.t += k.dt();
+        c.pos.y += c.vy * k.dt();
+        c.pos.x += Math.sin(c.t * 3) * c.sway * k.dt();
+        c.angle += 140 * k.dt();
+        if (c.pos.y > VIEW_H + 8) c.destroy();
+      });
+    }
+  }
+
+  k.scene("party", ({ back }) => {
+    state.cutscene = true;
+    state.map = "party";
+    state.focus = null;
+    k.setCamPos(VIEW_W / 2, VIEW_H / 2);
+
+    // ---- the lawn
+    for (let y = 0; y < Math.ceil(VIEW_H / T); y++) {
+      for (let x = 0; x < Math.ceil(VIEW_W / T); x++) {
+        const h = (x * 31 + y * 17 + x * y) % 10;
+        k.add([
+          k.sprite("tiles", { frame: h < 7 ? F.grass_a : h < 9 ? F.grass_b : F.grass_c }),
+          k.pos(x * T, y * T), k.z(-100),
+        ]);
+      }
+    }
+    for (let x = 4; x < VIEW_W; x += 34) {
+      k.add([k.sprite("tree"), k.pos(x, 44), k.anchor("bot"), k.z(20)]);
+    }
+    k.add([k.sprite("bunting"), k.pos(52, 30), k.anchor("bot"), k.z(9200)]);
+    k.add([k.sprite("bunting"), k.pos(214, 26), k.anchor("bot"), k.z(9200)]);
+    k.add([k.sprite("balloons"), k.pos(14, 96), k.anchor("bot"), k.z(60)]);
+    k.add([k.sprite("balloons"), k.pos(306, 92), k.anchor("bot"), k.z(60)]);
+    k.add([k.sprite("partytable"), k.pos(34, 214), k.anchor("bot"), k.z(214)]);
+    k.add([k.sprite("partytable"), k.pos(288, 214), k.anchor("bot"), k.z(214)]);
+
+    const cake = k.add([
+      k.sprite("cake", { frame: 0 }), k.pos(160, 140), k.anchor("bot"), k.z(140),
+    ]);
+
+    // ---- everybody
+    const crowd = [];
+    const place = (sprite, x, y, pet) => {
+      const o = k.add([
+        k.sprite(sprite, { anim: "idle-down" }), k.pos(x, y), k.anchor("bot"),
+        k.z(y), { baseY: y, phase: k.rand(0, 6.3), pet: !!pet },
+      ]);
+      crowd.push(o);
+      return o;
+    };
+
+    let gi = 0;
+    for (const row of PARTY_ROWS) {
+      for (const x of row.xs) {
+        if (gi >= PARTY_GUESTS.length) break;
+        place(PARTY_GUESTS[gi++], x, row.y);
+      }
+    }
+    for (const [sprite, x, y] of PARTY_PETS) place(sprite, x, y, true);
+
+    // her and Noah out front, with the cake between them ♥
+    const stars = [
+      place(save.hats ? "her_hat" : "her", 118, 184),
+      place(save.hats ? "noah_hat" : "noah", 202, 184),
+    ].filter(Boolean);
+
+    let jumping = false;
+    for (const o of crowd) {
+      o.onUpdate(() => {
+        if (!jumping) return;
+        const t = k.time() * 6 + o.phase;
+        const hop = Math.abs(Math.sin(t)) * (o.pet ? 5 : 8);
+        o.pos.y = o.baseY - hop;
+      });
+    }
+
+    // ---- dusk
+    const dusk = k.add([
+      k.rect(VIEW_W, VIEW_H), k.color(42, 32, 74), k.pos(0, 0),
+      k.opacity(0), k.z(8000), k.fixed(), { target: 0 },
+    ]);
+    dusk.onUpdate(() => {
+      const d = dusk.target - dusk.opacity;
+      if (Math.abs(d) > 0.002) dusk.opacity += Math.sign(d) * Math.min(Math.abs(d), 0.3 * k.dt());
+    });
+
+    const say = (lines) => dialogue.show(lines.map((t) => (typeof t === "string" ? { text: t } : t)));
+    const P = memories.party || {};
+    const NAME = memories.meta?.playerName || "you";
+
+    (async () => {
+      await fade(false);
+      await wait(0.7);
+
+      // 1. SURPRISE
+      audio.fanfare();
+      jumping = true;
+      confetti(46);
+      for (const o of stars) o.play("cheer");   // only these two have a cheer frame
+      ui.showPartyBanner(`HAPPY BIRTHDAY ${NAME.toUpperCase()}!!`);
+      await wait(1.5);
+      confetti(30);
+      await wait(1.2);
+      ui.hidePartyBanner();
+
+      await say(P.surprise || [
+        { text: "EVERYONE: SURPRISE!!!" },
+        { text: "(every single person in this little world is here. all of them. even the ones who barely know you.)" },
+        { who: "noah", text: "…okay so I may have invited everybody." },
+      ]);
+
+      // 2. candles
+      jumping = false;
+      for (const o of crowd) o.pos.y = o.baseY;
+      cake.frame = 1;
+      audio.heart();
+      for (let i = 0; i < 5; i++) {
+        heartBurst(k.vec2(160, 120), 4, 34);
+        await wait(0.18);
+      }
+      await say(P.cake || [
+        { text: "(the candles go up all at once. the cake is, frankly, structurally unwise.)" },
+        { who: "noah", text: "make a wish. take your time — we've got all night." },
+        { text: "(you close your eyes.)" },
+      ]);
+
+      // 3. fireworks
+      dusk.target = 0.34;
+      jumping = true;
+      for (let i = 0; i < 14; i++) {
+        firework(k.rand(34, VIEW_W - 34), k.rand(30, 96), i * 0.42);
+      }
+      audio.fanfare();
+      await wait(2.2);
+      confetti(40);
+      await wait(3.4);
+
+      await say(P.after || [
+        { who: "her", text: "…you did all of this?" },
+        { who: "noah", text: "we did all of this. you just had to show up and be you." },
+        { who: "noah", text: "happy birthday, my love ♥" },
+      ]);
+
+      // 4. credits, then back to the world
+      jumping = false;
+      for (const o of crowd) o.pos.y = o.baseY;
+      for (const o of stars) o.play("idle-down");
+      for (let i = 0; i < 8; i++) firework(k.rand(34, VIEW_W - 34), k.rand(28, 90), i * 0.7);
+      await ui.rollCredits(creditsData());
+      await fade(true);
+      state.cutscene = false;
+      state.playerPos = null;
+      k.go("map", { map: back?.map || "bos_jvue_in", spawn: back?.spawn || "door", pos: null });
+    })().catch((e) => console.error("party sequence:", e));
+  });
+
+  /** the end-credits reel — built from what's actually in the game */
+  function creditsData() {
+    const NAME = memories.meta?.playerName || "you";
+    const NOAH = memories.meta?.noahName || "Noah";
+    const c = memories.credits || {};
+    return {
+      title: c.title || "our little world",
+      sub: c.sub || `made for ${NAME}, with everything I've got`,
+      groups: c.groups || [
+        ["starring", [NAME, NOAH]],
+        ["the crowd", ["Mookie", "Leo", "Charlie", "Chakra", "the collie"]],
+        ["at home", ["Marina", "mom", "the little brother", "Jack & his wife"]],
+        ["in Boston", ["his mom & dad", "everyone at the cafe", "the co-op crowd"]],
+        ["locations", ["Mini Los Angeles", "Little Everywhere", "Mini Boston",
+          "one apartment with very good windows"]],
+        ["figs harvested", [`${save.figs.size} of ${allFigIds().length}`]],
+        ["pumpkins located", [`${save.pumps.size} of ${allPumpkinIds().length}`]],
+        ["memories", [`${save.seen.size} found`]],
+      ],
+      end: c.end || "happy birthday ♥",
+    };
   }
 
   // ------------------------------------------------------------ tomato garden 🍅
@@ -2301,20 +2580,22 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
     // ---- ambient wildlife: butterflies over the flowers, gulls over water
     if (!def.interior) {
       const flowerSpots = [];
-      const seaRows = new Map();   // row → [minX, maxX] of open water
+      // Contiguous horizontal runs of open water, per row. Min/max per row is
+      // not enough: a row with water at both ends would span the dry land in
+      // between, and a bird would paddle straight across the grass.
+      const waterRuns = [];
       def.ground.forEach((row, y) => {
-        [...row].forEach((ch, x) => {
-          if (ch === "*") flowerSpots.push([x, y]);
-          else if (ch === "w") {
-            const r = seaRows.get(y);
-            if (r) { r[0] = Math.min(r[0], x); r[1] = Math.max(r[1], x); }
-            else seaRows.set(y, [x, x]);
-          }
-        });
+        let x = 0;
+        while (x < row.length) {
+          if (row[x] === "*") flowerSpots.push([x, y]);
+          if (row[x] === "w") {
+            let x2 = x;
+            while (x2 < row.length && row[x2] === "w") x2++;
+            if (x2 - x >= 3) waterRuns.push({ y, x0: x, x1: x2 - 1 });
+            x = x2;
+          } else x++;
+        }
       });
-      // gulls only over real open water — the little pond on the route would
-      // otherwise send them gliding across the whole tree line
-      const gullRows = [...seaRows.entries()].filter(([, [a, b]]) => b - a >= 2);
       const pick = (list) => list[Math.floor(Math.random() * list.length)];
 
       for (let i = 0; i < Math.min(7, flowerSpots.length); i++) {
@@ -2331,20 +2612,28 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
           b.flipX = Math.sin(b.t * 1.7) > 0;
         });
       }
-      for (let i = 0; i < Math.min(3, gullRows.length); i++) {
-        const [gy, [ax, bx]] = pick(gullRows);
-        const x0 = ax * T - 12;
-        const x1 = (bx + 1) * T + 12;
+      // Waterfowl stay ON the water: the 12px sprite is anchored centre, so
+      // the sweep is inset by half its width (plus a little) at both ends, and
+      // it turns around at the edge instead of wrapping — a bird teleporting
+      // back across a small pond reads much worse than one paddling about.
+      const BIRD_INSET = 8;
+      for (let i = 0; i < Math.min(3, waterRuns.length); i++) {
+        const run = pick(waterRuns);
+        const x0 = run.x0 * T + BIRD_INSET;
+        const x1 = (run.x1 + 1) * T - BIRD_INSET;
+        if (x1 <= x0) continue;
         const g = k.add([
           k.sprite("critters", { anim: "glide" }),
-          k.pos(x0, gy * T), k.anchor("center"), k.z(1e4),
-          { t: k.rand(0, 12), gy: gy * T + 6, x0, span: x1 - x0 },
+          k.pos(x0, run.y * T + 8), k.anchor("center"), k.z(1e4),
+          { t: k.rand(0, 12), gy: run.y * T + 8, x0, span: x1 - x0 },
         ]);
         g.onUpdate(() => {
-          g.t += k.dt() * 0.3;
-          const u = (g.t % 2) / 2;                      // sweep across, then wrap
-          g.pos.x = g.x0 + u * g.span;
-          g.pos.y = g.gy + Math.sin(g.t * 3) * 4;
+          g.t += k.dt() * 0.22;
+          const u = g.t % 2;
+          const back = u > 1;
+          g.pos.x = g.x0 + (back ? 2 - u : u) * g.span;  // there, then back
+          g.pos.y = g.gy + Math.sin(g.t * 3) * 2;
+          g.flipX = back;
         });
       }
     }
@@ -2597,6 +2886,7 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
       k.go("map", { map: fresh ? "la" : save.map, spawn: "start", pos: fresh ? null : save.pos });
     },
     hasSave: save.seen.size > 0 || save.met || save.figs.size > 0,
+    runParty,
     state, save,
   };
 }

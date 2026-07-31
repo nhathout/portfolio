@@ -4,6 +4,11 @@ Encrypt / decrypt data/memories.enc — pure stdlib, no pip installs, no node.
 
     python crypt.py decrypt ../data/memories.enc mookie ../data/memories.json
     python crypt.py encrypt ../data/memories.json mookie "furry roommate..."
+    python crypt.py encrypt ../data/memories.json "fig,mookie" "the fruit or the cat"
+
+Several passwords, comma-separated, all open the same bundle: the text is
+encrypted once with a random data key, and that key is wrapped separately for
+each password (v2 format). Nothing readable ends up in the public repo.
 
 Same format as tools/encrypt.mjs (AES-256-GCM, PBKDF2-SHA256 150k), so the
 browser gate reads either one. AES + GCM are implemented here because this
@@ -190,24 +195,51 @@ def derive(password, salt, iterations=ITER):
 
 def decrypt_file(enc_path, password):
     bundle = json.load(open(enc_path, encoding="utf-8"))
-    key = derive(password, base64.b64decode(bundle["salt"]),
-                 bundle.get("iter", ITER))
-    plain = gcm_decrypt(key, base64.b64decode(bundle["iv"]),
+    iters = bundle.get("iter", ITER)
+    if bundle.get("v", 1) >= 2:
+        # v2: unwrap the data key with this password, then open the content
+        data_key = None
+        for slot in bundle["keys"]:
+            try:
+                data_key = gcm_decrypt(
+                    derive(password, base64.b64decode(slot["salt"]), iters),
+                    base64.b64decode(slot["iv"]), base64.b64decode(slot["ct"]))
+                break
+            except Exception:
+                continue
+        if data_key is None:
+            raise ValueError("no key slot opens with that password")
+    else:
+        data_key = derive(password, base64.b64decode(bundle["salt"]), iters)
+    plain = gcm_decrypt(data_key, base64.b64decode(bundle["iv"]),
                         base64.b64decode(bundle["ct"]))
     return plain.decode("utf-8")
 
 
-def encrypt_file(json_path, password, hint=None):
+def encrypt_file(json_path, passwords, hint=None):
+    """passwords: one string, or several separated by commas — any of them opens it."""
+    if isinstance(passwords, str):
+        passwords = [p.strip() for p in passwords.split(",") if p.strip()]
+    if not passwords:
+        raise ValueError("need at least one password")
     data = open(json_path, encoding="utf-8").read()
     json.loads(data)  # validate before encrypting
-    salt = os.urandom(16)
+    data_key = os.urandom(32)
     iv = os.urandom(12)
-    ct = gcm_encrypt(derive(password, salt), iv, data.encode("utf-8"))
+    ct = gcm_encrypt(data_key, iv, data.encode("utf-8"))
+    slots = []
+    for pw in passwords:
+        salt = os.urandom(16)
+        kiv = os.urandom(12)
+        slots.append({"salt": base64.b64encode(salt).decode(),
+                      "iv": base64.b64encode(kiv).decode(),
+                      "ct": base64.b64encode(
+                          gcm_encrypt(derive(pw, salt), kiv, data_key)).decode()})
     out = os.path.join(os.path.dirname(os.path.abspath(json_path)), "memories.enc")
-    bundle = {"v": 1, "iter": ITER,
-              "salt": base64.b64encode(salt).decode(),
+    bundle = {"v": 2, "iter": ITER,
               "iv": base64.b64encode(iv).decode(),
-              "ct": base64.b64encode(ct).decode()}
+              "ct": base64.b64encode(ct).decode(),
+              "keys": slots}
     if hint:
         bundle["hint"] = hint
     with open(out, "w", encoding="utf-8") as f:
@@ -231,9 +263,10 @@ def main(argv):
     elif mode == "encrypt":
         out = encrypt_file(path, password, argv[4] if len(argv) > 4 else None)
         print("wrote", out)
-        # round-trip check so a bad build never ships
-        assert json.loads(decrypt_file(out, password))
-        print("round-trip verified ✓")
+        # round-trip check EVERY password so a bad build never ships
+        for pw in [p.strip() for p in password.split(",") if p.strip()]:
+            assert json.loads(decrypt_file(out, pw))
+            print(f"  round-trip verified ✓  ({pw!r})")
     else:
         print(__doc__)
         return 1

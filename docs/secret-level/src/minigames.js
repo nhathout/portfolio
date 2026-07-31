@@ -321,11 +321,12 @@ export function openTank(ctx, roster) {
     { x: 148, h: 38, hue: "#3f8f5c", tip: "#5fbe7a" },
   ];
 
-  const IDLE = "click the water to feed · click a fish to say hi";
+  const IDLE = "click water to feed · fish to pet";
   let caption = fresh.length
     ? `${fresh.map((f) => f.name).join(", ")} — ${fresh.length > 1 ? "new fish!" : "a new fish!"} ♥`
     : IDLE;
   let captionT = fresh.length ? 6 : 0;
+  let queued = null;       // caption to run after the current one
   let rosterPage = 0;
   let rosterT = 0;
 
@@ -339,9 +340,10 @@ export function openTank(ctx, roster) {
     ctx.audio?.blip();
   }
 
-  function say(line, seconds = 3.4) {
+  function say(line, seconds = 3.4, then = null) {
     caption = line;
     captionT = seconds;
+    queued = then;   // shown once this one times out
   }
 
   scr.run((dt) => {
@@ -356,7 +358,7 @@ export function openTank(ctx, roster) {
       const hit = swimmers.find((s) =>
         c.x >= s.x - 2 && c.x <= s.x + s.fw + 2 && c.y >= s.y - 2 && c.y <= s.y + s.fh + 2);
       if (hit) {
-        say(hit.f.line, 5);
+        say(`♥ you earned ${hit.f.name} by ${hit.f.hint}`, 3, { line: hit.f.line, secs: 4.5 });
         hearts.push({ x: hit.x + hit.fw / 2, y: hit.y, t: 0 });
         ctx.audio?.heart();
       } else {
@@ -431,7 +433,10 @@ export function openTank(ctx, roster) {
 
     if (captionT > 0) {
       captionT -= dt;
-      if (captionT <= 0) caption = IDLE;
+      if (captionT <= 0) {
+        if (queued) { caption = queued.line; captionT = queued.secs; queued = null; }
+        else caption = IDLE;
+      }
     }
     // the locked list cycles slowly through the ones she hasn't earned yet
     rosterT += dt;
@@ -529,7 +534,7 @@ export function openTank(ctx, roster) {
     const nxt = locked.length ? locked[rosterPage % locked.length] : null;
     const lines = wrap(caption, nxt ? 34 : COLS);
     const showHint = lines.length < 2;
-    if (showHint) lines.push(nxt ? `still out there: ${nxt.hint}` : "E / esc to leave · F to feed");
+    if (showHint) lines.push(nxt ? `next: ${nxt.hint}` : "E / esc to leave · F to feed");
     chrome(g, "OUR TANK 🐠", `${unlocked.length}/${roster.length} · fed ${fed}`, lines);
     // the ghost of the next fish, but only next to its own hint — on its own
     // it just reads as a smudge in the corner

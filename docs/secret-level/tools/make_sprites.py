@@ -7977,6 +7977,136 @@ BUILDINGS = {
 
 
 # ---------------------------------------------------------------------------
+# THE PARTY 🎂 — props for the finale scene
+# ---------------------------------------------------------------------------
+
+def prop_cake():
+    """The cake. It is far too big. That is the point. 2 frames: candles out,
+    candles lit."""
+    sheet = Canvas(152, 68)
+    ice = hex_rgba("fdf1e2")          # buttercream
+    ice_d = hex_rgba("e6d2ba")
+    ice_l = hex_rgba("fffaf2")
+    pink = hex_rgba("f278a2")         # her colour, obviously
+    pink_d = hex_rgba("d1517f")
+    sponge = hex_rgba("d9a86a")
+    plate = hex_rgba("cfc7b6")
+    plate_d = hex_rgba("9c948a")
+    wax = hex_rgba("f6ecf0")
+    wax_d = hex_rgba("d6c9d0")
+
+    def tier(c, x, y, w, h):
+        """one iced layer with a frosting drip along its top edge"""
+        c.rect(x, y, w, h, ice)
+        c.rect(x, y, w, 3, ice_l)
+        c.rect(x, y + h - 3, w, 3, ice_d)
+        c.rect(x + 1, y + h - 8, w - 2, 2, sponge)      # a peek of cake
+        c.rect(x, y, w, 5, pink)                        # the drip band
+        for i in range(x, x + w, 6):
+            d = 4 + ((i // 6) % 3) * 3
+            c.rect(i, y + 4, 4, d, pink)
+            c.rect(i, y + 3 + d, 4, 1, pink_d)
+        c.rect(x, y, w, 1, hex_rgba("f8a8c0"))
+
+    for fi in range(2):
+        c = Canvas(76, 68)
+        c.rect(0, 62, 76, 5, plate)                     # the plate
+        c.rect(0, 65, 76, 2, plate_d)
+        c.rect(2, 60, 72, 3, plate_d)
+        tier(c, 2, 46, 72, 17)                          # bottom
+        tier(c, 14, 30, 48, 17)                         # middle
+        tier(c, 24, 15, 28, 16)                         # top
+        # piped rosettes round the base of each tier
+        for bx, by, bw in ((3, 58, 72), (15, 42, 48), (25, 27, 28)):
+            for i in range(bx, bx + bw - 3, 5):
+                c.rect(i, by, 4, 3, ice_l)
+                c.rect(i, by + 2, 4, 1, ice_d)
+        # a fig on top, because of course 🍇
+        c.rect(35, 8, 6, 8, hex_rgba("7a4a8c"))
+        c.rect(36, 9, 3, 3, hex_rgba("8f5aa0"))
+        c.rect(37, 5, 2, 3, hex_rgba("4e9e4a"))
+        # candles — standing in the top tier, not floating beside it
+        for cx in (26, 31, 45, 50):
+            c.rect(cx, 5, 3, 11, wax)
+            c.rect(cx + 2, 5, 1, 11, wax_d)
+            c.rect(cx, 5, 3, 1, pink)
+            c.rect(cx, 9, 3, 1, pink)
+            if fi == 1:
+                c.rect(cx + 1, 1, 1, 4, hex_rgba("f4d24a"))
+                c.rect(cx, 2, 3, 2, hex_rgba("f0a03c"))
+                c.set(cx + 1, 0, hex_rgba("fdf1e2"))
+            else:
+                c.set(cx + 1, 4, hex_rgba("6a6072"))     # a wisp of smoke
+                c.set(cx + 1, 2, hex_rgba("55505c"))
+        c.outline(OUTLINE)
+        sheet.blit(c, fi * 76, 0)
+    return sheet
+
+
+def prop_bunting():
+    """a string of triangular flags — hang it between two trees"""
+    c = Canvas(104, 22)
+    cols = [hex_rgba("e8556a"), hex_rgba("f0a03c"), hex_rgba("f0d264"),
+            hex_rgba("6aa84f"), hex_rgba("6f9ec4"), hex_rgba("c78ae0")]
+    string = hex_rgba("efe4cc")
+    for i in range(104):                                # the sagging string
+        u = i / 103.0
+        y = 1 + int(6 * (1 - (2 * u - 1) ** 2))
+        c.set(i, y, string)
+        if i % 13 == 6:
+            col = cols[(i // 13) % len(cols)]
+            for j in range(11):                         # a triangle flag
+                w = 11 - j
+                c.rect(i - w // 2, y + 1 + j, w, 1, col)
+            c.rect(i - 5, y + 1, 11, 2,
+                   tuple(min(255, v + 30) for v in col[:3]) + (255,))
+    c.outline(OUTLINE)
+    return c
+
+
+def prop_balloons():
+    """two party balloons on strings"""
+    c = Canvas(24, 44)
+    string = hex_rgba("e8e4d8")
+    for (bx, by, col, hi) in ((2, 2, hex_rgba("e8556a"), hex_rgba("f4909e")),
+                              (13, 6, hex_rgba("6f9ec4"), hex_rgba("a8c8e8"))):
+        for j in range(-6, 7):
+            w = 6 - abs(j) // 2
+            c.rect(bx + 4 - w, by + 7 + j, w * 2, 1, col)
+        c.rect(bx + 1, by + 3, 3, 4, hi)
+        c.rect(bx + 3, by + 14, 2, 2, col)              # the knot
+        for j in range(16, 42 - by):                    # the string
+            c.set(bx + 4 + (1 if (j // 4) % 2 else 0), by + j, string)
+    c.outline(OUTLINE)
+    return c
+
+
+def prop_partytable():
+    """a trestle table with paper cups and a bowl of figs"""
+    c = Canvas(52, 26)
+    cloth = hex_rgba("f6ecf0")
+    cloth_d = hex_rgba("d8c9d2")
+    wood_d = hex_rgba("74512d")
+    c.rect(0, 6, 52, 12, cloth)
+    c.rect(0, 6, 52, 2, hex_rgba("fffaf2"))
+    c.rect(0, 15, 52, 3, cloth_d)
+    for i in range(2, 50, 8):                           # scalloped hem
+        c.rect(i, 18, 6, 2, cloth)
+        c.rect(i, 19, 6, 1, cloth_d)
+    c.rect(4, 20, 3, 5, wood_d)
+    c.rect(45, 20, 3, 5, wood_d)
+    for i, col in enumerate((hex_rgba("e8556a"), hex_rgba("f0d264"), hex_rgba("6aa84f"))):
+        c.rect(6 + i * 7, 1, 5, 6, col)                 # paper cups
+        c.rect(6 + i * 7, 1, 5, 1, hex_rgba("f6ecf0"))
+    c.rect(32, 2, 14, 5, hex_rgba("e8e4d8"))            # bowl of figs
+    c.rect(34, 0, 3, 3, hex_rgba("7a4a8c"))
+    c.rect(38, 0, 3, 2, hex_rgba("8f5aa0"))
+    c.rect(42, 0, 3, 3, hex_rgba("7a4a8c"))
+    c.outline(OUTLINE)
+    return c
+
+
+# ---------------------------------------------------------------------------
 # main
 # ---------------------------------------------------------------------------
 
@@ -8156,6 +8286,11 @@ def main():
     out["in_dogbed"] = in_dogbed()
     out["in_stove"] = in_stove()
     out["in_samovar"] = in_samovar()
+    # ---- the party 🎂
+    out["cake"] = prop_cake()
+    out["bunting"] = prop_bunting()
+    out["balloons"] = prop_balloons()
+    out["partytable"] = prop_partytable()
     # ---- inside the burger place 🍔
     out["in_till"] = in_till()
     out["in_menuboard"] = in_menuboard()

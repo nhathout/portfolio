@@ -83,6 +83,16 @@ export class Chip {
   }
   denied() { this.tone(220, 0.12, "square", 0.045); this.tone(175, 0.18, "square", 0.045, 0.12); }
   heart() { this.tone(1175, 0.08, "triangle", 0.045); this.tone(1568, 0.12, "triangle", 0.04, 0.07); }
+  pop() {   // a firework going off, one shell
+    this.tone(240, 0.05, "square", 0.05, 0, -140);
+    this.tone(90, 0.28, "sawtooth", 0.035, 0.01, -50);
+    for (let i = 0; i < 5; i++) this.tone(1200 + i * 260, 0.06, "triangle", 0.02, 0.04 + i * 0.03, -400);
+  }
+  cheerCrowd() {  // the "SURPRISE!!" swell
+    [523, 587, 659, 784, 880, 1047].forEach((f, i) =>
+      this.tone(f, 0.5, "triangle", 0.03, i * 0.02));
+    this.tone(160, 0.6, "sawtooth", 0.02, 0, 90);
+  }
 
   // ------------------------------------------------------------ music
   // A cozy looping chiptune (C–G–Am–F) built from the same synth. Uses a

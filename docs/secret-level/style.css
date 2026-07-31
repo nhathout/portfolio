@@ -391,3 +391,129 @@ html, body {
   border-radius: 50%;
   background: rgba(232, 105, 127, 0.6);
 }
+
+
+/* ---------------------------------------------------------------- the party */
+#party-banner {
+  position: absolute;
+  top: 6%;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 60;
+}
+#party-banner span {
+  font-family: "Press Start 2P", monospace;
+  font-size: clamp(11px, 3vw, 26px);
+  line-height: 1.6;
+  text-align: center;
+  color: #fdf1e2;
+  padding: 12px 18px;
+  background: #2b2028;
+  border: 3px solid #f278a2;
+  border-radius: 6px;
+  box-shadow: 0 0 0 3px rgba(43, 32, 40, .78), 0 8px 0 rgba(0, 0, 0, .25);
+  animation: partyPop .5s cubic-bezier(.34, 1.56, .64, 1), partyWob 1.4s ease-in-out .5s infinite;
+}
+@keyframes partyPop { from { transform: scale(.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes partyWob { 0%, 100% { transform: rotate(-1.5deg); } 50% { transform: rotate(1.5deg); } }
+
+/* ---------------------------------------------------------------- credits */
+#credits {
+  background: #171225;
+  overflow: hidden;
+  z-index: 70;
+}
+#credits-scroll {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  padding: 0 8vw 12vh;
+  text-align: center;
+  font-family: "Press Start 2P", monospace;
+  color: #e8e4d8;
+  line-height: 2.1;
+  transform: translateY(100vh);
+}
+/* translate by the reel's OWN height so however long it gets, it all passes */
+#credits-scroll.roll { animation: creditsRoll linear forwards; }
+@keyframes creditsRoll {
+  from { transform: translateY(100vh); }
+  to { transform: translateY(-100%); }
+}
+#credits-scroll h2 {
+  font-size: clamp(13px, 3vw, 24px);
+  color: #f278a2;
+  margin: 0 0 6px;
+  line-height: 1.7;
+}
+#credits-scroll .cr-sub {
+  font-size: clamp(7px, 1.4vw, 11px);
+  color: #9c93a8;
+  margin: 0 0 12vh;
+}
+#credits-scroll .cr-role {
+  font-size: clamp(7px, 1.3vw, 10px);
+  color: #7f8fb8;
+  margin: 7vh 0 1.4vh;
+  letter-spacing: .08em;
+}
+#credits-scroll .cr-name {
+  font-size: clamp(9px, 1.8vw, 14px);
+  color: #f6ecf0;
+}
+#credits-scroll .cr-end {
+  font-size: clamp(12px, 2.6vw, 20px);
+  color: #f278a2;
+  margin-top: 14vh;
+}
+#btn-credits-skip {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  z-index: 2;
+}
+.pixel-btn.tiny-btn { font-size: 8px; padding: 7px 10px; }
+
+
+/* ---------------------------------------------------------------- loading */
+#loading { z-index: 40; }
+#loading h1 { font-size: clamp(10px, 2.2vw, 16px); margin-bottom: 18px; }
+.load-bar {
+  width: min(74vw, 320px);
+  height: 14px;
+  margin: 0 auto 10px;
+  background: #241d3d;
+  border: 3px solid #f6ecf0;
+  box-shadow: 0 0 0 3px #171225;
+  image-rendering: pixelated;
+}
+.load-bar i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: repeating-linear-gradient(
+    90deg, #f0d264 0 6px, #e8c74a 6px 12px);
+  transition: width 140ms linear;
+}
+
+/* the "why is there no password" note — local dev only */
+#devbadge {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  z-index: 90;
+  font-family: "Press Start 2P", monospace;
+  font-size: 7px;
+  line-height: 1.7;
+  color: #9c93a8;
+  background: rgba(23, 18, 37, .82);
+  border: 1px solid #3a3350;
+  border-radius: 3px;
+  padding: 5px 7px;
+  pointer-events: none;
+}
+#devbadge b { color: #f0d264; }

@@ -9,16 +9,38 @@ const PW_CACHE_KEY = "sl_pw";
 
 const b64dec = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
 
-async function deriveKey(password, salt, iterations) {
+async function deriveKey(password, salt, iterations, usages = ["decrypt"]) {
   const raw = await crypto.subtle.importKey(
     "raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveKey"]);
   return crypto.subtle.deriveKey(
     { name: "PBKDF2", salt, iterations, hash: "SHA-256" },
-    raw, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+    raw, { name: "AES-GCM", length: 256 }, false, usages);
 }
 
+/**
+ * v1 bundles derive the content key straight from the password.
+ * v2 bundles encrypt the content once with a random data key and wrap that key
+ * once per accepted password, so several passwords can open the same file
+ * without any of them being recoverable from the public repo.
+ */
 export async function decryptBundle(bundle, password) {
-  const key = await deriveKey(password, b64dec(bundle.salt), bundle.iter || 150000);
+  const iter = bundle.iter || 150000;
+  let key;
+  if ((bundle.v || 1) >= 2) {
+    let dataKey = null;
+    for (const slot of bundle.keys || []) {
+      try {
+        const wrap = await deriveKey(password, b64dec(slot.salt), iter);
+        dataKey = await crypto.subtle.decrypt(
+          { name: "AES-GCM", iv: b64dec(slot.iv) }, wrap, b64dec(slot.ct));
+        break;
+      } catch { /* not this slot — try the next password's */ }
+    }
+    if (!dataKey) throw new Error("no key slot for that password");
+    key = await crypto.subtle.importKey("raw", dataKey, "AES-GCM", false, ["decrypt"]);
+  } else {
+    key = await deriveKey(password, b64dec(bundle.salt), iter);
+  }
   const plain = await crypto.subtle.decrypt(
     { name: "AES-GCM", iv: b64dec(bundle.iv) }, key, b64dec(bundle.ct));
   return JSON.parse(new TextDecoder().decode(plain));
@@ -37,12 +59,24 @@ async function tryFetchJSON(url) {
 /** Resolves with the decrypted memories object (leaves the gate visible until then). */
 export async function loadMemories(audio) {
   const gate = document.getElementById("gate");
+  // `?gate` forces the real password screen even on your machine, where the
+  // plaintext memories.json would normally skip it. Use it to check what she
+  // will actually see.
+  const forceGate = new URLSearchParams(location.search).has("gate");
+  if (forceGate) localStorage.removeItem(PW_CACHE_KEY);
 
   // dev shortcut: plaintext memories.json (gitignored, never deployed)
-  const dev = await tryFetchJSON("data/memories.json");
-  if (dev) {
-    gate.classList.add("hidden");
-    return dev;
+  if (!forceGate) {
+    const dev = await tryFetchJSON("data/memories.json");
+    if (dev) {
+      gate.classList.add("hidden");
+      // say so, loudly enough to stop anyone wondering where the password went
+      document.getElementById("devbadge")?.classList.remove("hidden");
+      console.info(
+        "[secret-level] dev mode: loaded plaintext data/memories.json, so the "
+        + "password gate was skipped. Add ?gate to the URL to see it.");
+      return dev;
+    }
   }
 
   const bundle = await tryFetchJSON("data/memories.enc");

@@ -101,6 +101,7 @@ k.loadSprite("pumpkin", "assets/pumpkin.png", {
 });
 k.loadSprite("quad_ride", "assets/quad_ride.png", { sliceX: 3, sliceY: 1 });
 k.loadSprite("garden", "assets/garden.png", { sliceX: 2, sliceY: 1 });
+k.loadSprite("cake", "assets/cake.png", { sliceX: 2, sliceY: 1 });   // 🎂 candles out / lit
 // ambient props that cycle on their own — [name, speed, frames, pingpong].
 // world.js only knows the anim is called "live"; the frame counts live here.
 for (const [n, speed, frames = 2, pingpong = false] of [
@@ -168,12 +169,54 @@ for (const n of ["tree", "palm", "figtree", "lamp", "bench", "quad", "torii",
   "in_armchair", "in_beanshelf",
   "b_la_home", "b_la_jack", "b_la_house_b", "b_taco_shop", "b_theater",
   "b_innout", "b_brownstone_b", "b_bu_building", "b_neu_building",
+  // the party 🎂
+  "bunting", "balloons", "partytable",
   "b_cafe", "b_jvue", "b_duplex"]) {
   if (n === "figtree") k.loadSprite(n, `assets/${n}.png`, { sliceX: 2, sliceY: 1 });
   else k.loadSprite(n, `assets/${n}.png`);
 }
 
-await new Promise((resolve) => k.onLoad(resolve));
+// ---------------------------------------------------------------- loading 🎒
+// ~250 sprites. Show a bar, but only if the load actually takes a moment —
+// on a warm cache it finishes in a few frames and a flash would be worse.
+await (async () => {
+  const el = document.getElementById("loading");
+  const fill = document.getElementById("load-fill");
+  const pct = document.getElementById("load-pct");
+  const line = document.getElementById("load-line");
+  const LINES = [
+    "packing the suitcase…", "feeding the cat…", "planting the figs…",
+    "inflating the balloons…", "waking everybody up…",
+  ];
+  let done = false;
+  k.onLoad(() => { done = true; });
+
+  const shown = await new Promise((r) => setTimeout(() => r(!done), 140));
+  if (shown) {
+    el.classList.remove("hidden");
+    line.textContent = LINES[Math.floor(Math.random() * LINES.length)];
+  }
+  let lineT = 0;
+  await new Promise((resolve) => {
+    const tick = () => {
+      const p = Math.round(Math.min(1, k.loadProgress()) * 100);
+      if (shown) {
+        fill.style.width = `${p}%`;
+        pct.textContent = String(p);
+        if (++lineT % 90 === 0) line.textContent = LINES[Math.floor(Math.random() * LINES.length)];
+      }
+      if (done) {
+        if (!shown) return resolve();
+        fill.style.width = "100%";
+        pct.textContent = "100";
+        // let the bar land on full before it goes
+        return setTimeout(() => { el.classList.add("hidden"); resolve(); }, 260);
+      }
+      requestAnimationFrame(tick);
+    };
+    tick();
+  });
+})();
 
 // ---------------------------------------------------------------- UI glue
 const $ = (id) => document.getElementById(id);
@@ -195,6 +238,16 @@ const ui = {
   bindPause(setPaused) {
     $("btn-resume").addEventListener("click", () => setPaused(false));
     $("btn-exit").addEventListener("click", () => location.assign("../"));
+    // dev: a button in the pause menu that jumps straight to the party +
+    // credits, so the ending can be checked without finishing the game
+    if (params.has("dev")) {
+      const b = $("btn-test-ending");
+      b.classList.remove("hidden");
+      b.addEventListener("click", () => {
+        setPaused(false);
+        game.runParty({ map: game.state.map, spawn: "door" });
+      });
+    }
   },
   travelOpen() {
     return !$("travel").classList.contains("hidden");
@@ -292,6 +345,67 @@ const ui = {
   setMuted(m) {
     $("mute-btn").classList.toggle("muted", m);
   },
+  // ---- the party 🎂
+  showPartyBanner(text) {
+    const el = $("party-banner");
+    el.firstElementChild.textContent = text;
+    el.classList.remove("hidden");
+  },
+  hidePartyBanner() {
+    $("party-banner").classList.add("hidden");
+  },
+  /** resolves when she dismisses the "happy birthday" card */
+  finaleBannerClosed() {
+    const banner = $("finale-banner");
+    if (banner.classList.contains("hidden")) return Promise.resolve();
+    return new Promise((resolve) => {
+      const done = () => {
+        banner.classList.add("hidden");
+        $("btn-finale-close").removeEventListener("click", done);
+        resolve();
+      };
+      $("btn-finale-close").addEventListener("click", done);
+    });
+  },
+  /** scrolls the end credits; resolves when they finish or she skips */
+  rollCredits(data) {
+    const wrap = $("credits");
+    const scroll = $("credits-scroll");
+    const esc = (s) => String(s).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+    let html = `<h2>${esc(data.title)}</h2><p class="cr-sub">${esc(data.sub)}</p>`;
+    for (const [role, names] of data.groups) {
+      html += `<p class="cr-role">${esc(role)}</p>`;
+      for (const n of names) html += `<p class="cr-name">${esc(n)}</p>`;
+    }
+    html += `<p class="cr-end">${esc(data.end)}</p>`;
+    scroll.innerHTML = html;
+    scroll.classList.remove("roll");
+    wrap.classList.remove("hidden");
+    // pace the scroll to the amount of text, ~34s for a normal reel
+    const secs = Math.max(22, Math.min(70, 10 + scroll.scrollHeight / 26));
+    scroll.style.animationDuration = `${secs}s`;
+    void scroll.offsetHeight;   // restart the animation
+    scroll.classList.add("roll");
+    return new Promise((resolve) => {
+      let done = false;
+      const finish = () => {
+        if (done) return;
+        done = true;
+        clearTimeout(timer);
+        scroll.removeEventListener("animationend", finish);
+        $("btn-credits-skip").removeEventListener("click", finish);
+        window.removeEventListener("keydown", onKey);
+        wrap.classList.add("hidden");
+        scroll.classList.remove("roll");
+        resolve();
+      };
+      const onKey = (e) => { if (e.key === "Escape" || e.key === "Enter") finish(); };
+      const timer = setTimeout(finish, secs * 1000 + 1200);
+      scroll.addEventListener("animationend", finish);
+      $("btn-credits-skip").addEventListener("click", finish);
+      window.addEventListener("keydown", onKey);
+    });
+  },
   showFinaleBanner(title, sub) {
     $("finale-title").textContent = title;
     $("finale-sub").textContent = sub;
@@ -364,7 +478,12 @@ if (params.get("map")) {
   $("mute-btn").classList.remove("hidden");
   game.state.started = true;
   window.addEventListener("pointerdown", () => audio.startMusic(), { once: true });
-  k.go("map", { map: params.get("map"), spawn: params.get("spawn") || "start", pos: null });
+  if (params.get("map") === "party") {
+    // dev: jump straight to the finale party 🎂
+    game.runParty({ map: "bos_jvue_in", spawn: "door" });
+  } else {
+    k.go("map", { map: params.get("map"), spawn: params.get("spawn") || "start", pos: null });
+  }
 } else {
   $("title").classList.remove("hidden");
   if (game.hasSave) {

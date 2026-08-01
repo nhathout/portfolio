@@ -304,6 +304,28 @@ Every placeholder is marked `[TODO Noah: …]` — grep for `TODO`.
    Titles are just text; the buildings are in `src/maps.js` if you want to
    move or re-skin them.
 
+## 🐈 the finale (the kitten)
+
+Reading every required memory + finding every fig arms the finale; it fires at
+the apartment window (`jvue_home`). After `finale.lines`, the game opens the
+**kitten picker** — three kittens (orange / grey / cream), she keeps one and
+names it. From then on it follows her like Leo and Chakra do, stands at her feet
+in the party scene, and gets its own line in the credits.
+
+- All of the copy is in `memories.json → finale.kitten` (`prompt`, `sub`, the
+  three `options`, `namePrompt`, `confirm`, `back`, and `after`). `{name}` in the
+  `after` lines is replaced with whatever she types.
+- The choice lives in the save as `kitten: { id, name }`, and `COMPANIONS.kitten`
+  is rebuilt from it at load. `?reset=1` clears it, which is how you re-test.
+- Art: `kit_ginger` / `kit_gray` / `kit_cream` in `make_sprites.py`.
+
+## 🎬 the credits
+
+`memories.json → credits` — `title`, `sub`, `groups` (`[role, [names…]]`), `end`.
+Edit `groups` freely; `{her}` and `{noah}` are substituted from `meta`. The three
+tallies at the bottom (figs / pumpkins / memories) and the kitten's line are
+appended by the game, so they can never go stale.
+
 ## 🔐 password & encryption (important)
 
 This repo is **public**, so the personal text + the surprise are **never

@@ -715,20 +715,42 @@
       ]
     },
     "home_jack": {
-      "title": "home_jack",
+      "title": "Jack ♥",
       "lines": [
         {
-          "text": "Jack fills the doorway the way weather fills a sky."
-        },
-        {
-          "text": "Jack: \"So! You brought him.\" (he has not let go of your shoulders yet)"
+          "text": "Jack is up and across the room before you've finished shutting the door, wiping his hands on his jeans."
         },
         {
           "who": "noah",
-          "text": "he shook my hand and I felt it in my spine."
+          "text": "JACKINGTON."
         },
         {
-          "text": "Jack: \"Sit. Eat. We are not discussing it.\""
+          "text": "Jack: \"Noah! good. okay — I've got three things, and you're going to like two of them.\""
+        },
+        {
+          "who": "her",
+          "text": "hi Jack—"
+        },
+        {
+          "text": "Jack: \"Hi sweetheart. so the FIRST one—\""
+        },
+        {
+          "who": "noah",
+          "text": "he does this every time. I have never once made it to a chair first."
+        },
+        {
+          "text": "Jack: \"—and if we ran a line out to the back beds the whole thing could water itself. you'd know how to do that part.\""
+        },
+        {
+          "who": "noah",
+          "text": "…I would know how to do that part."
+        },
+        {
+          "who": "her",
+          "text": "and there he goes."
+        },
+        {
+          "text": "(they are already three steps into it. you go and find the dog.)"
         }
       ]
     },
@@ -1532,6 +1554,59 @@
           "text": "we always take the window table."
         }
       ]
+    },
+    "bu_rhett": {
+      "title": "Rhett 🐶",
+      "lines": [
+        {
+          "text": "A Boston terrier is sitting dead centre of the lab floor like he is chairing the meeting."
+        },
+        {
+          "who": "noah",
+          "text": "…that's Rhett."
+        },
+        {
+          "who": "her",
+          "text": "does he WORK here?"
+        },
+        {
+          "who": "noah",
+          "text": "he has a badge. I have seen the badge."
+        },
+        {
+          "text": "(Rhett accepts exactly one head scratch, then leans his entire body weight against your shins.)"
+        },
+        {
+          "who": "noah",
+          "text": "he only does that to people he's already decided about ♥"
+        }
+      ]
+    },
+    "neu_paws": {
+      "title": "Paws 🐺",
+      "lines": [
+        {
+          "text": "A husky is asleep under the co-op board with all four legs in the air."
+        },
+        {
+          "who": "her",
+          "text": "PAWS."
+        },
+        {
+          "text": "(Paws does not open his eyes. …Paws opens one eye.)"
+        },
+        {
+          "who": "her",
+          "text": "he's the mascot. he's technically staff."
+        },
+        {
+          "who": "noah",
+          "text": "he's technically unconscious."
+        },
+        {
+          "text": "(He gets up, shakes out, and falls in behind you like it was always the plan.)"
+        }
+      ]
     }
   },
   "noah": {
@@ -1709,6 +1784,57 @@
         },
         {
           "text": "(one eye is black, one eye is white, both eyes are locked on you.)"
+        }
+      ]
+    ],
+    "kitten": [
+      [
+        {
+          "text": "(the kitten is asleep on your foot. you are not going anywhere.)"
+        }
+      ],
+      [
+        {
+          "text": "(the kitten attacks your shoelace, misses entirely, and walks away as if that was the plan.)"
+        }
+      ],
+      [
+        {
+          "text": "(Mookie is watching from a shelf. the truce is holding. barely.)"
+        }
+      ]
+    ],
+    "rhett": [
+      [
+        {
+          "text": "(Rhett is sitting on your foot. this is a Boston terrier's love language.)"
+        }
+      ],
+      [
+        {
+          "text": "(he sneezes. it is the loudest thing that has ever happened in this building.)"
+        }
+      ],
+      [
+        {
+          "text": "(Rhett looks up at Chakra. Chakra could eat him. they are best friends.)"
+        }
+      ]
+    ],
+    "paws": [
+      [
+        {
+          "text": "(Paws leans on you until you are structurally involved.)"
+        }
+      ],
+      [
+        {
+          "text": "(he says something. it isn't a bark, it's a whole sentence, and it's an argument.)"
+        }
+      ],
+      [
+        {
+          "text": "(Paws has decided the front of the group is his. nobody is contesting it.)"
         }
       ]
     ]
@@ -1955,10 +2081,27 @@
   "pumpkins": {
     "collect": "PUMPKINN!! ({n}/{total})",
     "all": [
-      "(that's every pumpkin. PUMPKINN!!)",
+      {
+        "text": "(that's every pumpkin. all of them. the entire harvest.)"
+      },
       {
         "who": "noah",
-        "text": "[TODO Noah: the pumpkin prize — the story behind PUMPKINN!, a link/QR to the clip, or a little reward reveal.]"
+        "text": "you collected all the pumpkins! for what reason? PUMPKINN!!"
+      },
+      {
+        "who": "her",
+        "text": "PUMPKINN!!"
+      },
+      {
+        "who": "noah",
+        "text": "there's no prize. I want to be really clear that there was never going to be a prize."
+      },
+      {
+        "who": "noah",
+        "text": "you did that for the bit. you did that ENTIRELY for the bit ♥"
+      },
+      {
+        "text": "(nobody has ever been prouder of anybody.)"
       }
     ]
   },
@@ -1970,18 +2113,107 @@
       }
     ],
     "lines": [
-      "(Noah is fidgeting. He practiced this.)",
       {
-        "who": "noah",
-        "text": "[TODO Noah: THE REVEAL. Japan flights? the kitten? Write the real thing here — this is the moment.]"
+        "text": "(Noah is fidgeting. He practiced this.)"
       },
       {
         "who": "noah",
-        "text": "happy birthday. I love you."
+        "text": "okay. so. you found everything I hid in here."
+      },
+      {
+        "who": "noah",
+        "text": "every place we've been, everyone who matters, the figs, the pumpkins for no reason—"
+      },
+      {
+        "who": "her",
+        "text": "PUMPKINN!!"
+      },
+      {
+        "who": "noah",
+        "text": "PUMPKINN. yes. thank you."
+      },
+      {
+        "who": "noah",
+        "text": "so there's one thing left. and it's not in the game."
+      },
+      {
+        "who": "her",
+        "text": "…Noah."
+      },
+      {
+        "who": "noah",
+        "text": "it's not a flight. it's not a trip."
+      },
+      {
+        "who": "noah",
+        "text": "it's about eight weeks old and it doesn't have a name yet."
+      },
+      {
+        "text": "(He turns his phone around. Three kittens, blinking into a camera.)"
+      },
+      {
+        "who": "noah",
+        "text": "happy birthday ♥"
+      },
+      {
+        "who": "noah",
+        "text": "pick one. they're yours."
       }
     ],
     "title": "HAPPY BIRTHDAY ♥",
-    "subtitle": "love, noah (and mookie)"
+    "subtitle": "love, noah (and mookie)",
+    "kitten": {
+      "prompt": "pick your kitten ♥",
+      "sub": "(take your time. this one's for keeps.)",
+      "options": [
+        {
+          "id": "ginger",
+          "label": "the orange one",
+          "blurb": "loud. affectionate. will be sitting on your laptop by Thursday.",
+          "fallbackName": "Peach"
+        },
+        {
+          "id": "gray",
+          "label": "the grey one",
+          "blurb": "quiet, dignified, already judging the room. picks you, not the other way round.",
+          "fallbackName": "Smoke"
+        },
+        {
+          "id": "cream",
+          "label": "the cream one",
+          "blurb": "soft, sleepy, finds the one sunbeam in the apartment and holds it all day.",
+          "fallbackName": "Biscuit"
+        }
+      ],
+      "namePrompt": "…and what are we calling them?",
+      "namePlaceholder": "name",
+      "confirm": "that's the one ♥",
+      "back": "wait, let me look again",
+      "after": [
+        {
+          "text": "({name} fits in one hand. {name} does not care to be in one hand.)"
+        },
+        {
+          "who": "her",
+          "text": "…hi. hi. oh my god."
+        },
+        {
+          "who": "noah",
+          "text": "Mookie is going to have OPINIONS about this."
+        },
+        {
+          "who": "her",
+          "text": "Mookie is going to be a big brother."
+        },
+        {
+          "text": "({name} falls asleep in the crook of her arm inside ninety seconds.)"
+        },
+        {
+          "who": "noah",
+          "text": "happy birthday. I love you ♥"
+        }
+      ]
+    }
   },
   "party": {
     "_readme": "the finale party 🎂 — plays after the reveal",
@@ -2028,6 +2260,53 @@
     "_readme": "the end-credits reel. `groups` is [role, [names…]] — add whatever you like.",
     "title": "our little world",
     "sub": "made for Sasha, with everything I've got",
-    "end": "happy birthday ♥"
+    "end": "happy birthday ♥",
+    "groups": [
+      [
+        "starring",
+        [
+          "{her}",
+          "{noah}"
+        ]
+      ],
+      [
+        "the crowd",
+        [
+          "Mookie",
+          "Leo",
+          "Charlie",
+          "Chakra",
+          "Charlie (the collie)",
+          "Rhett (BU)",
+          "Paws (NU)"
+        ]
+      ],
+      [
+        "at home",
+        [
+          "Marina",
+          "mom",
+          "the little brother",
+          "Jack & his wife"
+        ]
+      ],
+      [
+        "in Boston",
+        [
+          "his mom & dad",
+          "everyone at the cafe",
+          "the co-op crowd"
+        ]
+      ],
+      [
+        "locations",
+        [
+          "Mini-LA",
+          "Mini-Everywhere",
+          "Mini-Boston",
+          "one apartment with very good windows"
+        ]
+      ]
+    ]
   }
 }

@@ -913,6 +913,9 @@ export const MAPS = {
     npcs: [
       { id: "neu_prof", sprite: "npc_prof", x: 16, y: 11, dir: "left" },
       { id: "neu_husky", sprite: "npc_husky", x: 5, y: 12, dir: "down" },
+      // 🐺 Paws — the actual husky, asleep under the co-op board
+      { id: "neu_paws", sprite: "paws", pet: true, x: 7, y: 11, dir: "down",
+        point: "neu_paws", join: "paws" },
     ],
     exits: [{ x: 10, y: 14, w: 2, h: 1, to: "boston", spawn: "neudoor" }],
     spawns: { door: [11, 13] },
@@ -968,6 +971,9 @@ export const MAPS = {
     pumpkins: [{ id: "pk_bu", x: 20, y: 2 }],
     npcs: [
       { id: "bu_grad", sprite: "npc_grad", x: 16, y: 6, dir: "down" },
+      // 🐶 Rhett — BU's Boston terrier, chairing the meeting from the floor
+      { id: "bu_rhett", sprite: "rhett", pet: true, x: 5, y: 11, dir: "down",
+        point: "bu_rhett", join: "rhett" },
     ],
     exits: [{ x: 10, y: 13, w: 2, h: 1, to: "boston", spawn: "budoor" }],
     spawns: { door: [11, 12] },

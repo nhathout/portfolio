@@ -280,6 +280,69 @@ html, body {
 #gate-msg { min-height: 16px; }
 #gate-msg.err { color: var(--coral) !important; }
 
+/* ---------- 🐈 the kitten picker (the finale) ---------- */
+.kit-card-wrap { max-width: 620px; }
+#kit-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+.kit-card {
+  flex: 1 1 150px;
+  max-width: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-family: inherit;
+  color: var(--paper);
+  background: rgba(255, 253, 244, 0.06);
+  border: 3px solid var(--paper);
+  border-radius: 3px;
+  padding: 12px 8px 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.4);
+}
+.kit-card:hover { background: rgba(255, 253, 244, 0.14); }
+.kit-card.picked {
+  border-color: var(--gold);
+  background: rgba(232, 199, 74, 0.16);
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.4);
+}
+.kit-sprite {
+  width: 64px;
+  height: 64px;
+  background-size: 256px 256px;   /* the 64x64 sheet at 4x — frame 0 is idle-down */
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  animation: kit-bob 1.1s infinite alternate ease-in-out;
+}
+.kit-card:nth-child(2) .kit-sprite { animation-delay: 0.25s; }
+.kit-card:nth-child(3) .kit-sprite { animation-delay: 0.5s; }
+@keyframes kit-bob {
+  from { transform: translateY(0); }
+  to { transform: translateY(-4px); }
+}
+.kit-card strong { font-size: 10px; line-height: 1.6; color: var(--gold); }
+.kit-card em { font-size: 8px; line-height: 1.9; color: #cfc9e0; font-style: normal; }
+#kit-name-form { margin-top: 18px; }
+.kit-label { font-size: 10px !important; line-height: 1.9; margin-bottom: 12px; }
+#kit-name {
+  font-family: inherit;
+  font-size: 12px;
+  padding: 12px 10px;
+  background: var(--paper);
+  border: 3px solid var(--ink);
+  border-radius: 3px;
+  color: var(--ink);
+  width: 220px;
+  text-align: center;
+}
+
 /* ---------- travel log form ---------- */
 #travel-form { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; align-items: center; }
 #travel-form input,

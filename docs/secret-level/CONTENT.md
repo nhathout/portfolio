@@ -138,6 +138,7 @@ never breaks — but the built-ins are mine, not yours.
 | `neu_flags` | spot | bonus | 🟢 written |
 | `neu_prof` | townsfolk | bonus | 🟢 written |
 | `neu_husky` | townsfolk | bonus | 🟢 written |
+| `neu_paws` | animal | **yes** | 🟢 written |
 
 ## 🏠 BU Robotics Lab 🤖
 
@@ -149,6 +150,7 @@ never breaks — but the built-ins are mine, not yours.
 | `bu_bench` | spot | bonus | 🟢 written |
 | `bu_board` | spot | bonus | 🟢 written |
 | `bu_grad` | townsfolk | bonus | 🟢 written |
+| `bu_rhett` | animal | **yes** | 🟢 written |
 
 ## 🏠 Cafe Bene ☕
 
@@ -167,13 +169,13 @@ never breaks — but the built-ins are mine, not yours.
 | `meta.playerName` | her name — used everywhere, including the party banner | 🟢 written |
 | `meta.intro` | the three lines on arrival | 🟢 written |
 | `noah.greet_la` | how he introduces the whole game | 🟢 written |
-| `noah.chat` | small talk, cycles | 🔴 **TODO** |
-| `noah.after` | what he says once it's over | 🔴 **TODO** |
+| `noah.chat` | small talk, cycles | 🟢 written |
+| `noah.after` | what he says once it's over | 🟢 written |
 | `mookie.lines` | the cat | 🟢 written |
 | `figs.all` | the payoff for every fig | 🟢 written |
-| `pumpkins.all` | the PUMPKINN!! payoff | 🔴 **TODO** |
+| `pumpkins.all` | the PUMPKINN!! payoff | 🟢 written |
 | `finale.prompt` | "meet me at our apartment" | 🟢 written |
-| `finale.lines` | **THE REVEAL. the whole point of the game.** | 🔴 **TODO** |
+| `finale.lines` | **THE REVEAL. the whole point of the game.** | 🟢 written |
 | `finale.title` | the card that comes up after | 🟢 written |
 | `party.surprise` | 🎂 the party skit | 🟢 written |
 | `party.cake` | the candles | 🟢 written |
@@ -182,7 +184,7 @@ never breaks — but the built-ins are mine, not yours.
 
 ---
 
-**4 of 100** entries still need you. `python tools/content_status.py --todo` lists just those.
+**0 of 102** entries still need you. `python tools/content_status.py --todo` lists just those.
 
 ## testing
 

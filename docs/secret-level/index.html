@@ -91,6 +91,24 @@
       </div>
     </div>
 
+    <!-- 🐈 the last screen of the game: she picks a kitten, and names it -->
+    <div id="kitten" class="overlay hidden">
+      <div class="title-card kit-card-wrap">
+        <div class="title-hearts">🐈</div>
+        <h1 id="kit-title">…</h1>
+        <p id="kit-sub"></p>
+        <div id="kit-row"></div>
+        <form id="kit-name-form" class="hidden">
+          <p id="kit-name-label" class="kit-label"></p>
+          <input id="kit-name" type="text" maxlength="16" placeholder="name" autocomplete="off" />
+          <div>
+            <button type="submit" id="kit-confirm" class="pixel-btn">that's the one ♥</button>
+            <button type="button" id="kit-back" class="pixel-btn pixel-btn--dim">← pick again</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <!-- pause menu -->
     <div id="pause" class="overlay hidden">
       <div class="title-card">

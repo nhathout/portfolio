@@ -326,6 +326,22 @@ export const POINT_FALLBACK = {
     { who: "noah", text: "half of everything I know happened in that room and about a third of it was on a Sunday." },
     { who: "noah", text: "come see ♥" },
   ],
+  bu_rhett: [
+    "A Boston terrier is sitting dead centre of the lab floor like he is chairing the meeting.",
+    { who: "noah", text: "…that's Rhett." },
+    { who: "her", text: "does he WORK here?" },
+    { who: "noah", text: "he has a badge. I have seen the badge." },
+    { text: "(Rhett accepts exactly one head scratch, then leans his entire body weight against your shins.)" },
+    { who: "noah", text: "he only does that to people he's already decided about ♥" },
+  ],
+  neu_paws: [
+    "A husky is asleep under the co-op board with all four legs in the air.",
+    { who: "her", text: "PAWS." },
+    { text: "(Paws does not open his eyes. …Paws opens one eye.)" },
+    { who: "her", text: "he's the mascot. he's technically staff." },
+    { who: "noah", text: "he's technically unconscious." },
+    { text: "(He gets up, shakes out, and falls in behind you like it was always the plan.)" },
+  ],
   bu_arm: [
     "A six-axis arm on a pedestal, sweeping slowly through the same arc, over and over.",
     { who: "noah", text: "okay. this is the one. this is my favourite object in the building." },
@@ -421,6 +437,33 @@ const COMPANIONS = {
   // taken by, well, Charlie.
   collie: { sprite: "collie", lag: 15, side: -22, speed: 104, name: "Charlie",
     joinToast: "Charlie joined you! ♥ (…the other Charlie 🐕)" },
+  // 🐶 the two campus mascots. Both are, in their own minds, staff.
+  rhett: { sprite: "rhett", lag: 20, side: -27, speed: 90, name: "Rhett",
+    joinToast: "Rhett joined you! ♥ (he has a badge)" },
+  paws: { sprite: "paws", lag: 33, side: 26, speed: 98, name: "Paws",
+    joinToast: "Paws joined you! ♥ (technically staff)" },
+};
+
+// 🐈 the birthday kittens. She picks one at the finale, names it, and it
+// follows her for the rest of the game — `COMPANIONS.kitten` is built at load
+// time from the save, because the sprite and the name are both her choice.
+const KITTEN_SPRITES = {
+  ginger: "kit_ginger", gray: "kit_gray", cream: "kit_cream",
+};
+const KITTEN_FALLBACK = {
+  prompt: "pick your kitten ♥",
+  sub: "(take your time. this one's for keeps.)",
+  namePrompt: "…and what are we calling them?",
+  confirm: "that's the one ♥",
+  options: [
+    { id: "ginger", label: "the orange one", blurb: "loud, affectionate, will be on your keyboard by Thursday." },
+    { id: "gray", label: "the grey one", blurb: "quiet. dignified. will pick you, not the other way round." },
+    { id: "cream", label: "the cream one", blurb: "soft, sleepy, finds the one sunbeam and holds it all day." },
+  ],
+  after: [
+    { text: "({name} is asleep in the crook of her arm inside ninety seconds.)" },
+    { who: "noah", text: "happy birthday ♥" },
+  ],
 };
 
 // ---------------------------------------------------------------- the tank 🐠
@@ -741,6 +784,7 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
         finale: !!raw.finale,
         introDone: !!raw.introDone,
         mounted: !!raw.mounted,
+        kitten: raw.kitten || null,
         map: raw.map || "la",
         pos: raw.pos || null,
       };
@@ -755,7 +799,7 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
     return {
       seen: new Set(), figs: new Set(), pumps: new Set(), crew: new Set(),
       met: false, hats: false, finale: false, introDone: false, mounted: false,
-      map: "la", pos: null,
+      kitten: null, map: "la", pos: null,
     };
   }
   function persist() {
@@ -768,9 +812,23 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
       seen: [...save.seen], figs: [...save.figs], pumps: [...save.pumps],
       crew: [...save.crew], met: save.met, hats: save.hats,
       finale: save.finale, introDone: save.introDone, mounted: save.mounted,
-      map: save.map, pos: save.pos,
+      kitten: save.kitten, map: save.map, pos: save.pos,
     }));
   }
+
+  // 🐈 her kitten is a companion like Leo or Chakra, except both its sprite and
+  // its name came out of the finale — so the entry has to be rebuilt from the
+  // save on every load, before any scene tries to respawn the crew.
+  function registerKitten() {
+    if (!save.kitten) return;
+    COMPANIONS.kitten = {
+      sprite: KITTEN_SPRITES[save.kitten.id] || "kit_ginger",
+      lag: 10, side: 15, speed: 74,
+      name: save.kitten.name || "the kitten",
+      joinToast: `${save.kitten.name || "the kitten"} joined you! ♥`,
+    };
+  }
+  registerKitten();
 
   // ------------------------------------------------------------ run state
   const state = {
@@ -1221,6 +1279,33 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
     h.onUpdate(() => { h.t += k.dt(); h.pos.y = y + Math.sin(h.t * 3) * 3; });
   }
 
+  /**
+   * 🐈 the reveal itself: three kittens, she keeps one, she names it, and it
+   * walks out of the apartment behind her. Runs once — if she's already chosen
+   * (replaying the ending with ?map=party, say) it stays chosen.
+   */
+  async function pickKitten() {
+    const cfg = { ...KITTEN_FALLBACK, ...(memories.finale?.kitten || {}) };
+    if (save.kitten || !ui.chooseKitten) return;
+    const options = (cfg.options || []).filter((o) => KITTEN_SPRITES[o.id])
+      .map((o) => ({ ...o, sprite: KITTEN_SPRITES[o.id] }));
+    if (!options.length) return;
+
+    const chosen = await ui.chooseKitten({ ...cfg, options });
+    save.kitten = { id: chosen.id, name: chosen.name };
+    registerKitten();
+    persist();
+    recruit("kitten", state.player.pos.add(-14, 10));
+
+    // {name} in the after-lines is her kitten's name, whatever she just typed
+    const after = (cfg.after || []).map((l) => {
+      const line = typeof l === "string" ? { text: l } : { ...l };
+      line.text = (line.text || "").replaceAll("{name}", chosen.name);
+      return line;
+    });
+    if (after.length) await dialogue.show(after);
+  }
+
   async function runFinale() {
     state.cutscene = true;
     audio.heart();
@@ -1231,6 +1316,7 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
     await wait(0.4);
     audio.fanfare();
     await dialogue.show(memories.finale?.lines?.length ? memories.finale.lines : FALLBACK_LINES);
+    await pickKitten();
     state.player.play("cheer");
     if (state.noah) state.noah.play("cheer");
     for (let i = 0; i < 6; i++) {
@@ -1272,6 +1358,7 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
   const PARTY_PETS = [
     ["mookie", 36, 162], ["leo", 74, 162], ["charlie", 244, 162],
     ["chakra", 282, 162], ["collie", 158, 166],
+    ["rhett", 106, 166], ["paws", 212, 166],
   ];
   const FIREWORK_COLORS = [
     [244, 210, 74], [232, 85, 106], [111, 158, 196], [199, 138, 224],
@@ -1404,6 +1491,8 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
       }
     }
     for (const [sprite, x, y] of PARTY_PETS) place(sprite, x, y, true);
+    // …and the newest one, right at her feet where she has been all week 🐈
+    if (save.kitten) place(KITTEN_SPRITES[save.kitten.id] || "kit_ginger", 136, 190, true);
 
     // her and Noah out front, with the cake between them ♥
     const stars = [
@@ -1509,13 +1598,23 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
     return {
       title: c.title || "our little world",
       sub: c.sub || `made for ${NAME}, with everything I've got`,
-      groups: c.groups || [
-        ["starring", [NAME, NOAH]],
-        ["the crowd", ["Mookie", "Leo", "Charlie", "Chakra", "the collie"]],
-        ["at home", ["Marina", "mom", "the little brother", "Jack & his wife"]],
-        ["in Boston", ["his mom & dad", "everyone at the cafe", "the co-op crowd"]],
-        ["locations", ["Mini Los Angeles", "Mini-Everywhere", "Mini-Boston",
-          "one apartment with very good windows"]],
+      // The named groups are hers to edit (memories.json → credits.groups).
+      // The three tallies below are always appended and always live, so they
+      // can't go stale when a fig or a memory gets added to the world.
+      groups: [
+        // {her} / {noah} in the authored groups, so renaming her in `meta`
+        // still renames her in the credits
+        ...(c.groups || []).map(([role, names]) => [role, (names || []).map(
+          (n) => String(n).replaceAll("{her}", NAME).replaceAll("{noah}", NOAH))]),
+        ...(c.groups ? [] : [
+          ["starring", [NAME, NOAH]],
+          ["the crowd", ["Mookie", "Leo", "Charlie", "Chakra", "Charlie (the collie)"]],
+          ["at home", ["Marina", "mom", "the little brother", "Jack & his wife"]],
+          ["in Boston", ["his mom & dad", "everyone at the cafe", "the co-op crowd"]],
+          ["locations", ["Mini-LA", "Mini-Everywhere", "Mini-Boston",
+            "one apartment with very good windows"]],
+        ]),
+        ...(save.kitten ? [["and, as of today", [`${save.kitten.name} 🐈`]]] : []),
         ["figs harvested", [`${save.figs.size} of ${allFigIds().length}`]],
         ["pumpkins located", [`${save.pumps.size} of ${allPumpkinIds().length}`]],
         ["memories", [`${save.seen.size} found`]],
@@ -1834,6 +1933,14 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
 
   // one-liner pools for the animals that joined her
   const PET_CHATTER = {
+    rhett: [
+      ["(Rhett is sitting on your foot. this is a Boston terrier's love language.)"],
+      ["(he sneezes. it is the loudest thing that has ever happened in this building.)"],
+    ],
+    paws: [
+      ["(Paws leans on you until you are structurally involved.)"],
+      ["(he says something. it isn't a bark, it's a whole sentence, and it's an argument.)"],
+    ],
     leo: [
       ["(Leo flops over sideways with total confidence that someone will catch him.)"],
       ["Leo: mrrrp.", "(that was the whole speech.)"],

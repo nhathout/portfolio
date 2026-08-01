@@ -89,7 +89,9 @@ const PET_ANIMS = {
   "sit-flick": { from: 12, to: 15, speed: 2.5, loop: true },
 };
 // (`collie` is the OTHER Charlie — Noah's border collie 🐕)
-for (const pet of ["mookie", "leo", "charlie", "chakra", "collie"]) {
+// (the three kit_* sheets are the birthday kittens — she keeps one 🐈)
+for (const pet of ["mookie", "leo", "charlie", "chakra", "collie",
+  "rhett", "paws", "kit_ginger", "kit_gray", "kit_cream"]) {
   k.loadSprite(pet, `assets/${pet}.png`, { sliceX: 4, sliceY: 4, anims: PET_ANIMS });
 }
 k.loadSprite("fig", "assets/fig.png", {
@@ -408,6 +410,66 @@ const ui = {
       scroll.addEventListener("animationend", finish);
       $("btn-credits-skip").addEventListener("click", finish);
       window.addEventListener("keydown", onKey);
+    });
+  },
+  /**
+   * 🐈 the last thing she does in the game: pick one of three kittens, then
+   * name it. Resolves with { id, name } — there is deliberately no way to
+   * cancel out of this one.
+   */
+  chooseKitten(cfg) {
+    const overlay = $("kitten");
+    const row = $("kit-row");
+    const form = $("kit-name-form");
+    const input = $("kit-name");
+    $("kit-title").textContent = cfg.prompt || "pick your kitten ♥";
+    $("kit-sub").textContent = cfg.sub || "";
+    $("kit-name-label").textContent = cfg.namePrompt || "…and what's their name?";
+    input.placeholder = cfg.namePlaceholder || "name";
+    input.value = "";
+    $("kit-confirm").textContent = cfg.confirm || "that's the one ♥";
+    $("kit-back").textContent = cfg.back || "← pick again";
+    row.innerHTML = "";
+    form.classList.add("hidden");
+    overlay.classList.remove("hidden");
+    let picked = null;
+
+    return new Promise((resolve) => {
+      const unpick = () => {
+        picked = null;
+        form.classList.add("hidden");
+        for (const c of row.children) c.classList.remove("picked");
+      };
+      for (const opt of cfg.options || []) {
+        const card = document.createElement("button");
+        card.type = "button";
+        card.className = "kit-card";
+        const sprite = document.createElement("span");
+        sprite.className = "kit-sprite";
+        sprite.style.backgroundImage = `url("assets/${opt.sprite}.png")`;
+        const label = document.createElement("strong");
+        label.textContent = opt.label || "";
+        const blurb = document.createElement("em");
+        blurb.textContent = opt.blurb || "";
+        card.append(sprite, label, blurb);
+        card.addEventListener("click", () => {
+          picked = opt;
+          for (const c of row.children) c.classList.toggle("picked", c === card);
+          form.classList.remove("hidden");
+          audio.confirm();
+          setTimeout(() => input.focus(), 60);
+        });
+        row.appendChild(card);
+      }
+      $("kit-back").onclick = () => { audio.close(); unpick(); };
+      form.onsubmit = (e) => {
+        e.preventDefault();
+        if (!picked) return;
+        const name = input.value.trim().slice(0, 16) || picked.fallbackName || "kitten";
+        overlay.classList.add("hidden");
+        audio.fanfare();
+        resolve({ id: picked.id, name });
+      };
     });
   },
   showFinaleBanner(title, sub) {

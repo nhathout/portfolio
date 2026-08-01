@@ -335,10 +335,66 @@ LEO = {                                # Leo — big orange tabby 🐱
     "p": hex_rgba("f0a8b0"), "e": hex_rgba("4f8f4f"),
 }
 
+# 🐈 the three kittens on the last screen of the game. Leo is already a big
+# orange tabby, so the ginger one is deliberately paler and pinker than he is —
+# at 16px two orange cats side by side at the party would read as one cat twice.
+KIT_GINGER = {
+    "g": hex_rgba("f2a95e"), "G": hex_rgba("d07a34"), "w": hex_rgba("fdf1dc"),
+    "p": hex_rgba("f4b0b8"), "e": hex_rgba("5aa06a"),
+}
+KIT_GRAY = {
+    "g": hex_rgba("9aa3ad"), "G": hex_rgba("6c7581"), "w": hex_rgba("e8edf1"),
+    "p": hex_rgba("e8a8b4"), "e": hex_rgba("6fbcd8"),
+}
+KIT_CREAM = {
+    "g": hex_rgba("efdcbc"), "G": hex_rgba("d4b78e"), "w": hex_rgba("fdf7ea"),
+    "p": hex_rgba("f0b0b8"), "e": hex_rgba("d8a24a"),
+}
+
 CHARLIE = {                            # Charlie — small white dog 🐶
     "g": hex_rgba("f6f2e6"), "G": hex_rgba("bdb09a"), "w": hex_rgba("fdfbf4"),
     "p": hex_rgba("e8a0a8"), "e": hex_rgba("2b2028"), "n": hex_rgba("3a3230"),
 }
+
+# 🐶 the two campus mascots, who both decide to come along
+RHETT = {                              # BU's Boston terrier — a tuxedo: black
+    "g": hex_rgba("312d38"),           # coat, white muzzle, blaze, bib, socks
+    "G": hex_rgba("47414f"),           # ears + legs, a shade up so the
+    "l": hex_rgba("47414f"),           # silhouette doesn't fill in at 16px
+    "w": hex_rgba("fbf8f0"),
+    "p": hex_rgba("e8a0a8"), "e": hex_rgba("f0c94a"), "n": hex_rgba("1a1820"),
+}
+PAWS = {                               # Northeastern's husky: a plain
+    "g": hex_rgba("343841"),           # black-and-white husky — dark coat and
+    "G": hex_rgba("22252b"),           # dark ears/legs, with the mask, the
+    "l": hex_rgba("e9eef2"),           # forehead blaze and the shoulders white
+    "w": hex_rgba("fdfeff"),           # muzzle, chest, paws
+    "p": hex_rgba("e8a0a8"), "e": hex_rgba("6fbcd8"), "n": hex_rgba("22252b"),
+}
+
+
+def boston_face(grids):
+    """DOG with a white blaze up the middle of the face — the single marking
+    that makes a black dog read as a Boston terrier and not as a shadow."""
+    out = dict(grids)
+    for key in ("down", "down_a", "sit", "sit_b"):
+        rows = list(grids[key])
+        for i, r in enumerate(rows):
+            if r.count("e") != 2:
+                continue
+            a, b = r.find("e"), r.rfind("e")
+            mid = (a + b) // 2
+            for j in (i - 2, i - 1, i):          # blaze runs up between the eyes
+                if j < 0:
+                    continue
+                row = list(rows[j])
+                for x in (mid, mid + 1):
+                    if 0 <= x < len(row) and row[x] == "g":
+                        row[x] = "w"
+                rows[j] = "".join(row)
+            break
+        out[key] = rows
+    return out
 
 # ---- Brookline: Noah's half of the duplex 🏡 -------------------------------
 DAD = {                                # his dad — black hair, glasses, and a
@@ -8602,6 +8658,12 @@ def main():
         {"front": KID_LEGS_FRONT, "side": KID_LEGS_SIDE}, BRO,
         torso_h=BRO_TORSO_H, head_pad=BRO_HEAD_PAD)
     out["leo"] = compose_quad(MOOK, LEO)
+    # 🐈 the birthday kittens — she picks one of these on the last screen
+    out["rhett"] = compose_quad(boston_face(DOG), RHETT)
+    out["paws"] = compose_quad(BIGDOG, PAWS)
+    out["kit_ginger"] = compose_quad(MOOK, KIT_GINGER)
+    out["kit_gray"] = compose_quad(MOOK, KIT_GRAY)
+    out["kit_cream"] = compose_quad(MOOK, KIT_CREAM)
     out["charlie"] = compose_quad(DOG, CHARLIE)
 
     # ---- Brookline: his half of the duplex 🏡
@@ -8848,6 +8910,7 @@ def main():
                  ["in_rover", "in_drone", "in_cafetable", "in_hingeframe"],
                  ["in_cafecounter", "in_espresso", "in_pastrycase"],
                  ["in_armchair", "in_beanshelf"],
+                 ["kit_ginger", "kit_gray", "kit_cream", "rhett", "paws"],
                  ["npc_aide", "in_carebed", "in_bedtable"],
                  ["in_ivdrip", "in_wheelchair"],
                  ["torii", "barrier", "fig", "fx", "shadow"],

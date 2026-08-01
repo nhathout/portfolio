@@ -127,8 +127,8 @@ export async function loadMemories(audio) {
     if (dev) {
       devText = text;
       gate.classList.add("hidden");
-      // say so, loudly enough to stop anyone wondering where the password went
-      document.getElementById("devbadge")?.classList.remove("hidden");
+      // console only — nothing dev-facing is allowed to render on the page,
+      // because the page is the thing she sees
       console.info(
         "[secret-level] dev mode: loaded plaintext data/memories.json, so the "
         + "password gate was skipped. Add ?gate to the URL to see it.");

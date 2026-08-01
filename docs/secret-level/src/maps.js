@@ -34,6 +34,11 @@
 //   a  lab floor       Q  wall top (solid)      q  wall face (solid)
 //   e  corridor window (solid)   u  whiteboard (solid)   U  lab door (solid)
 //
+// CARE HOME interior (la_care_in) — lino, sage wainscot, a lot of daylight:
+//   n  lino floor       N  wall top (solid)      m  wall face (solid)
+//   W  the garden window (solid)   E  the wall of photographs (solid)
+//   d  the wide door (solid)
+//
 // CAFE BENE interior (bos_cafe_in) — herringbone + chocolate wainscot:
 //   g  parquet floor   A  wall top (solid)      G  wall face (solid)
 //   B  the storefront window (solid)   J  the chalk menu (solid)  L  door (solid)
@@ -57,8 +62,8 @@ export const BUILDING_META = {
   b_la_home: { wt: 8, ht: 3, doorCol: 6 },
   b_la_jack: { wt: 8, ht: 3, doorCol: 4 },
   b_la_house_b: { wt: 4, ht: 2 },
-  b_taco_shop: { wt: 4, ht: 2 },
-  b_theater: { wt: 5, ht: 2 },
+  b_shaveice: { wt: 4, ht: 2 },
+  b_carehome: { wt: 5, ht: 2, doorCol: 2 },
   b_innout: { wt: 5, ht: 2, doorCol: 2 },
   b_brownstone_b: { wt: 4, ht: 3, stoop: true },
   b_bu_building: { wt: 6, ht: 3, doorCol: 4 },
@@ -71,7 +76,7 @@ export const BUILDING_META = {
 export const MAPS = {
   // ------------------------------------------------------------- MINI LA
   la: {
-    name: "Mini Los Angeles",
+    name: "Mini-LA",
     ground: [
       "wwwwwwssssss....*........*.......*.........",
       "wwwwwwssssss..**......*........**......*...",
@@ -152,8 +157,11 @@ export const MAPS = {
       { sprite: "b_la_home", x: 15, y: 6, point: "la_home",
         enter: { to: "la_house_in", spawn: "door" } },
       { sprite: "b_la_house_b", x: 35, y: 6 },
-      { sprite: "b_taco_shop", x: 25, y: 11, point: "la_taco" },
-      { sprite: "b_theater", x: 30, y: 18, point: "la_theater" },
+      // 🍧 Brian's — a window, a bench, and her favourite thing in the county
+      { sprite: "b_shaveice", x: 25, y: 11, point: "la_shaveice" },
+      // 🌷 the care home: Dusya's room is up the ramp and to the left
+      { sprite: "b_carehome", x: 30, y: 18, point: "la_care",
+        enter: { to: "la_care_in", spawn: "door" } },
       // 🍔 In-N-Out, off the main road. Interior comes later.
       { sprite: "b_innout", x: 15, y: 14, point: "innout",
         enter: { to: "la_innout_in", spawn: "door" } },
@@ -223,21 +231,21 @@ export const MAPS = {
       { id: "la_neighbor", sprite: "npc_old", x: 36, y: 8, dir: "down" },
     ],
     signs: {
-      "39,10": ["→ Little Everywhere (300m)", "→ Mini Boston (4,982km… worth it)"],
+      "39,10": ["→ Mini-Everywhere (300m)", "→ Mini-Boston (4,982km… worth it)"],
       "34,16": ["← the beach (400m)", "↓ the garden house (5 min)"],
       "15,26": ["🌻 THE GARDEN 🌻", "take what you need,", "leave the tomatoes alone. — Jack"],
     },
     exits: [{ x: 41, y: 11, w: 1, h: 3, to: "route", spawn: "west" }],
     spawns: {
       start: [19, 8], west: [39, 12], door: [21, 8], jackdoor: [29, 27],
-      innoutdoor: [17, 15],
+      innoutdoor: [17, 15], caredoor: [32, 19],
     },
     noahPost: [23, 8],
   },
 
   // ------------------------------------------------------------- THE ROUTE
   route: {
-    name: "Little Everywhere · all our places",
+    name: "Mini-Everywhere",
     ground: [
       ".....*..........*.........*...",
       "..*........*.........*.......*",
@@ -315,8 +323,8 @@ export const MAPS = {
       { id: "route_admirer", sprite: "npc_woman", x: 23, y: 4, dir: "right" },
     ],
     signs: {
-      "2,7": ["← Mini LA (300m)", "→ Mini Boston (600m)"],
-      "28,7": ["→ Mini Boston (300m)", "← Mini LA (600m)"],
+      "2,7": ["← Mini-LA (300m)", "→ Mini-Boston (600m)"],
+      "28,7": ["→ Mini-Boston (300m)", "← Mini-LA (600m)"],
     },
     exits: [
       { x: 0, y: 7, w: 1, h: 3, to: "la", spawn: "west" },
@@ -327,7 +335,7 @@ export const MAPS = {
 
   // ------------------------------------------------------------- MINI BOSTON
   boston: {
-    name: "Mini Boston",
+    name: "Mini-Boston",
     ground: [
       "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
       "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
@@ -462,7 +470,7 @@ export const MAPS = {
       { id: "pk_bos_3", x: 5, y: 3 },
     ],
     signs: {
-      "2,10": ["← Little Everywhere (300m)", "← Mini LA (a long walk)"],
+      "2,10": ["← Mini-Everywhere (300m)", "← Mini-LA (a long walk)"],
       "4,31": ["🏡 BROOKLINE", "↑ Longwood · JVUE (900m)", "↑ the Esplanade (2.1km)"],
     },
     npcs: [
@@ -480,7 +488,7 @@ export const MAPS = {
       jvuedoor: [11, 22], parentsdoor: [16, 28],
     },
     // deliberately no `noahPost`: until she talks to him he stays put on
-    // his bench in Mini LA, so he can't show up here having never met her
+    // his bench in Mini-LA, so he can't show up here having never met her
   },
 
   // ------------------------------------------------------- INSIDE HER HOUSE
@@ -605,6 +613,59 @@ export const MAPS = {
     ],
     exits: [{ x: 10, y: 13, w: 2, h: 1, to: "la", spawn: "jackdoor" }],
     spawns: { door: [11, 12] },
+  },
+
+  // ------------------------------------------------- 🌷 THE CARE HOME
+  // Dusya's room. She is drawn into the bed sprite rather than standing
+  // next to it as an NPC — every character in this engine is on their feet,
+  // and a woman propped up on three pillows is the whole point of the room.
+  la_care_in: {
+    name: "Dusya's room 🌷",
+    interior: true,
+    ground: [
+      "NNNNNNNNNNNNNNNNNNNN",
+      "mmWWWmmmEEmmmWWWmmmm",
+      "mnnnnnnnnnnnnnnnnnnm",
+      "mnnnnnnnnnnnnnnnnnnm",
+      "mnnnnnnnnnnnnnnnnnnm",
+      "mnnnnnnnnnnnnnnnnnnm",
+      "mnnnnnnnnnnnnnnnnnnm",
+      "mnnnnnnnnnnnnnnnnnnm",
+      "mnnnnnnnnnnnnnnnnnnm",
+      "mnnnnnnnnnnnnnnnnnnm",
+      "mnnnnnnnnnnnnnnnnnnm",
+      "mnnnnnnnnnnnnnnnnnnm",
+      "mnnnnnnnnnnnnnnnnnnm",
+      "mmmmmmmmmddmmmmmmmmm",
+    ],
+    objects: [],
+    buildings: [],
+    props: [
+      // the bed, under the photographs, where everything in here happens
+      { type: "in_carebed", x: 6, y: 4 },
+      { type: "in_ivdrip", x: 9, y: 4 },
+      { type: "in_bedtable", x: 3, y: 4 },
+      { type: "in_armchair", x: 10, y: 5 },   // the chair Noah gets put in
+      { type: "in_tvmount", x: 16, y: 3 },
+      { type: "in_wheelchair", x: 2, y: 11 },
+      { type: "in_bigplant", x: 18, y: 11 },
+      { type: "in_lamp", x: 1, y: 7 },
+    ],
+    points: [
+      { id: "care_baba", x: 5, y: 5, w: 3, h: 1 },
+      // the window and the wall of photographs are scenery on purpose — the
+      // room only asks her to stop at one thing
+      { id: "care_tv", x: 15, y: 4, w: 3, h: 1, bonus: true },
+    ],
+    figs: [],
+    pumpkins: [{ id: "pk_care", x: 1, y: 3 }],
+    npcs: [
+      // background townsfolk (no `point:`) — she cycles the lines in
+      // memories.json → npcs.care_aide and doesn't tick the ♥ counter
+      { id: "care_aide", sprite: "npc_aide", x: 14, y: 8, dir: "left" },
+    ],
+    exits: [{ x: 9, y: 12, w: 2, h: 1, to: "la", spawn: "caredoor" }],
+    spawns: { door: [10, 11] },
   },
 
   // ------------------------------------------------- INSIDE IN-N-OUT 🍔
@@ -842,7 +903,7 @@ export const MAPS = {
     ],
     points: [
       { id: "neu_map", x: 10, y: 4, w: 4, h: 1 },
-      { id: "neu_un", x: 9, y: 10, w: 5, h: 1 },
+      // (the Model UN horseshoe is scenery — no interaction on it)
       { id: "neu_globe", x: 18, y: 6, w: 3, h: 1, bonus: true },
       { id: "neu_coop", x: 1, y: 10, w: 3, h: 1, bonus: true },
       { id: "neu_flags", x: 3, y: 5, w: 4, h: 1, bonus: true },
@@ -954,7 +1015,7 @@ export const MAPS = {
       { id: "cafe_table", x: 5, y: 12, w: 3, h: 1 },
       { id: "cafe_hinge", x: 15, y: 4, w: 3, h: 1 },
       { id: "cafe_counter", x: 8, y: 5, w: 4, h: 1, bonus: true },
-      { id: "cafe_pastry", x: 3, y: 5, w: 3, h: 1, bonus: true },
+      // (the pastry case is scenery — no interaction on it)
     ],
     figs: [{ id: "fig_cafe", x: 18, y: 11 }],
     pumpkins: [{ id: "pk_cafe", x: 1, y: 3 }],

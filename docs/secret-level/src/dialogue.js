@@ -55,7 +55,7 @@ export class Dialogue {
       const display = this.names[who] || who;
       this.nameEl.textContent = display;
       this.nameEl.className = "";
-      if (who === "her" || who === "noah" || who === "cat") {
+      if (who === "her" || who === "noah" || who === "cat" || who === "dusya") {
         this.nameEl.classList.add(`who-${who}`);
       }
     } else {

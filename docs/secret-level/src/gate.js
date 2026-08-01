@@ -7,6 +7,10 @@
 
 const PW_CACHE_KEY = "sl_pw";
 
+// set when loadMemories() took the plaintext path — watchMemories() is a no-op
+// otherwise, so nothing polls on the deployed (encrypted) site.
+let devText = null;
+
 const b64dec = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
 
 async function deriveKey(password, salt, iterations, usages = ["decrypt"]) {
@@ -46,14 +50,64 @@ export async function decryptBundle(bundle, password) {
   return JSON.parse(new TextDecoder().decode(plain));
 }
 
-async function tryFetchJSON(url) {
+async function tryFetchText(url) {
   try {
     const res = await fetch(url, { cache: "no-store" });
     if (!res.ok) return null;
-    return await res.json();
+    return await res.text();
   } catch {
     return null;
   }
+}
+
+async function tryFetchJSON(url) {
+  const text = await tryFetchText(url);
+  if (text === null) return null;
+  try {
+    return JSON.parse(text);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Dev-only live reload: poll data/memories.json and, when it changes on disk,
+ * swap the new text into the SAME `memories` object the game is holding.
+ * Everything (points, npcs, pets, party, credits) is read lazily at interact
+ * time, so edits show up on the next E press — no page refresh, no lost save.
+ *
+ * No-op unless loadMemories() actually took the plaintext path.
+ * `onUpdate(memories, err)` fires on every successful swap, and once with an
+ * `err` when the file stops parsing (so the game can say so on screen).
+ */
+export function watchMemories(memories, onUpdate, intervalMs = 900) {
+  if (devText === null) return () => {};
+  let badShown = false;
+  const timer = setInterval(async () => {
+    const text = await tryFetchText("data/memories.json");
+    if (text === null || text === devText) return;
+    let next;
+    try {
+      next = JSON.parse(text);
+    } catch (e) {
+      // half-written file, or a real typo — say it once, keep the old content
+      // live, and keep polling so the fix picks itself up.
+      if (!badShown) {
+        badShown = true;
+        console.warn("[secret-level] memories.json didn't parse:", e.message);
+        onUpdate?.(memories, e);
+      }
+      return;
+    }
+    devText = text;
+    badShown = false;
+    // mutate in place — main.js/world.js closed over this exact object
+    for (const key of Object.keys(memories)) delete memories[key];
+    Object.assign(memories, next);
+    console.info("[secret-level] memories.json reloaded ♥");
+    onUpdate?.(memories, null);
+  }, intervalMs);
+  return () => clearInterval(timer);
 }
 
 /** Resolves with the decrypted memories object (leaves the gate visible until then). */
@@ -67,8 +121,11 @@ export async function loadMemories(audio) {
 
   // dev shortcut: plaintext memories.json (gitignored, never deployed)
   if (!forceGate) {
-    const dev = await tryFetchJSON("data/memories.json");
+    const text = await tryFetchText("data/memories.json");
+    let dev = null;
+    try { dev = text === null ? null : JSON.parse(text); } catch { dev = null; }
     if (dev) {
+      devText = text;
       gate.classList.add("hidden");
       // say so, loudly enough to stop anyone wondering where the password went
       document.getElementById("devbadge")?.classList.remove("hidden");
@@ -76,6 +133,11 @@ export async function loadMemories(audio) {
         "[secret-level] dev mode: loaded plaintext data/memories.json, so the "
         + "password gate was skipped. Add ?gate to the URL to see it.");
       return dev;
+    }
+    if (text !== null) {
+      console.warn(
+        "[secret-level] data/memories.json is present but isn't valid JSON — "
+        + "falling back to the encrypted bundle. (trailing comma? smart quote?)");
     }
   }
 

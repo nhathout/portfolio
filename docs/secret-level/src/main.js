@@ -1,7 +1,7 @@
 // Boot: password gate → kaplay init → asset load → title → game.
 
 import { Chip } from "./audio.js";
-import { loadMemories } from "./gate.js";
+import { loadMemories, watchMemories } from "./gate.js";
 import { Dialogue } from "./dialogue.js";
 import { startGame } from "./world.js";
 import { allPointIds, allFigIds } from "./maps.js";
@@ -71,7 +71,8 @@ for (const npc of ["npc_woman", "npc_man", "npc_old",
   "npc_marina", "npc_mom", "npc_bro", "npc_jack", "npc_wife",
   "npc_innout", "npc_innout2",
   // 🏡 Brookline + the three Boston interiors
-  "npc_dad", "npc_hismom", "npc_barista", "npc_prof", "npc_grad", "npc_husky"]) {
+  "npc_dad", "npc_hismom", "npc_barista", "npc_prof", "npc_grad", "npc_husky",
+  "npc_aide"]) {
   k.loadSprite(npc, `assets/${npc}.png`, { sliceX: 4, sliceY: 4, anims: CHAR_ANIMS });
 }
 // the same two of them, in In-N-Out paper hats, for after the burger run 🍔
@@ -167,7 +168,9 @@ for (const n of ["tree", "palm", "figtree", "lamp", "bench", "quad", "torii",
   // ☕ Cafe Bene
   "in_cafetable", "in_cafecounter", "in_pastrycase", "in_hingeframe",
   "in_armchair", "in_beanshelf",
-  "b_la_home", "b_la_jack", "b_la_house_b", "b_taco_shop", "b_theater",
+  // 🌷 the care home
+  "in_carebed", "in_ivdrip", "in_bedtable", "in_wheelchair",
+  "b_la_home", "b_la_jack", "b_la_house_b", "b_shaveice", "b_carehome",
   "b_innout", "b_brownstone_b", "b_bu_building", "b_neu_building",
   // the party 🎂
   "bunting", "balloons", "partytable",
@@ -224,6 +227,7 @@ const names = {
   her: memories.meta?.playerName || "you",
   noah: memories.meta?.noahName || "Noah",
   cat: memories.meta?.catName || "Mookie",
+  dusya: memories.meta?.grandmaName || "Dusya",
 };
 const dialogue = new Dialogue(audio, names);
 
@@ -449,8 +453,27 @@ const game = startGame(k, memories, tilesMeta, dialogue, audio, ui);
 window.__sl = { k, game, memories }; // debug handle
 
 // ---------------------------------------------------------------- title
-$("title-name").textContent = memories.meta?.title || "our little world";
-$("title-sub").textContent = memories.meta?.subtitle || "";
+function applyMeta() {
+  names.her = memories.meta?.playerName || "you";
+  names.noah = memories.meta?.noahName || "Noah";
+  names.cat = memories.meta?.catName || "Mookie";
+  names.dusya = memories.meta?.grandmaName || "Dusya";
+  $("title-name").textContent = memories.meta?.title || "our little world";
+  $("title-sub").textContent = memories.meta?.subtitle || "";
+}
+applyMeta();
+
+// dev only (plaintext memories.json): editing the file updates the game live.
+// Everything else reads `memories` lazily, so only the meta needs re-applying.
+watchMemories(memories, (_mem, err) => {
+  applyMeta();
+  const el = ui.toast;
+  el.textContent = err ? "memories.json didn't parse — see console" : "memories.json reloaded ♥";
+  el.classList.remove("hidden", "fade-out");
+  clearTimeout(el._t1); clearTimeout(el._t2);
+  el._t1 = setTimeout(() => el.classList.add("fade-out"), 1800);
+  el._t2 = setTimeout(() => el.classList.add("hidden"), 2350);
+});
 
 function begin(fresh) {
   audio.confirm();

@@ -47,7 +47,7 @@ the only tell. That fades to `/secret-level/`, which asks for the password.
 - 🎃 **PUMPKINN!!** — pumpkins hidden across the maps and interiors; collecting
   all of them triggers the pumpkin prize dialogue (fill it in
   `memories.json → pumpkins.all`).
-- 🛵 **the ATV** — after reading the quad-bike memory on Little Everywhere,
+- 🛵 **the ATV** — after reading the quad-bike memory on Mini-Everywhere,
   press E on the quad to ride it (Mookie hops on the back). It's fast, it
   works across maps, E parks it. Noah sprints to keep up.
 - 🐴 the **beach horse** in LA is pettable (riding comes in a later update).
@@ -78,19 +78,19 @@ the only tell. That fades to `/secret-level/`, which asks for the password.
   paper hats**. The tray lands on a booth and stays there, and **she and Noah
   wear the hats for the rest of the game** (saved, on every map). Two bonus
   spots inside: the menu board and the fry station.
-- 🌊 **the beach** runs the whole west edge of Mini LA and is six tiles of
+- 🌊 **the beach** runs the whole west edge of Mini-LA and is six tiles of
   ocean plus six of sand: a **lifeguard tower**, a big umbrella and towel,
   boards planted in the sand, a **volleyball net**, somebody's **sandcastle**,
   loungers, starfish, palms, two sailboats out on the water, and the horse.
   Three readable spots (the beach itself, the tower, the boards).
-- 🌳 **the Charles River Esplanade** along the top of Mini Boston: the **Hatch
+- 🌳 **the Charles River Esplanade** along the top of Mini-Boston: the **Hatch
   Shell**, weeping willows leaning over the water, sailboats drifting on the
   river, lamps and benches on the bank, the park sign, and the boombox. One
   readable spot; no interior by design.
 
 ### 🏙 the five Boston interiors
 
-Every building on the Mini Boston strip opens now — press **E** on the door,
+Every building on the Mini-Boston strip opens now — press **E** on the door,
 same as her house in LA. Walk onto the door tile inside to come back out.
 
 - 🏢 **JVUE at the LMA** (`bos_jvue_in`) — **their apartment**, eleven days
@@ -153,13 +153,13 @@ own 320×240 canvas laid over kaplay's (`src/minigames.js`, `#minigame` in
 - 🇦🇼 **the Aruba beach**, past the road barriers on the far east of Mini
   Boston: a palapa bar with a **CLOSED** board, a driftwood ARUBA sign, palms,
   starfish, and **a turtle she can talk to**. (There's a divi-divi tree on
-  Little Everywhere too, and "Aruba" is in the travel log as *soon ♥*.)
+  Mini-Everywhere too, and "Aruba" is in the travel log as *soon ♥*.)
 - 🪧 **signs** near map edges are readable (E) and show directions + distances.
 - 🍅 the **tomato garden** by Noah's LA house: after its memory, E picks a
   tomato (they regrow; total picked is remembered).
-- 🌍 **Little Everywhere** has one landmark per country (Greece, Egypt, Italy,
+- 🌍 **Mini-Everywhere** has one landmark per country (Greece, Egypt, Italy,
   Mexico, Moldova, Russia) — each gives a short brief + a `[TODO Noah]` line.
-- ✈ the **travel-log easel** on Little Everywhere: she can log a new trip
+- ✈ the **travel-log easel** on Mini-Everywhere: she can log a new trip
   (country + a tiny memory) and a monument appears on a random free spot.
   **Known countries/cities get a hand-drawn monument** (Canada→maple leaf,
   Puerto Rico→garita, Boston→lobster, New York/USA→Statue of Liberty,
@@ -204,6 +204,14 @@ python3 -m http.server 8321
 
 - If `data/memories.json` exists (it's **gitignored**), the gate is skipped and
   that plaintext file is used — that's your dev mode.
+- **Live reload.** In that dev mode the game polls `data/memories.json` about
+  once a second and swaps the new text into the running game — save the file,
+  press **E** on the thing you just rewrote, and the new lines are there. No
+  refresh, no lost save, no walking back across the map. A `memories.json
+  reloaded ♥` toast confirms each swap. If the file has a JSON typo the game
+  keeps the last good copy, toasts `didn't parse — see console`, and picks the
+  fix up as soon as it parses again. The watcher never runs on the deployed
+  site (it only starts when the plaintext file was the thing that loaded).
 - Dev URL params: `?map=la|route|boston|la_house_in|la_jack_in&spawn=start`
   (skip title; handy spawns: `boston&spawn=beach|esplanade|brookline`,
   `la&spawn=door`, `la&spawn=jackdoor`, `la_house_in&spawn=door`,
@@ -232,7 +240,7 @@ python3 -m http.server 8321
 
 ### ⚡ how the ground is drawn (read this before touching `maps.js` tiles)
 
-Mini LA is 43×34 tiles. One game object per tile meant ~1,300 objects on that
+Mini-LA is 43×34 tiles. One game object per tile meant ~1,300 objects on that
 map alone and the frame rate showed it, so **the static floor is baked**:
 `bakeGround()` in `world.js` stamps every non-animated tile into one offscreen
 canvas and hands it to kaplay as a single sprite (`bake_<map>`), and all the
@@ -291,9 +299,10 @@ Every placeholder is marked `[TODO Noah: …]` — grep for `TODO`.
    whole point. Also `finale.prompt/title/subtitle`.
 4. `noah.chat` / `noah.after`, `mookie.lines`, `npcs.*` — flavor lines
    (townsfolk fall back to built-in jokes if you leave `npcs` out).
-5. Rename the generic LA landmarks (taco spot / theater) to your real ones —
-   titles are just text; the buildings are in `src/maps.js` if you want to
-   move/re-skin them.
+5. The LA block is all real places now — her house, **Brian's shaved ice**,
+   the **care home** (Dusya's room is inside it), In-N-Out and Jack's.
+   Titles are just text; the buildings are in `src/maps.js` if you want to
+   move or re-skin them.
 
 ## 🔐 password & encryption (important)
 
@@ -383,7 +392,8 @@ cd tools && python3 make_sprites.py   # regenerates ../assets/*.png + preview.pn
 - **Interiors, one at a time** — every exterior is placed and readable; the
   insides still to do: **JVUE** (her apartment — that one is the finale room),
   her **parents' place** in Brookline, **Cafe Bene**, plus the older
-  placeholders (taco shop, theater, BU, Northeastern). **In-N-Out is done.**
+  placeholders (BU, Northeastern). **In-N-Out and the care home are done**
+  (Brian's is a walk-up window, so it deliberately has no inside).
   The plumbing is done — add a map with `interior: true`, then
   `enter: { to, spawn }` on the building in `maps.js`. Copy `la_house_in` or
   `la_jack_in` (see "adding another house" below).

@@ -19,6 +19,25 @@ export const POINT_FALLBACK = {
     { who: "noah", text: "Santa Clarita. I knew every room in this place before I ever set foot in it." },
     { who: "noah", text: "go on — everybody's inside. press E at the door ♥" },
   ],
+  // 🍧 🌷 the two LA landmarks — the full versions live in memories.json
+  la_shaveice: [
+    "A walk-up window, a wall of syrup bottles, and a line that is somehow always four people long.",
+    { who: "noah", text: "Brian's. we were never once \"just stopping by\" ♥" },
+  ],
+  la_care: [
+    "Low and warm and brick, with a ramp up to the doors and flowers under every window.",
+    { who: "noah", text: "your grandma's place. her room's the first on the left ♥" },
+  ],
+  care_baba: [
+    { text: "She is sitting up against three pillows, and her hair is the exact orange it has always been." },
+    { who: "dusya", text: "Sashenka!! Idi syuda, idi!" },
+    { who: "her", text: "…she wants to know when the wedding is." },
+    { who: "noah", text: "tell her I'm working on it ♥" },
+  ],
+  care_tv: [
+    "A Russian talk show, muted, in which two men in suits are furious about something.",
+    { text: "(from the bed, without looking over: \"Tishe!\")" },
+  ],
   la_pool: [
     "The pool. Perfectly still, absurdly blue, faintly smug about it.",
     { who: "noah", text: "one day we're going to argue about whether the water is 'too cold' again. I'm going to lose again." },
@@ -278,20 +297,6 @@ export const POINT_FALLBACK = {
     { who: "noah", text: "and then you go to them. that's the part people miss." },
     { text: "(she moves one pin two centimetres to the left. It was bothering her.)" },
   ],
-  neu_un: [
-    "The Model UN room, still set from this morning: placards out, water glasses full, gavel unclaimed.",
-    { who: "her", text: "oh no." },
-    { who: "noah", text: "oh YES. which one were you?" },
-    { who: "her", text: "…I chaired." },
-    { who: "noah", text: "you CHAIRED." },
-    { who: "her", text: "somebody had to. two delegates were arguing about a comma." },
-    { text: "(She picks up the gavel. She absolutely should not. She does it anyway.)" },
-    { text: "*TOK*" },
-    { who: "her", text: "the motion carries." },
-    { who: "noah", text: "what motion" },
-    { who: "her", text: "the one where we get food after this." },
-    { text: "(Unanimous. The gavel goes back exactly where it was.)" },
-  ],
   neu_globe: [
     "A floor globe on a brass meridian, worn smooth around the equator by ten thousand hands.",
     { text: "(She spins it, closes her eyes, and puts a finger down.)" },
@@ -300,10 +305,12 @@ export const POINT_FALLBACK = {
   ],
   neu_coop: [
     "The co-op board. Six months on, six months off, and every posting has its tabs torn off.",
-    { who: "noah", text: "the famous co-op. this board runs this entire university." },
-    { who: "her", text: "it runs my entire LIFE. I have a spreadsheet." },
-    { who: "noah", text: "you have a spreadsheet about a corkboard." },
-    { who: "her", text: "I have a spreadsheet about a corkboard and it is COLOR CODED." },
+    { who: "noah", text: "two of these were yours." },
+    { who: "her", text: "TJX first. marketing. I did not love it." },
+    { who: "noah", text: "you didn't love the work or you didn't love the people?" },
+    { who: "her", text: "…the people." },
+    { who: "noah", text: "and now Wellington." },
+    { who: "her", text: "and now Wellington, and I actually like going in ♥" },
   ],
   neu_flags: [
     "A row of little flags on brass poles, none of them hanging quite level.",
@@ -398,13 +405,6 @@ export const POINT_FALLBACK = {
     { who: "her", text: "…yes please." },
     { text: "Barista, already making it: \"You always take the window table.\"" },
     { who: "noah", text: "we always take the window table." },
-  ],
-  cafe_pastry: [
-    "The glass case. Two shelves, eight things, and one long-running argument.",
-    { who: "her", text: "the almond croissant." },
-    { who: "noah", text: "every time." },
-    { who: "her", text: "because it's the correct one." },
-    { who: "noah", text: "I'm not arguing. I'm noting the consistency." },
   ],
 };
 
@@ -524,7 +524,12 @@ export const NPC_FALLBACK = {
   la_neighbor: [
     [{ text: "Lovely couple. You two remind me of me and my wife." },
      { text: "Now shoo — you're standing on my sprinklers." }],
-    [{ text: "Back again? The taco place down the street is the real landmark." }],
+    [{ text: "Back again? The shaved ice place down the street is the real landmark." }],
+  ],
+  care_aide: [
+    [{ text: "\"You're the granddaughter! She talks about you constantly. CONSTANTLY.\"" },
+     { text: "\"…and about a tall young man. Is that him? Hm. She undersold him.\"" }],
+    [{ text: "\"If she offers you food, take the food. It is not really an offer.\"" }],
   ],
   route_hiker: [
     [{ text: "Careful past here — I saw someone on a quad bike screaming about figs." },
@@ -602,7 +607,7 @@ export const NPC_FALLBACK = {
 };
 
 // ---------------------------------------------------------------- travel log
-// The landmarks already on Little Everywhere count as the couple's trip
+// The landmarks already on Mini-Everywhere count as the couple's trip
 // baseline. Logging a country again at the easel gets a visit-number badge.
 const HERITAGE_LIST = [
   { country: "Greece", flag: "🇬🇷", visited: true },
@@ -744,9 +749,12 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
     }
   }
   function blankSave() {
+    // every field loadSave() reads has to be here, or New Game leaves it at
+    // whatever the old run set it to — that's how the paper hats survived a
+    // restart and she began the game already wearing one 🍔
     return {
       seen: new Set(), figs: new Set(), pumps: new Set(), crew: new Set(),
-      met: false, finale: false, introDone: false, mounted: false,
+      met: false, hats: false, finale: false, introDone: false, mounted: false,
       map: "la", pos: null,
     };
   }
@@ -1506,7 +1514,7 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
         ["the crowd", ["Mookie", "Leo", "Charlie", "Chakra", "the collie"]],
         ["at home", ["Marina", "mom", "the little brother", "Jack & his wife"]],
         ["in Boston", ["his mom & dad", "everyone at the cafe", "the co-op crowd"]],
-        ["locations", ["Mini Los Angeles", "Little Everywhere", "Mini Boston",
+        ["locations", ["Mini Los Angeles", "Mini-Everywhere", "Mini-Boston",
           "one apartment with very good windows"]],
         ["figs harvested", [`${save.figs.size} of ${allFigIds().length}`]],
         ["pumpkins located", [`${save.pumps.size} of ${allPumpkinIds().length}`]],
@@ -2022,7 +2030,7 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
   }
 
   // --------------------------------------------------------- baked ground
-  // Drawing every tile as its own game object cost ~1,300 objects on Mini LA
+  // Drawing every tile as its own game object cost ~1,300 objects on Mini-LA
   // once the beach got wider, and the frame rate showed it. Instead each map's
   // static floor is stamped into an offscreen canvas once and handed to kaplay
   // as a single sprite; the animated tiles (water, flowers) are the only ones
@@ -2188,6 +2196,13 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
         case "B": return F.cf_win;
         case "J": return F.cf_menu;
         case "L": return F.cf_door;
+        // ---- the care home 🌷
+        case "n": return F.ch_floor;
+        case "N": return F.ch_top;
+        case "m": return F.ch_face;
+        case "W": return F.ch_win;
+        case "E": return F.ch_pic;
+        case "d": return F.ch_door;
         default: return null;   // "*" flowers and "w" water
       }
     };
@@ -2219,7 +2234,8 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
       "^", "!", "2", "3", "4", "+",         // JVUE 🏢
       "7", "6", "8", "9", "0",              // Northeastern 🎓
       "Q", "q", "e", "u", "U",              // BU robotics 🤖
-      "A", "G", "B", "J", "L"]);            // Cafe Bene ☕
+      "A", "G", "B", "J", "L",              // Cafe Bene ☕
+      "N", "m", "W", "E", "d"]);            // the care home 🌷
     const slabs = [];
     let openRuns = new Map();       // "x0,x1" → index into slabs
     def.ground.forEach((row, y) => {
@@ -2388,6 +2404,12 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
       in_partsbin: { ox: -17, w: 34, h: 16 },
       in_rover: { ox: -14, w: 28, h: 8 },
       in_drone: { ox: -15, w: 30, h: 8 },
+      // 🌷 the care home. The bed's collider stops at its front rail so she
+      // can stand at the bedside — which is where the whole scene happens.
+      in_carebed: { ox: -24, w: 48, h: 22 },
+      in_ivdrip: { ox: -6, w: 12, h: 8 },
+      in_bedtable: { ox: -15, w: 30, h: 12 },
+      in_wheelchair: { ox: -13, w: 26, h: 14 },
       // ☕ Cafe Bene
       in_cafetable: { ox: -14, w: 28, h: 16 },
       in_cafecounter: { ox: -33, w: 66, h: 18 },
@@ -2638,7 +2660,7 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
       }
     }
 
-    // ---- her travel log ✈ (auto-generated monuments on Little Everywhere)
+    // ---- her travel log ✈ (auto-generated monuments on Mini-Everywhere)
     if (map === "route") {
       respaceTravels();   // spread out anything logged before the spacing rule
       for (const e of travelEntries()) spawnTravel(e);

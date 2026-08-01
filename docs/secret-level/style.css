@@ -178,6 +178,7 @@ html, body {
 #dlg-name.who-her { background: var(--coral); }
 #dlg-name.who-noah { background: var(--teal); }
 #dlg-name.who-cat { background: #7a4a8c; }
+#dlg-name.who-dusya { background: #d8823c; }  /* the hair 🌷 */
 #dlg-text {
   font-size: 12px;
   line-height: 1.9;

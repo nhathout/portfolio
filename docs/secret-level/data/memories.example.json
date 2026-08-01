@@ -10,7 +10,8 @@
       "Mini-LA. The sun is out, the ocean is doing its thing…",
       "…and someone with a familiar face is waiting for you by the path.",
       "(walk with the arrow keys or WASD. press E next to sparkles, people, and cats.)"
-    ]
+    ],
+    "grandmaName": "Dusya"
   },
   "points": {
     "la_home": {
@@ -22,21 +23,203 @@
         }
       ]
     },
-    "la_taco": {
-      "title": "the taco spot (rename me)",
+    "la_shaveice": {
+      "title": "Brian's 🍧",
       "lines": [
         {
+          "text": "A walk-up window, a wall of syrup bottles, and a line that is somehow always four people long."
+        },
+        {
           "who": "noah",
-          "text": "[TODO Noah: LA landmark #2 — swap this building's meaning + write the inside joke. The sprite is a yellow shop with a red awning.]"
+          "text": "Brian's. shaved ice. we came here what — three times? four?"
+        },
+        {
+          "who": "noah",
+          "text": "every single visit. \"we're just stopping by.\" we were never just stopping by."
+        },
+        {
+          "who": "her",
+          "text": "it's the best shaved ice in the county."
+        },
+        {
+          "who": "noah",
+          "text": "you say that like you've surveyed the county."
+        },
+        {
+          "who": "noah",
+          "text": "…you HAVE surveyed the county, haven't you."
+        },
+        {
+          "text": "(she orders the same thing every time. she has never once looked at the board.)"
+        },
+        {
+          "who": "noah",
+          "text": "worth the drive. worth the line. worth the brain freeze I get every time and never learn from ♥"
         }
       ]
     },
-    "la_theater": {
-      "title": "the theater (rename me)",
+    "la_care": {
+      "title": "the care home 🌷",
       "lines": [
         {
+          "text": "Low and warm and brick, with a ramp up to the doors and flowers in the boxes under every window."
+        },
+        {
           "who": "noah",
-          "text": "[TODO Noah: LA landmark #3 — another memory goes here.]"
+          "text": "your grandma's place."
+        },
+        {
+          "who": "noah",
+          "text": "I have been inside this building maybe five times and I have understood maybe eleven words of what happened in it."
+        },
+        {
+          "who": "her",
+          "text": "she loves you."
+        },
+        {
+          "who": "noah",
+          "text": "I KNOW! that part came through fine. that part never needed translating."
+        },
+        {
+          "who": "noah",
+          "text": "go on — her room's the first on the left ♥"
+        }
+      ]
+    },
+    "care_baba": {
+      "title": "Dusya ♥",
+      "lines": [
+        {
+          "text": "She's sitting up against three pillows with the TV on mute, and her hair is the exact orange it has been since before you were born."
+        },
+        {
+          "who": "her",
+          "text": "DUSIA!!"
+        },
+        {
+          "who": "dusya",
+          "text": "Sashenka!! Idi syuda, idi, idi!"
+        },
+        {
+          "who": "dusya",
+          "text": "A! I ty tut. Nu nakonets-to! Sadis', sadis' blizhe."
+        },
+        {
+          "who": "her",
+          "text": "she says: and there you are. finally. sit closer."
+        },
+        {
+          "who": "dusya",
+          "text": "Kushal? Ty khudoi!"
+        },
+        {
+          "who": "her",
+          "text": "she asked if you've eaten. she says you're too skinny."
+        },
+        {
+          "who": "noah",
+          "text": "I ate an hour ago—"
+        },
+        {
+          "who": "dusya",
+          "text": "Nyet. Ne kushal."
+        },
+        {
+          "who": "noah",
+          "text": "…she's right. it was a granola bar. how does she DO that."
+        },
+        {
+          "text": "She takes his hand in both of hers and pats it, the way you'd pat a dog that has finally sat down."
+        },
+        {
+          "who": "dusya",
+          "text": "Khoroshii malchik."
+        },
+        {
+          "who": "her",
+          "text": "\"good boy.\""
+        },
+        {
+          "who": "dusya",
+          "text": "Sashenka. Kogda svadba?"
+        },
+        {
+          "who": "noah",
+          "text": "…what. what was that one."
+        },
+        {
+          "who": "her",
+          "text": "nothing."
+        },
+        {
+          "who": "dusya",
+          "text": "SVAD-BA! Ya zhe ne vechnaya! Pravnuki! Dvoe! Tri!"
+        },
+        {
+          "who": "her",
+          "text": "she's asking when the wedding is. she says she is not eternal — and she would like great-grandchildren. two. possibly three."
+        },
+        {
+          "who": "noah",
+          "text": "tell her I'm working on it."
+        },
+        {
+          "who": "her",
+          "text": "I'm not telling her that."
+        },
+        {
+          "who": "noah",
+          "text": "TELL HER I'M WORKING ON IT."
+        },
+        {
+          "who": "her",
+          "text": "…on rabotayet nad etim."
+        },
+        {
+          "who": "dusya",
+          "text": "Slava Bogu!!"
+        },
+        {
+          "text": "Dusya grabs both their hands at once and doesn't let go for a while."
+        },
+        {
+          "who": "dusya",
+          "text": "Khorosho. Idite gulyat'. I kushayte shto-nibud'!"
+        },
+        {
+          "who": "her",
+          "text": "we've been dismissed. and we have to go eat something."
+        },
+        {
+          "who": "noah",
+          "text": "I understood four words of that and I love her ♥"
+        }
+      ]
+    },
+    "care_tv": {
+      "title": "the television",
+      "lines": [
+        {
+          "text": "A Russian talk show, muted, in which two men in suits are furious about something."
+        },
+        {
+          "who": "noah",
+          "text": "is it always this channel?"
+        },
+        {
+          "who": "her",
+          "text": "it's always this channel."
+        },
+        {
+          "who": "noah",
+          "text": "does she ever unmute it?"
+        },
+        {
+          "who": "her",
+          "text": "never. she says she already knows what they're saying."
+        },
+        {
+          "text": "(from the bed, without looking over: \"Tishe!\" — quieter. nobody was talking.)"
         }
       ]
     },
@@ -997,55 +1180,6 @@
         }
       ]
     },
-    "neu_un": {
-      "title": "neu_un",
-      "lines": [
-        {
-          "text": "The Model UN room, still set from this morning: placards out, water glasses full, gavel unclaimed."
-        },
-        {
-          "who": "her",
-          "text": "oh no."
-        },
-        {
-          "who": "noah",
-          "text": "oh YES. which one were you?"
-        },
-        {
-          "who": "her",
-          "text": "…I chaired."
-        },
-        {
-          "who": "noah",
-          "text": "you CHAIRED."
-        },
-        {
-          "who": "her",
-          "text": "somebody had to. two delegates were arguing about a comma."
-        },
-        {
-          "text": "(She picks up the gavel. She absolutely should not. She does it anyway.)"
-        },
-        {
-          "text": "*TOK*"
-        },
-        {
-          "who": "her",
-          "text": "the motion carries."
-        },
-        {
-          "who": "noah",
-          "text": "what motion"
-        },
-        {
-          "who": "her",
-          "text": "the one where we get food after this."
-        },
-        {
-          "text": "(Unanimous. The gavel goes back exactly where it was.)"
-        }
-      ]
-    },
     "neu_globe": {
       "title": "neu_globe",
       "lines": [
@@ -1065,26 +1199,74 @@
       ]
     },
     "neu_coop": {
-      "title": "neu_coop",
+      "title": "the co-op board",
       "lines": [
         {
-          "text": "The co-op board. Six months on, six months off, and every posting has its tabs torn off."
+          "text": "The co-op board. Six months on, six months off, and every posting on it has its tabs torn off."
         },
         {
           "who": "noah",
-          "text": "the famous co-op. this board runs this entire university."
+          "text": "two of these were yours."
         },
         {
           "who": "her",
-          "text": "it runs my entire LIFE. I have a spreadsheet."
+          "text": "TJX. marketing. that was the first one."
         },
         {
           "who": "noah",
-          "text": "you have a spreadsheet about a corkboard."
+          "text": "and you hated it."
         },
         {
           "who": "her",
-          "text": "I have a spreadsheet about a corkboard and it is COLOR CODED."
+          "text": "I hated it. and I want to be fair — some of that was just the work."
+        },
+        {
+          "who": "her",
+          "text": "…most of it was the people I was working for."
+        },
+        {
+          "who": "noah",
+          "text": "I remember hearing about it. every day. in detail."
+        },
+        {
+          "who": "her",
+          "text": "you were very patient."
+        },
+        {
+          "who": "noah",
+          "text": "and then Wellington."
+        },
+        {
+          "who": "her",
+          "text": "and then WELLINGTON."
+        },
+        {
+          "who": "her",
+          "text": "I LIKE the people. genuinely. I look forward to going in, which I did not know was a thing that could happen to a person."
+        },
+        {
+          "who": "noah",
+          "text": "they'd keep you, you know."
+        },
+        {
+          "who": "her",
+          "text": "…they might, actually. part time, through my last year."
+        },
+        {
+          "who": "her",
+          "text": "which starts after this summer. which is — oh. that's now, isn't it."
+        },
+        {
+          "who": "noah",
+          "text": "a full course load and a job at once."
+        },
+        {
+          "who": "her",
+          "text": "yes."
+        },
+        {
+          "who": "noah",
+          "text": "you're going to be unbearable about how well it goes ♥"
         }
       ]
     },
@@ -1350,30 +1532,6 @@
           "text": "we always take the window table."
         }
       ]
-    },
-    "cafe_pastry": {
-      "title": "cafe_pastry",
-      "lines": [
-        {
-          "text": "The glass case. Two shelves, eight things, and one long-running argument."
-        },
-        {
-          "who": "her",
-          "text": "the almond croissant."
-        },
-        {
-          "who": "noah",
-          "text": "every time."
-        },
-        {
-          "who": "her",
-          "text": "because it's the correct one."
-        },
-        {
-          "who": "noah",
-          "text": "I'm not arguing. I'm noting the consistency."
-        }
-      ]
     }
   },
   "noah": {
@@ -1563,6 +1721,31 @@
         },
         {
           "text": "Now shoo — you're standing on my sprinklers."
+        }
+      ],
+      [
+        {
+          "text": "Back again? The shaved ice place down the street is the real landmark."
+        }
+      ]
+    ],
+    "care_aide": [
+      [
+        {
+          "text": "\"You're the granddaughter! She talks about you constantly. CONSTANTLY.\""
+        },
+        {
+          "text": "\"…and about a tall young man. Is that him? Hm. She undersold him, actually.\""
+        }
+      ],
+      [
+        {
+          "text": "\"If she offers you food, take the food. It is not really an offer.\""
+        }
+      ],
+      [
+        {
+          "text": "\"She did her hair herself this morning. She knew you were coming ♥\""
         }
       ]
     ],

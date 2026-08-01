@@ -1009,6 +1009,7 @@
     </p>
     <span class="inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center fill-current text-gray-500 sm:justify-start">
      <!-- Social media icons here -->
+     <button id="eggHeart" aria-label="?" type="button"></button>
     </span>
    </div>
   </footer>
@@ -2039,7 +2040,10 @@
     }
     .resume-popover {
       position: fixed;
-      bottom: 24px;
+      /* --resume-lift is driven from script.js: as the footer scrolls in, the
+         card rides up so it never sits on top of it. Kept on `bottom` rather
+         than `transform` so the show/hide animation below stays untouched. */
+      bottom: calc(24px + var(--resume-lift, 0px));
       right: 24px;
       z-index: 50;
       background: #fff7d6;
@@ -2049,12 +2053,22 @@
       max-width: 320px;
       transform: translateY(20px);
       opacity: 0;
-      pointer-events: auto;
-      transition: opacity 260ms ease, transform 260ms ease;
+      /* Dismissed = gone. It used to keep pointer-events:auto while faded out,
+         which left an invisible 320px card over the bottom-right corner that
+         ate every click there (including the footer heart) and fired the
+         resume download instead. visibility also keeps the hidden download
+         link out of the tab order. */
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 260ms ease, transform 260ms ease,
+                  visibility 0s linear 260ms;
     }
     .resume-popover.is-visible {
       opacity: 1;
       transform: translateY(0);
+      visibility: visible;
+      pointer-events: auto;
+      transition: opacity 260ms ease, transform 260ms ease, visibility 0s;
     }
     .resume-popover__close {
       position: absolute;
@@ -3730,6 +3744,8 @@
 
     /* Adjust leaderboard font-size and layout are done in JS inline styles */
   </style>
+  <script defer="" src="egg.js">
+  </script>
   <script defer="" src="script.js?v=818ab50">
   </script>
  </body>

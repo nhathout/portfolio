@@ -1,0 +1,2312 @@
+{
+  "_readme": "EVERY line of text in the game lives in this file. Edit it, then re-encrypt (see README). Anything you delete falls back to the built-in copy in src/world.js.",
+  "meta": {
+    "title": "our little world",
+    "subtitle": "a tiny game about us. happy birthday ♥",
+    "playerName": "Sasha",
+    "noahName": "Noah",
+    "catName": "Mookie",
+    "intro": [
+      "Mini-LA. The sun is out, the ocean is doing its thing…",
+      "…and someone with a familiar face is waiting for you by the path.",
+      "(walk with the arrow keys or WASD. press E next to sparkles, people, and cats.)"
+    ],
+    "grandmaName": "Dusya"
+  },
+  "points": {
+    "la_home": {
+      "title": "Noah's house",
+      "lines": [
+        {
+          "who": "noah",
+          "text": "[TODO Noah: this is 'my house' in Mini-LA — write the memory or story you want here. e.g. what you'd have shown her if she visited hometown-you.]"
+        }
+      ]
+    },
+    "la_shaveice": {
+      "title": "Brian's 🍧",
+      "lines": [
+        {
+          "text": "A walk-up window, a wall of syrup bottles, and a line that is somehow always four people long."
+        },
+        {
+          "who": "noah",
+          "text": "Brian's. shaved ice. we came here what — three times? four?"
+        },
+        {
+          "who": "noah",
+          "text": "every single visit. \"we're just stopping by.\" we were never just stopping by."
+        },
+        {
+          "who": "her",
+          "text": "it's the best shaved ice in the county."
+        },
+        {
+          "who": "noah",
+          "text": "you say that like you've surveyed the county."
+        },
+        {
+          "who": "noah",
+          "text": "…you HAVE surveyed the county, haven't you."
+        },
+        {
+          "text": "(she orders the same thing every time. she has never once looked at the board.)"
+        },
+        {
+          "who": "noah",
+          "text": "worth the drive. worth the line. worth the brain freeze I get every time and never learn from ♥"
+        }
+      ]
+    },
+    "la_care": {
+      "title": "the care home 🌷",
+      "lines": [
+        {
+          "text": "Low and warm and brick, with a ramp up to the doors and flowers in the boxes under every window."
+        },
+        {
+          "who": "noah",
+          "text": "your grandma's place."
+        },
+        {
+          "who": "noah",
+          "text": "I have been inside this building maybe five times and I have understood maybe eleven words of what happened in it."
+        },
+        {
+          "who": "her",
+          "text": "she loves you."
+        },
+        {
+          "who": "noah",
+          "text": "I KNOW! that part came through fine. that part never needed translating."
+        },
+        {
+          "who": "noah",
+          "text": "go on — her room's the first on the left ♥"
+        }
+      ]
+    },
+    "care_baba": {
+      "title": "Dusya ♥",
+      "lines": [
+        {
+          "text": "She's sitting up against three pillows with the TV on mute, and her hair is the exact orange it has been since before you were born."
+        },
+        {
+          "who": "her",
+          "text": "DUSIA!!"
+        },
+        {
+          "who": "dusya",
+          "text": "Sashenka!! Idi syuda, idi, idi!"
+        },
+        {
+          "who": "dusya",
+          "text": "A! I ty tut. Nu nakonets-to! Sadis', sadis' blizhe."
+        },
+        {
+          "who": "her",
+          "text": "she says: and there you are. finally. sit closer."
+        },
+        {
+          "who": "dusya",
+          "text": "Kushal? Ty khudoi!"
+        },
+        {
+          "who": "her",
+          "text": "she asked if you've eaten. she says you're too skinny."
+        },
+        {
+          "who": "noah",
+          "text": "I ate an hour ago—"
+        },
+        {
+          "who": "dusya",
+          "text": "Nyet. Ne kushal."
+        },
+        {
+          "who": "noah",
+          "text": "…she's right. it was a granola bar. how does she DO that."
+        },
+        {
+          "text": "She takes his hand in both of hers and pats it, the way you'd pat a dog that has finally sat down."
+        },
+        {
+          "who": "dusya",
+          "text": "Khoroshii malchik."
+        },
+        {
+          "who": "her",
+          "text": "\"good boy.\""
+        },
+        {
+          "who": "dusya",
+          "text": "Sashenka. Kogda svadba?"
+        },
+        {
+          "who": "noah",
+          "text": "…what. what was that one."
+        },
+        {
+          "who": "her",
+          "text": "nothing."
+        },
+        {
+          "who": "dusya",
+          "text": "SVAD-BA! Ya zhe ne vechnaya! Pravnuki! Dvoe! Tri!"
+        },
+        {
+          "who": "her",
+          "text": "she's asking when the wedding is. she says she is not eternal — and she would like great-grandchildren. two. possibly three."
+        },
+        {
+          "who": "noah",
+          "text": "tell her I'm working on it."
+        },
+        {
+          "who": "her",
+          "text": "I'm not telling her that."
+        },
+        {
+          "who": "noah",
+          "text": "TELL HER I'M WORKING ON IT."
+        },
+        {
+          "who": "her",
+          "text": "…on rabotayet nad etim."
+        },
+        {
+          "who": "dusya",
+          "text": "Slava Bogu!!"
+        },
+        {
+          "text": "Dusya grabs both their hands at once and doesn't let go for a while."
+        },
+        {
+          "who": "dusya",
+          "text": "Khorosho. Idite gulyat'. I kushayte shto-nibud'!"
+        },
+        {
+          "who": "her",
+          "text": "we've been dismissed. and we have to go eat something."
+        },
+        {
+          "who": "noah",
+          "text": "I understood four words of that and I love her ♥"
+        }
+      ]
+    },
+    "care_tv": {
+      "title": "the television",
+      "lines": [
+        {
+          "text": "A Russian talk show, muted, in which two men in suits are furious about something."
+        },
+        {
+          "who": "noah",
+          "text": "is it always this channel?"
+        },
+        {
+          "who": "her",
+          "text": "it's always this channel."
+        },
+        {
+          "who": "noah",
+          "text": "does she ever unmute it?"
+        },
+        {
+          "who": "her",
+          "text": "never. she says she already knows what they're saying."
+        },
+        {
+          "text": "(from the bed, without looking over: \"Tishe!\" — quieter. nobody was talking.)"
+        }
+      ]
+    },
+    "innout": {
+      "title": "the innout door",
+      "lines": [
+        {
+          "text": "White walls, red stripe, and a yellow arrow you can see from three blocks away."
+        },
+        {
+          "who": "noah",
+          "text": "[TODO Noah: the In-N-Out order. Animal style? the whole thing.]"
+        },
+        {
+          "who": "noah",
+          "text": "double-double, fries well done, and a twenty minute argument about the milkshake."
+        },
+        {
+          "text": "(the arrow points down the road like it knows something.)"
+        }
+      ]
+    },
+    "jack_home": {
+      "title": "the jack_home door",
+      "lines": [
+        {
+          "text": "Jack's house — the long low one behind all the sunflowers."
+        },
+        {
+          "who": "noah",
+          "text": "you can smell the garden from the street. tomatoes and woodsmoke."
+        },
+        {
+          "who": "noah",
+          "text": "go on, knock. nobody in there has ever knocked on anything ♥"
+        }
+      ]
+    },
+    "la_beach": {
+      "title": "the beach",
+      "lines": [
+        {
+          "text": "The Pacific! It's cold and beautiful and full of surfers with better hair than Noah."
+        },
+        {
+          "who": "noah",
+          "text": "[TODO Noah: beach memory or the first-time-she-visits-LA plan.]"
+        }
+      ]
+    },
+    "la_lifeguard": {
+      "title": "la_lifeguard",
+      "lines": [
+        {
+          "text": "The tower's shutters are open and nobody's in it. Just the flag, snapping."
+        },
+        {
+          "who": "noah",
+          "text": "we sat under one of these for four hours once and didn't go in the water a single time."
+        }
+      ]
+    },
+    "beach_horse": {
+      "title": "a horse?! on the beach?!",
+      "lines": [
+        {
+          "text": "A very calm horse is watching the waves. It seems to be waiting for a competition."
+        },
+        {
+          "who": "noah",
+          "text": "[TODO Noah: the Miami beach horse-competition memory — she loves riding, write it here. (riding him in-game is coming in a later update.)]"
+        }
+      ]
+    },
+    "la_surf": {
+      "title": "la_surf",
+      "lines": [
+        {
+          "text": "Two boards planted nose-up in the sand, still wet."
+        },
+        {
+          "who": "noah",
+          "text": "[TODO Noah: whether either of us can actually surf ♥]"
+        }
+      ]
+    },
+    "garden": {
+      "title": "the tomato garden",
+      "lines": [
+        {
+          "text": "A little raised bed, bursting with tomatoes. 🍅"
+        },
+        {
+          "who": "noah",
+          "text": "[TODO Noah: her tomato obsession — write it here. After this, pressing E on the garden picks a tomato (they regrow).]"
+        }
+      ]
+    },
+    "la_pool": {
+      "title": "la_pool",
+      "lines": [
+        {
+          "text": "The pool. Perfectly still, absurdly blue, faintly smug about it."
+        },
+        {
+          "who": "noah",
+          "text": "one day we're going to argue about whether the water is 'too cold' again. I'm going to lose again."
+        }
+      ]
+    },
+    "jack_garden": {
+      "title": "jack_garden",
+      "lines": [
+        {
+          "text": "Rows and rows of it: tomatoes up the stakes, corn taller than Jack, lettuce, peppers, herbs."
+        },
+        {
+          "who": "noah",
+          "text": "they genuinely grow most of what ends up on that table."
+        },
+        {
+          "who": "her",
+          "text": "…we're taking some home."
+        },
+        {
+          "text": "(you were always taking some home.)"
+        }
+      ]
+    },
+    "jack_firepit": {
+      "title": "jack_firepit",
+      "lines": [
+        {
+          "text": "A ring of stones, a proper fire, three logs pulled up close."
+        },
+        {
+          "who": "noah",
+          "text": "this is the spot. this is where the night goes long and nobody notices."
+        },
+        {
+          "who": "noah",
+          "text": "[TODO Noah: the story from the fire pit ♥]"
+        }
+      ]
+    },
+    "jack_bus": {
+      "title": "jack_bus",
+      "lines": [
+        {
+          "text": "The van. Rainbow down the side, peace sign on the panel, curtains half drawn."
+        },
+        {
+          "text": "It has not moved in a while. It does not need to."
+        }
+      ]
+    },
+    "route_figtree": {
+      "title": "the fig tree",
+      "lines": [
+        {
+          "text": "An old fig tree leans over the path. It smells like a Greek summer."
+        },
+        {
+          "who": "noah",
+          "text": "remember Greece? me, you, and one extremely rented quad bike."
+        },
+        {
+          "who": "noah",
+          "text": "you'd yell FIG!! out of absolutely nowhere and I'd have to emergency-brake so you could raid a stranger's tree."
+        },
+        {
+          "who": "her",
+          "text": "FIG!!!"
+        },
+        {
+          "text": "(you picked a perfectly ripe fig. it's yours now.)"
+        }
+      ]
+    },
+    "route_quad": {
+      "title": "the quad bike",
+      "lines": [
+        {
+          "text": "It's THE quad bike. Somehow it followed you both home."
+        },
+        {
+          "who": "noah",
+          "text": "[TODO Noah: the Greece quad-bike memory — the drive, the dust, the backseat commentary…]"
+        }
+      ]
+    },
+    "route_pond": {
+      "title": "the pond",
+      "lines": [
+        {
+          "text": "A little pond, still as glass. A couple of ducks judge you silently."
+        },
+        {
+          "who": "noah",
+          "text": "[TODO Noah: optional pond memory — or delete this point from src/maps.js if you don't want it.]"
+        }
+      ]
+    },
+    "lm_greece": {
+      "title": "Greece 🇬🇷",
+      "lines": [
+        {
+          "text": "A marble column, quietly holding up the whole sky. The air smells like figs."
+        },
+        {
+          "who": "noah",
+          "text": "[TODO Noah: one line about the Greece trip.]"
+        }
+      ]
+    },
+    "lm_egypt": {
+      "title": "Egypt 🇪🇬",
+      "lines": [
+        {
+          "text": "A pyramid! Four thousand years old and still the best-organized pile of rocks on earth."
+        },
+        {
+          "who": "noah",
+          "text": "[TODO Noah: one line about Egypt / your heritage.]"
+        }
+      ]
+    },
+    "lm_italy": {
+      "title": "Italy 🇮🇹",
+      "lines": [
+        {
+          "text": "The tower leans. It has always leaned. It is doing its best."
+        },
+        {
+          "who": "noah",
+          "text": "[TODO Noah: one line about Italy — the trip or the heritage.]"
+        }
+      ]
+    },
+    "lm_moldova": {
+      "title": "Moldova 🇲🇩",
+      "lines": [
+        {
+          "text": "A wine barrel with grapes on top — Moldova has more vineyards per person than anywhere on earth."
+        },
+        {
+          "who": "noah",
+          "text": "[TODO Noah: one line about Moldova / her roots.]"
+        }
+      ]
+    },
+    "lm_russia": {
+      "title": "Russia 🇷🇺",
+      "lines": [
+        {
+          "text": "A matryoshka. Inside her is a smaller her, and inside that one, an even smaller one. Relatable."
+        },
+        {
+          "who": "noah",
+          "text": "[TODO Noah: one line about her family / heritage.]"
+        }
+      ]
+    },
+    "lm_aruba": {
+      "title": "lm_aruba",
+      "lines": [
+        {
+          "text": "A divi-divi tree, bent permanently southwest by wind that never stops blowing."
+        },
+        {
+          "who": "noah",
+          "text": "this one isn't a memory yet. it's a promise — next week ♥"
+        }
+      ]
+    },
+    "travel_station": {
+      "title": "our travel log",
+      "lines": [
+        {
+          "text": "A little easel with a map, covered in pins."
+        },
+        {
+          "who": "noah",
+          "text": "every trip we take, you can log it here — it becomes a tiny monument on this road. our world grows with us ♥"
+        }
+      ]
+    },
+    "bu": {
+      "title": "Boston University",
+      "lines": [
+        {
+          "who": "noah",
+          "text": "[TODO Noah: the BU building where it all started — write how you two met here.]"
+        }
+      ]
+    },
+    "cafe": {
+      "title": "first date spot (rename me)",
+      "lines": [
+        {
+          "who": "noah",
+          "text": "[TODO Noah: the first date — where it was, what you actually remember, what she claims happened instead.]"
+        }
+      ]
+    },
+    "neu": {
+      "title": "Northeastern",
+      "lines": [
+        {
+          "who": "noah",
+          "text": "[TODO Noah: her school. Something nice about a Northeastern person, if such a thing can be written by a BU student.]"
+        }
+      ]
+    },
+    "apartment": {
+      "title": "our apartment",
+      "lines": [
+        {
+          "who": "noah",
+          "text": "[TODO Noah: your apartment — the memory of moving in / living together. (after all memories + figs are found, this door becomes the finale.)]"
+        }
+      ]
+    },
+    "parents_home": {
+      "title": "the parents_home door",
+      "lines": [
+        {
+          "text": "White clapboard, wooden trim, the bottom half of a big Brookline duplex. The porch light is on."
+        },
+        {
+          "who": "noah",
+          "text": "my parents' place. bottom floor's ours — the whole thing smells like whatever mom's cooking."
+        },
+        {
+          "who": "noah",
+          "text": "they already love you. they asked about you before they asked about me."
+        },
+        {
+          "who": "noah",
+          "text": "go on. knock. …actually don't knock, just walk in, they'll be offended if you knock."
+        }
+      ]
+    },
+    "aruba_beach": {
+      "title": "aruba_beach",
+      "lines": [
+        {
+          "text": "Past the barriers the road just… stops, and turns into white sand."
+        },
+        {
+          "text": "A little palapa bar stands in the sun. The board on it says CLOSED."
+        },
+        {
+          "who": "noah",
+          "text": "yeah. closed. for one more week."
+        },
+        {
+          "who": "noah",
+          "text": "then it's you, me, and an entire island. happy birthday, my love ♥"
+        }
+      ]
+    },
+    "aruba_turtle": {
+      "title": "aruba_turtle",
+      "lines": [
+        {
+          "text": "A sea turtle is sitting in the warm sand, entirely unbothered."
+        },
+        {
+          "text": "Turtle: \"…\""
+        },
+        {
+          "text": "Turtle: \"one week.\""
+        },
+        {
+          "who": "her",
+          "text": "did the turtle just—"
+        },
+        {
+          "text": "Turtle: \"see you on the beach.\" (he goes back to sleep.)"
+        }
+      ]
+    },
+    "esplanade": {
+      "title": "the esplanade",
+      "lines": [
+        {
+          "text": "The Charles glitters. A sailboat drifts by, unbothered."
+        },
+        {
+          "who": "noah",
+          "text": "[TODO Noah: river walk memory — or delete this point in src/maps.js if you don't want it.]"
+        }
+      ]
+    },
+    "radio": {
+      "title": "someone's boombox",
+      "lines": [
+        {
+          "text": "Someone left a boombox by the river. It is, of course, playing K-pop."
+        },
+        {
+          "who": "her",
+          "text": "…is this? IT IS."
+        },
+        {
+          "who": "noah",
+          "text": "[TODO Noah: her BTS / K-pop thing — the song, the story, the 💜. Write it proudly.]"
+        }
+      ]
+    },
+    "home_marina": {
+      "title": "home_marina",
+      "lines": [
+        {
+          "text": "Marina looks up from the counter and immediately starts wiping something that was already clean."
+        },
+        {
+          "who": "her",
+          "text": "Marina!!"
+        },
+        {
+          "text": "Marina: \"So. This is the boy. Hmph. …He is taller than the photo.\""
+        },
+        {
+          "text": "(she is smiling. she will deny this.)"
+        }
+      ]
+    },
+    "home_mom": {
+      "title": "home_mom",
+      "lines": [
+        {
+          "text": "Your mom hugs you the way moms do — like she's checking you're all still there."
+        },
+        {
+          "text": "Mom: \"Are you eating? You're not eating. Sit, I'll make something.\""
+        },
+        {
+          "who": "noah",
+          "text": "…I love it here."
+        }
+      ]
+    },
+    "home_bro": {
+      "title": "home_bro",
+      "lines": [
+        {
+          "text": "Your brother is threading a line through a rod that already had a line in it."
+        },
+        {
+          "text": "\"Hey. …Happy birthday. Don't make it weird.\""
+        },
+        {
+          "text": "\"We're going out at five tomorrow. You can come. Only if you're quiet.\""
+        },
+        {
+          "who": "noah",
+          "text": "he scored four last weekend. FOUR. he told me twice."
+        },
+        {
+          "text": "(he makes it weird. he hugs you. it's very sweet.)"
+        }
+      ]
+    },
+    "home_leo": {
+      "title": "home_leo",
+      "lines": [
+        {
+          "text": "Leo, all seventeen pounds of orange menace, blinks at you slowly."
+        },
+        {
+          "who": "noah",
+          "text": "he's judging me."
+        },
+        {
+          "text": "(Leo decides he is coming too. Leo joined your little crowd! 🐱)"
+        }
+      ]
+    },
+    "home_charlie": {
+      "title": "home_charlie",
+      "lines": [
+        {
+          "text": "Charlie spins in a full circle before you even say his name."
+        },
+        {
+          "text": "(Charlie has decided this is the best day of his entire life.)"
+        },
+        {
+          "text": "(Charlie joined your little crowd! 🐶)"
+        }
+      ]
+    },
+    "home_jack": {
+      "title": "Jack ♥",
+      "lines": [
+        {
+          "text": "Jack is up and across the room before you've finished shutting the door, wiping his hands on his jeans."
+        },
+        {
+          "who": "noah",
+          "text": "JACKINGTON."
+        },
+        {
+          "text": "Jack: \"Noah! good. okay — I've got three things, and you're going to like two of them.\""
+        },
+        {
+          "who": "her",
+          "text": "hi Jack—"
+        },
+        {
+          "text": "Jack: \"Hi sweetheart. so the FIRST one—\""
+        },
+        {
+          "who": "noah",
+          "text": "he does this every time. I have never once made it to a chair first."
+        },
+        {
+          "text": "Jack: \"—and if we ran a line out to the back beds the whole thing could water itself. you'd know how to do that part.\""
+        },
+        {
+          "who": "noah",
+          "text": "…I would know how to do that part."
+        },
+        {
+          "who": "her",
+          "text": "and there he goes."
+        },
+        {
+          "text": "(they are already three steps into it. you go and find the dog.)"
+        }
+      ]
+    },
+    "home_jackwife": {
+      "title": "home_jackwife",
+      "lines": [
+        {
+          "text": "Dez pushes a curl out of her face with the back of a floury hand."
+        },
+        {
+          "text": "\"Ignore him, he's been loud since he was six.\""
+        },
+        {
+          "text": "(she hands you something warm before you've said a word.)"
+        }
+      ]
+    },
+    "home_chakra": {
+      "title": "home_chakra",
+      "lines": [
+        {
+          "text": "Chakra crosses the whole room in about two steps."
+        },
+        {
+          "who": "noah",
+          "text": "she's the size of a small horse and she thinks she's a lap dog."
+        },
+        {
+          "text": "(Chakra leans her entire weight against your leg. This is affection. This is also a takeover.)"
+        },
+        {
+          "text": "(Chakra joined your little crowd! 🖤)"
+        }
+      ]
+    },
+    "innout_order": {
+      "title": "innout_order",
+      "lines": [
+        {
+          "text": "The associate straightens her paper hat. \"Hi! What can I get started for you?\""
+        },
+        {
+          "who": "her",
+          "text": "okay. okay okay okay. …a LOT of burgers."
+        },
+        {
+          "who": "noah",
+          "text": "she means it. don't round down."
+        },
+        {
+          "who": "her",
+          "text": "raw onion. extra cheese. extra spread. on all of them."
+        },
+        {
+          "text": "Associate, typing, entirely unbothered: \"…extra spread on all of them. Got it.\""
+        },
+        {
+          "who": "noah",
+          "text": "fries animal style. that's not optional, that's structural."
+        },
+        {
+          "who": "her",
+          "text": "two drinks. and a shake."
+        },
+        {
+          "who": "noah",
+          "text": "…one shake?"
+        },
+        {
+          "who": "her",
+          "text": "one shake. two straws."
+        },
+        {
+          "text": "(the associate looks up. the associate approves.)"
+        },
+        {
+          "who": "her",
+          "text": "and — this is going to sound strange — could we have two of the hats?"
+        },
+        {
+          "text": "Associate: \"Nobody has ever asked me that so politely.\""
+        },
+        {
+          "text": "She slides two folded paper hats across the counter, one for each of you."
+        },
+        {
+          "text": "(you both put them on immediately. neither of you takes them off.)"
+        },
+        {
+          "who": "noah",
+          "text": "[TODO Noah: what actually happened the first time we came here ♥]"
+        }
+      ]
+    },
+    "innout_menu": {
+      "title": "innout_menu",
+      "lines": [
+        {
+          "text": "Red board, white letters, five things on it and not one thing more."
+        },
+        {
+          "who": "noah",
+          "text": "the whole menu fits on one sign and it's still the correct answer every time."
+        },
+        {
+          "who": "her",
+          "text": "…the prices on this board are from 1976."
+        },
+        {
+          "who": "noah",
+          "text": "it's my pixel restaurant. the double-double is two forty-five and I won't be taking questions."
+        }
+      ]
+    },
+    "innout_fries": {
+      "title": "innout_fries",
+      "lines": [
+        {
+          "text": "Whole potatoes going into the slicer at one end, fries coming out under the heat lamp at the other."
+        },
+        {
+          "who": "her",
+          "text": "they cut them RIGHT THERE. every time this delights me."
+        },
+        {
+          "who": "noah",
+          "text": "every time. I have watched you watch this."
+        }
+      ]
+    },
+    "jvue_home": {
+      "title": "jvue_home",
+      "lines": [
+        {
+          "text": "The whole top wall is glass. Longwood, a slice of sky, and the light coming in flat and gold."
+        },
+        {
+          "who": "her",
+          "text": "…we live here."
+        },
+        {
+          "who": "noah",
+          "text": "we live here."
+        },
+        {
+          "who": "her",
+          "text": "there are still eleven boxes."
+        },
+        {
+          "who": "noah",
+          "text": "we live here WITH eleven boxes. that's a detail."
+        },
+        {
+          "text": "(you stand at the window for a while. Neither of you says anything. It's the good kind.)"
+        },
+        {
+          "who": "noah",
+          "text": "[TODO Noah: the first night in this apartment ♥]"
+        }
+      ]
+    },
+    "jvue_tank": {
+      "title": "jvue_tank",
+      "lines": [
+        {
+          "text": "The tank hums quietly on its stand. Gravel, a castle, a lot of very green plants."
+        },
+        {
+          "who": "noah",
+          "text": "okay so. this started as 'one small fish'."
+        },
+        {
+          "who": "her",
+          "text": "it is not one small fish."
+        },
+        {
+          "who": "noah",
+          "text": "it's a whole little world. and every time we hit something together, it gets a new one."
+        },
+        {
+          "text": "(press E again any time to sit in front of the tank ♥)"
+        }
+      ]
+    },
+    "jvue_herbs": {
+      "title": "jvue_herbs",
+      "lines": [
+        {
+          "text": "A shelf of terracotta under the windows. Soil, a trowel, one very earnest watering can."
+        },
+        {
+          "who": "her",
+          "text": "I want to grow things. Actual things. Tomatoes. Basil."
+        },
+        {
+          "who": "noah",
+          "text": "we are extremely going to grow things."
+        },
+        {
+          "who": "noah",
+          "text": "this is the starter set. water them, pick them, and we'll scale up to the balcony in spring."
+        },
+        {
+          "text": "(press E again any time to step into the little greenhouse 🌱)"
+        }
+      ]
+    },
+    "jvue_boxes": {
+      "title": "jvue_boxes",
+      "lines": [
+        {
+          "text": "Eleven boxes. One says MUGS. One just says US, in her handwriting."
+        },
+        {
+          "who": "noah",
+          "text": "we'll do them this weekend."
+        },
+        {
+          "who": "her",
+          "text": "you said that about last weekend."
+        },
+        {
+          "who": "noah",
+          "text": "and I'll say it about next weekend. it's a tradition now."
+        }
+      ]
+    },
+    "jvue_tv": {
+      "title": "jvue_tv",
+      "lines": [
+        {
+          "text": "The TV on the left wall, the grey sofa parked square in front of it, the blanket already crumpled."
+        },
+        {
+          "who": "noah",
+          "text": "we have watched roughly four minutes of anything on this."
+        },
+        {
+          "who": "her",
+          "text": "we talk through all of it."
+        },
+        {
+          "who": "noah",
+          "text": "yeah. best four minutes of TV I've ever had."
+        }
+      ]
+    },
+    "parents_gym": {
+      "title": "parents_gym",
+      "lines": [
+        {
+          "text": "Two gym bags dumped by the door, and a shaker bottle that rolled under the radiator."
+        },
+        {
+          "who": "noah",
+          "text": "Mia and Brandon. they left about an hour ago."
+        },
+        {
+          "who": "noah",
+          "text": "they go together every single day. it's genuinely impressive and slightly menacing."
+        },
+        {
+          "who": "her",
+          "text": "…should we be going to the gym."
+        },
+        {
+          "who": "noah",
+          "text": "we should be going to the gym. we are not going to the gym. we're eating whatever mom just made."
+        }
+      ]
+    },
+    "parents_stairs": {
+      "title": "parents_stairs",
+      "lines": [
+        {
+          "text": "The stairs up to the rest of the house. Somebody's shoes are on the third step."
+        },
+        {
+          "who": "noah",
+          "text": "Mia's floor. those are hers — she leaves them exactly there, every time."
+        },
+        {
+          "who": "noah",
+          "text": "you'll meet her when she's back. fair warning: she'll like you more than she likes me inside ten minutes."
+        }
+      ]
+    },
+    "parents_oven": {
+      "title": "parents_oven",
+      "lines": [
+        {
+          "text": "The oven light is on. Something in there is going gold at the edges."
+        },
+        {
+          "who": "her",
+          "text": "what is that."
+        },
+        {
+          "who": "noah",
+          "text": "I don't know yet. that's the fun part."
+        },
+        {
+          "text": "(His mom, without turning around: \"Twelve more minutes. Nobody opens it.\")"
+        }
+      ]
+    },
+    "home_hismom": {
+      "title": "home_hismom",
+      "lines": [
+        {
+          "text": "His mom turns around with flour on one cheek and a tray in both hands."
+        },
+        {
+          "text": "\"There she IS.\" (the tray goes down. you do not.)"
+        },
+        {
+          "text": "Mom: \"Sit, sit — no, first, taste this. Then sit.\""
+        },
+        {
+          "who": "noah",
+          "text": "she's been baking since eight this morning. for four people."
+        },
+        {
+          "text": "Mom: \"There are SIX of us if Mia comes back hungry.\""
+        },
+        {
+          "text": "(she pushes a warm one into your hand before you can answer. It's perfect.)"
+        },
+        {
+          "who": "noah",
+          "text": "[TODO Noah: what mom actually said about her ♥]"
+        }
+      ]
+    },
+    "home_dad": {
+      "title": "home_dad",
+      "lines": [
+        {
+          "text": "His dad looks up over his glasses, entirely delighted, and does not get up."
+        },
+        {
+          "text": "Dad: \"Ah — you must be the famous Sasha.\""
+        },
+        {
+          "who": "her",
+          "text": "hi! it's so good to finally—"
+        },
+        {
+          "text": "Dad: \"I hear you're studying international relations.\""
+        },
+        {
+          "who": "her",
+          "text": "…I am?"
+        },
+        {
+          "text": "Dad: \"Good. Because relations in THIS house are strictly domestic.\""
+        },
+        {
+          "text": "(silence. he is thrilled with himself.)"
+        },
+        {
+          "who": "noah",
+          "text": "he has been holding that one since Tuesday."
+        },
+        {
+          "text": "Dad: \"Since MONDAY.\" (he shakes your hand with both of his.)"
+        },
+        {
+          "text": "Dad: \"He talks about you constantly, you know. Constantly. It's become a whole thing.\""
+        }
+      ]
+    },
+    "home_collie": {
+      "title": "home_collie",
+      "lines": [
+        {
+          "text": "A border collie comes around the corner at roughly the speed of sound."
+        },
+        {
+          "text": "White, with black over one ear and most of one eye — so he always looks like he's asking a question."
+        },
+        {
+          "who": "her",
+          "text": "oh he's BEAUTIFUL — what's his name?"
+        },
+        {
+          "who": "noah",
+          "text": "…Charlie."
+        },
+        {
+          "who": "her",
+          "text": "Charlie."
+        },
+        {
+          "who": "noah",
+          "text": "Charlie."
+        },
+        {
+          "who": "her",
+          "text": "we have two Charlies."
+        },
+        {
+          "who": "noah",
+          "text": "we have two Charlies. nobody planned it. nobody's fixing it."
+        },
+        {
+          "text": "(Charlie #2 does one lap of the whole room to celebrate.)"
+        },
+        {
+          "text": "(He spots Mookie. He stops. He side-eyes Mookie the entire way past.)"
+        },
+        {
+          "text": "(He decides you are his person now. Charlie joined your little crowd! 🐕)"
+        }
+      ]
+    },
+    "neu_map": {
+      "title": "neu_map",
+      "lines": [
+        {
+          "text": "A pinned world map the length of the wall, red string running between five thumbtacks."
+        },
+        {
+          "who": "her",
+          "text": "this is the wall. everyone in the program has put a pin in this wall."
+        },
+        {
+          "who": "noah",
+          "text": "which ones are yours?"
+        },
+        {
+          "who": "her",
+          "text": "…all five of these, actually."
+        },
+        {
+          "who": "noah",
+          "text": "of COURSE they are."
+        },
+        {
+          "who": "her",
+          "text": "international affairs and political science. which mostly means I get very upset about places I've never been."
+        },
+        {
+          "who": "noah",
+          "text": "and then you go to them. that's the part people miss."
+        },
+        {
+          "text": "(she moves one pin two centimetres to the left. It was bothering her.)"
+        }
+      ]
+    },
+    "neu_globe": {
+      "title": "neu_globe",
+      "lines": [
+        {
+          "text": "A floor globe on a brass meridian, worn smooth around the equator by ten thousand hands."
+        },
+        {
+          "text": "(She spins it, closes her eyes, and puts a finger down.)"
+        },
+        {
+          "text": "…the middle of the Pacific Ocean."
+        },
+        {
+          "who": "noah",
+          "text": "booking it."
+        }
+      ]
+    },
+    "neu_coop": {
+      "title": "the co-op board",
+      "lines": [
+        {
+          "text": "The co-op board. Six months on, six months off, and every posting on it has its tabs torn off."
+        },
+        {
+          "who": "noah",
+          "text": "two of these were yours."
+        },
+        {
+          "who": "her",
+          "text": "TJX. marketing. that was the first one."
+        },
+        {
+          "who": "noah",
+          "text": "and you hated it."
+        },
+        {
+          "who": "her",
+          "text": "I hated it. and I want to be fair — some of that was just the work."
+        },
+        {
+          "who": "her",
+          "text": "…most of it was the people I was working for."
+        },
+        {
+          "who": "noah",
+          "text": "I remember hearing about it. every day. in detail."
+        },
+        {
+          "who": "her",
+          "text": "you were very patient."
+        },
+        {
+          "who": "noah",
+          "text": "and then Wellington."
+        },
+        {
+          "who": "her",
+          "text": "and then WELLINGTON."
+        },
+        {
+          "who": "her",
+          "text": "I LIKE the people. genuinely. I look forward to going in, which I did not know was a thing that could happen to a person."
+        },
+        {
+          "who": "noah",
+          "text": "they'd keep you, you know."
+        },
+        {
+          "who": "her",
+          "text": "…they might, actually. part time, through my last year."
+        },
+        {
+          "who": "her",
+          "text": "which starts after this summer. which is — oh. that's now, isn't it."
+        },
+        {
+          "who": "noah",
+          "text": "a full course load and a job at once."
+        },
+        {
+          "who": "her",
+          "text": "yes."
+        },
+        {
+          "who": "noah",
+          "text": "you're going to be unbearable about how well it goes ♥"
+        }
+      ]
+    },
+    "neu_flags": {
+      "title": "neu_flags",
+      "lines": [
+        {
+          "text": "A row of little flags on brass poles, none of them hanging quite level."
+        },
+        {
+          "text": "One for every language taught on this floor."
+        },
+        {
+          "who": "her",
+          "text": "I can order coffee wrong in four of these."
+        },
+        {
+          "who": "noah",
+          "text": "that's four more than me."
+        }
+      ]
+    },
+    "bu_arm": {
+      "title": "bu_arm",
+      "lines": [
+        {
+          "text": "A six-axis arm on a pedestal, sweeping slowly through the same arc, over and over."
+        },
+        {
+          "who": "noah",
+          "text": "okay. this is the one. this is my favourite object in the building."
+        },
+        {
+          "text": "He taps something. The arm swings out, closes on a little red cube, lifts it, sets it down half an inch to the left."
+        },
+        {
+          "who": "noah",
+          "text": "it has been doing that since 2019."
+        },
+        {
+          "who": "her",
+          "text": "…that's it? that's the whole thing?"
+        },
+        {
+          "who": "noah",
+          "text": "that's the whole thing. and getting it to do THAT reliably is about nine hundred hours of somebody's life."
+        },
+        {
+          "text": "(The arm sets the cube down. Perfectly. Again.)"
+        },
+        {
+          "who": "her",
+          "text": "okay it's kind of beautiful."
+        },
+        {
+          "who": "noah",
+          "text": "IT'S KIND OF BEAUTIFUL."
+        },
+        {
+          "text": "(She makes it wave. It waves. She's delighted.)"
+        }
+      ]
+    },
+    "bu_printer": {
+      "title": "bu_printer",
+      "lines": [
+        {
+          "text": "Two printers running. Gantries tracking left and right, beds sliding, layers stacking up one at a time."
+        },
+        {
+          "who": "her",
+          "text": "what are they making?"
+        },
+        {
+          "who": "noah",
+          "text": "that one's a bracket. that one is… hm."
+        },
+        {
+          "text": "(You both lean in. The part on the second bed is unmistakably a small pink heart.)"
+        },
+        {
+          "who": "noah",
+          "text": "…somebody's calibrating."
+        },
+        {
+          "who": "her",
+          "text": "somebody is NOT calibrating."
+        },
+        {
+          "who": "noah",
+          "text": "somebody put that on the queue eleven minutes ago and I refuse to say who."
+        },
+        {
+          "text": "(It finishes. He pops it off the bed with a spatula while it's still warm and hands it to you.)"
+        },
+        {
+          "text": "(You put it in your pocket. It stays there.)"
+        }
+      ]
+    },
+    "bu_rover": {
+      "title": "bu_rover",
+      "lines": [
+        {
+          "text": "A tracked rover parked by the wall. There's masking tape on the side with a name on it — crossed out twice."
+        },
+        {
+          "who": "noah",
+          "text": "it's had three names. currently it's 'ROOMBA (LEGALLY DISTINCT)'."
+        },
+        {
+          "who": "her",
+          "text": "what were the other two?"
+        },
+        {
+          "who": "noah",
+          "text": "we don't say the second one out loud in this building."
+        }
+      ]
+    },
+    "bu_bench": {
+      "title": "bu_bench",
+      "lines": [
+        {
+          "text": "The bench: an oscilloscope drawing a lazy green line, an iron still warm, and four spools of wire."
+        },
+        {
+          "who": "noah",
+          "text": "I have burned myself on that iron more times than I've burned myself cooking."
+        },
+        {
+          "who": "her",
+          "text": "you've burned yourself cooking a LOT."
+        },
+        {
+          "who": "noah",
+          "text": "which is what makes the statistic impressive."
+        }
+      ]
+    },
+    "bu_board": {
+      "title": "bu_board",
+      "lines": [
+        {
+          "text": "A whiteboard nobody has erased since March. Kinematics, a half-rubbed plot, and a doodle of a very angry robot."
+        },
+        {
+          "text": "In the corner, small, in different handwriting: DO NOT ERASE (SERIOUSLY)"
+        },
+        {
+          "who": "noah",
+          "text": "that's mine. and I no longer remember what it was for."
+        }
+      ]
+    },
+    "cafe_table": {
+      "title": "cafe_table",
+      "lines": [
+        {
+          "text": "The little two-top by the front window. Two chairs, a round marble top, and the good light."
+        },
+        {
+          "who": "noah",
+          "text": "here."
+        },
+        {
+          "who": "noah",
+          "text": "this table. this exact table."
+        },
+        {
+          "who": "noah",
+          "text": "I came through that door, I was looking at my phone, and I looked up — and you were sitting right there in that chair."
+        },
+        {
+          "who": "her",
+          "text": "I remember what I was wearing."
+        },
+        {
+          "who": "noah",
+          "text": "I remember EVERYTHING you were wearing. I also remember walking straight past you and then standing at the counter for a full minute deciding whether to turn around."
+        },
+        {
+          "who": "her",
+          "text": "you turned around."
+        },
+        {
+          "who": "noah",
+          "text": "I turned around."
+        },
+        {
+          "text": "(You both sit down in the same two chairs. It fits exactly the way it did.)"
+        },
+        {
+          "who": "noah",
+          "text": "[TODO Noah: what you actually said when you turned around ♥]"
+        }
+      ]
+    },
+    "cafe_hinge": {
+      "title": "cafe_hinge",
+      "lines": [
+        {
+          "text": "A framed screenshot on the wall in a slightly-too-serious black frame, with a little brass plaque under it."
+        },
+        {
+          "text": "It's two tiny profile cards side by side, with a heart between them."
+        },
+        {
+          "who": "her",
+          "text": "…did they frame a dating app."
+        },
+        {
+          "who": "noah",
+          "text": "the plaque says 'THE ALGORITHM: 1, EVERY WELL-MEANING FRIEND WE HAVE: 0'."
+        },
+        {
+          "who": "her",
+          "text": "we met on HINGE."
+        },
+        {
+          "who": "noah",
+          "text": "we met on Hinge! the app designed to be deleted! and we deleted it! it WORKED!"
+        },
+        {
+          "who": "her",
+          "text": "your first message was about my third photo."
+        },
+        {
+          "who": "noah",
+          "text": "it was a GOOD third photo. I thought about that message for twenty minutes."
+        },
+        {
+          "who": "her",
+          "text": "it was eleven words."
+        },
+        {
+          "who": "noah",
+          "text": "twenty minutes. eleven words. best return on investment of my entire life."
+        },
+        {
+          "text": "(Somewhere out there is a server with the exact timestamp on it. Neither of you needs to look it up.)"
+        }
+      ]
+    },
+    "cafe_counter": {
+      "title": "cafe_counter",
+      "lines": [
+        {
+          "text": "The counter: tip jar, card reader, a stack of cups, and a barista who has seen you two a lot."
+        },
+        {
+          "text": "Barista: \"The usual? Cortado and the cold brew?\""
+        },
+        {
+          "who": "her",
+          "text": "…yes please."
+        },
+        {
+          "text": "Barista, already making it: \"You always take the window table.\""
+        },
+        {
+          "who": "noah",
+          "text": "we always take the window table."
+        }
+      ]
+    },
+    "bu_rhett": {
+      "title": "Rhett 🐶",
+      "lines": [
+        {
+          "text": "A Boston terrier is sitting dead centre of the lab floor like he is chairing the meeting."
+        },
+        {
+          "who": "noah",
+          "text": "…that's Rhett."
+        },
+        {
+          "who": "her",
+          "text": "does he WORK here?"
+        },
+        {
+          "who": "noah",
+          "text": "he has a badge. I have seen the badge."
+        },
+        {
+          "text": "(Rhett accepts exactly one head scratch, then leans his entire body weight against your shins.)"
+        },
+        {
+          "who": "noah",
+          "text": "he only does that to people he's already decided about ♥"
+        }
+      ]
+    },
+    "neu_paws": {
+      "title": "Paws 🐺",
+      "lines": [
+        {
+          "text": "A husky is asleep under the co-op board with all four legs in the air."
+        },
+        {
+          "who": "her",
+          "text": "PAWS."
+        },
+        {
+          "text": "(Paws does not open his eyes. …Paws opens one eye.)"
+        },
+        {
+          "who": "her",
+          "text": "he's the mascot. he's technically staff."
+        },
+        {
+          "who": "noah",
+          "text": "he's technically unconscious."
+        },
+        {
+          "text": "(He gets up, shakes out, and falls in behind you like it was always the plan.)"
+        }
+      ]
+    }
+  },
+  "noah": {
+    "greet_la": [
+      {
+        "who": "noah",
+        "text": "hey you. welcome to Mini-LA — I shrunk my hometown so you'd finally visit."
+      },
+      {
+        "who": "noah",
+        "text": "see those sparkles? each one is something I remember. go poke them. I'll come with you."
+      },
+      {
+        "who": "noah",
+        "text": "(and keep an eye out for figs. you'll know why.)"
+      }
+    ],
+    "chat": [
+      [
+        {
+          "who": "noah",
+          "text": "the sparkles are memories. the figs are figs. the cat is a menace."
+        }
+      ],
+      [
+        {
+          "who": "noah",
+          "text": "there's a road east of here. it leads somewhere that smells like Greece."
+        }
+      ],
+      [
+        {
+          "who": "noah",
+          "text": "I hid figs in the tall grass. Mookie may or may not have moved some."
+        }
+      ],
+      [
+        {
+          "who": "noah",
+          "text": "[TODO Noah: add more small talk lines — these cycle when she talks to you.]"
+        }
+      ]
+    ],
+    "after": [
+      [
+        {
+          "who": "noah",
+          "text": "happy birthday ♥"
+        }
+      ],
+      [
+        {
+          "who": "noah",
+          "text": "[TODO Noah: post-finale chatter.]"
+        }
+      ]
+    ]
+  },
+  "mookie": {
+    "lines": [
+      "Mookie: mrrrp?",
+      "(Mookie headbutts your ankle, then acts like it never happened.)",
+      "Mookie: meow. meow meow. (a full speech. no notes.)",
+      "(Mookie is following you. He would follow you anywhere.)"
+    ]
+  },
+  "pets": {
+    "leo": [
+      [
+        {
+          "text": "(Leo flops over sideways with total confidence that someone will catch him.)"
+        }
+      ],
+      [
+        {
+          "text": "Leo: mrrrp."
+        },
+        {
+          "text": "(that was the whole speech.)"
+        }
+      ],
+      [
+        {
+          "text": "(Leo and Mookie exchange a long look. Diplomacy is ongoing.)"
+        }
+      ]
+    ],
+    "charlie": [
+      [
+        {
+          "text": "(Charlie's whole back half is wagging. All of it.)"
+        }
+      ],
+      [
+        {
+          "text": "Charlie: !!!!!"
+        },
+        {
+          "text": "(he has no further comment.)"
+        }
+      ],
+      [
+        {
+          "text": "(Charlie tries to herd the cats. It is not going well. He is undeterred.)"
+        }
+      ]
+    ],
+    "chakra": [
+      [
+        {
+          "text": "(Chakra sits on your foot. Both of your feet. It's fine, you didn't need those.)"
+        }
+      ],
+      [
+        {
+          "text": "Chakra: whuff."
+        },
+        {
+          "text": "(that was the deepest sound anyone has ever made.)"
+        }
+      ],
+      [
+        {
+          "text": "(Charlie has been trying to get Chakra to play for ten minutes. She has blinked once.)"
+        }
+      ],
+      [
+        {
+          "text": "(Chakra checks over her shoulder every few steps to make sure you're still there. 🖤)"
+        }
+      ]
+    ],
+    "collie": [
+      [
+        {
+          "text": "(Charlie — the collie one — has already run the length of the street twice.)"
+        },
+        {
+          "text": "(He is back. He is somehow not tired.)"
+        }
+      ],
+      [
+        {
+          "text": "(He drops a stick at your feet. You did not throw a stick. He found a stick.)"
+        }
+      ],
+      [
+        {
+          "text": "(Charlie is very carefully herding the entire group into a tighter shape.)"
+        },
+        {
+          "text": "(Nobody agreed to this. It is working anyway.)"
+        }
+      ],
+      [
+        {
+          "text": "(Charlie glances at Mookie. Mookie does not glance back.)"
+        },
+        {
+          "text": "(Charlie decides to walk on the far side of you. Just in case. 👀)"
+        }
+      ],
+      [
+        {
+          "text": "(Two Charlies. You call one name and get two heads.)"
+        },
+        {
+          "who": "noah",
+          "text": "we've fully accepted it. they answer as a unit now."
+        }
+      ],
+      [
+        {
+          "text": "Charlie: !!!"
+        },
+        {
+          "text": "(one eye is black, one eye is white, both eyes are locked on you.)"
+        }
+      ]
+    ],
+    "kitten": [
+      [
+        {
+          "text": "(the kitten is asleep on your foot. you are not going anywhere.)"
+        }
+      ],
+      [
+        {
+          "text": "(the kitten attacks your shoelace, misses entirely, and walks away as if that was the plan.)"
+        }
+      ],
+      [
+        {
+          "text": "(Mookie is watching from a shelf. the truce is holding. barely.)"
+        }
+      ]
+    ],
+    "rhett": [
+      [
+        {
+          "text": "(Rhett is sitting on your foot. this is a Boston terrier's love language.)"
+        }
+      ],
+      [
+        {
+          "text": "(he sneezes. it is the loudest thing that has ever happened in this building.)"
+        }
+      ],
+      [
+        {
+          "text": "(Rhett looks up at Chakra. Chakra could eat him. they are best friends.)"
+        }
+      ]
+    ],
+    "paws": [
+      [
+        {
+          "text": "(Paws leans on you until you are structurally involved.)"
+        }
+      ],
+      [
+        {
+          "text": "(he says something. it isn't a bark, it's a whole sentence, and it's an argument.)"
+        }
+      ],
+      [
+        {
+          "text": "(Paws has decided the front of the group is his. nobody is contesting it.)"
+        }
+      ]
+    ]
+  },
+  "npcs": {
+    "la_neighbor": [
+      [
+        {
+          "text": "Lovely couple. You two remind me of me and my wife."
+        },
+        {
+          "text": "Now shoo — you're standing on my sprinklers."
+        }
+      ],
+      [
+        {
+          "text": "Back again? The shaved ice place down the street is the real landmark."
+        }
+      ]
+    ],
+    "care_aide": [
+      [
+        {
+          "text": "\"You're the granddaughter! She talks about you constantly. CONSTANTLY.\""
+        },
+        {
+          "text": "\"…and about a tall young man. Is that him? Hm. She undersold him, actually.\""
+        }
+      ],
+      [
+        {
+          "text": "\"If she offers you food, take the food. It is not really an offer.\""
+        }
+      ],
+      [
+        {
+          "text": "\"She did her hair herself this morning. She knew you were coming ♥\""
+        }
+      ]
+    ],
+    "route_hiker": [
+      [
+        {
+          "text": "Careful up ahead — someone on a quad bike went by screaming about figs."
+        },
+        {
+          "text": "…wait. Was that YOU two?"
+        }
+      ]
+    ],
+    "route_admirer": [
+      [
+        {
+          "text": "(she squints at the pyramid, counting on her fingers)"
+        },
+        {
+          "text": "Greece, Italy, Egypt, Mexico, Moldova… all that together? I can't even commit to a coffee order."
+        }
+      ],
+      [
+        {
+          "text": "One little road, a whole world on it. You two collect countries like I collect parking tickets."
+        }
+      ]
+    ],
+    "bos_student": [
+      [
+        {
+          "text": "Is that a cat following you? Lucky. Mine won't even look at me."
+        }
+      ]
+    ],
+    "bos_runner": [
+      [
+        {
+          "text": "Go Terriers! …or Huskies. I forget which school I go to."
+        }
+      ]
+    ],
+    "bos_oldman": [
+      [
+        {
+          "text": "The Charles is lovely this time of year. Don't drink it, though."
+        }
+      ]
+    ],
+    "bos_neighbor": [
+      [
+        {
+          "text": "You're the one from downstairs' boy's girl, aren't you."
+        },
+        {
+          "text": "…that came out wrong. Anyway. Welcome to Brookline."
+        }
+      ],
+      [
+        {
+          "text": "Trash goes out Tuesday. Somebody had to tell you."
+        }
+      ]
+    ],
+    "io_cook": [
+      [
+        {
+          "text": "He turns a basket of fries without looking up."
+        },
+        {
+          "text": "\"Animal style takes an extra minute. It's worth the extra minute.\""
+        }
+      ]
+    ],
+    "io_cashier": [
+      [
+        {
+          "text": "\"Take your time. The board hasn't changed since 1948.\""
+        }
+      ],
+      [
+        {
+          "text": "\"…the hats suit you both, honestly.\""
+        }
+      ]
+    ],
+    "io_customer": [
+      [
+        {
+          "text": "A man is halfway through a double-double and will not be interrupted."
+        },
+        {
+          "text": "He raises the burger a few inches. That's the whole greeting."
+        }
+      ]
+    ],
+    "neu_prof": [
+      [
+        {
+          "text": "She looks up from a stack of position papers, glasses pushed into her hair."
+        },
+        {
+          "text": "\"Ah — one of mine. Good. Tell me you finished the Moldova brief.\""
+        },
+        {
+          "text": "(You did. You finished it four days early. She already knows.)"
+        }
+      ],
+      [
+        {
+          "text": "\"The trick isn't having an opinion. Everyone has an opinion.\""
+        },
+        {
+          "text": "\"The trick is being able to argue the other side well enough that it hurts.\""
+        }
+      ]
+    ],
+    "neu_husky": [
+      [
+        {
+          "text": "\"Do you know if the spring co-op postings are up yet?\""
+        },
+        {
+          "text": "\"…they're not up yet. I've checked eleven times. I'm going to check again.\""
+        }
+      ],
+      [
+        {
+          "text": "\"Six months in class, six months at a desk, forever. It's a beautiful system.\""
+        },
+        {
+          "text": "\"I have no idea what month it is.\""
+        }
+      ]
+    ],
+    "bu_grad": [
+      [
+        {
+          "text": "A grad student surfaces from behind a monitor, holding a screwdriver like a pen."
+        },
+        {
+          "text": "\"Oh — hey. Don't touch the arm.\" (a pause) \"…okay, touch the arm. It's fine. It's rated for it.\""
+        }
+      ],
+      [
+        {
+          "text": "\"Print's at ninety-four percent. It'll fail at ninety-six. It always fails at ninety-six.\""
+        },
+        {
+          "text": "\"I've stopped being sad about it. Now it's just a thing that happens, like weather.\""
+        }
+      ],
+      [
+        {
+          "text": "\"You're the one from the photo on his desk.\""
+        },
+        {
+          "text": "(you didn't know there was a photo on his desk.)"
+        },
+        {
+          "text": "\"There's a photo on his desk.\""
+        }
+      ]
+    ],
+    "cafe_barista": [
+      [
+        {
+          "text": "\"Window table's free.\" (she says it before either of you asks.)"
+        },
+        {
+          "text": "\"It's always free when you two come in. I don't make the rules.\""
+        }
+      ],
+      [
+        {
+          "text": "\"You know you ordered the exact same thing the first time you sat there.\""
+        },
+        {
+          "text": "\"I remember because he ordered wrong twice.\""
+        }
+      ]
+    ],
+    "cafe_regular": [
+      [
+        {
+          "text": "An older man with a newspaper he is not reading."
+        },
+        {
+          "text": "\"Same table every time, you two.\""
+        },
+        {
+          "text": "\"Me too. Forty-one years with mine. Same booth. Keep the table.\""
+        }
+      ]
+    ]
+  },
+  "figs": {
+    "collect": "FIG!! ({n}/{total})",
+    "all": [
+      "(that's every fig on the map.)",
+      {
+        "who": "noah",
+        "text": "unstoppable. the strangers' trees of Greece never stood a chance."
+      }
+    ]
+  },
+  "pumpkins": {
+    "collect": "PUMPKINN!! ({n}/{total})",
+    "all": [
+      {
+        "text": "(that's every pumpkin. all of them. the entire harvest.)"
+      },
+      {
+        "who": "noah",
+        "text": "you collected all the pumpkins! for what reason? PUMPKINN!!"
+      },
+      {
+        "who": "her",
+        "text": "PUMPKINN!!"
+      },
+      {
+        "who": "noah",
+        "text": "there's no prize. I want to be really clear that there was never going to be a prize."
+      },
+      {
+        "who": "noah",
+        "text": "you did that for the bit. you did that ENTIRELY for the bit ♥"
+      },
+      {
+        "text": "(nobody has ever been prouder of anybody.)"
+      }
+    ]
+  },
+  "finale": {
+    "prompt": [
+      {
+        "who": "noah",
+        "text": "hey… that's everything I hid. almost everything. meet me at our apartment? ♥"
+      }
+    ],
+    "lines": [
+      {
+        "text": "(Noah is fidgeting. He practiced this.)"
+      },
+      {
+        "who": "noah",
+        "text": "okay. so. you found everything I hid in here."
+      },
+      {
+        "who": "noah",
+        "text": "every place we've been, everyone who matters, the figs, the pumpkins for no reason—"
+      },
+      {
+        "who": "her",
+        "text": "PUMPKINN!!"
+      },
+      {
+        "who": "noah",
+        "text": "PUMPKINN. yes. thank you."
+      },
+      {
+        "who": "noah",
+        "text": "so there's one thing left. and it's not in the game."
+      },
+      {
+        "who": "her",
+        "text": "…Noah."
+      },
+      {
+        "who": "noah",
+        "text": "it's not a flight. it's not a trip."
+      },
+      {
+        "who": "noah",
+        "text": "it's about eight weeks old and it doesn't have a name yet."
+      },
+      {
+        "text": "(He turns his phone around. Three kittens, blinking into a camera.)"
+      },
+      {
+        "who": "noah",
+        "text": "happy birthday ♥"
+      },
+      {
+        "who": "noah",
+        "text": "pick one. they're yours."
+      }
+    ],
+    "title": "HAPPY BIRTHDAY ♥",
+    "subtitle": "love, noah (and mookie)",
+    "kitten": {
+      "prompt": "pick your kitten ♥",
+      "sub": "(take your time. this one's for keeps.)",
+      "options": [
+        {
+          "id": "ginger",
+          "label": "the orange one",
+          "blurb": "loud. affectionate. will be sitting on your laptop by Thursday.",
+          "fallbackName": "Peach"
+        },
+        {
+          "id": "gray",
+          "label": "the grey one",
+          "blurb": "quiet, dignified, already judging the room. picks you, not the other way round.",
+          "fallbackName": "Smoke"
+        },
+        {
+          "id": "cream",
+          "label": "the cream one",
+          "blurb": "soft, sleepy, finds the one sunbeam in the apartment and holds it all day.",
+          "fallbackName": "Biscuit"
+        }
+      ],
+      "namePrompt": "…and what are we calling them?",
+      "namePlaceholder": "name",
+      "confirm": "that's the one ♥",
+      "back": "wait, let me look again",
+      "after": [
+        {
+          "text": "({name} fits in one hand. {name} does not care to be in one hand.)"
+        },
+        {
+          "who": "her",
+          "text": "…hi. hi. oh my god."
+        },
+        {
+          "who": "noah",
+          "text": "Mookie is going to have OPINIONS about this."
+        },
+        {
+          "who": "her",
+          "text": "Mookie is going to be a big brother."
+        },
+        {
+          "text": "({name} falls asleep in the crook of her arm inside ninety seconds.)"
+        },
+        {
+          "who": "noah",
+          "text": "happy birthday. I love you ♥"
+        }
+      ]
+    }
+  },
+  "party": {
+    "_readme": "the finale party 🎂 — plays after the reveal",
+    "surprise": [
+      {
+        "text": "EVERYONE: SURPRISE!!!"
+      },
+      {
+        "text": "(every single person in this little world is here. all of them. even the ones who barely know you.)"
+      },
+      {
+        "who": "noah",
+        "text": "…okay so I may have invited everybody."
+      }
+    ],
+    "cake": [
+      {
+        "text": "(the candles go up all at once. the cake is, frankly, structurally unwise.)"
+      },
+      {
+        "who": "noah",
+        "text": "make a wish. take your time — we've got all night."
+      },
+      {
+        "text": "(you close your eyes.)"
+      }
+    ],
+    "after": [
+      {
+        "who": "her",
+        "text": "…you did all of this?"
+      },
+      {
+        "who": "noah",
+        "text": "we did all of this. you just had to show up and be you."
+      },
+      {
+        "who": "noah",
+        "text": "happy birthday, my love ♥"
+      }
+    ]
+  },
+  "credits": {
+    "_readme": "the end-credits reel. `groups` is [role, [names…]] — add whatever you like.",
+    "title": "our little world",
+    "sub": "made for Sasha, with everything I've got",
+    "end": "happy birthday ♥",
+    "groups": [
+      [
+        "starring",
+        [
+          "{her}",
+          "{noah}"
+        ]
+      ],
+      [
+        "the crowd",
+        [
+          "Mookie",
+          "Leo",
+          "Charlie",
+          "Chakra",
+          "Charlie (the collie)",
+          "Rhett (BU)",
+          "Paws (NU)"
+        ]
+      ],
+      [
+        "at home",
+        [
+          "Marina",
+          "mom",
+          "the little brother",
+          "Jack & his wife"
+        ]
+      ],
+      [
+        "in Boston",
+        [
+          "his mom & dad",
+          "everyone at the cafe",
+          "the co-op crowd"
+        ]
+      ],
+      [
+        "locations",
+        [
+          "Mini-LA",
+          "Mini-Everywhere",
+          "Mini-Boston",
+          "one apartment with very good windows"
+        ]
+      ]
+    ]
+  }
+}

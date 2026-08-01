@@ -222,6 +222,50 @@ function initResumePopover() {
     resumePopoverClose?.addEventListener('click', () => {
         resumePopover.classList.remove('is-visible');
     });
+    initResumePopoverFooterLift();
+}
+
+/**
+ * Keep the resume card clear of the footer.
+ *
+ * The card is fixed to the bottom-right, which is exactly where the footer's
+ * last row sits — so on the way down the page it ends up parked on top of it.
+ * Instead of hiding the card, ride it upward by however much it would have
+ * overlapped, so the footer is always reachable and the card stays available.
+ */
+function initResumePopoverFooterLift() {
+    const footer = document.querySelector('footer');
+    if (!footer) return;
+
+    const REST_BOTTOM = 24;  // matches `bottom` in the .resume-popover rule
+    const GAP = 14;          // breathing room between card and footer
+    let queued = false;
+
+    const apply = () => {
+        queued = false;
+        const footerTop = footer.getBoundingClientRect().top;
+        const cardBottom = window.innerHeight - REST_BOTTOM;
+        let lift = Math.max(0, cardBottom - footerTop + GAP);
+        // never push it off the top of the screen on short viewports
+        const maxLift = Math.max(
+            0,
+            window.innerHeight - resumePopover.offsetHeight - REST_BOTTOM - 8
+        );
+        lift = Math.min(lift, maxLift);
+        resumePopover.style.setProperty('--resume-lift', `${Math.round(lift)}px`);
+    };
+
+    const schedule = () => {
+        if (queued) return;
+        queued = true;
+        requestAnimationFrame(apply);
+    };
+
+    // tracks scroll 1:1, so it reads as the card stepping aside rather than
+    // animating — no transition on `bottom` on purpose
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    apply();
 }
 
 function initCopyrightYear() {

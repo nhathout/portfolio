@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Secret Level</title>
+  <link rel="icon" href="assets/favicon.png" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="stage">
+    <canvas id="game"></canvas>
+
+    <!-- HUD -->
+    <div id="hud" class="hidden">
+      <div class="hud-chip"><span class="hud-icon hud-heart"></span><span id="hud-mem">0/0</span></div>
+      <div class="hud-chip"><span class="hud-icon hud-fig"></span><span id="hud-fig">0/0</span></div>
+      <div class="hud-chip"><span class="hud-icon hud-pump"></span><span id="hud-pump">0/0</span></div>
+    </div>
+    <button id="mute-btn" class="hidden" aria-label="Toggle sound">♪</button>
+
+    <!-- map name toast -->
+    <div id="toast" class="hidden"></div>
+
+    <!-- asset loading 🎒 -->
+    <div id="loading" class="overlay hidden">
+      <div class="title-card">
+        <div class="title-hearts">♥</div>
+        <h1 id="load-line">packing the suitcase…</h1>
+        <div class="load-bar"><i id="load-fill"></i></div>
+        <p class="tiny"><span id="load-pct">0</span>%</p>
+      </div>
+    </div>
+
+    <!-- full-screen minigames (aquarium 🐠 / greenhouse 🌱) build their own
+         320x240 canvas in here -->
+    <div id="minigame" class="hidden"></div>
+
+    <!-- dialogue -->
+    <div id="dialogue" class="hidden">
+      <div id="dlg-name" class="hidden"></div>
+      <div id="dlg-text"></div>
+      <div id="dlg-more">▼</div>
+    </div>
+
+    <!-- touch controls -->
+    <div id="touch-ui" class="hidden">
+      <div id="dpad">
+        <button data-dir="up" class="pad-btn pad-up">▲</button>
+        <button data-dir="left" class="pad-btn pad-left">◀</button>
+        <button data-dir="right" class="pad-btn pad-right">▶</button>
+        <button data-dir="down" class="pad-btn pad-down">▼</button>
+      </div>
+      <button id="btn-a" class="pad-btn">A</button>
+    </div>
+
+    <!-- title screen -->
+    <div id="title" class="overlay hidden">
+      <div class="title-card">
+        <div class="title-hearts">♥ ♥ ♥</div>
+        <h1 id="title-name">…</h1>
+        <p id="title-sub"></p>
+        <button id="btn-start" class="pixel-btn">Start</button>
+        <button id="btn-continue" class="pixel-btn hidden">Continue</button>
+        <p id="title-hint" class="tiny">arrows / WASD to walk · E to interact · shift to run</p>
+        <p class="tiny"><a href="#" id="btn-reset" class="hidden">start over</a></p>
+      </div>
+    </div>
+
+    <!-- travel log form -->
+    <div id="travel" class="overlay hidden">
+      <div class="title-card">
+        <div class="title-hearts">✈</div>
+        <h1>our travel log</h1>
+        <p>add a place we've been (or just went!) —<br/>a little monument appears in Mini-Everywhere.</p>
+        <form id="travel-form">
+          <input id="tv-country" type="text" maxlength="24" placeholder="country / place" autocomplete="off" />
+          <textarea id="tv-msg" maxlength="160" rows="3" placeholder="a tiny memory from the trip…"></textarea>
+          <div>
+            <button type="submit" class="pixel-btn">add ♥</button>
+            <button type="button" id="tv-cancel" class="pixel-btn pixel-btn--dim">not now</button>
+          </div>
+        </form>
+        <p class="tiny">it lands on a random free spot · walk up + E to reread it</p>
+        <div id="tv-list" class="hidden"></div>
+      </div>
+    </div>
+
+    <!-- 🐈 the last screen of the game: she picks a kitten, and names it -->
+    <div id="kitten" class="overlay hidden">
+      <div class="title-card kit-card-wrap">
+        <div class="title-hearts">🐈</div>
+        <h1 id="kit-title">…</h1>
+        <p id="kit-sub"></p>
+        <div id="kit-row"></div>
+        <form id="kit-name-form" class="hidden">
+          <p id="kit-name-label" class="kit-label"></p>
+          <input id="kit-name" type="text" maxlength="16" placeholder="name" autocomplete="off" />
+          <div>
+            <button type="submit" id="kit-confirm" class="pixel-btn">that's the one ♥</button>
+            <button type="button" id="kit-back" class="pixel-btn pixel-btn--dim">← pick again</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- pause menu -->
+    <div id="pause" class="overlay hidden">
+      <div class="title-card">
+        <div class="title-hearts">❚❚</div>
+        <h1>paused</h1>
+        <p>take your time. mookie will wait.</p>
+        <button id="btn-resume" class="pixel-btn">resume</button>
+        <button id="btn-exit" class="pixel-btn pixel-btn--dim">back to the website</button>
+        <!-- dev only: shown when the URL has ?dev — never on her copy -->
+        <button id="btn-test-ending" class="pixel-btn pixel-btn--dim hidden">🎂 test the ending</button>
+        <p class="tiny">esc to resume · progress auto-saves</p>
+      </div>
+    </div>
+
+    <!-- finale banner -->
+    <div id="finale-banner" class="overlay hidden">
+      <div class="title-card">
+        <div class="title-hearts big" id="finale-hearts">♥</div>
+        <h1 id="finale-title"></h1>
+        <p id="finale-sub"></p>
+        <button id="btn-finale-close" class="pixel-btn">♥</button>
+      </div>
+    </div>
+
+    <!-- party banner + end credits 🎂 -->
+    <div id="party-banner" class="hidden"><span></span></div>
+    <div id="credits" class="overlay hidden">
+      <div id="credits-scroll"></div>
+      <button id="btn-credits-skip" class="pixel-btn tiny-btn">skip ▸</button>
+    </div>
+
+    <!-- password gate -->
+    <div id="gate" class="overlay">
+      <div class="title-card">
+        <div class="gate-lock">♥</div>
+        <h1 class="gate-h">psst… you found a secret level</h1>
+        <p class="gate-p">this one’s not for everyone.<br/>whisper the magic word:</p>
+        <form id="gate-form">
+          <input id="gate-input" type="password" autocomplete="off" spellcheck="false" placeholder="password" />
+          <button type="submit" class="pixel-btn">unlock</button>
+        </form>
+        <p id="gate-msg" class="tiny"></p>
+      </div>
+    </div>
+
+    <div id="fader"></div>
+  </div>
+
+  <script>
+    // crash reporter: kaplay swallows errors into its blue screen, but it
+    // logs them via console.error first — capture that, plus window errors,
+    // show a copyable strip and remember the last one in localStorage.
+    (() => {
+      function report(msg) {
+        try { localStorage.setItem("sl_lasterror", `${new Date().toISOString()} ${msg}`); } catch {}
+        let el = document.getElementById("crash-strip");
+        if (!el) {
+          el = document.createElement("div");
+          el.id = "crash-strip";
+          el.style.cssText =
+            "position:fixed;left:0;right:0;bottom:0;z-index:99999;background:#8c1f2e;" +
+            "color:#fff;font:11px/1.6 monospace;padding:8px 34px 8px 10px;word-break:break-all;";
+          const x = document.createElement("span");
+          x.textContent = "✕";
+          x.style.cssText = "position:absolute;right:10px;top:8px;cursor:pointer;";
+          x.onclick = () => el.remove();
+          el.appendChild(x);
+          document.body.appendChild(el);
+        }
+        el.insertBefore(document.createTextNode(`the game hiccuped — tell noah: ${msg} `), el.firstChild);
+      }
+      const orig = console.error.bind(console);
+      console.error = (...a) => {
+        orig(...a);
+        const m = a.map((x) => (x && x.stack) || String(x)).join(" ");
+        if (/error/i.test(m)) report(m.slice(0, 500));
+      };
+      window.addEventListener("error", (e) => report(`${e.message} @ ${e.filename}:${e.lineno}`));
+      window.addEventListener("unhandledrejection", (e) =>
+        report(String((e.reason && (e.reason.stack || e.reason.message)) || e.reason).slice(0, 500)));
+    })();
+  </script>
+  <script src="lib/kaplay.js"></script>
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

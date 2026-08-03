@@ -38,9 +38,11 @@ the only tell. That fades to `/secret-level/`, which asks for the password.
 | M | mute (music + SFX) |
 
 - ✨ **sparkles** mark memory spots — walk up and press E. The HUD heart counts
-  them (38 required at the moment, plus bonus ones like the boombox and the
-  beach horse). The count is derived from `maps.js`, so adding a spot just
-  raises the bar — `bonus: true` keeps one out of the finale requirement.
+  only the **♥ list**: `STORY_POINTS` at the bottom of `maps.js` (15 spots — the
+  eight people, the six animals, and the travel-log isle). Everything else on
+  every map still sparkles and still reads, it just doesn't gate the ending, so
+  adding a spot anywhere is free. To make something count, add its id to that
+  list; to stop it counting, take it out. Nothing else controls this.
 - 🍇 **figs** — one from the fig tree on the route, the rest hidden around the
   maps and inside the houses (tall grass and tree lines are good places to
   look). The HUD shows the live total, so adding more just raises the bar.
@@ -232,6 +234,11 @@ python3 -m http.server 8321
   jumps straight to the party + credits from wherever you are. It only exists
   when `?dev` is in the URL, so her copy never shows it. `?map=party` does the
   same thing in one step.
+- **Screenshots without clicking around**: `python tools/shoot.py out.png
+  --map bos_parents_in --wait 2.5` drives headless Chrome over CDP (it presses
+  Start for you, can send `--keys right,right,e`, and `--eval "<js>"` reads
+  anything out of `window.__sl`). `--virtual-time-budget` does *not* work here —
+  it freezes kaplay's frame loop — which is why this exists.
 - After editing `src/maps.js`, run `python tools/check_maps.py` — it catches
   bad row widths, props/points/spawns placed out of bounds or inside walls,
   missing sprites, broken exit→spawn links, overlapping buildings, doors that
@@ -391,6 +398,19 @@ cd tools && python3 make_sprites.py   # regenerates ../assets/*.png + preview.pn
   hair sits a row lower than Noah's afro, hence `hat_dy=1` on hers. Hatted
   sheets are separate sprites (`her_hat`, `noah_hat`) that `world.js` swaps in
   when `save.hats` is set.
+- **🎩 townsfolk**: the nameless background people are stock torso + one loud
+  hat + one prop, in the `BACKGROUND TOWNSFOLK` block — `TOP_HAT`, `CURLERS`,
+  `CANS`, `STRAW_HAT`… plus overlays (`MOUSTACHE`, `CAMERA`, `CASSEROLE`,
+  `NEWSPAPER`, `FLORAL`, `BURGER`). `specs=` takes a **list** of overlays now,
+  each with its own `dy`, so a new one is a palette + a hat + two grids. Keep
+  overlay pixels inside the body unless they're meant to stick out — the outline
+  pass will draw a border around a stray floating pixel. Named people (Marina,
+  mom, Jack, Dez, Baba's aide, his parents, the pets) are drawn as themselves
+  and are deliberately *not* in this crowd.
+- **`src/artmeta.js` is generated** by this script: how many transparent rows
+  sit above each sheet's art. `world.js` needs it to hang the "press E" sparkle
+  a few px above someone's hair instead of a whole head higher. Don't hand-edit
+  it; it rewrites on every run.
 - Check `tools/preview.png` (zoomed contact sheet) after regenerating.
 - Maps are ASCII too — `src/maps.js`, chars documented at the top of the file.
 - (If you ever want ready-made tiles instead, Kenney's CC0 "RPG Urban Pack"
@@ -433,7 +453,8 @@ secret-level/
 │   ├── main.js                boot: gate → assets → title → game
 │   ├── world.js               engine: player, followers, interactions, finale
 │   ├── minigames.js           the aquarium 🐠 and the greenhouse 🌱 (own canvas)
-│   ├── maps.js                the maps (ASCII) + building metadata
+│   ├── maps.js                the maps (ASCII) + building metadata + STORY_POINTS (♥)
+│   ├── artmeta.js             GENERATED sprite headroom (sparkle placement)
 │   ├── dialogue.js            typewriter dialogue box
 │   ├── gate.js                password gate / AES-GCM decrypt
 │   └── audio.js               WebAudio chiptune SFX (no audio files)
@@ -446,6 +467,7 @@ secret-level/
     ├── make_sprites.py        art generator (run to rebuild assets/)
     ├── crypt.py               python encrypt AND decrypt (no installs, no node)
     ├── check_maps.py          static validator for src/maps.js
+    ├── shoot.py               headless-Chrome screenshot/QA driver (CDP)
     ├── encrypt.mjs            CLI encryptor (needs node)
     ├── encrypt.html           browser encryptor
     └── preview.png            zoomed art contact sheet
@@ -474,6 +496,10 @@ The LA block grew southward for Jack's place — the pattern is repeatable:
 
 Default dialogue for anything new lives in `POINT_FALLBACK` at the top of
 `world.js`; whatever Noah writes into `memories.json → points` wins.
+
+Nothing you add here can accidentally move the finish line: the ending reads
+`STORY_POINTS` in `maps.js` and nothing else. A new house is bonus content until
+you put one of its ids on that list on purpose.
 
 ## 🧑‍🤝‍🧑 adding another animal to the crowd
 

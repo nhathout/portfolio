@@ -68,6 +68,9 @@ const CHAR_ANIMS = {
 k.loadSprite("her", "assets/her.png", { sliceX: 4, sliceY: 4, anims: CHAR_ANIMS });
 k.loadSprite("noah", "assets/noah.png", { sliceX: 4, sliceY: 4, anims: CHAR_ANIMS });
 for (const npc of ["npc_woman", "npc_man", "npc_old",
+  // 🎩 the townsfolk with personalities (see make_sprites.py)
+  "npc_dapper", "npc_hiker", "npc_tourist", "npc_curlers", "npc_jogger",
+  "npc_student", "npc_hawaii", "npc_regular", "npc_burgerguy",
   "npc_marina", "npc_mom", "npc_bro", "npc_jack", "npc_wife",
   "npc_innout", "npc_innout2",
   // 🏡 Brookline + the three Boston interiors

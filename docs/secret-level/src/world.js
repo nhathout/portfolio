@@ -2,6 +2,7 @@
 
 import { MAPS, BUILDING_META, TILE as T, allPointIds, allFigIds, allPumpkinIds } from "./maps.js";
 import { openTank, openGarden } from "./minigames.js";
+import { ART_HEADROOM } from "./artmeta.js";
 
 const VIEW_W = 320;
 const VIEW_H = 240;
@@ -596,20 +597,27 @@ export const NPC_FALLBACK = {
      { text: "He raises the burger a few inches. That's the whole greeting." }],
   ],
   bos_neighbor: [
-    [{ text: "You're the one from downstairs' boy's girl, aren't you." },
-     { text: "…that came out wrong. Anyway. Welcome to Brookline." }],
-    [{ text: "Trash goes out Tuesday. Somebody had to tell you." }],
+    [{ text: "(A woman in curlers appears with a casserole, as though she has been waiting behind that door since March.)" },
+     { text: "\"YOU'RE the one from the photos. He shows everybody. The mailman has seen the photos.\"" },
+     { text: "(She presses the dish into your hands. It is still hot. It is enormous.)" },
+     { text: "\"Don't argue. Bring the dish back whenever — that's how I know you'll come back.\"" }],
+    [{ text: "\"Trash is Tuesday. They come at six. I'll be up.\"" },
+     { text: "\"…I'm always up.\"" }],
+    [{ text: "\"You two hold hands at the mailbox. I've seen it. The whole street has seen it.\"" },
+     { text: "\"Keep doing it. It's good for property values.\"" }],
   ],
   bos_student: [
-    [{ text: "Is that a cat following you? Lucky." },
+    [{ text: "(She lifts one enormous headphone about an inch. That's the meeting.)" },
+     { text: "Is that a cat following you? Lucky." },
      { text: "My cat won't even make eye contact with me." }],
   ],
   bos_runner: [
     [{ text: "Go Terriers! …or Huskies. I always forget which school I actually go to." }],
   ],
   bos_oldman: [
-    [{ text: "The Charles is beautiful this time of year." },
-     { text: "Don't drink it, though. Trust me." }],
+    [{ text: "(A man in a top hat. On the esplanade. In this decade.)" },
+     { text: "\"The Charles is beautiful this time of year.\"" },
+     { text: "\"Don't drink it, though. Trust me.\"" }],
   ],
   // ---- 🎓 Northeastern
   neu_prof: [
@@ -1100,6 +1108,21 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
     setAnim(b, false, opp[dir]);
   }
 
+  // ------------------------------------------------------------ the sparkle
+  // "press E here" markers are `fx` frames 2-3 drawn anchor:bot, and those
+  // frames are empty below row 9 of 16 — so the pixels stop SPARK_FOOT px above
+  // the object's own y. Nor does a sprite's frame height say where its art
+  // starts: character sheets carry 4-5 rows of headroom above the hair, the
+  // travel easel 7. Ignore either and the sparkle floats a whole head above
+  // whatever it is pointing at — which is what happened to Marina, her mom and
+  // her brother. ART_HEADROOM is generated from the art by make_sprites.py.
+  const SPARK_FOOT = 6;   // empty rows under the sparkle art, in px
+  const SPARK_GAP = 3;    // air between the top of the thing and the sparkle
+  /** y for a sparkle sitting just above art whose top edge is `artTop` */
+  const sparkY = (artTop) => artTop - SPARK_GAP + SPARK_FOOT;
+  /** top edge of a bottom-anchored object's actual pixels */
+  const artTopOf = (o) => o.pos.y - o.height + (ART_HEADROOM[o.sprite] || 0);
+
   // ------------------------------------------------------------ particles
   function sparkleBurst(pos, n = 6) {
     for (let i = 0; i < n; i++) {
@@ -1139,7 +1162,7 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
 
   // ------------------------------------------------------------ the ATV 🛵
   function spawnQuadParked(px, py) {
-    k.add([
+    return k.add([
       k.sprite("quad"), k.pos(px, py), k.anchor("bot"),
       k.area({ shape: new k.Rect(k.vec2(-13, -9), 26, 9) }),
       k.body({ isStatic: true }), k.z(py), "quadProp",
@@ -2420,7 +2443,7 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
       solidRect(b.x * T, baseY - m.ht * T, m.wt * T, m.ht * T);
       if (b.point) {
         const doorCol = m.doorCol ?? Math.floor(m.wt / 2);
-        const zone = addPointZone({ id: b.point, x: b.x + doorCol, y: b.y + 1, w: 1, h: 1 });
+        const zone = addPointZone({ id: b.point, x: b.x + doorCol, y: b.y + 1, w: 1, h: 1, door: true });
         if (b.enter) { zone.enterTo = b.enter.to; zone.enterSpawn = b.enter.spawn; }
       }
     }
@@ -2549,6 +2572,14 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
     // things that sit ON something else and have to beat its z to be seen: the
     // tray is on a booth table, the till and the hats are on the counter
     const ON_TOP = { in_tray: 34, in_till: 8, in_hatstack: 8 };
+    // where each prop's art actually is, so a memory's sparkle can sit on the
+    // aquarium / the boombox / the fig tree instead of guessing from the tile
+    const propArt = [];
+    const noteProp = (o) => {
+      propArt.push({ x0: o.pos.x - o.width / 2, x1: o.pos.x + o.width / 2, top: artTopOf(o), bot: o.pos.y });
+      return o;
+    };
+    const addProp = (comps) => noteProp(k.add(comps));
     for (const p of def.props || []) {
       // `after` gates a prop on a memory being read — the burger tray doesn't
       // exist until she's actually ordered it
@@ -2556,39 +2587,39 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
       const px = (p.x + 0.5) * T;
       const py = (p.y + 1) * T;
       if (p.type === "pool") {
-        const pool = k.add([
+        const pool = addProp([
           k.sprite("pool", { anim: "live" }), k.pos(px, py), k.anchor("bot"),
           k.area({ shape: new k.Rect(k.vec2(-36, -34), 72, 26) }),
           k.body({ isStatic: true }), k.z(py),
         ]);
         pool.z = py - 2; // she can stand on the near deck
       } else if (p.type === "turtle") {
-        k.add([
+        addProp([
           k.sprite("turtle", { anim: "live" }), k.pos(px, py), k.anchor("bot"),
           k.area({ shape: new k.Rect(k.vec2(-11, -8), 22, 8) }),
           k.body({ isStatic: true }), k.z(py),
         ]);
       } else if (FLICKER[p.type]) {
         const d = FLICKER[p.type];
-        k.add([
+        addProp([
           k.sprite(p.type, { anim: "live" }), k.pos(px, py), k.anchor("bot"),
           k.area({ shape: new k.Rect(k.vec2(d.ox, -d.h), d.w, d.h) }),
           k.body({ isStatic: true }), k.z(py),
         ]);
       } else if (SOFT_DECOR.has(p.type)) {
-        k.add([k.sprite(p.type), k.pos(px, py), k.anchor("bot"),
+        addProp([k.sprite(p.type), k.pos(px, py), k.anchor("bot"),
           k.z(FLOOR_DECOR.has(p.type) ? py - 24 : py + (ON_TOP[p.type] || 0))]);
       } else if (p.type === "figtree") {
-        k.add([
+        addProp([
           k.sprite("figtree", { frame: save.figs.has("fig_tree") ? 1 : 0 }),
           k.pos(px, py), k.anchor("bot"),
           k.area({ shape: new k.Rect(k.vec2(-10, -6), 20, 6) }), k.body({ isStatic: true }),
           k.z(py), "figtreeProp",
         ]);
       } else if (p.type === "quad") {
-        if (!save.mounted) spawnQuadParked(px, py); // she rode it off somewhere
+        if (!save.mounted) noteProp(spawnQuadParked(px, py)); // else she rode it off somewhere
       } else if (p.type === "garden") {
-        k.add([
+        addProp([
           k.sprite("garden", { frame: 0 }),
           k.pos(px, py), k.anchor("bot"),
           k.area({ shape: new k.Rect(k.vec2(-17, -14), 34, 14) }),
@@ -2596,15 +2627,15 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
         ]);
       } else if (DECOR[p.type]) {
         const d = DECOR[p.type];
-        k.add([
+        addProp([
           k.sprite(p.type), k.pos(px, py), k.anchor("bot"),
           k.area({ shape: new k.Rect(k.vec2(d.ox, -d.h), d.w, d.h) }),
           k.body({ isStatic: true }), k.z(py),
         ]);
       } else if (p.type === "torii") {
-        k.add([k.sprite("torii"), k.pos(px, py), k.anchor("bot"), k.z(py)]);
+        addProp([k.sprite("torii"), k.pos(px, py), k.anchor("bot"), k.z(py)]);
       } else if (p.type === "sailboat") {
-        const boat = k.add([k.sprite("sailboat"), k.pos(px, py), k.anchor("bot"),
+        const boat = addProp([k.sprite("sailboat"), k.pos(px, py), k.anchor("bot"),
           k.z(py), { t: k.rand(0, 6) }]);
         boat.onUpdate(() => {
           boat.t += k.dt();
@@ -2628,11 +2659,21 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
         },
       ]);
       if (!save.seen.has(p.id)) {
+        // A door's sparkle belongs ON the door — measuring its building would
+        // put it over the roof, three storeys up. Everything else hovers just
+        // above the prop standing in the zone (the easel, the tank, the
+        // boombox); with no prop it hovers over the ground she stands on.
+        const cx = zone.focusPos.x;
+        let my = p.y * T - 8;
+        if (!p.door) {
+          const under = propArt.filter((a) => a.x0 <= cx && cx <= a.x1
+            && a.bot >= p.y * T && a.bot <= (p.y + p.h) * T);
+          my = sparkY(under.length ? Math.min(...under.map((a) => a.top)) : p.y * T);
+        }
         zone.marker = k.add([
           k.sprite("fx", { anim: "sparkle" }),
-          k.pos(zone.focusPos.x, p.y * T - 8), k.anchor("bot"), k.z(1e5), { t: k.rand(0, 5) },
+          k.pos(cx, my), k.anchor("bot"), k.z(1e5), { t: k.rand(0, 5) },
         ]);
-        const my = p.y * T - 8;
         zone.marker.onUpdate(() => { zone.marker.t += k.dt(); zone.marker.pos.y = my + Math.sin(zone.marker.t * 2.5) * 2; });
       }
       return zone;
@@ -2686,7 +2727,7 @@ export function startGame(k, memories, tilesMeta, dialogue, audio, ui) {
       addShadow(c);
       // people with a memory get the same sparkle as a memory spot
       if (n.point && !save.seen.has(n.point)) {
-        const my = py - (n.pet ? 20 : 34);
+        const my = sparkY(artTopOf(c));
         const mk = k.add([
           k.sprite("fx", { anim: "sparkle" }),
           k.pos(px, my), k.anchor("bot"), k.z(1e5), { t: k.rand(0, 5) },

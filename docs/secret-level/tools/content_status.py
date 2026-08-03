@@ -20,8 +20,8 @@ def load_maps():
     """Import src/maps.js with node and hand the real objects back. Parsing the
     file with regexes drifts the moment a building gains a nested `enter: {}`,
     and a checklist that quietly drops rows is worse than no checklist."""
-    js = ("import { MAPS } from %s;\n"
-          "console.log(JSON.stringify(MAPS));\n"
+    js = ("import { MAPS, STORY_POINTS } from %s;\n"
+          "console.log(JSON.stringify({ MAPS, STORY_POINTS }));\n"
           % json.dumps(os.path.join(ROOT, "src", "maps.js")))
     with tempfile.NamedTemporaryFile("w", suffix=".mjs", delete=False) as f:
         f.write(js)
@@ -34,7 +34,8 @@ def load_maps():
         os.unlink(path)
     if out.returncode:
         sys.exit(out.stderr.strip() or "node failed to import src/maps.js")
-    return json.loads(out.stdout)
+    data = json.loads(out.stdout)
+    return data["MAPS"], set(data["STORY_POINTS"])
 
 
 def status(kind, key):
@@ -48,19 +49,22 @@ def status(kind, key):
 
 
 rows_by_map, todo_ids = [], []
-for name, d in load_maps().items():
+maps, story = load_maps()
+# "required" means "on the ♥ list in maps.js" — see STORY_POINTS there. Every
+# other spot is optional colour, which is not the same thing as unwritten.
+for name, d in maps.items():
     title = d.get("name", name)
     interior = bool(d.get("interior"))
     rows = []
     for bd in d.get("buildings", []):
         if bd.get("point"):
-            rows.append((bd["point"], "door", True))
+            rows.append((bd["point"], "door", bd["point"] in story))
     for p in d.get("points", []):
-        rows.append((p["id"], "spot", not p.get("bonus")))
+        rows.append((p["id"], "spot", p["id"] in story))
     for n in d.get("npcs", []):
         if n.get("point"):
             rows.append((n["point"], "animal" if n.get("pet") else "person",
-                         not n.get("bonus")))
+                         n["point"] in story))
         else:
             # background townsfolk: no memory, just chatter under npcs.<id>
             rows.append((n["id"], "townsfolk", False))

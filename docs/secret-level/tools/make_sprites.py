@@ -19,7 +19,8 @@ import struct
 import zlib
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ASSETS = os.path.normpath(os.path.join(HERE, "..", "assets"))
+ROOT = os.path.normpath(os.path.join(HERE, ".."))
+ASSETS = os.path.join(ROOT, "assets")
 
 # ---------------------------------------------------------------------------
 # minimal PNG writer + canvas
@@ -1324,13 +1325,338 @@ PAPER_HAT = {
     "dx": {"down": 0, "up": 0, "side": 1},
 }
 
+# ---------------------------------------------------------------------------
+# BACKGROUND TOWNSFOLK 🎩 — the obviously-an-NPC crowd
+#
+# The people who live here (Marina, mom, Jack, Baba…) are drawn as themselves.
+# Everybody else is scenery, and scenery should be readable in one glance from
+# across the street: at 16px a silhouette lands long before a face does, so
+# each of these is a stock torso + one loud hat + one prop. Nobody shares a
+# sheet with anybody else any more.
+#
+# Hats are blitted so their bottom row lands ON the hair (see compose_char).
+# Overlay pixels must stay INSIDE the body silhouette unless they're meant to
+# stick out (the hiker's pack, the student's coffee) — the outline pass will
+# happily draw a border around a stray floating pixel.
+# ---------------------------------------------------------------------------
+
+TOP_HAT = {                            # the full Victorian chimney 🎩
+    "pal": {"N": hex_rgba("2f2a33"), "Q": hex_rgba("4a444f"),
+            "R": hex_rgba("7d2436"), "V": hex_rgba("5a1826"),
+            "M": hex_rgba("3a343e")},
+    "rows": [
+        "....NNNNNNNN....",
+        "....NQNNNNNN....",
+        "....NQNNNNNN....",
+        "....NNNNNNNN....",
+        "....RRRRRRRR....",
+        "..MMMMMMMMMMMM..",
+        "..NNNNNNNNNNNN..",
+    ],
+    "dy": -4,
+    "dx": {"down": 0, "up": 0, "side": 1},
+}
+
+SAFARI_HAT = {                         # bucket hat, chin cord, absolute intent
+    "pal": {"N": hex_rgba("b8a173"), "Q": hex_rgba("d6c194"),
+            "M": hex_rgba("8f7c55")},
+    "rows": [
+        "....NNNNNNNN....",
+        "...QNNNNNNNNQ...",
+        "..MMMMMMMMMMMM..",
+        "..NMMMMMMMMMMN..",
+    ],
+    "dy": -2,
+    "dx": {"down": 0, "up": 0, "side": 1},
+}
+
+VISOR = {                              # sun visor, worn indoors too
+    "pal": {"N": hex_rgba("f2f0e6"), "M": hex_rgba("d3cfbe"),
+            "R": hex_rgba("3f8f6f")},
+    "rows": [
+        "...NNNNNNNNNN...",
+        "..RRRRRRRRRRRR..",
+        "..MMMMMMMMMMMM..",
+    ],
+    "dy": 1,
+    "dx": {"down": 0, "up": 0, "side": 1},
+}
+
+CURLERS = {                            # three pink rollers, no apology
+    "pal": {"N": hex_rgba("e87ba6"), "V": hex_rgba("c25583"),
+            "M": hex_rgba("f6b3cd")},
+    "rows": [
+        "...NNN.NNN.NNN..",
+        "...NMN.NMN.NMN..",
+        "...VVV.VVV.VVV..",
+    ],
+    "dy": 0,
+    "dx": {"down": 0, "up": 0, "side": 1},
+}
+
+HEADBAND = {                           # 1983 and going strong
+    "pal": {"R": hex_rgba("e04a4a"), "V": hex_rgba("b02f36"),
+            "N": hex_rgba("f2f0e6")},
+    "rows": [
+        "...RRRRRRRRRR...",
+        "...VRRNNRRRRV...",
+    ],
+    "dy": 3,
+    "dx": {"down": 0, "up": 0, "side": 1},
+}
+
+CANS = {                               # headphones the size of dinner plates
+    "pal": {"N": hex_rgba("2f3440"), "Q": hex_rgba("efe9d8"),
+            "M": hex_rgba("c6bfae")},
+    "rows": [
+        "...NNNNNNNNNN...",
+        "..QQ........QQ..",
+        "..QM........MQ..",
+        "..QM........MQ..",
+        "..QQ........QQ..",
+    ],
+    "dy": 0,
+    "dx": {"down": 0, "up": 0, "side": 1},
+}
+
+STRAW_HAT = {                          # retired, and dressed for it
+    "pal": {"N": hex_rgba("e8cf92"), "Q": hex_rgba("f6e6b8"),
+            "M": hex_rgba("c4a967"), "R": hex_rgba("4f8f8a")},
+    "rows": [
+        "....NQNNNNNN....",
+        "....NNNNNNNN....",
+        "....RRRRRRRR....",
+        ".MMMMMMMMMMMMMM.",
+        ".NNNNNNNNNNNNNN.",
+    ],
+    "dy": -2,
+    "dx": {"down": 0, "up": 0, "side": 1},
+}
+
+BERET = {                              # tilted, obviously
+    "pal": {"N": hex_rgba("30313a"), "Q": hex_rgba("4a4c58"),
+            "M": hex_rgba("22232a")},
+    "rows": [
+        "......NNNNNQ....",
+        "....NNNNNNNNQ...",
+        "....MNNNNNNNM...",
+        "....MMMMMMMM....",
+    ],
+    "dy": -1,
+    "dx": {"down": 0, "up": 0, "side": 1},
+}
+
+BALLCAP = {                            # brim to the back, mid-burger
+    "pal": {"N": hex_rgba("c8452f"), "Q": hex_rgba("e0674f"),
+            "M": hex_rgba("9c3122")},
+    "rows": [
+        "....NQNNNNNN....",
+        "...NNNNNNNNNN...",
+        "...MMMMMMMMMM...",
+        "..MMM...........",
+    ],
+    "dy": 0,
+    "dx": {"down": 0, "up": 0, "side": 1},
+}
+
+# ---- worn things. `X` dark, `Y` light, `Z` accent, `U` second accent -------
+
+MOUSTACHE = {"dy": 10, "up": None,
+             "down": [".....X....X.....",
+                      ".....XXXXXX....."],
+             "side": ["..........XX....",
+                      ".........XXX...."]}
+
+MONOCLE = {"dy": 7, "up": None,           # V = frame, Y = glass
+           "down": [".........VVV....",
+                    ".........VYV....",
+                    ".........VVV....",
+                    "..........V....."],
+           "side": ["..........VVV...",
+                    "..........VYV...",
+                    "..........VVV..."]}
+
+SHADES = {"dy": 8, "up": None,
+          "down": ["..XXXXXXXXXXXX..",
+                   "...XXXXXXXXXX..."],
+          "side": ["......XXXXXXXX..",
+                   ".......XXXXXXX.."]}
+
+PACK = {"dy": 12,
+        "down": ["....XX....XX....",       # just the straps from the front
+                 "....XX....XX....",
+                 "....XX....XX....",
+                 "....XX....XX...."],
+        "up": ["...UUUUUUUU.....",         # …and the whole thing from behind
+               "..UUUUUUUUUU....",
+               "..UUXUUUUXUU....",
+               "..UUUUUUUUUU....",
+               "...UUUUUUUU....."],
+        "side": ["..UUUU..........",
+                 ".UUUUUU.........",
+                 ".UUXUUU.........",
+                 ".UUUUUU.........",
+                 "..UUUU.........."]}
+
+CAMERA = {"dy": 13, "up": None,
+          "down": ["...X........X...",
+                   "....XXXXXXXX....",
+                   "....XXZYYZXX....",
+                   ".....XXXXXX....."],
+          "side": ["........XXXX....",
+                   "........XZYX....",
+                   ".........XXX...."]}
+
+CASSEROLE = {"dy": 14, "up": None,
+             "down": ["...XXXXXXXXXX...",
+                      "...XYYYYYYYYX...",
+                      "....XXXXXXXX...."],
+             "side": ["........XXXXX...",
+                      "........XYYYX...",
+                      ".........XXX...."]}
+
+BIB = {"dy": 14, "up": None,               # race number, pinned on for life
+       "down": ["......YYYY......",
+                "......YXXY......"],
+       "side": [".........YYY....",
+                ".........YXY...."]}
+
+ICED = {"dy": 13, "up": None,                 # iced coffee, permanent accessory
+        "down": ["...........YYY..",
+                 "...........XZX..",
+                 "...........XZX..",
+                 "...........XXX.."],
+        "side": ["..........YYY...",
+                 "..........XZX...",
+                 "..........XZX...",
+                 "..........XXX..."]}
+
+FLORAL = {"dy": 13,                           # the shirt. THE shirt.
+          "up": ["....Z...U..Z....",
+                 "..Z...Z...U.Z...",
+                 "....U...Z...U...",
+                 "..Z...U...Z.....",
+                 "....Z...U..Z...."],
+          "down": ["....Z...Z..Z....",
+                   "..Z...U...U.Z...",
+                   "....U...Z...U...",
+                   "..Z...Z...U.....",
+                   "....U...Z..Z...."],
+          "side": ["......Z..U......",
+                   ".....U..Z..Z....",
+                   "......Z..U......",
+                   ".....U..Z..U....",
+                   "......Z..Z......"]}
+
+NEWSPAPER = {"dy": 13, "up": None,            # not reading it. holding it.
+             "down": ["...YYYYYYYYY....",
+                      "...YXXXYXXXY....",
+                      "...YXXXYXXXY....",
+                      "...YYYYYYYYY...."],
+             "side": ["......YYYYYY....",
+                      "......YXXYXY....",
+                      "......YXXYXY....",
+                      "......YYYYYY...."]}
+
+BURGER = {"dy": 13,                           # raised a few inches in greeting
+          "up": ["........UUUU....",            # he only ever faces the table
+                 "........XZZX....",
+                 "........UUUU....",
+                 ".........UU....."],
+          "down": ["....UUUUUU......",
+                   "....XZZZZX......",
+                   "....UUUUUU......",
+                   ".....UUUU......."],
+          "side": ["........UUUU....",
+                   "........XZZX....",
+                   "........UUUU....",
+                   ".........UU....."]}
+
+# palettes. `X/Y/Z/U` are the worn-thing colours for the overlays above.
+DAPPER = {                             # 🎩 the esplanade gentleman
+    "h": hex_rgba("d8d8de"), "H": hex_rgba("f0f0f4"), "s": hex_rgba("e6c0a0"),
+    "S": hex_rgba("c69c7c"), "e": hex_rgba("2a2620"), "t": hex_rgba("6b3a4a"),
+    "T": hex_rgba("4d2733"), "W": hex_rgba("e8dfc8"), "d": hex_rgba("2f2a33"),
+    "D": hex_rgba("221f27"), "w": hex_rgba("1f1c22"),
+    "X": hex_rgba("e8e8ee"), "Y": hex_rgba("bfe0ea"), "Z": hex_rgba("7d2436"),
+    "U": hex_rgba("d8d8de"), "V": hex_rgba("2f2a33"),
+}
+HIKER = {                              # 🥾 twelve miles in, thrilled about it
+    "h": hex_rgba("6b4a2e"), "H": hex_rgba("8c6440"), "s": hex_rgba("e0b184"),
+    "S": hex_rgba("bd8f62"), "e": hex_rgba("2b2118"), "t": hex_rgba("8fa06a"),
+    "T": hex_rgba("6b7c4c"), "W": hex_rgba("e4dcc2"), "d": hex_rgba("7a6a4a"),
+    "D": hex_rgba("5c4f37"), "w": hex_rgba("57402c"),
+    "X": hex_rgba("3f3a30"), "Y": hex_rgba("efe7d2"), "Z": hex_rgba("c05a3a"),
+    "U": hex_rgba("c0522f"),
+}
+TOURIST = {                            # 📷 counting countries on her fingers
+    "h": hex_rgba("8a5f3a"), "H": hex_rgba("ac7d4f"), "s": hex_rgba("f0cfa8"),
+    "S": hex_rgba("d0ab84"), "e": hex_rgba("35241d"), "t": hex_rgba("f2e9d2"),
+    "T": hex_rgba("d3c8ad"), "d": hex_rgba("4f7f9c"), "D": hex_rgba("3b6178"),
+    "w": hex_rgba("efe9db"),
+    "X": hex_rgba("2f2c30"), "Y": hex_rgba("8fd0e8"), "Z": hex_rgba("e2557f"),
+    "U": hex_rgba("f0c04a"),
+}
+CURLER_LADY = {                        # 🥘 Brookline's unpaid security service
+    "h": hex_rgba("9a9aa4"), "H": hex_rgba("c2c2cc"), "s": hex_rgba("eec8a4"),
+    "S": hex_rgba("cda480"), "e": hex_rgba("3a2c22"), "t": hex_rgba("8f6fb0"),
+    "T": hex_rgba("6d5090"), "d": hex_rgba("7a5f98"), "D": hex_rgba("5c4576"),
+    "w": hex_rgba("e2b8c8"),
+    "X": hex_rgba("3f4a6b"), "Y": hex_rgba("f2e2b0"), "Z": hex_rgba("e0684a"),
+    "U": hex_rgba("cfc7b6"),
+}
+JOGGER = {                             # 🏃 school loyalty: unresolved
+    "h": hex_rgba("3a2a1e"), "H": hex_rgba("55402e"), "s": hex_rgba("c98f5f"),
+    "S": hex_rgba("a5713f"), "e": hex_rgba("241a16"), "t": hex_rgba("e8c93f"),
+    "T": hex_rgba("c2a521"), "W": hex_rgba("e04a4a"), "d": hex_rgba("3f6fb0"),
+    "D": hex_rgba("2d5288"), "w": hex_rgba("f2f0e6"),
+    "X": hex_rgba("c8452f"), "Y": hex_rgba("f6f4ea"), "Z": hex_rgba("e04a4a"),
+    "U": hex_rgba("3f6fb0"),
+}
+STUDENT = {                            # 🎧 has never heard you the first time
+    "h": hex_rgba("2f2a2a"), "H": hex_rgba("4a4040"), "s": hex_rgba("d8ab80"),
+    "S": hex_rgba("b6875c"), "e": hex_rgba("2b201c"), "t": hex_rgba("4a6f8f"),
+    "T": hex_rgba("35526c"), "d": hex_rgba("40444f"), "D": hex_rgba("2e323b"),
+    "w": hex_rgba("e8e4d8"),
+    "X": hex_rgba("6b5442"), "Y": hex_rgba("f4efe2"), "Z": hex_rgba("b98a5c"),
+    "U": hex_rgba("cfc7b6"),
+}
+HAWAII = {                             # 🌺 lovely couple. off his sprinklers.
+    "h": hex_rgba("cfcfd6"), "H": hex_rgba("eeeef2"), "s": hex_rgba("e2bb95"),
+    "S": hex_rgba("c69a70"), "e": hex_rgba("2a2620"), "t": hex_rgba("3f9c8f"),
+    "T": hex_rgba("2c7a70"), "W": hex_rgba("f2f0e6"), "d": hex_rgba("d8d2c0"),
+    "D": hex_rgba("b6b0a0"), "w": hex_rgba("8a6a4a"),
+    "X": hex_rgba("2a2620"), "Y": hex_rgba("f6f4ea"), "Z": hex_rgba("e8557f"),
+    "U": hex_rgba("f0c04a"),
+}
+REGULAR = {                            # ☕ forty-one years, same booth
+    "h": hex_rgba("cfcfd6"), "H": hex_rgba("eeeef2"), "s": hex_rgba("ddb48c"),
+    "S": hex_rgba("bc9068"), "e": hex_rgba("2a2620"), "t": hex_rgba("6f7f9c"),
+    "T": hex_rgba("52607a"), "W": hex_rgba("e8e4d8"), "d": hex_rgba("4a4438"),
+    "D": hex_rgba("36322a"), "w": hex_rgba("6b5844"),
+    "X": hex_rgba("55524c"), "Y": hex_rgba("f2efe4"), "Z": hex_rgba("b04a3a"),
+    "U": hex_rgba("cfc7b6"),
+}
+BURGER_GUY = {                         # 🍔 will not be interrupted
+    "h": hex_rgba("3a2a20"), "H": hex_rgba("55402f"), "s": hex_rgba("8a5f3f"),
+    "S": hex_rgba("6e4a30"), "e": hex_rgba("1d1512"), "t": hex_rgba("4f6f8f"),
+    "T": hex_rgba("3a5470"), "W": hex_rgba("e8e4d8"), "d": hex_rgba("3f4450"),
+    "D": hex_rgba("2e323b"), "w": hex_rgba("d8d4c8"),
+    "X": hex_rgba("6b4a2a"), "Y": hex_rgba("f2efe4"), "Z": hex_rgba("c8452f"),
+    "U": hex_rgba("e0b070"),
+}
+
 
 def compose_char(torsos, legsets, pal, extras=None, hat=None,
                  torso_h=TORSO_H, head_pad=HEAD_PAD, hat_dy=0, specs=None,
                  specs_dy=0):
     """torsos: {down,up,side}; legsets: {front:{stand,a}, side:{stand,a}}
     torso_h/head_pad let shorter characters (kids) sit lower in the frame.
-    `specs` (see SPECS) draws glasses over the face on the down/side rows."""
+    `specs` is one overlay (see SPECS) or a list of them — per-direction ASCII
+    blitted over the body before the outline pass, each with its own optional
+    "dy". That's how the townsfolk get moustaches, cameras and casseroles
+    without a bespoke torso per person."""
+    overlays = [] if specs is None else (specs if isinstance(specs, list) else [specs])
     hatpal = dict(pal)
     if hat:
         hatpal.update(hat["pal"])
@@ -1342,12 +1668,11 @@ def compose_char(torsos, legsets, pal, extras=None, hat=None,
     ]
 
     def wear(f, dirname):
-        """glasses go on before the outline pass so the frame reads as one line"""
-        if not specs:
-            return
-        rows = specs.get(dirname)
-        if rows:
-            f.blit_ascii(0, head_pad + specs_dy, rows, pal)
+        """worn things go on before the outline pass so the frame reads as one line"""
+        for ov in overlays:
+            rows = ov.get(dirname)
+            if rows:
+                f.blit_ascii(0, head_pad + ov.get("dy", specs_dy), rows, pal)
 
     for ri, (dirname, legkind) in enumerate(rows_spec):
         legs = legsets[legkind]
@@ -8704,7 +9029,8 @@ def main():
         {"front": LEGS_FRONT, "side": LEGS_SIDE}, WIFE)
     out["chakra"] = compose_quad(BIGDOG, CHAKRA)
 
-    # background townsfolk (no cheer/wave extras)
+    # background townsfolk (no cheer/wave extras). npc_woman/man/old are the
+    # plain spares — everyone actually standing on a map gets a face below.
     out["npc_woman"] = compose_char(
         {"down": HER_DOWN, "up": HER_UP, "side": HER_SIDE},
         {"front": LEGS_FRONT, "side": LEGS_SIDE}, NPC_WOMAN)
@@ -8714,6 +9040,44 @@ def main():
     out["npc_old"] = compose_char(
         {"down": NOAH_DOWN, "up": NOAH_UP, "side": NOAH_SIDE},
         {"front": NOAH_LEGS_FRONT, "side": NOAH_LEGS_SIDE}, NPC_OLD)
+
+    # ---- the townsfolk with personalities 🎩
+    out["npc_dapper"] = compose_char(
+        {"down": NOAH_DOWN, "up": NOAH_UP, "side": NOAH_SIDE},
+        {"front": NOAH_LEGS_FRONT, "side": NOAH_LEGS_SIDE}, DAPPER,
+        hat=TOP_HAT, specs=[MOUSTACHE, MONOCLE])
+    out["npc_hiker"] = compose_char(
+        {"down": NOAH_DOWN, "up": NOAH_UP, "side": NOAH_SIDE},
+        {"front": NOAH_LEGS_FRONT, "side": NOAH_LEGS_SIDE}, HIKER,
+        hat=SAFARI_HAT, specs=[PACK])
+    out["npc_tourist"] = compose_char(
+        {"down": MOM_DOWN, "up": MOM_UP, "side": MOM_SIDE},
+        {"front": LEGS_FRONT, "side": LEGS_SIDE}, TOURIST,
+        hat=VISOR, specs=[CAMERA])
+    out["npc_curlers"] = compose_char(
+        {"down": MOM_DOWN, "up": MOM_UP, "side": MOM_SIDE},
+        {"front": LEGS_FRONT, "side": LEGS_SIDE}, CURLER_LADY,
+        hat=CURLERS, specs=[CASSEROLE])
+    out["npc_jogger"] = compose_char(
+        {"down": NOAH_DOWN, "up": NOAH_UP, "side": NOAH_SIDE},
+        {"front": NOAH_LEGS_FRONT, "side": NOAH_LEGS_SIDE}, JOGGER,
+        hat=HEADBAND, specs=[BIB])
+    out["npc_student"] = compose_char(
+        {"down": HER_DOWN, "up": HER_UP, "side": HER_SIDE},
+        {"front": LEGS_FRONT, "side": LEGS_SIDE}, STUDENT,
+        hat=CANS, specs=[ICED])
+    out["npc_hawaii"] = compose_char(
+        {"down": NOAH_DOWN, "up": NOAH_UP, "side": NOAH_SIDE},
+        {"front": NOAH_LEGS_FRONT, "side": NOAH_LEGS_SIDE}, HAWAII,
+        hat=STRAW_HAT, specs=[SHADES, FLORAL])
+    out["npc_regular"] = compose_char(
+        {"down": NOAH_DOWN, "up": NOAH_UP, "side": NOAH_SIDE},
+        {"front": NOAH_LEGS_FRONT, "side": NOAH_LEGS_SIDE}, REGULAR,
+        hat=BERET, specs=[SPECS, NEWSPAPER])
+    out["npc_burgerguy"] = compose_char(
+        {"down": NOAH_DOWN, "up": NOAH_UP, "side": NOAH_SIDE},
+        {"front": NOAH_LEGS_FRONT, "side": NOAH_LEGS_SIDE}, BURGER_GUY,
+        hat=BALLCAP, specs=[BURGER])
 
     out["tiles"] = build_tiles()
     out["tree"] = prop_tree()
@@ -8863,6 +9227,26 @@ def main():
 
     for name, cv in out.items():
         cv.save(os.path.join(ASSETS, f"{name}.png"))
+
+    # ---- src/artmeta.js: how many transparent rows sit above the art in each
+    # sheet. Everything in the game is anchored "bot", so a sprite's frame
+    # height is not where its art starts — the game needs this to hang the
+    # "press E" sparkle a few px above someone's hair (or a sign, or a fig
+    # tree) instead of a full head higher. Regenerated on every run.
+    headroom = {}
+    for name, cv in sorted(out.items()):
+        top = next((y for y in range(cv.h)
+                    for x in range(cv.w) if cv.px[y][x][3] > 0), 0)
+        if top:
+            headroom[name] = top
+    with open(os.path.join(ROOT, "src", "artmeta.js"), "w", encoding="utf-8") as f:
+        f.write("// GENERATED by tools/make_sprites.py — do not edit by hand.\n"
+                "// Transparent rows above the art in each sprite sheet's top frame row.\n"
+                "// Sprites not listed here start their art on row 0.\n"
+                "export const ART_HEADROOM = {\n")
+        for name, top in headroom.items():
+            f.write(f"  {name}: {top},\n")
+        f.write("};\n")
 
     # favicon: the fig, scaled up
     fig_frame = Canvas(12, 12)

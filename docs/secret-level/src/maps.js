@@ -51,7 +51,8 @@
 // x → right, y → down; a building's `y` is the row its base sits on).
 //
 // `points` are the interactable memory spots — their ids must match entries
-// in data/memories.json → points.
+// in data/memories.json → points. Adding one is free: only the ids listed in
+// STORY_POINTS (bottom of this file) count toward ♥ and the ending.
 
 export const TILE = 16;
 
@@ -208,27 +209,27 @@ export const MAPS = {
     ],
     points: [
       { id: "la_beach", x: 9, y: 8, w: 3, h: 4 },
-      { id: "la_lifeguard", x: 7, y: 7, w: 3, h: 1, bonus: true },
-      { id: "beach_horse", x: 9, y: 16, w: 3, h: 1, bonus: true },
-      { id: "la_surf", x: 8, y: 21, w: 3, h: 1, bonus: true },
-      { id: "garden", x: 12, y: 17, w: 3, h: 1, bonus: true },
-      { id: "la_pool", x: 25, y: 8, w: 5, h: 1, bonus: true },
-      { id: "jack_garden", x: 13, y: 30, w: 8, h: 1, bonus: true },
-      { id: "jack_firepit", x: 28, y: 31, w: 4, h: 1, bonus: true },
-      { id: "jack_bus", x: 36, y: 29, w: 4, h: 1, bonus: true },
+      { id: "la_lifeguard", x: 7, y: 7, w: 3, h: 1 },
+      { id: "beach_horse", x: 9, y: 16, w: 3, h: 1 },
+      { id: "la_surf", x: 8, y: 21, w: 3, h: 1 },
+      { id: "garden", x: 12, y: 17, w: 3, h: 1 },
+      { id: "la_pool", x: 25, y: 8, w: 5, h: 1 },
+      { id: "jack_garden", x: 13, y: 30, w: 8, h: 1 },
+      { id: "jack_firepit", x: 28, y: 31, w: 4, h: 1 },
+      { id: "jack_bus", x: 36, y: 29, w: 4, h: 1 },
     ],
     figs: [
       { id: "fig_la", x: 15, y: 20 },
-      { id: "fig_la_2", x: 40, y: 3 },
-      { id: "fig_la_3", x: 6, y: 18 },
+      { id: "fig_la_2", x: 38, y: 3 },
+      { id: "fig_la_3", x: 7, y: 16 },
     ],
     pumpkins: [
       { id: "pk_la_1", x: 14, y: 2 },
-      { id: "pk_la_2", x: 32, y: 20 },
-      { id: "pk_la_3", x: 11, y: 30 },
+      { id: "pk_la_2", x: 32, y: 21 },
+      { id: "pk_la_3", x: 10, y: 30 },
     ],
     npcs: [
-      { id: "la_neighbor", sprite: "npc_old", x: 36, y: 8, dir: "down" },
+      { id: "la_neighbor", sprite: "npc_hawaii", x: 36, y: 8, dir: "down" },
     ],
     signs: {
       "39,10": ["→ Mini-Everywhere (300m)", "→ Mini-Boston (4,982km… worth it)"],
@@ -302,25 +303,25 @@ export const MAPS = {
       { id: "route_figtree", x: 13, y: 6, w: 3, h: 1, givesFig: "fig_tree" },
       { id: "route_quad", x: 16, y: 8, w: 3, h: 1 },
       { id: "route_pond", x: 9, y: 12, w: 2, h: 2 },
-      { id: "lm_greece", x: 10, y: 5, w: 3, h: 1, bonus: true },
-      { id: "lm_egypt", x: 25, y: 6, w: 3, h: 1, bonus: true },
-      { id: "lm_italy", x: 2, y: 5, w: 3, h: 1, bonus: true },
-      { id: "lm_moldova", x: 24, y: 13, w: 3, h: 1, bonus: true },
-      { id: "lm_russia", x: 22, y: 11, w: 3, h: 1, bonus: true },
-      { id: "lm_aruba", x: 19, y: 13, w: 3, h: 1, bonus: true },
-      { id: "travel_station", x: 13, y: 12, w: 3, h: 1, bonus: true },
+      { id: "lm_greece", x: 10, y: 5, w: 3, h: 1 },
+      { id: "lm_egypt", x: 25, y: 6, w: 3, h: 1 },
+      { id: "lm_italy", x: 2, y: 5, w: 3, h: 1 },
+      { id: "lm_moldova", x: 24, y: 13, w: 3, h: 1 },
+      { id: "lm_russia", x: 22, y: 11, w: 3, h: 1 },
+      { id: "lm_aruba", x: 19, y: 13, w: 3, h: 1 },
+      { id: "travel_station", x: 13, y: 12, w: 3, h: 1 },
     ],
     figs: [
       { id: "fig_route_1", x: 7, y: 5 },
-      { id: "fig_route_2", x: 21, y: 13 },
-      { id: "fig_route_3", x: 28, y: 4 },
-      { id: "fig_route_4", x: 10, y: 10 },
+      { id: "fig_route_2", x: 21, y: 9 },
+      { id: "fig_route_3", x: 27, y: 2 },
+      { id: "fig_route_4", x: 10, y: 9 },
     ],
-    pumpkins: [{ id: "pk_route_1", x: 27, y: 1 }],
+    pumpkins: [{ id: "pk_route_1", x: 24, y: 2 }],
     npcs: [
-      { id: "route_hiker", sprite: "npc_man", x: 24, y: 6, dir: "down" },
+      { id: "route_hiker", sprite: "npc_hiker", x: 24, y: 6, dir: "down" },
       // admiring the pyramid from a respectful distance
-      { id: "route_admirer", sprite: "npc_woman", x: 23, y: 4, dir: "right" },
+      { id: "route_admirer", sprite: "npc_tourist", x: 23, y: 4, dir: "right" },
     ],
     signs: {
       "2,7": ["← Mini-LA (300m)", "→ Mini-Boston (600m)"],
@@ -456,28 +457,28 @@ export const MAPS = {
       { id: "aruba_beach", x: 30, y: 8, w: 4, h: 1 },
       { id: "aruba_turtle", x: 35, y: 6, w: 2, h: 1 },
       { id: "esplanade", x: 12, y: 6, w: 3, h: 1 },
-      { id: "radio", x: 20, y: 4, w: 3, h: 2, bonus: true },
+      { id: "radio", x: 20, y: 4, w: 3, h: 2 },
     ],
     figs: [
-      { id: "fig_bos_1", x: 34, y: 5 },
+      { id: "fig_bos_1", x: 30, y: 11 },
       { id: "fig_bos_2", x: 27, y: 20 },
-      { id: "fig_bos_3", x: 6, y: 12 },
-      { id: "fig_bos_4", x: 30, y: 26 },
+      { id: "fig_bos_3", x: 7, y: 11 },
+      { id: "fig_bos_4", x: 31, y: 26 },
     ],
     pumpkins: [
-      { id: "pk_bos_1", x: 36, y: 15 },
-      { id: "pk_bos_2", x: 3, y: 17 },
-      { id: "pk_bos_3", x: 5, y: 3 },
+      { id: "pk_bos_1", x: 35, y: 15 },
+      { id: "pk_bos_2", x: 3, y: 18 },
+      { id: "pk_bos_3", x: 10, y: 13 },
     ],
     signs: {
       "2,10": ["← Mini-Everywhere (300m)", "← Mini-LA (a long walk)"],
       "4,31": ["🏡 BROOKLINE", "↑ Longwood · JVUE (900m)", "↑ the Esplanade (2.1km)"],
     },
     npcs: [
-      { id: "bos_student", sprite: "npc_woman", x: 22, y: 13, dir: "down" },
-      { id: "bos_runner", sprite: "npc_man", x: 8, y: 4, dir: "down" },
-      { id: "bos_oldman", sprite: "npc_old", x: 14, y: 12, dir: "left" },
-      { id: "bos_neighbor", sprite: "npc_woman", x: 21, y: 26, dir: "down" },
+      { id: "bos_student", sprite: "npc_student", x: 22, y: 13, dir: "down" },
+      { id: "bos_runner", sprite: "npc_jogger", x: 8, y: 4, dir: "down" },
+      { id: "bos_oldman", sprite: "npc_dapper", x: 14, y: 12, dir: "left" },
+      { id: "bos_neighbor", sprite: "npc_curlers", x: 21, y: 26, dir: "down" },
     ],
     exits: [{ x: 0, y: 7, w: 1, h: 4, to: "route", spawn: "east" }],
     // `beach` / `esplanade` / `brookline` are dev shortcuts; the *door spawns
@@ -533,8 +534,8 @@ export const MAPS = {
       { type: "in_ball", x: 13, y: 3 },
     ],
     points: [],
-    figs: [{ id: "fig_home", x: 2, y: 11 }],
-    pumpkins: [{ id: "pk_home", x: 18, y: 2 }],
+    figs: [{ id: "fig_home", x: 9, y: 8 }],
+    pumpkins: [{ id: "pk_home", x: 14, y: 8 }],
     // everyone lives here — talking to each one is a memory (♥ counter),
     // and the two with `join` come along afterwards
     npcs: [
@@ -600,8 +601,8 @@ export const MAPS = {
       { type: "in_bowl", x: 14, y: 12 },
     ],
     points: [],
-    figs: [{ id: "fig_jack", x: 2, y: 13 }],
-    pumpkins: [{ id: "pk_jack", x: 20, y: 3 }],
+    figs: [{ id: "fig_jack", x: 2, y: 12 }],
+    pumpkins: [{ id: "pk_jack", x: 14, y: 9 }],
     npcs: [
       { id: "home_jack", sprite: "npc_jack", x: 12, y: 10, dir: "down",
         point: "home_jack" },
@@ -655,10 +656,10 @@ export const MAPS = {
       { id: "care_baba", x: 5, y: 5, w: 3, h: 1 },
       // the window and the wall of photographs are scenery on purpose — the
       // room only asks her to stop at one thing
-      { id: "care_tv", x: 15, y: 4, w: 3, h: 1, bonus: true },
+      { id: "care_tv", x: 15, y: 4, w: 3, h: 1 },
     ],
     figs: [],
-    pumpkins: [{ id: "pk_care", x: 1, y: 3 }],
+    pumpkins: [{ id: "pk_care", x: 3, y: 6 }],
     npcs: [
       // background townsfolk (no `point:`) — she cycles the lines in
       // memories.json → npcs.care_aide and doesn't tick the ♥ counter
@@ -715,15 +716,15 @@ export const MAPS = {
     ],
     points: [
       { id: "innout_order", x: 11, y: 6, w: 3, h: 1 },
-      { id: "innout_menu", x: 7, y: 6, w: 3, h: 1, bonus: true },
-      { id: "innout_fries", x: 2, y: 6, w: 3, h: 1, bonus: true },
+      { id: "innout_menu", x: 7, y: 6, w: 3, h: 1 },
+      { id: "innout_fries", x: 2, y: 6, w: 3, h: 1 },
     ],
-    figs: [{ id: "fig_innout", x: 16, y: 12 }],
-    pumpkins: [{ id: "pk_innout", x: 1, y: 13 }],
+    figs: [{ id: "fig_innout", x: 9, y: 10 }],
+    pumpkins: [{ id: "pk_innout", x: 2, y: 12 }],
     npcs: [
       { id: "io_cook", sprite: "npc_innout2", x: 4, y: 4, dir: "down" },
       { id: "io_cashier", sprite: "npc_innout", x: 12, y: 4, dir: "down" },
-      { id: "io_customer", sprite: "npc_man", x: 2, y: 10, dir: "up" },
+      { id: "io_customer", sprite: "npc_burgerguy", x: 2, y: 10, dir: "up" },
     ],
     exits: [{ x: 8, y: 13, w: 2, h: 1, to: "la", spawn: "innoutdoor" }],
     spawns: { door: [9, 12] },
@@ -783,11 +784,11 @@ export const MAPS = {
       { id: "jvue_home", x: 12, y: 2, w: 3, h: 1 },
       { id: "jvue_tank", x: 15, y: 6, w: 3, h: 1 },
       { id: "jvue_herbs", x: 9, y: 4, w: 3, h: 1 },
-      { id: "jvue_boxes", x: 4, y: 13, w: 3, h: 1, bonus: true },
-      { id: "jvue_tv", x: 2, y: 4, w: 3, h: 1, bonus: true },
+      { id: "jvue_boxes", x: 4, y: 13, w: 3, h: 1 },
+      { id: "jvue_tv", x: 2, y: 4, w: 3, h: 1 },
     ],
-    figs: [{ id: "fig_jvue", x: 20, y: 7 }],
-    pumpkins: [{ id: "pk_jvue", x: 1, y: 11 }],
+    figs: [{ id: "fig_jvue", x: 19, y: 5 }],
+    pumpkins: [{ id: "pk_jvue", x: 2, y: 12 }],
     npcs: [],
     exits: [{ x: 10, y: 13, w: 2, h: 1, to: "boston", spawn: "jvuedoor" }],
     spawns: { door: [11, 12] },
@@ -841,12 +842,12 @@ export const MAPS = {
       { type: "in_bowl", x: 20, y: 13 },
     ],
     points: [
-      { id: "parents_gym", x: 5, y: 13, w: 3, h: 1, bonus: true },
-      { id: "parents_stairs", x: 18, y: 2, w: 2, h: 1, bonus: true },
-      { id: "parents_oven", x: 5, y: 8, w: 3, h: 1, bonus: true },
+      { id: "parents_gym", x: 5, y: 13, w: 3, h: 1 },
+      { id: "parents_stairs", x: 18, y: 2, w: 2, h: 1 },
+      { id: "parents_oven", x: 5, y: 8, w: 3, h: 1 },
     ],
-    figs: [{ id: "fig_parents", x: 2, y: 12 }],
-    pumpkins: [{ id: "pk_parents", x: 20, y: 3 }],
+    figs: [{ id: "fig_parents", x: 9, y: 11 }],
+    pumpkins: [{ id: "pk_parents", x: 14, y: 3 }],
     npcs: [
       { id: "home_hismom", sprite: "npc_hismom", x: 6, y: 8, dir: "up",
         point: "home_hismom" },
@@ -904,12 +905,12 @@ export const MAPS = {
     points: [
       { id: "neu_map", x: 10, y: 4, w: 4, h: 1 },
       // (the Model UN horseshoe is scenery — no interaction on it)
-      { id: "neu_globe", x: 18, y: 6, w: 3, h: 1, bonus: true },
-      { id: "neu_coop", x: 1, y: 10, w: 3, h: 1, bonus: true },
-      { id: "neu_flags", x: 3, y: 5, w: 4, h: 1, bonus: true },
+      { id: "neu_globe", x: 18, y: 6, w: 3, h: 1 },
+      { id: "neu_coop", x: 1, y: 10, w: 3, h: 1 },
+      { id: "neu_flags", x: 3, y: 5, w: 4, h: 1 },
     ],
-    figs: [{ id: "fig_neu", x: 20, y: 2 }],
-    pumpkins: [{ id: "pk_neu", x: 1, y: 6 }],
+    figs: [{ id: "fig_neu", x: 16, y: 3 }],
+    pumpkins: [{ id: "pk_neu", x: 5, y: 7 }],
     npcs: [
       { id: "neu_prof", sprite: "npc_prof", x: 16, y: 11, dir: "left" },
       { id: "neu_husky", sprite: "npc_husky", x: 5, y: 12, dir: "down" },
@@ -963,12 +964,12 @@ export const MAPS = {
     points: [
       { id: "bu_arm", x: 3, y: 8, w: 3, h: 1 },
       { id: "bu_printer", x: 9, y: 6, w: 5, h: 1 },
-      { id: "bu_rover", x: 7, y: 13, w: 3, h: 1, bonus: true },
-      { id: "bu_bench", x: 16, y: 10, w: 4, h: 1, bonus: true },
-      { id: "bu_board", x: 9, y: 2, w: 5, h: 1, bonus: true },
+      { id: "bu_rover", x: 7, y: 13, w: 3, h: 1 },
+      { id: "bu_bench", x: 16, y: 10, w: 4, h: 1 },
+      { id: "bu_board", x: 9, y: 2, w: 5, h: 1 },
     ],
-    figs: [{ id: "fig_bu", x: 19, y: 13 }],
-    pumpkins: [{ id: "pk_bu", x: 20, y: 2 }],
+    figs: [{ id: "fig_bu", x: 19, y: 12 }],
+    pumpkins: [{ id: "pk_bu", x: 16, y: 3 }],
     npcs: [
       { id: "bu_grad", sprite: "npc_grad", x: 16, y: 6, dir: "down" },
       // 🐶 Rhett — BU's Boston terrier, chairing the meeting from the floor
@@ -1020,14 +1021,14 @@ export const MAPS = {
     points: [
       { id: "cafe_table", x: 5, y: 12, w: 3, h: 1 },
       { id: "cafe_hinge", x: 15, y: 4, w: 3, h: 1 },
-      { id: "cafe_counter", x: 8, y: 5, w: 4, h: 1, bonus: true },
+      { id: "cafe_counter", x: 8, y: 5, w: 4, h: 1 },
       // (the pastry case is scenery — no interaction on it)
     ],
-    figs: [{ id: "fig_cafe", x: 18, y: 11 }],
-    pumpkins: [{ id: "pk_cafe", x: 1, y: 3 }],
+    figs: [{ id: "fig_cafe", x: 17, y: 11 }],
+    pumpkins: [{ id: "pk_cafe", x: 2, y: 5 }],
     npcs: [
       { id: "cafe_barista", sprite: "npc_barista", x: 13, y: 5, dir: "down" },
-      { id: "cafe_regular", sprite: "npc_old", x: 14, y: 9, dir: "down" },
+      { id: "cafe_regular", sprite: "npc_regular", x: 14, y: 9, dir: "down" },
     ],
     exits: [{ x: 9, y: 12, w: 2, h: 1, to: "boston", spawn: "cafedoor" }],
     spawns: { door: [10, 11] },
@@ -1046,16 +1047,49 @@ for (const def of Object.values(MAPS)) {
   def.objects = obj.map(fit);
 }
 
-/** every memory point id, in "story order" (bonus spots don't gate the finale) */
+/**
+ * The ♥ list — the ONLY memories that gate the ending.
+ *
+ * Everything else on every map (doors, beaches, the esplanade, the cafe, the
+ * landmarks, the fig tree, the quad, the pond, every `bonus: true` spot) is
+ * optional colour: it still sparkles, she can still read it, it still gets
+ * remembered — it just doesn't hold the ending hostage. There used to be 40
+ * required spots, which made "finish the story" feel like a chore list.
+ *
+ * The rule: main characters, their animals, and the one thing that's hers to
+ * build (the travel-log isle on Mini-Everywhere). Nothing that isn't the story.
+ * To make something count again, add its id here. That's the whole mechanism.
+ */
+export const STORY_POINTS = [
+  // 🏡 her house in LA
+  "home_marina", "home_mom", "home_bro",
+  "home_leo", "home_charlie",
+  // 🌻 Jack + Dez's place
+  "home_jack", "home_jackwife", "home_chakra",
+  // 🌷 the care home
+  "care_baba",
+  // 🏡 Brookline
+  "home_hismom", "home_dad", "home_collie",
+  // 🐕 the two campus mascots
+  "bu_rhett", "neu_paws",
+  // 🌍 Mini-Everywhere: the travel log is hers to add to and tear down
+  "travel_station",
+];
+
+/** the ♥ ids that actually exist on a map, in story order */
 export function allPointIds() {
-  const ids = [];
+  const known = new Set();
   for (const def of Object.values(MAPS)) {
-    for (const b of def.buildings) if (b.point) ids.push(b.point);
-    for (const p of def.points) if (!p.bonus) ids.push(p.id);
-    // people are memories too — the house crew fills the ♥ counter
-    for (const n of def.npcs || []) if (n.point && !n.bonus) ids.push(n.point);
+    for (const b of def.buildings) if (b.point) known.add(b.point);
+    for (const p of def.points) known.add(p.id);
+    for (const n of def.npcs || []) if (n.point) known.add(n.point);
   }
-  return ids;
+  const missing = STORY_POINTS.filter((id) => !known.has(id));
+  if (missing.length) {
+    // a typo here would quietly make the ending unreachable, so say so loudly
+    console.warn("[secret-level] STORY_POINTS ids that exist on no map:", missing.join(", "));
+  }
+  return STORY_POINTS.filter((id) => known.has(id));
 }
 
 export function allFigIds() {

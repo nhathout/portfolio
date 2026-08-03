@@ -19,12 +19,12 @@ never breaks — but the built-ins are mine, not yours.
 
 | id | what | needed for the ending? | status |
 |---|---|---|---|
-| `la_home` | door | **yes** | 🟢 written |
-| `la_shaveice` | door | **yes** | 🟢 written |
-| `la_care` | door | **yes** | 🟢 written |
-| `innout` | door | **yes** | 🟢 written |
-| `jack_home` | door | **yes** | 🟢 written |
-| `la_beach` | spot | **yes** | 🟢 written |
+| `la_home` | door | bonus | 🟢 written |
+| `la_shaveice` | door | bonus | 🟢 written |
+| `la_care` | door | bonus | 🟢 written |
+| `innout` | door | bonus | 🟢 written |
+| `jack_home` | door | bonus | 🟢 written |
+| `la_beach` | spot | bonus | 🟢 written |
 | `la_lifeguard` | spot | bonus | 🟢 written |
 | `beach_horse` | spot | bonus | 🟢 written |
 | `la_surf` | spot | bonus | 🟢 written |
@@ -39,16 +39,16 @@ never breaks — but the built-ins are mine, not yours.
 
 | id | what | needed for the ending? | status |
 |---|---|---|---|
-| `route_figtree` | spot | **yes** | 🟢 written |
-| `route_quad` | spot | **yes** | 🟢 written |
-| `route_pond` | spot | **yes** | 🟢 written |
+| `route_figtree` | spot | bonus | 🟢 written |
+| `route_quad` | spot | bonus | 🟢 written |
+| `route_pond` | spot | bonus | 🟢 written |
 | `lm_greece` | spot | bonus | 🟢 written |
 | `lm_egypt` | spot | bonus | 🟢 written |
 | `lm_italy` | spot | bonus | 🟢 written |
 | `lm_moldova` | spot | bonus | 🟢 written |
 | `lm_russia` | spot | bonus | 🟢 written |
 | `lm_aruba` | spot | bonus | 🟢 written |
-| `travel_station` | spot | bonus | 🟢 written |
+| `travel_station` | spot | **yes** | 🟢 written |
 | `route_hiker` | townsfolk | bonus | 🟢 written |
 | `route_admirer` | townsfolk | bonus | 🟢 written |
 
@@ -56,14 +56,14 @@ never breaks — but the built-ins are mine, not yours.
 
 | id | what | needed for the ending? | status |
 |---|---|---|---|
-| `bu` | door | **yes** | 🟢 written |
-| `cafe` | door | **yes** | 🟢 written |
-| `neu` | door | **yes** | 🟢 written |
-| `apartment` | door | **yes** | 🟢 written |
-| `parents_home` | door | **yes** | 🟢 written |
-| `aruba_beach` | spot | **yes** | 🟢 written |
-| `aruba_turtle` | spot | **yes** | 🟢 written |
-| `esplanade` | spot | **yes** | 🟢 written |
+| `bu` | door | bonus | 🟢 written |
+| `cafe` | door | bonus | 🟢 written |
+| `neu` | door | bonus | 🟢 written |
+| `apartment` | door | bonus | 🟢 written |
+| `parents_home` | door | bonus | 🟢 written |
+| `aruba_beach` | spot | bonus | 🟢 written |
+| `aruba_turtle` | spot | bonus | 🟢 written |
+| `esplanade` | spot | bonus | 🟢 written |
 | `radio` | spot | bonus | 🟢 written |
 | `bos_student` | townsfolk | bonus | 🟢 written |
 | `bos_runner` | townsfolk | bonus | 🟢 written |
@@ -100,7 +100,7 @@ never breaks — but the built-ins are mine, not yours.
 
 | id | what | needed for the ending? | status |
 |---|---|---|---|
-| `innout_order` | spot | **yes** | 🟢 written |
+| `innout_order` | spot | bonus | 🟢 written |
 | `innout_menu` | spot | bonus | 🟢 written |
 | `innout_fries` | spot | bonus | 🟢 written |
 | `io_cook` | townsfolk | bonus | 🟢 written |
@@ -111,9 +111,9 @@ never breaks — but the built-ins are mine, not yours.
 
 | id | what | needed for the ending? | status |
 |---|---|---|---|
-| `jvue_home` | spot | **yes** | 🟢 written |
-| `jvue_tank` | spot | **yes** | 🟢 written |
-| `jvue_herbs` | spot | **yes** | 🟢 written |
+| `jvue_home` | spot | bonus | 🟢 written |
+| `jvue_tank` | spot | bonus | 🟢 written |
+| `jvue_herbs` | spot | bonus | 🟢 written |
 | `jvue_boxes` | spot | bonus | 🟢 written |
 | `jvue_tv` | spot | bonus | 🟢 written |
 
@@ -126,13 +126,13 @@ never breaks — but the built-ins are mine, not yours.
 | `parents_oven` | spot | bonus | 🟢 written |
 | `home_hismom` | person | **yes** | 🟢 written |
 | `home_dad` | person | **yes** | 🟢 written |
-| `home_collie` | animal | **yes** | 🟡 built-in |
+| `home_collie` | animal | **yes** | 🟢 written |
 
 ## 🏠 Northeastern · International Affairs 🎓
 
 | id | what | needed for the ending? | status |
 |---|---|---|---|
-| `neu_map` | spot | **yes** | 🟢 written |
+| `neu_map` | spot | bonus | 🟢 written |
 | `neu_globe` | spot | bonus | 🟢 written |
 | `neu_coop` | spot | bonus | 🟢 written |
 | `neu_flags` | spot | bonus | 🟢 written |
@@ -144,8 +144,8 @@ never breaks — but the built-ins are mine, not yours.
 
 | id | what | needed for the ending? | status |
 |---|---|---|---|
-| `bu_arm` | spot | **yes** | 🟢 written |
-| `bu_printer` | spot | **yes** | 🟢 written |
+| `bu_arm` | spot | bonus | 🟢 written |
+| `bu_printer` | spot | bonus | 🟢 written |
 | `bu_rover` | spot | bonus | 🟢 written |
 | `bu_bench` | spot | bonus | 🟢 written |
 | `bu_board` | spot | bonus | 🟢 written |
@@ -156,8 +156,8 @@ never breaks — but the built-ins are mine, not yours.
 
 | id | what | needed for the ending? | status |
 |---|---|---|---|
-| `cafe_table` | spot | **yes** | 🟢 written |
-| `cafe_hinge` | spot | **yes** | 🟢 written |
+| `cafe_table` | spot | bonus | 🟢 written |
+| `cafe_hinge` | spot | bonus | 🟢 written |
 | `cafe_counter` | spot | bonus | 🟢 written |
 | `cafe_barista` | townsfolk | bonus | 🟢 written |
 | `cafe_regular` | townsfolk | bonus | 🟢 written |

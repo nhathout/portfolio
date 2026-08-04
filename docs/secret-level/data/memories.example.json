@@ -538,8 +538,42 @@
       "title": "our apartment",
       "lines": [
         {
+          "text": "JVUE at the LMA. New brick, a lot of glass, and a little gold light over a door that has been ours for exactly eleven days."
+        },
+        {
+          "who": "her",
+          "text": "ours."
+        },
+        {
           "who": "noah",
-          "text": "[TODO Noah: your apartment — the memory of moving in / living together. (after all memories + figs are found, this door becomes the finale.)]"
+          "text": "ours. the door, the mailbox, the elevator that sighs at you."
+        },
+        {
+          "who": "noah",
+          "text": "fair warning though, it is nowhere near done. the tank's still empty. the plant shelf is still just a shelf."
+        },
+        {
+          "who": "her",
+          "text": "…and eleven boxes."
+        },
+        {
+          "who": "noah",
+          "text": "eleven days, eleven boxes. I've decided that's a system."
+        },
+        {
+          "who": "her",
+          "text": "I don't care. it's the prettiest place I've ever had a key to."
+        },
+        {
+          "who": "noah",
+          "text": "it's getting there. we fill it in as we go — that's honestly my favorite part."
+        },
+        {
+          "who": "noah",
+          "text": "…and there's one more thing coming for in here. not telling you yet."
+        },
+        {
+          "text": "(he does not elaborate. He is enjoying that far too much.)"
         }
       ]
     },

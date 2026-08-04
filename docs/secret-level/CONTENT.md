@@ -69,6 +69,7 @@ never breaks — but the built-ins are mine, not yours.
 | `bos_runner` | townsfolk | bonus | 🟢 written |
 | `bos_oldman` | townsfolk | bonus | 🟢 written |
 | `bos_neighbor` | townsfolk | bonus | 🟢 written |
+| `mateo` | person | bonus | 🟢 written |
 
 ## 🏠 home ♥
 
@@ -126,6 +127,7 @@ never breaks — but the built-ins are mine, not yours.
 | `parents_oven` | spot | bonus | 🟢 written |
 | `home_hismom` | person | **yes** | 🟢 written |
 | `home_dad` | person | **yes** | 🟢 written |
+| `home_mia` | person | **yes** | 🟢 written |
 | `home_collie` | animal | **yes** | 🟢 written |
 
 ## 🏠 Northeastern · International Affairs 🎓
@@ -184,7 +186,7 @@ never breaks — but the built-ins are mine, not yours.
 
 ---
 
-**0 of 102** entries still need you. `python tools/content_status.py --todo` lists just those.
+**0 of 104** entries still need you. `python tools/content_status.py --todo` lists just those.
 
 ## testing
 

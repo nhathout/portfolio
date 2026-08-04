@@ -38,8 +38,8 @@ the only tell. That fades to `/secret-level/`, which asks for the password.
 | M | mute (music + SFX) |
 
 - ✨ **sparkles** mark memory spots — walk up and press E. The HUD heart counts
-  only the **♥ list**: `STORY_POINTS` at the bottom of `maps.js` (15 spots — the
-  eight people, the six animals, and the travel-log isle). Everything else on
+  only the **♥ list**: `STORY_POINTS` at the bottom of `maps.js` (16 spots — the
+  nine people, the six animals, and the travel-log isle). Everything else on
   every map still sparkles and still reads, it just doesn't gate the ending, so
   adding a spot anywhere is free. To make something count, add its id to that
   list; to stop it counting, take it out. Nothing else controls this.
@@ -89,6 +89,9 @@ the only tell. That fades to `/secret-level/`, which asks for the password.
   Shell**, weeping willows leaning over the water, sailboats drifting on the
   river, lamps and benches on the bank, the park sign, and the boombox. One
   readable spot; no interior by design.
+- 🇪🇸 **Mateo** stands outside the brownstone two doors down from JVUE (red
+  shirt, unmissable). He playtested the whole game, negotiated his way into it,
+  and says so at length. Bonus spot — he doesn't count toward ♥.
 
 ### 🏙 the five Boston interiors
 
@@ -104,13 +107,14 @@ same as her house in LA. Walk onto the door tile inside to come back out.
   street, so she can always come back in for the fish.
 - 🏡 **the Brookline house** (`bos_parents_in`) — his parents' half of the
   duplex. His **mom** (long brown curls, apron, flour everywhere) is at the
-  oven with a cooling rack of something; his **dad** (black hair, glasses) is
-  in his chair with a dad joke he has been holding since Monday. **Charlie the
-  border collie** — white with a black patch over one eye — joins the crowd
-  like Leo and Chakra did, side-eyes Mookie the whole way, and yes, that means
-  there are now **two Charlies**. **Mia and Brandon are at the gym**; their
-  bags are still by the door (a bonus spot), and so are Mia's shoes on the
-  stairs.
+  oven, turned round to face the room; his **dad** (black hair, glasses) is up
+  by the sofa with a dad joke he has been holding since Monday. **Mia**, his
+  sister — black sweats, hair still wet — is back from the gym and standing at
+  the family table; ask her where Brandon is 🏋 **Charlie the border collie** —
+  white with a black patch over one eye — joins the crowd like Leo and Chakra
+  did, side-eyes Mookie the whole way, and yes, that means there are now **two
+  Charlies**. The gym bags by the door and Mia's shoes on the stairs are both
+  readable.
 - 🎓 **Northeastern** (`bos_neu_in`) — the **International Affairs** floor
   (she's IA + political science). Terrazzo, limestone, NU red: a **pinned world
   map** the length of one wall with red string between her five pins, the
@@ -295,7 +299,8 @@ Every placeholder is marked `[TODO Noah: …]` — grep for `TODO`.
    written** — tweak to taste. The five Boston interiors are written too, in
    `POINT_FALLBACK` at the top of `world.js` rather than in `memories.json`:
    `jvue_home` `jvue_tank` `jvue_herbs` `jvue_boxes` `jvue_tv`, `home_dad`
-   `home_hismom` `home_collie` `parents_gym` `parents_stairs` `parents_oven`,
+   `home_hismom` `home_mia` `home_collie` `parents_gym` `parents_stairs`
+   `parents_oven`, `mateo`,
    `neu_map` `neu_un` `neu_globe` `neu_coop` `neu_flags`, `bu_arm` `bu_printer`
    `bu_rover` `bu_bench` `bu_board`, `cafe_table` `cafe_hinge` `cafe_counter`
    `cafe_pastry`. Anything you put in `memories.json` under the same id **wins**
@@ -405,8 +410,11 @@ cd tools && python3 make_sprites.py   # regenerates ../assets/*.png + preview.pn
   each with its own `dy`, so a new one is a palette + a hat + two grids. Keep
   overlay pixels inside the body unless they're meant to stick out — the outline
   pass will draw a border around a stray floating pixel. Named people (Marina,
-  mom, Jack, Dez, Baba's aide, his parents, the pets) are drawn as themselves
-  and are deliberately *not* in this crowd.
+  mom, Jack, Dez, Baba's aide, his parents, Mia, Mateo, the pets) are drawn as
+  themselves and are deliberately *not* in this crowd. **Friends are the easy
+  case**: a palette plus one edited hair silhouette is a whole new person —
+  `MIA` / `MATEO` in `make_sprites.py` are the two shortest examples in the
+  file.
 - **`src/artmeta.js` is generated** by this script: how many transparent rows
   sit above each sheet's art. `world.js` needs it to hang the "press E" sparkle
   a few px above someone's hair instead of a whole head higher. Don't hand-edit

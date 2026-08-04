@@ -422,6 +422,31 @@ HISMOM = {                             # his mom — long brown curls, flour on
     "a": hex_rgba("f8f2e2"), "A": hex_rgba("d6cdb6"),   # the baking apron
 }
 
+MIA = {                                # his sister — dark brown hair down her
+                                       # back, his dad's colouring, and the
+                                       # blackest sweats in Massachusetts
+    "h": hex_rgba("33251b"), "H": hex_rgba("55402e"),
+    "s": hex_rgba("d9a878"), "S": hex_rgba("b8875a"),   # dad's skin exactly
+    "e": hex_rgba("241a16"),
+    "t": hex_rgba("3b3b45"), "T": hex_rgba("2a2a33"),   # the sweatshirt
+    "W": hex_rgba("d8d4c8"),           # the two drawstrings (the only light
+                                       # thing above the knee — without them
+                                       # head-to-toe black is one flat blob)
+    "d": hex_rgba("33333b"), "D": hex_rgba("24242b"),   # the sweatpants
+    "w": hex_rgba("efe9db"),           # very white trainers
+}
+
+MATEO = {                              # 🇪🇸 the best friend. Playtested the
+                                       # whole game. Negotiated for this sprite
+    "h": hex_rgba("272122"), "H": hex_rgba("453b3c"),   # black, short
+    "s": hex_rgba("f0cba4"), "S": hex_rgba("cfa47f"),
+    "e": hex_rgba("241a16"),
+    "t": hex_rgba("d4432f"), "T": hex_rgba("a82f20"),   # THE red shirt
+    "W": hex_rgba("f2ece0"),           # whatever is printed on it
+    "d": hex_rgba("3f4a63"), "D": hex_rgba("2e3648"),
+    "w": hex_rgba("e8e4d8"),
+}
+
 COLLIE = {                             # Charlie #2 — the border collie. Yes,
                                        # there are two Charlies. Nobody planned
                                        # this and nobody is fixing it 🐕
@@ -946,6 +971,59 @@ HISMOM_SIDE = [
     "..hhTttttss.....",
     "...hTTTTTT......",
 ]
+
+# ---- Mia: his sister. Sasha's build, but the hair keeps going past the
+# shoulders — one row of strands either side of the arms is the whole trick.
+MIA_DOWN = HER_DOWN[:13] + [
+    "...hhtttttthh...",
+    "...htttWWttth...",
+    "..hstttttttsh...",
+    "...sTttttttTs...",
+    "....TTTTTTTT....",
+]
+
+MIA_UP = HER_UP
+MIA_SIDE = HER_SIDE
+
+# ---- Mateo: the best friend who playtested this and would not let it go.
+# Same body as Noah, but the afro comes off — a short crop that hugs the
+# skull, so the two of them don't read as the same guy in different shirts.
+MATEO_DOWN = [
+    "................",
+    "................",
+    "................",
+    "....hhhhhhhh....",
+    "...hhhhhhhhhh...",
+    "...hHhhhhhhHh...",
+    "...hhhhhhhhhh...",
+] + NOAH_DOWN[7:]
+
+MATEO_UP = [
+    "................",
+    "................",
+    "................",
+    "....hhhhhhhh....",
+    "...hhhhhhhhhh...",
+    # two highlight pixels in the middle of the back of a cropped head read
+    # as a second pair of eyes — keep the rim light out at the edges
+    "...hHhhhhhhHh...",
+    "...hhhhhhhhhh...",
+    "...hhhhhhhhhh...",
+    "...hhhhhhhhhh...",
+    "...hhhhhhhhhh...",
+    "....hhhhhhhh....",
+    "....hhhhhhhh....",
+] + NOAH_UP[12:]
+
+MATEO_SIDE = [
+    "................",
+    "................",
+    "................",
+    "...hhhhhhhh.....",
+    "..hhhhhhhhhh....",
+    "..hhHhhhhhhh....",
+] + NOAH_SIDE[6:]
+
 
 # ---- spectacles. Same idea as a hat: a spec, not a flag. Blitted over the
 # face after the torso, skipped on the "up" row (that's the back of a head).
@@ -8998,7 +9076,15 @@ def main():
     out["npc_hismom"] = compose_char(
         {"down": HISMOM_DOWN, "up": HISMOM_UP, "side": HISMOM_SIDE},
         {"front": APRON_FRONT, "side": APRON_SIDE}, HISMOM)
+    out["npc_mia"] = compose_char(
+        {"down": MIA_DOWN, "up": MIA_UP, "side": MIA_SIDE},
+        {"front": NOAH_LEGS_FRONT, "side": NOAH_LEGS_SIDE}, MIA)
     out["collie"] = compose_quad(COLLIE_G, COLLIE)
+
+    # ---- and one friend, by popular demand (his) 🇪🇸
+    out["npc_mateo"] = compose_char(
+        {"down": MATEO_DOWN, "up": MATEO_UP, "side": MATEO_SIDE},
+        {"front": NOAH_LEGS_FRONT, "side": NOAH_LEGS_SIDE}, MATEO)
 
     # ---- the three Boston interiors 🎓 🤖 ☕
     out["npc_barista"] = compose_char(
@@ -9263,7 +9349,7 @@ def main():
     row_items = [["her", "noah", "mookie", "npc_woman", "npc_man", "npc_old"],
                  ["npc_marina", "npc_mom", "npc_bro", "leo", "charlie"],
                  ["npc_jack", "npc_wife", "chakra"],
-                 ["npc_dad", "npc_hismom", "collie"],
+                 ["npc_dad", "npc_hismom", "npc_mia", "collie", "npc_mateo"],
                  ["npc_barista", "npc_prof", "npc_grad", "npc_husky"],
                  ["her_hat", "noah_hat", "npc_innout", "npc_innout2"],
                  ["tiles"],

@@ -88,6 +88,8 @@ export const ART_HEADROOM = {
   npc_jogger: 4,
   npc_man: 4,
   npc_marina: 5,
+  npc_mateo: 6,
+  npc_mia: 5,
   npc_mom: 4,
   npc_old: 4,
   npc_prof: 4,

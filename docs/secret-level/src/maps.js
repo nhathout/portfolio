@@ -476,9 +476,14 @@ export const MAPS = {
     },
     npcs: [
       { id: "bos_student", sprite: "npc_student", x: 22, y: 13, dir: "down" },
-      { id: "bos_runner", sprite: "npc_jogger", x: 8, y: 4, dir: "down" },
+      // clear of the willow at (7,5) — its art is 28px wide and 40 tall, so it
+      // drew straight over him at (8,4) and he was a pair of legs in a bush
+      { id: "bos_runner", sprite: "npc_jogger", x: 10, y: 4, dir: "down" },
       { id: "bos_oldman", sprite: "npc_dapper", x: 14, y: 12, dir: "left" },
       { id: "bos_neighbor", sprite: "npc_curlers", x: 21, y: 26, dir: "down" },
+      // 🇪🇸 out front of the brownstone next door to ours
+      { id: "bos_mateo", sprite: "npc_mateo", x: 22, y: 22, dir: "down",
+        point: "mateo" },
     ],
     exits: [{ x: 0, y: 7, w: 1, h: 4, to: "route", spawn: "east" }],
     // `beach` / `esplanade` / `brookline` are dev shortcuts; the *door spawns
@@ -844,15 +849,22 @@ export const MAPS = {
     points: [
       { id: "parents_gym", x: 5, y: 13, w: 3, h: 1 },
       { id: "parents_stairs", x: 18, y: 2, w: 2, h: 1 },
-      { id: "parents_oven", x: 5, y: 8, w: 3, h: 1 },
+      // right in front of the oven door — the sparkle hangs off the stove
+      // itself, which only works while this zone's centre sits under its art
+      { id: "parents_oven", x: 6, y: 5, w: 2, h: 1 },
     ],
     figs: [{ id: "fig_parents", x: 9, y: 11 }],
     pumpkins: [{ id: "pk_parents", x: 14, y: 3 }],
     npcs: [
-      { id: "home_hismom", sprite: "npc_hismom", x: 6, y: 8, dir: "up",
+      // at the oven, facing the room, because she turns around for everybody
+      { id: "home_hismom", sprite: "npc_hismom", x: 5, y: 5, dir: "down",
         point: "home_hismom" },
-      { id: "home_dad", sprite: "npc_dad", x: 16, y: 8, dir: "down",
+      // up by the sofa, a whole room away from the TV he isn't watching
+      { id: "home_dad", sprite: "npc_dad", x: 15, y: 6, dir: "down",
         point: "home_dad" },
+      // 🏋 Mia got back an hour ago. Brandon did not
+      { id: "home_mia", sprite: "npc_mia", x: 10, y: 7, dir: "down",
+        point: "home_mia" },
       // he is coming with us. he was always coming with us 🐕
       { id: "home_collie", sprite: "collie", pet: true, x: 12, y: 12,
         dir: "down", point: "home_collie", join: "collie" },
@@ -1069,7 +1081,7 @@ export const STORY_POINTS = [
   // 🌷 the care home
   "care_baba",
   // 🏡 Brookline
-  "home_hismom", "home_dad", "home_collie",
+  "home_hismom", "home_dad", "home_mia", "home_collie",
   // 🐕 the two campus mascots
   "bu_rhett", "neu_paws",
   // 🌍 Mini-Everywhere: the travel log is hers to add to and tear down

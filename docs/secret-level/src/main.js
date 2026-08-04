@@ -74,8 +74,10 @@ for (const npc of ["npc_woman", "npc_man", "npc_old",
   "npc_marina", "npc_mom", "npc_bro", "npc_jack", "npc_wife",
   "npc_innout", "npc_innout2",
   // 🏡 Brookline + the three Boston interiors
-  "npc_dad", "npc_hismom", "npc_barista", "npc_prof", "npc_grad", "npc_husky",
-  "npc_aide"]) {
+  "npc_dad", "npc_hismom", "npc_mia", "npc_barista", "npc_prof", "npc_grad",
+  "npc_husky", "npc_aide",
+  // 🇪🇸 the friend who playtested it and negotiated his way in
+  "npc_mateo"]) {
   k.loadSprite(npc, `assets/${npc}.png`, { sliceX: 4, sliceY: 4, anims: CHAR_ANIMS });
 }
 // the same two of them, in In-N-Out paper hats, for after the burger run 🍔

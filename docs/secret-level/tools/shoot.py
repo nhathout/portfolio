@@ -16,11 +16,15 @@ import urllib.request
 import websocket  # websocket-client
 
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-KEYCODES = {  # what kaplay's window-level handler looks at is `code`
-    "left": ("ArrowLeft", 37), "right": ("ArrowRight", 39),
-    "up": ("ArrowUp", 38), "down": ("ArrowDown", 40),
-    "e": ("KeyE", 69), "space": ("Space", 32), "escape": ("Escape", 27),
-    "enter": ("Enter", 13),
+# (code, key, windowsVirtualKeyCode). world.js reads `ev.key`, NOT `ev.code` —
+# send "KeyE" as the key and the game never sees an interact press (the arrows
+# only ever worked because their code and key strings happen to be identical).
+KEYCODES = {
+    "left": ("ArrowLeft", "ArrowLeft", 37), "right": ("ArrowRight", "ArrowRight", 39),
+    "up": ("ArrowUp", "ArrowUp", 38), "down": ("ArrowDown", "ArrowDown", 40),
+    "e": ("KeyE", "e", 69), "space": ("Space", " ", 32),
+    "escape": ("Escape", "Escape", 27), "enter": ("Enter", "Enter", 13),
+    "m": ("KeyM", "m", 77),
 }
 
 
@@ -39,12 +43,12 @@ class Tab:
                     raise RuntimeError(f"{method}: {msg['error']}")
                 return msg.get("result", {})
 
-    def key(self, name):
-        code, win = KEYCODES[name]
+    def key(self, name, hold=0.06):
+        code, key, win = KEYCODES[name]
         for typ in ("keyDown", "keyUp"):
-            self.send("Input.dispatchKeyEvent", type=typ, code=code, key=code,
+            self.send("Input.dispatchKeyEvent", type=typ, code=code, key=key,
                       windowsVirtualKeyCode=win, nativeVirtualKeyCode=win)
-            time.sleep(0.06)
+            time.sleep(hold)
 
     def click(self, x, y):
         for typ in ("mousePressed", "mouseReleased"):

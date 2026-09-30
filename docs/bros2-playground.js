@@ -1,7 +1,7 @@
-// Featured BROS2 panel:
+// Featured Wirepup panel:
 //   1. demo video + screenshot tabs, with a theater ("lights off") view and a
 //      draggable pop-out mini-player
-//   2. a tiny BROS2 playground: draggable blocks, typed ports, wires, Run/Stop,
+//   2. a tiny Wirepup playground: draggable blocks, typed ports, wires, Run/Stop,
 //      live values, a live plot, problems, topics, and generated launch code
 //   3. the early-access waitlist (tally lives on the Render API in server.js)
 (() => {
@@ -136,7 +136,7 @@
             });
             if (focus) tab.focus();
             if (caption) caption.textContent = tab.dataset.caption || '';
-            if (windowTitle) windowTitle.textContent = `BROS2 · ${tab.dataset.title || tab.textContent.trim()}`;
+            if (windowTitle) windowTitle.textContent = `Wirepup · ${tab.dataset.title || tab.textContent.trim()}`;
 
             showingVideo = tab.dataset.kind === 'video';
             screen.classList.add('is-swapping');
@@ -151,7 +151,7 @@
                         screen.appendChild(still);
                     }
                     still.src = tab.dataset.src;
-                    still.alt = `BROS2 screenshot: ${tab.dataset.caption || tab.textContent.trim()}`;
+                    still.alt = `Wirepup screenshot: ${tab.dataset.caption || tab.textContent.trim()}`;
                 }
                 syncScreen();
                 syncPlayback();
@@ -178,7 +178,7 @@
         const buildTheater = () => {
             const dialog = document.createElement('dialog');
             dialog.className = 'bros2-theater';
-            dialog.setAttribute('aria-label', 'BROS2 demo, theater view');
+            dialog.setAttribute('aria-label', 'Wirepup demo, theater view');
             dialog.innerHTML = `
                 <div class="bros2-theater__frame">
                     <div class="bros2-theater__bar">
@@ -228,7 +228,7 @@
                 img.alt = still.alt;
                 slot.appendChild(img);
             }
-            theater.querySelector('[data-theater-title]').textContent = useVideo ? 'BROS2 · Build & drive' : (windowTitle?.textContent || 'BROS2');
+            theater.querySelector('[data-theater-title]').textContent = useVideo ? 'Wirepup · Build & drive' : (windowTitle?.textContent || 'Wirepup');
             theater.querySelector('[data-theater-caption]').textContent = useVideo ? (tabs[0].dataset.caption || '') : (caption?.textContent || '');
             syncScreen();
             if (typeof theater.showModal === 'function') {
@@ -269,11 +269,11 @@
             el.className = 'bros2-pip';
             el.hidden = true;
             el.setAttribute('role', 'region');
-            el.setAttribute('aria-label', 'BROS2 demo mini-player');
+            el.setAttribute('aria-label', 'Wirepup demo mini-player');
             el.innerHTML = `
                 <div class="bros2-pip__bar" data-pip-handle title="Drag me">
                     <span aria-hidden="true" class="bros2-pip__grip"></span>
-                    <span class="bros2-pip__title">BROS2 demo</span>
+                    <span class="bros2-pip__title">Wirepup demo</span>
                     <button type="button" class="bros2-pip__btn" data-pip-expand aria-label="Expand to theater view">${icon('expand')}</button>
                     <button type="button" class="bros2-pip__btn" data-pip-close aria-label="Close mini-player and put the video back">${icon('close')}</button>
                 </div>
@@ -357,7 +357,7 @@
     }
 
     // =====================================================================
-    //  2. Playground: a tiny BROS2 in the browser
+    //  2. Playground: a tiny Wirepup in the browser
     // =====================================================================
     function initPlayground() {
         const host = panel.querySelector('[data-playground]');
@@ -422,7 +422,7 @@
             { id: 'filter', title: 'Wire in the Low-pass Filter', text: 'Route Add Noise → Low-pass Filter → Live Plot: drag from an output ● to an input ●.', tag: 'Blocks are ROS 2 nodes' },
             { id: 'tune', title: 'Tune it while it runs', text: 'Press Run, then drag the Noise slider.', tag: 'Tune while it runs' },
             { id: 'types', title: 'Try to break the types', text: 'Wire Threshold’s bool output into any f64 input.', tag: 'Type-checked graphs' },
-            { id: 'code', title: 'Peek at the code', text: 'Open the Code tab: that is the launch file BROS2 writes.', tag: 'Real code out' }
+            { id: 'code', title: 'Peek at the code', text: 'Open the Code tab: that is the launch file Wirepup writes.', tag: 'Real code out' }
         ];
         const NODE_ICONS = {
             wave: 'M2 12c2-6 4-6 5 0s3 6 5 0 3-6 5 0 3 6 5 0',
@@ -491,7 +491,7 @@
                 <p class="pg-side__title">Try this</p>
                 <ol class="pg-quests">${questItems}</ol>
                 <div class="pg-done" data-pg-done hidden>
-                    <strong>That’s BROS2 in a nutshell.</strong>
+                    <strong>That’s Wirepup in a nutshell.</strong>
                     <p>The real app turns graphs like this into a colcon-built ROS 2 package and runs it on your laptop or your robot.</p>
                     <button class="pg-done__cta" data-pg-waitlist type="button">Request early access →</button>
                 </div>
@@ -881,7 +881,7 @@
             const errs = errors().length;
             if (errs) lines.push(`# Build blocked: fix ${errs} type error${errs === 1 ? '' : 's'} in Problems first.`);
             lines.push(
-                '# Launch file generated by BROS2 for the "Signal Lab" workspace.',
+                '# Launch file generated by Wirepup for the "Signal Lab" workspace.',
                 '# Run with: ros2 launch bros2_signal_lab signal_lab.launch.py',
                 'from launch import LaunchDescription',
                 'from launch_ros.actions import Node',
@@ -1659,12 +1659,12 @@
             const body = [
                 'Hi Noah,',
                 '',
-                'I’d like early access to BROS2.',
+                'I’d like early access to Wirepup.',
                 '',
                 email ? `Email: ${email}` : '',
                 role ? `I’m a: ${role}` : ''
             ].filter((line, index, lines) => line || lines[index - 1]).join('\n');
-            return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('BROS2 early access')}&body=${encodeURIComponent(body)}`;
+            return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Wirepup early access')}&body=${encodeURIComponent(body)}`;
         };
 
         const setMessage = (text, tone = 'info', fallback = null) => {

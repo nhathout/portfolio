@@ -1,0 +1,371 @@
+/*
+ * Education + Experience pixel layer: rail waypoints, the walking avatar,
+ * the spotlight quest banner, and stat/filter icons. Sprites are 16px (10px
+ * for icons) canvases scaled with image-rendering: pixelated.
+ */
+
+#education-experience canvas.edex-node__sprite,
+#education-experience canvas.edex-node__mark,
+#education-experience canvas.edex-walker,
+#education-experience canvas.edex-quest__sprite,
+#education-experience canvas.edex-quest__status-icon,
+#education-experience canvas.edex-stat__icon,
+#education-experience canvas.edex-filter__icon {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Rail geometry: room for 32px waypoints centered on the line       */
+/* ------------------------------------------------------------------ */
+#education-experience .edex-rail.has-pixel-nodes {
+  --node-center: 1.2rem;
+  padding-left: 3rem;
+}
+
+#education-experience .edex-rail.has-pixel-nodes .edex-rail__line {
+  left: calc(var(--node-center) - 1px);
+  width: 3px;
+  background: repeating-linear-gradient(180deg, var(--border-strong) 0 6px, transparent 6px 10px);
+  border-radius: 0;
+}
+
+#education-experience .edex-rail.has-pixel-nodes .edex-rail__progress {
+  border-radius: 0;
+  box-shadow: none;
+  background: linear-gradient(180deg, var(--accent), var(--accent-warm));
+}
+
+#education-experience .edex-rail.has-pixel-nodes .edex-card::after {
+  display: none;
+}
+
+#education-experience .edex-node {
+  position: absolute;
+  top: 1.05rem;
+  left: calc(var(--node-center) - 3rem - 16px);
+  z-index: 2;
+  width: 32px;
+  height: 32px;
+  background: var(--surface);
+  box-shadow:
+    0 -3px 0 0 var(--edex-accent),
+    0 3px 0 0 var(--edex-accent),
+    -3px 0 0 0 var(--edex-accent),
+    3px 0 0 0 var(--edex-accent);
+  transition: transform 320ms cubic-bezier(0.34, 1.56, 0.64, 1), filter 320ms ease, opacity 320ms ease;
+}
+
+#education-experience .edex-node__sprite {
+  display: block;
+  width: 32px;
+  height: 32px;
+}
+
+/* quest state marker in the node's corner */
+#education-experience .edex-node__mark {
+  position: absolute;
+  right: -11px;
+  top: -11px;
+  width: 15px;
+  height: 15px;
+}
+
+#education-experience .edex-node__mark--done {
+  opacity: 0;
+  transform: scale(0.4);
+  transition: opacity 240ms ease, transform 320ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+#education-experience .edex-card.is-passed .edex-node__mark--done {
+  opacity: 1;
+  transform: none;
+}
+
+#education-experience .edex-node__mark--active {
+  animation: edex-bang 1.4s steps(2, jump-none) infinite;
+}
+
+@keyframes edex-bang {
+  50% { transform: translateY(-3px); }
+}
+
+/* waypoints light up as the walker passes them */
+#education-experience .edex-card:not(.is-passed) .edex-node {
+  filter: saturate(0.35);
+  opacity: 0.8;
+}
+
+#education-experience .edex-card.is-passed .edex-node {
+  transform: scale(1.06);
+}
+
+#education-experience .edex-card.is-active .edex-node,
+#education-experience .edex-card:hover .edex-node,
+#education-experience .edex-card:focus-visible .edex-node {
+  filter: none;
+  opacity: 1;
+  transform: scale(1.12) rotate(-4deg);
+}
+
+/* a card reached from the Skills inventory pings briefly */
+#education-experience .edex-card.is-pinged {
+  animation: edex-ping 1.4s ease;
+}
+
+@keyframes edex-ping {
+  0%, 100% { outline: 3px solid transparent; outline-offset: 10px; }
+  30% { outline: 3px solid var(--edex-accent); outline-offset: 6px; }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Walker                                                            */
+/* ------------------------------------------------------------------ */
+#education-experience .edex-walker {
+  position: absolute;
+  top: -30px;
+  left: calc(var(--node-center) - 12px);
+  z-index: 5;
+  width: 24px;
+  height: 32px;
+  pointer-events: none;
+  filter: drop-shadow(0 3px 0 rgba(15, 23, 42, 0.25));
+  will-change: transform;
+}
+
+#education-experience .edex-walker.is-home {
+  filter: drop-shadow(0 3px 0 rgba(15, 23, 42, 0.25)) drop-shadow(0 0 6px var(--accent-soft));
+}
+
+html.darkmode #education-experience .edex-walker {
+  filter: drop-shadow(0 3px 0 rgba(0, 0, 0, 0.5)) drop-shadow(0 0 1px rgba(255, 255, 255, 0.6));
+}
+
+/* ------------------------------------------------------------------ */
+/*  Spotlight quest banner                                            */
+/* ------------------------------------------------------------------ */
+#education-experience .edex-quest {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin: -0.2rem 0 1.1rem;
+  padding: 0.55rem 0.7rem;
+  background: #141a2b;
+  color: #eef3f9;
+  box-shadow:
+    0 -3px 0 0 #050a14,
+    0 3px 0 0 #050a14,
+    -3px 0 0 0 #050a14,
+    3px 0 0 0 #050a14,
+    inset 0 0 0 2px #2b3754;
+}
+
+#education-experience .edex-quest.is-swapping {
+  animation: edex-quest-in 280ms steps(4, end);
+}
+
+@keyframes edex-quest-in {
+  from { clip-path: inset(0 100% 0 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+
+#education-experience .edex-quest__tile {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  background: #f4f4f4;
+  box-shadow: inset 3px 3px 0 0 #c5d0dc;
+}
+
+#education-experience .edex-quest__sprite {
+  width: 48px;
+  height: 48px;
+}
+
+#education-experience .edex-quest__kind {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #ffcd75 !important;
+}
+
+#education-experience .edex-quest[data-state="done"] .edex-quest__kind {
+  color: #a7f070 !important;
+}
+
+#education-experience .edex-quest__status {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 0.3rem;
+  font-size: 0.95rem;
+  font-weight: 900;
+  color: #ffffff !important;
+}
+
+#education-experience .edex-quest__status-icon {
+  width: 15px;
+  height: 15px;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Stats + filters                                                   */
+/* ------------------------------------------------------------------ */
+#education-experience .edex-stat {
+  position: relative;
+}
+
+#education-experience .edex-stat__icon {
+  position: absolute;
+  right: 0.9rem;
+  top: 0.9rem;
+  width: 20px;
+  height: 20px;
+}
+
+#education-experience .edex-filter {
+  gap: 0.5rem;
+}
+
+#education-experience .edex-filter__icon {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Shared pixel-frame recipe (same tokens as pixel-skin.css)          */
+/* ------------------------------------------------------------------ */
+#education-experience .edex-shell,
+#education-experience .edex-card,
+#education-experience .edex-spotlight,
+#education-experience .edex-stat,
+#education-experience .edex-filter,
+#education-experience .edex-card__logo,
+#education-experience .edex-spotlight__logo-shell {
+  --px-c: var(--px-frame, #333c57);
+  border-radius: 0;
+  border-color: transparent;
+  box-shadow:
+    0 calc(var(--px-u) * -1) 0 0 var(--px-c),
+    0 var(--px-u) 0 0 var(--px-c),
+    calc(var(--px-u) * -1) 0 0 0 var(--px-c),
+    var(--px-u) 0 0 0 var(--px-c),
+    calc(var(--px-u) * 2) calc(var(--px-u) * 3) 0 0 var(--px-drop, rgba(15, 23, 42, 0.18));
+}
+
+html.darkmode #education-experience .edex-shell,
+html.darkmode #education-experience .edex-card,
+html.darkmode #education-experience .edex-spotlight,
+html.darkmode #education-experience .edex-stat,
+html.darkmode #education-experience .edex-filter,
+html.darkmode #education-experience .edex-card__logo,
+html.darkmode #education-experience .edex-spotlight__logo-shell {
+  --px-c: var(--px-frame, #050a14);
+}
+
+#education-experience .edex-shell,
+#education-experience .edex-card,
+#education-experience .edex-spotlight,
+#education-experience .edex-stat {
+  --px-u: 3px;
+}
+
+#education-experience .edex-filter,
+#education-experience .edex-card__logo,
+#education-experience .edex-spotlight__logo-shell {
+  --px-u: 2px;
+}
+
+#education-experience .edex-shell::before,
+#education-experience .edex-card::before {
+  border-radius: 0;
+}
+
+/* hover / active: accent frame and a small hop up-left */
+#education-experience .edex-card:hover,
+#education-experience .edex-card:focus-visible,
+#education-experience .edex-card.is-active,
+#education-experience .edex-filter:hover,
+#education-experience .edex-filter:focus-visible,
+#education-experience .edex-filter.is-active {
+  --px-c: var(--px-frame-hover, var(--accent));
+  transform: translate(-2px, -2px);
+}
+
+#education-experience .edex-spotlight {
+  --px-c: var(--spotlight-accent, var(--px-frame, #333c57));
+}
+
+#education-experience .edex-filter.is-active {
+  background: var(--accent-strong);
+  color: #ffffff;
+}
+
+html.darkmode #education-experience .edex-filter.is-active {
+  background: linear-gradient(120deg, #0f766e, #38bdf8);
+  color: #f8fffe;
+}
+
+/* the in-card chips and pills go square too (notched in their own color, no outline) */
+#education-experience .edex-pill,
+#education-experience .edex-card__tags span,
+#education-experience .edex-tag {
+  border-radius: 0;
+}
+
+#education-experience .edex-meta-pill {
+  border-radius: 0;
+}
+
+/* dark-mode contrast fixes for text the inline styles leave dark */
+html.darkmode #education-experience .edex-spotlight__org {
+  color: var(--ink-soft);
+}
+
+html.darkmode #education-experience .edex-pill--education {
+  background: rgba(248, 113, 113, 0.16);
+  color: #fca5a5;
+}
+
+html.darkmode #education-experience .edex-pill--experience {
+  background: rgba(94, 234, 212, 0.14);
+  color: #5eead4;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Small screens                                                     */
+/* ------------------------------------------------------------------ */
+@media (max-width: 640px) {
+  #education-experience .edex-rail.has-pixel-nodes {
+    --node-center: 0.95rem;
+    padding-left: 2.55rem;
+  }
+
+  #education-experience .edex-node {
+    left: calc(var(--node-center) - 2.55rem - 16px);
+  }
+
+  #education-experience .edex-walker {
+    left: calc(var(--node-center) - 12px);
+  }
+
+  #education-experience .edex-quest__tile,
+  #education-experience .edex-quest__sprite {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #education-experience .edex-node__mark--active,
+  #education-experience .edex-quest.is-swapping,
+  #education-experience .edex-card.is-pinged {
+    animation: none !important;
+  }
+}

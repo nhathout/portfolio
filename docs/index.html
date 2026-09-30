@@ -7,8 +7,8 @@
   <title>
    Noah Hathout · Robotics &amp; AI Engineer
   </title>
-  <meta content="Noah Hathout: robotics and AI engineer finishing an M.S. in Robotics &amp; Autonomous Systems at Boston University. AI Engineer Intern at Universal Robots, builder of BROS2, a visual builder for ROS 2." name="description"/>
-  <meta content="Noah Hathout, robotics engineer, AI engineer, ROS 2, BROS2, Boston University, Universal Robots, robot learning, computer vision, portfolio" name="keywords"/>
+  <meta content="Noah Hathout: robotics and AI engineer finishing an M.S. in Robotics &amp; Autonomous Systems at Boston University. AI Engineer Intern at Universal Robots, builder of Wirepup (formerly BROS2), a visual builder for ROS 2." name="description"/>
+  <meta content="Noah Hathout, robotics engineer, AI engineer, ROS 2, Wirepup, BROS2, Boston University, Universal Robots, robot learning, computer vision, portfolio" name="keywords"/>
   <meta content="Noah Hathout" name="author"/>
   <link href="https://noahhathout.com/" rel="canonical"/>
   <meta content="#edf2f7" media="(prefers-color-scheme: light)" name="theme-color"/>
@@ -17,14 +17,14 @@
   <meta content="https://noahhathout.com/" property="og:url"/>
   <meta content="Noah Hathout" property="og:site_name"/>
   <meta content="Noah Hathout · Robotics &amp; AI Engineer" property="og:title"/>
-  <meta content="Robotics + AI engineer at Boston University and Universal Robots. Projects, experience, and BROS2, a visual builder for ROS 2." property="og:description"/>
+  <meta content="Robotics + AI engineer at Boston University and Universal Robots. Projects, experience, and Wirepup, a visual builder for ROS 2." property="og:description"/>
   <meta content="https://noahhathout.com/assets/opt/og-card.jpg" property="og:image"/>
   <meta content="1200" property="og:image:width"/>
   <meta content="630" property="og:image:height"/>
   <meta content="Pixel-art portrait of Noah Hathout next to his name and title" property="og:image:alt"/>
   <meta content="summary_large_image" name="twitter:card"/>
   <meta content="Noah Hathout · Robotics &amp; AI Engineer" name="twitter:title"/>
-  <meta content="Robotics + AI engineer at Boston University and Universal Robots. Projects, experience, and BROS2, a visual builder for ROS 2." name="twitter:description"/>
+  <meta content="Robotics + AI engineer at Boston University and Universal Robots. Projects, experience, and Wirepup, a visual builder for ROS 2." name="twitter:description"/>
   <meta content="https://noahhathout.com/assets/opt/og-card.jpg" name="twitter:image"/>
   <link href="assets/images/PixelMe_50x50.jpg" rel="icon"/>
   <link href="assets/images/PixelMe_50x50.jpg" rel="apple-touch-icon"/>
@@ -33,6 +33,10 @@
   <link href="assets/css/about.css?v=2026-09-29" rel="stylesheet"/>
   <link href="assets/css/bros2-playground.css?v=2026-09-29" rel="stylesheet"/>
   <link href="assets/css/game.css?v=2026-09-29" rel="stylesheet"/>
+  <link href="assets/css/skills.css?v=2026-09-29" rel="stylesheet"/>
+  <link href="assets/css/edex.css?v=2026-09-29" rel="stylesheet"/>
+  <link href="assets/css/contact.css?v=2026-09-29" rel="stylesheet"/>
+  <link href="assets/css/pixel-skin.css?v=2026-09-29" rel="stylesheet"/>
   <script type="application/ld+json">
    {
      "@context": "https://schema.org",
@@ -255,7 +259,7 @@
        <a class="hero-now__chip hero-now__chip--build" href="#featured-bros2">
         <span aria-hidden="true" class="hero-now__dot">
         </span>
-        Building BROS2, a visual builder for ROS 2
+        Building Wirepup, a visual builder for ROS 2
        </a>
       </div>
       <div class="hero-socials">
@@ -301,7 +305,7 @@
         I'm Noah Jean-Pierre Hathout: a robotics &amp; AI engineer, tech enthusiast, and avid gamer. I'm finishing my M.S. in Robotics &amp; Autonomous Systems at Boston University while doing my thesis research as an AI Engineer Intern at Universal Robots, after earning my B.S. in Computer Engineering there (cum laude, 2025). I love exploring how machines can learn and interact with the world.
        </p>
        <p class="about-lede about-lede--soft" data-reveal="">
-        On the side, I lead software part-time at UMG Technologies, I'm turning BROS2 (my visual builder for ROS 2) into a real product, and I'm teaching myself game development.
+        On the side, I lead software part-time at UMG Technologies, I'm turning Wirepup (my visual builder for ROS 2, formerly BROS2) into a real product, and I'm teaching myself game development.
        </p>
        <section aria-labelledby="aboutSheetTitle" class="about-sheet" data-reveal="">
         <header class="about-sheet__head">
@@ -357,7 +361,7 @@
           </dt>
           <dd>
            <a class="about-sheet__link" href="#featured-bros2">
-            Building BROS2 into a product →
+            Building Wirepup into a product →
            </a>
           </dd>
          </div>
@@ -474,7 +478,7 @@
       <div class="edex-header">
        <div class="edex-header-copy">
         <p class="edex-kicker">
-         Timeline / education + experience
+         Quest log / education + experience
         </p>
         <h2 class="edex-title">
          Education <br>+ Experience
@@ -1083,42 +1087,58 @@
    <!-- SKILLS SECTION -->
    <section class="text-gray-600 body-font font-mono bg-white relative overflow-hidden py-10" id="skills">
     <div class="container mx-auto px-5">
-     <h2 class="text-4xl font-bold text-black mb-10 text-center" data-reveal="">
-      Skills
-     </h2>
-     <div class="bg-gray-100 p-5 rounded-xl space-y-6" data-reveal="">
+     <div class="skills-head" data-reveal="">
+      <p class="skills-kicker">
+       items collected
+      </p>
+      <h2 class="text-4xl md:text-5xl font-bold text-black text-center">
+       Skills
+      </h2>
+     </div>
+     <div class="skills-panel space-y-6" data-reveal="" id="skillsPanel">
       <div class="skills-nav flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-       <div>
-        <p class="text-xs uppercase tracking-[0.3em] text-gray-500">
-         Navigate my stack
-        </p>
-        <h3 class="text-2xl font-bold text-gray-800">
-         Explore by focus area
-        </h3>
+       <div class="skills-nav__title">
+        <span aria-hidden="true" class="skills-chest" data-skills-chest="">
+        </span>
+        <div>
+         <p class="skills-nav__kicker">
+          Navigate my stack
+         </p>
+         <h3 class="skills-nav__heading">
+          Explore by focus area
+         </h3>
+        </div>
        </div>
        <div class="skills-pager flex items-center justify-center gap-3">
         <button aria-label="Previous skill category" class="skills-pager-btn" id="skillsPrev" type="button">
          ‹
         </button>
-        <span class="skills-active-label text-lg font-semibold text-gray-800 text-center" id="skillsActiveLabel">
+        <span class="skills-active-label text-center" id="skillsActiveLabel">
         </span>
         <button aria-label="Next skill category" class="skills-pager-btn" id="skillsNext" type="button">
          ›
         </button>
        </div>
       </div>
-      <div class="skills-tabs flex flex-wrap items-center justify-center gap-3" id="skillsTabs">
+      <div aria-label="Skill categories" class="skills-tabs flex flex-wrap items-center justify-center gap-3" id="skillsTabs" role="group">
       </div>
       <div class="skills-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6" id="skillsGrid">
       </div>
-      <p class="text-center text-xs text-gray-500">
+      <div aria-live="polite" class="skills-info" id="skillsInfo">
+      </div>
+      <p class="skills-tips text-center">
        <span class="skills-tip skills-tip--desktop">
-        Hover over a cube to spin it, then click to check out more info. Use the arrows (or scroll) to switch topics.
+        Hover a cube to spin it and see where I've used it; click to visit the tool. Use the arrows (or swipe sideways) to switch topics.
        </span>
        <span class="skills-tip skills-tip--mobile">
-        Double tap to explore more about a skill. 
+        Tap a cube to see where I've used it; tap again to visit the tool.
        </span>
       </p>
+      <noscript>
+       <p>
+        Python, C, C++, C#, TensorFlow, PyTorch, MATLAB, JavaScript, TypeScript, React, SQLite, FastAPI, HTML, CSS, OpenCV, pytest, Java, Arduino, Raspberry Pi, ESP32, NVIDIA, Universal Robots, ROS, ROS 2, Intel RealSense, Orbbec, BeagleBone, Git, GitHub, GitHub Actions, Docker, Onshape, Bambu Lab, Godot, Electron, Unreal Engine 5, Ubuntu, Windows, macOS, Linux.
+       </p>
+      </noscript>
      </div>
     </div>
    </section>
@@ -1133,7 +1153,7 @@
      </h2>
     </div>
     <div class="container mx-auto px-5">
-     <!-- FEATURED: BROS2 -->
+     <!-- FEATURED: Wirepup (formerly BROS2) -->
      <article aria-labelledby="featuredTitle" class="feature-shell" data-reveal="" id="featured-bros2">
       <div class="feature-copy">
        <p class="feature-kicker">
@@ -1145,10 +1165,13 @@
         <img alt="" class="feature-brand__mark" height="64" src="assets/opt/bros2/mark.svg" width="64"/>
         <div>
          <h3 class="feature-brand__name" id="featuredTitle">
-          BROS2
+          Wirepup
          </h3>
          <p class="feature-brand__tagline">
           A visual builder for ROS 2
+          <span class="feature-brand__formerly">
+           formerly BROS2
+          </span>
          </p>
         </div>
        </div>
@@ -1157,13 +1180,13 @@
         <strong>
          Run
         </strong>
-        and BROS2 generates a standard ROS 2 package, builds it with colcon in a managed Docker sandbox, and wires live plots, sliders, a joystick, or your phone into the running graph. Press
+        and Wirepup generates a standard ROS 2 package, builds it with colcon in a managed Docker sandbox, and wires live plots, sliders, a joystick, or your phone into the running graph. Press
         <strong>
          Deploy
         </strong>
         and the same graph runs on a Raspberry Pi, Jetson, or ROS 2 robot.
        </p>
-       <ul aria-label="BROS2 at a glance" class="feature-stats">
+       <ul aria-label="Wirepup at a glance" class="feature-stats">
         <li>
          <strong data-count-to="47">
           47
@@ -1198,7 +1221,7 @@
         </li>
        </ul>
        <div class="feature-actions">
-        <a aria-controls="bros2Waitlist" aria-expanded="false" class="feature-cta" data-waitlist-open="" href="mailto:nhathout@bu.edu?subject=BROS2%20early%20access">
+        <a aria-controls="bros2Waitlist" aria-expanded="false" class="feature-cta" data-waitlist-open="" href="mailto:nhathout@bu.edu?subject=Wirepup%20early%20access">
          Request early access
         </a>
         <span class="feature-status">
@@ -1246,7 +1269,7 @@
         </fieldset>
         <input aria-hidden="true" autocomplete="off" class="waitlist__hp" name="website" tabindex="-1" type="text"/>
         <p class="waitlist__note">
-         Only used to email you about BROS2 early access.
+         Only used to email you about Wirepup early access.
         </p>
         <p aria-live="polite" class="waitlist__msg" data-waitlist-msg="" role="status"></p>
        </form>
@@ -1271,7 +1294,7 @@
           </i>
          </span>
          <span aria-hidden="true" class="feature-window__title" data-feature-window-title="">
-          BROS2 · Build &amp; drive
+          Wirepup · Build &amp; drive
          </span>
          <span class="feature-window__tools">
           <button aria-label="Pop the demo video out into a mini-player" class="feature-window__tool" data-feature-popout="" title="Pop out" type="button">
@@ -1287,12 +1310,12 @@
          </span>
         </div>
         <div class="feature-window__screen" id="featureScreen">
-         <video aria-label="BROS2 demo: three blocks are connected, run, and the simulated turtle is driven live" data-feature-video="" loop="" muted="" playsinline="" poster="assets/opt/bros2/demo-poster.webp" preload="none">
+         <video aria-label="Wirepup demo: three blocks are connected, run, and the simulated turtle is driven live" data-feature-video="" loop="" muted="" playsinline="" poster="assets/opt/bros2/demo-poster.webp" preload="none">
           <source data-src="assets/opt/bros2/demo.mp4" type="video/mp4"/>
          </video>
         </div>
        </div>
-       <div aria-label="BROS2 screenshots" class="feature-tabs" role="tablist">
+       <div aria-label="Wirepup screenshots" class="feature-tabs" role="tablist">
         <button aria-selected="true" class="feature-tab is-active" data-caption="Three blocks, two wires, one click: a real ROS 2 package built with colcon and driven live." data-kind="video" data-title="Build &amp; drive" role="tab" type="button">
          Build &amp; drive
         </button>
@@ -1320,7 +1343,7 @@
          Try it · no install
         </p>
         <h4 class="feature-play__title" id="bros2PlayTitle">
-         A tiny BROS2, right in your browser
+         A tiny Wirepup, right in your browser
         </h4>
         <p class="feature-play__sub">
          Drag the blocks around, wire an output <span aria-hidden="true" class="pg-dot pg-dot--out"></span> into an input <span aria-hidden="true" class="pg-dot"></span>, and press Run. It's a toy version of the real app, but the ideas are the real ones.
@@ -1394,7 +1417,7 @@
            <path d="M16 14.6L17.3 17.2L20.2 17.6L18.1 19.6L18.6 22.5L16 21.1L13.4 22.5L13.9 19.6L11.8 17.6L14.7 17.2L16 14.6Z" fill="#B45309"/>
           </svg>
           <p>
-           Started as a BU EC601 team project that won <strong>Best Project (Fall 2025)</strong>, then rebuilt from the ground up as a product in 2026.
+           Started as <strong>BROS2</strong>, a BU EC601 team project that won <strong>Best Project (Fall 2025)</strong>, then rebuilt from the ground up as a product in 2026.
           </p>
          </div>
        </div>
@@ -1435,16 +1458,16 @@
         </span>
        </div>
        <div class="award-body">
-        <img alt="BROS2 logo" height="90" loading="lazy" src="assets/opt/bros2/mark.svg" width="90"/>
+        <img alt="Wirepup logo" height="90" loading="lazy" src="assets/opt/bros2/mark.svg" width="90"/>
         <div>
          <p class="award-title">
           BU EC601 · Fall 2025
          </p>
          <p class="award-copy">
-          BROS2, our drag-and-drop IDE for ROS 2, took Best Project of the semester. I have since rebuilt it into a product.
+          BROS2, our drag-and-drop IDE for ROS 2, took Best Project of the semester. I have since rebuilt it into a product: Wirepup.
          </p>
          <a class="award-link" data-scroll-to="featured-bros2" href="#featured-bros2">
-          See BROS2 →
+          See Wirepup →
          </a>
         </div>
        </div>
@@ -1542,9 +1565,10 @@
     </section>
     -->
    <!-- CONTACT SECTION -->
-   <section class="text-gray-600 body-font font-mono bg-white relative overflow-hidden py-10" id="contact">
-    <div class="container mx-auto flex flex-col lg:flex-row items-center px-5 gap-10">
-     <div class="lg:w-1/2 w-full">
+   <section class="text-gray-600 body-font font-mono bg-white relative overflow-hidden pt-10" id="contact">
+    <div class="container mx-auto px-5">
+     <div class="contact-layout">
+     <div class="contact-stage">
       <figure class="crt" data-reveal="">
        <button aria-label="Flip the channel" class="crt__screen" data-crt-screen="" type="button">
         <video autoplay="" class="contact-video" loop="" muted="" playsinline="">
@@ -1583,7 +1607,7 @@
        </figcaption>
       </figure>
      </div>
-     <div class="lg:w-1/2 w-full">
+     <div class="contact-main">
       <div class="contact-card">
        <div class="text-center lg:text-left">
         <p class="text-xs uppercase tracking-[0.4em] text-gray-500 mb-2">
@@ -1593,7 +1617,7 @@
          Say hi
         </h2>
         <p class="contact-lede">
-         Open to robotics, AI, and software roles, research collaborations, and BROS2 early-access testers.
+         Open to robotics, AI, and software roles, research collaborations, and Wirepup early-access testers.
         </p>
        </div>
        <div class="contact-links" data-reveal="">
@@ -1676,8 +1700,8 @@
           <button aria-pressed="false" class="composer__topic" data-topic="Research collaboration" type="button">
            🔬 Research collab
           </button>
-          <button aria-pressed="false" class="composer__topic" data-topic="BROS2 early access" type="button">
-           🧩 BROS2 early access
+          <button aria-pressed="false" class="composer__topic" data-topic="Wirepup early access" type="button">
+           🧩 Wirepup early access
           </button>
          </fieldset>
          <label class="composer__label" for="composerMessage">
@@ -1719,6 +1743,26 @@
        </div>
        </div>
       </div>
+     </div>
+    </div>
+    <div class="skyline" data-phase="day" data-skyline="">
+     <canvas aria-label="Pixel-art Boston skyline across the Charles River: the Citgo sign, the Prudential Tower, 200 Clarendon, and the Longfellow Bridge, with a tiny pixel Noah waving from the Cambridge side. The sky follows the time of day in Boston." class="skyline__canvas" height="84" role="img" width="320">
+     </canvas>
+     <button aria-label="Wave at pixel Noah" class="skyline__noah" data-skyline-noah="" type="button">
+     </button>
+     <span aria-hidden="true" class="skyline__bubble" data-skyline-bubble="">
+      hi! 👋
+     </span>
+     <div class="skyline__bar">
+      <p class="skyline__label" data-skyline-label="">
+       Boston right now
+      </p>
+      <button class="skyline__cycle" data-skyline-cycle="" type="button">
+       <span aria-hidden="true">
+        ◐
+       </span>
+       Change time of day
+      </button>
      </div>
     </div>
    </section>
@@ -4397,6 +4441,8 @@
 
     /* Adjust leaderboard font-size and layout are done in JS inline styles */
   </style>
+  <script defer="" src="pixel-kit.js?v=2026-09-29">
+  </script>
   <script defer="" src="egg.js">
   </script>
   <script defer="" src="script.js?v=2026-09-29">
@@ -4412,6 +4458,12 @@
   <script defer="" src="hero-ascii.js?v=2026-09-29">
   </script>
   <script defer="" src="sections.js?v=2026-09-29">
+  </script>
+  <script defer="" src="skills.js?v=2026-09-29">
+  </script>
+  <script defer="" src="edex.js?v=2026-09-29">
+  </script>
+  <script defer="" src="contact.js?v=2026-09-29">
   </script>
  </body>
 </html>

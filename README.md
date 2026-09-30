@@ -16,8 +16,10 @@ Everything that ships lives in [`docs/`](docs/) (served by GitHub Pages at [noah
 | `docs/interactions.js` | Command palette (`Ctrl/⌘ K` or `/`), scroll reveals, copy-email toast, flag-emoji fallback |
 | `docs/hero-ascii.js` | The mouse-reactive ANSI/ASCII layer over the hero art |
 | `docs/sections.js` | Experience timeline progress + durations, award unlocks/tilt, contact clock, CRT, and note composer |
+| `docs/contact.js` | Contact pixel-art icons and the Boston skyline (sky follows Boston time) |
+| `docs/pixel-kit.js` | Shared pixel-art palette + painter used by the Contact/Skills/Experience art |
 | `docs/about.js` | About section: character sheet, photo deck (`aboutPhotos`), pixel-art world tour (`aboutStops`), side quests (`aboutQuests`) |
-| `docs/bros2-playground.js` | BROS2 panel: in-browser node playground, video theater/pop-out, early-access waitlist |
+| `docs/bros2-playground.js` | Wirepup (formerly BROS2) panel: in-browser node playground, video theater/pop-out, early-access waitlist |
 | `docs/game.js` | Atari [Course]out: the Breakout mini-game and its shared leaderboard |
 | `docs/assets/css/*.css` | Styles for the pieces above (`enhancements`, `sections`, `about`, `bros2-playground`, `game`) |
 | `docs/assets/opt/` | Web-sized WebP/MP4 copies of the images and clips the page actually loads |
@@ -26,7 +28,7 @@ Everything that ships lives in [`docs/`](docs/) (served by GitHub Pages at [noah
 
 **About section:** add photos to `aboutPhotos` and tour stops to `aboutStops` at the top of `docs/about.js` (a stop's optional `photo` replaces its pixel scene).
 
-**Server (`server.js`, deployed on Render):** besides the game leaderboard it hosts the BROS2 waitlist: `GET /api/bros2/interest` (count), `POST /api/bros2/interest` (`{ email, role? }`), and `GET /api/bros2/interest/export`, which needs the header `x-admin-key` to match the `INTEREST_ADMIN_KEY` environment variable (export is off when it's unset). `DB_DIR` overrides the database folder (default `/data/db`) for local testing.
+**Server (`server.js`, deployed on Render):** besides the game leaderboard it hosts the Wirepup (formerly BROS2) waitlist: `GET /api/bros2/interest` (count), `POST /api/bros2/interest` (`{ email, role? }`), and `GET /api/bros2/interest/export`, which needs the header `x-admin-key` to match the `INTEREST_ADMIN_KEY` environment variable (export is off when it's unset). `DB_DIR` overrides the database folder (default `/data/db`) for local testing.
 
 **Adding images:** drop the original in `docs/assets/images/`, then save a web-sized copy (WebP, around 1000px wide for projects and 320px for logos) in `docs/assets/opt/` and point the page at that copy.
 

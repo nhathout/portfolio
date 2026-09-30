@@ -992,9 +992,10 @@
             tour.style.setProperty('--about-pin-top', `${pinTop}px`);
             tour.style.height = '';
             track.style.transform = '';
-            const wantPin = pinQuery.matches && !reducedMotion;
+            // pinned mode sizes the panel to the screen, so it needs enough height for readable cards
+            const wantPin = pinQuery.matches && !reducedMotion && window.innerHeight - pinTop >= 560;
             tour.classList.toggle('is-pinned', wantPin);
-            if (wantPin && pin.offsetHeight > window.innerHeight - pinTop - 12) {
+            if (wantPin && pin.offsetHeight > window.innerHeight - pinTop - 8) {
                 // the panel wouldn't fit on screen while pinned; fall back to swiping
                 tour.classList.remove('is-pinned');
             }

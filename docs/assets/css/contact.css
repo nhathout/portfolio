@@ -1,0 +1,231 @@
+/*
+ * Contact: responsive layout, pixel-art link icons, and the Boston skyline.
+ * The layout responds to the width of the section itself (container
+ * queries), so it behaves the same in a half-width browser window as on a
+ * small laptop: side by side only when both halves have room, otherwise the
+ * TV sits centered above a full-width card.
+ */
+
+#contact > .container {
+  container-type: inline-size;
+  container-name: contact;
+}
+
+.contact-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1.75rem, 3vw, 2.75rem);
+  align-items: center;
+}
+
+.contact-stage {
+  width: min(100%, 460px);
+  justify-self: center;
+}
+
+.contact-main {
+  min-width: 0;
+}
+
+@container contact (min-width: 1080px) {
+  .contact-layout {
+    grid-template-columns: minmax(340px, 0.82fr) minmax(0, 1.18fr);
+  }
+
+  .contact-stage {
+    width: 100%;
+  }
+}
+
+/* the card: tighter padding on small screens */
+#contact .contact-card {
+  padding: clamp(1.4rem, 4vw, 2.5rem);
+}
+
+/* links: as many columns as fit, never squeezed into one tall column */
+#contact .contact-links {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 215px), 1fr));
+  gap: 1rem 1.1rem;
+}
+
+#contact .contact-link-inner {
+  padding: 0.85rem 1rem;
+}
+
+.contact-pixel-icon {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  filter: drop-shadow(0 3px 0 rgba(15, 23, 42, 0.18));
+  transition: transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.contact-link:hover .contact-pixel-icon,
+.contact-link:focus-visible .contact-pixel-icon {
+  transform: translateY(-3px) rotate(-4deg) scale(1.08);
+}
+
+html.darkmode .contact-pixel-icon {
+  filter: drop-shadow(0 3px 0 rgba(0, 0, 0, 0.45));
+}
+
+/* ------------------------------------------------------------------ */
+/*  Skyline                                                           */
+/* ------------------------------------------------------------------ */
+.skyline {
+  position: relative;
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+  line-height: 0;
+  overflow: hidden;
+}
+
+.skyline__canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.skyline__bar {
+  position: absolute;
+  top: clamp(0.6rem, 1.5vw, 1rem);
+  left: clamp(0.75rem, 3vw, 2rem);
+  right: clamp(0.75rem, 3vw, 2rem);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  line-height: 1.2;
+  pointer-events: none;
+}
+
+.skyline__label,
+.skyline__cycle {
+  pointer-events: auto;
+  padding: 0.4rem 0.7rem;
+  border: 2px solid #1a1c2c;
+  border-radius: 0;
+  background: rgba(244, 244, 244, 0.92);
+  color: #1a1c2c;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  box-shadow: 3px 3px 0 #1a1c2c;
+}
+
+.skyline__cycle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.skyline__cycle:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 #1a1c2c;
+}
+
+.skyline__cycle:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 #1a1c2c;
+}
+
+.skyline__cycle:focus-visible,
+.skyline__noah:focus-visible {
+  outline: 2px dashed #ffcd75;
+  outline-offset: 3px;
+}
+
+#contact .skyline__label {
+  color: #1a1c2c !important;
+}
+
+#contact .skyline[data-phase="night"] .skyline__label,
+#contact .skyline[data-phase="dusk"] .skyline__label {
+  color: #f4f4f4 !important;
+}
+
+.skyline[data-phase="night"] .skyline__label,
+.skyline[data-phase="night"] .skyline__cycle,
+.skyline[data-phase="dusk"] .skyline__label,
+.skyline[data-phase="dusk"] .skyline__cycle {
+  background: rgba(26, 28, 44, 0.88);
+  border-color: #94b0c2;
+  color: #f4f4f4;
+  box-shadow: 3px 3px 0 #94b0c2;
+}
+
+.skyline__noah {
+  position: absolute;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.skyline__bubble {
+  position: absolute;
+  z-index: 2;
+  padding: 0.35rem 0.55rem;
+  border: 2px solid #1a1c2c;
+  background: #f4f4f4;
+  color: #1a1c2c;
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1.2;
+  white-space: nowrap;
+  box-shadow: 3px 3px 0 #1a1c2c;
+  opacity: 0;
+  transform: translate(-50%, -115%) scale(0.6);
+  transform-origin: bottom center;
+  pointer-events: none;
+}
+
+.skyline__bubble::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -8px;
+  width: 8px;
+  height: 8px;
+  margin-left: -4px;
+  background: #f4f4f4;
+  border-right: 2px solid #1a1c2c;
+  border-bottom: 2px solid #1a1c2c;
+  transform: rotate(45deg);
+}
+
+.skyline__bubble.is-visible {
+  animation: skyline-bubble 2.4s ease both;
+}
+
+@keyframes skyline-bubble {
+  0% { opacity: 0; transform: translate(-50%, -100%) scale(0.6); }
+  10%, 82% { opacity: 1; transform: translate(-50%, -115%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -125%) scale(1); }
+}
+
+@media (max-width: 520px) {
+  .skyline__label {
+    font-size: 0.6rem;
+  }
+
+  .skyline__cycle {
+    font-size: 0.6rem;
+    padding: 0.35rem 0.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skyline__bubble.is-visible {
+    animation: none;
+    opacity: 1;
+    transform: translate(-50%, -115%);
+  }
+}

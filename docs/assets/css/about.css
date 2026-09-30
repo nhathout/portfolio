@@ -1082,3 +1082,57 @@ html.darkmode #about .about-quest__art {
     transition: none;
   }
 }
+
+/* ------------------------------------------------------------------ */
+/*  Pinned tour: the panel fills the space under the header and the    */
+/*  cards are sized from BOTH window height and width (about three     */
+/*  across), so they never balloon on tall windows; the content sits  */
+/*  centered in the panel. Phones/swipe mode keep the original sizes.  */
+/* ------------------------------------------------------------------ */
+#about .about-tour.is-pinned {
+  --stop-w: clamp(250px, min((100vh - 390px) * 0.74, 27vw), 440px);
+}
+
+#about .about-tour.is-pinned .about-tour__pin {
+  height: calc(100vh - var(--about-pin-top, 96px) - 20px);
+  justify-content: center;
+}
+
+#about .about-tour.is-pinned .about-stop {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 var(--stop-w);
+}
+
+#about .about-tour.is-pinned .about-stop--wide {
+  flex-basis: calc(var(--stop-w) * 1.18);
+}
+
+#about .about-tour.is-pinned .about-stop__scene {
+  height: calc(var(--stop-w) * 0.86);
+}
+
+#about .about-tour.is-pinned .about-stop__sprite {
+  width: auto;
+  height: calc(var(--stop-w) * 0.5);
+}
+
+#about .about-tour.is-pinned .about-stop__badge {
+  width: auto;
+  height: calc(var(--stop-w) * 0.18);
+}
+
+#about .about-tour.is-pinned .about-stop__country {
+  font-size: clamp(1.02rem, calc(var(--stop-w) * 0.04), 1.2rem);
+}
+
+#about .about-tour.is-pinned .about-stop__title {
+  font-size: clamp(0.82rem, calc(var(--stop-w) * 0.03), 0.92rem);
+}
+
+/* photo deck: a touch smaller on laptop / half-screen windows; phones keep the full-width deck */
+@media (min-width: 641px) {
+  #about .about-deck {
+    width: min(100%, clamp(250px, 21vw, 300px));
+  }
+}

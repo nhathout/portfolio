@@ -1925,3 +1925,17 @@ html.darkmode .contact-copy__btn.is-copied {
     scroll-snap-align: start;
   }
 }
+
+.feature-brand__formerly {
+  display: inline-block;
+  margin-left: 0.55rem;
+  padding: 0.14rem 0.5rem;
+  border-radius: 999px;
+  border: 1px dashed rgba(148, 163, 184, 0.45);
+  color: #8ea6b4;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  vertical-align: 2px;
+}

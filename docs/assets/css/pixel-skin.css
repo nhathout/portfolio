@@ -1,0 +1,193 @@
+/*
+ * Pixel skin: one consistent 8-bit frame for cards, chips, and buttons so the
+ * pixel-art sections and everything else read as one style.
+ *
+ * The frame is drawn with box-shadows (no border-radius), which gives the
+ * classic notched pixel corners plus a hard drop shadow:
+ *   --px-u  pixel size (3px for cards/panels, 2px for chips/buttons)
+ *   --px-c  frame color (hover/focus switches it to --px-frame-hover)
+ * Loaded last; !important is used only where an older rule would win.
+ */
+
+:root {
+  --px-frame: #333c57;
+  --px-frame-hover: #00796b;
+  --px-drop: rgba(26, 28, 44, 0.2);
+  --px-frame-dark-panel: #2d4a54;
+}
+
+html.darkmode {
+  --px-frame: #3a4868;
+  --px-frame-hover: #38bdf8;
+  --px-drop: rgba(0, 0, 0, 0.55);
+  --px-frame-dark-panel: #1f5f5a;
+}
+
+/* ---------------- the frame ---------------- */
+:is(
+  .project-card, .award-card, .affiliation-card, .contact-card, .composer,
+  .project-dialog, .palette, .resume-popover, .mobile-menu-card,
+  .feature-shell, #mini-game.edex-sidequest,
+  #about .about-stop, #about .about-quest, #about .about-outro, #about .about-sheet,
+  .contact-link-inner, .projects-filter, .project-links a, .project-tags li,
+  .projects-more, .hero-now__chip, .hero-social, .award-ribbon,
+  .composer__topic, .composer__send, .composer__copy, .contact-copy__btn,
+  .project-status, .project-award-note, .project-upcoming-note, .project-upcoming-lock,
+  .project-lock-badge, .project-placeholder-label, .feature-tab, .feature-cta,
+  .palette-trigger, .theme-switch, .mobile-swipe-chip, .mobile-menu-action,
+  .resume-download, .toast, .skip-link, .project-dialog__navbtn, .project-dialog__close
+) {
+  --px-c: var(--px-frame);
+  --px-u: 2px;
+  border-radius: 0 !important;
+  border-color: transparent !important;
+  box-shadow:
+    0 calc(var(--px-u) * -1) 0 0 var(--px-c),
+    0 var(--px-u) 0 0 var(--px-c),
+    calc(var(--px-u) * -1) 0 0 0 var(--px-c),
+    var(--px-u) 0 0 0 var(--px-c),
+    calc(var(--px-u) * 2) calc(var(--px-u) * 3) 0 0 var(--px-drop) !important;
+}
+
+/* big surfaces get the chunkier 3px pixel */
+:is(
+  .project-card, .award-card, .affiliation-card, .contact-card, .composer,
+  .project-dialog, .palette, .resume-popover, .mobile-menu-card,
+  .feature-shell, #mini-game.edex-sidequest,
+  #about .about-stop, #about .about-quest, #about .about-outro, #about .about-sheet
+) {
+  --px-u: 3px;
+}
+
+/* dark showcase panels keep a frame that belongs to their own palette */
+:is(.feature-shell, #mini-game.edex-sidequest, #about .about-sheet) {
+  --px-c: var(--px-frame-dark-panel);
+}
+
+/* hover / focus / active: accent frame, the card lifts a pixel or two */
+:is(
+  .project-card, .award-card, .affiliation-card, .contact-link, .projects-more,
+  .hero-now__chip, .hero-social, .composer__topic, .composer__send, .composer__copy,
+  .contact-copy__btn, .feature-tab, .feature-cta, .palette-trigger, .theme-switch,
+  .project-links a, .projects-filter, #about .about-stop, #about .about-quest,
+  .project-dialog__navbtn, .project-dialog__close, .mobile-swipe-chip, .mobile-menu-action
+):is(:hover, :focus-visible) {
+  --px-c: var(--px-frame-hover);
+}
+
+#contact .contact-link:is(:hover, :focus-visible) .contact-link-inner {
+  --px-c: var(--px-frame-hover);
+}
+
+:is(.projects-filter.is-active, .composer__topic.is-active, .feature-tab.is-active, .mobile-swipe-chip.is-active, #about .about-stop.is-active) {
+  --px-c: var(--px-frame-hover);
+}
+
+/* pressing a pixel button pushes it into its shadow */
+:is(
+  .projects-more, .composer__send, .composer__copy, .contact-copy__btn, .feature-cta,
+  .project-links a, .projects-filter, .composer__topic, .feature-tab, .hero-social,
+  .palette-trigger, .theme-switch
+):active {
+  transform: translate(2px, 2px) !important;
+  box-shadow:
+    0 calc(var(--px-u) * -1) 0 0 var(--px-c),
+    0 var(--px-u) 0 0 var(--px-c),
+    calc(var(--px-u) * -1) 0 0 0 var(--px-c),
+    var(--px-u) 0 0 0 var(--px-c) !important;
+}
+
+/* inner media and overlays follow the square corners */
+.project-card .project-media,
+.project-card::before,
+.project-card::after,
+.award-card::after,
+#about .about-stop__scene,
+.feature-window,
+.project-dialog__media .project-media {
+  border-radius: 0 !important;
+}
+
+/* the "Locked" dashed inset reads better as a pixel dotted frame */
+.project-card--upcoming::before {
+  border-radius: 0 !important;
+  border-style: dotted !important;
+}
+
+/* award badge: a pixel medallion instead of a smooth circle */
+.project-award-badge {
+  border-radius: 0 !important;
+  clip-path: polygon(25% 0, 75% 0, 75% 8%, 92% 8%, 92% 25%, 100% 25%, 100% 75%, 92% 75%, 92% 92%, 75% 92%, 75% 100%, 25% 100%, 25% 92%, 8% 92%, 8% 75%, 0 75%, 0 25%, 8% 25%, 8% 8%, 25% 8%);
+}
+
+.project-award-icon,
+.award-body img,
+.edex-card__logo,
+.edex-spotlight__logo-shell {
+  border-radius: 0;
+}
+
+/* contact links: straight pixel tiles instead of skewed cards */
+#contact .contact-link {
+  transform: none;
+}
+
+#contact .contact-link:hover {
+  transform: translate(-2px, -2px);
+}
+
+#contact .contact-link-inner {
+  box-shadow:
+    0 calc(var(--px-u) * -1) 0 0 var(--px-c),
+    0 var(--px-u) 0 0 var(--px-c),
+    calc(var(--px-u) * -1) 0 0 0 var(--px-c),
+    var(--px-u) 0 0 0 var(--px-c),
+    calc(var(--px-u) * 2) calc(var(--px-u) * 3) 0 0 var(--px-drop) !important;
+}
+
+/* the CRT keeps its rounded tube, but its caption plate goes pixel */
+.crt__caption {
+  border-radius: 0 !important;
+}
+
+/* chips that were pills keep a little breathing room inside the frame */
+:is(.hero-now__chip, .projects-filter, .composer__topic, .feature-tab, .award-ribbon, .project-tags li) {
+  margin: 2px;
+}
+
+/* the resume card's download button is a pill inside a pixel card: square it */
+.resume-download,
+.resume-button {
+  border-radius: 0 !important;
+}
+
+/* focus rings stay visible on top of the frames */
+:is(.project-links a, .projects-filter, .composer__topic, .feature-tab, .hero-social, .contact-link):focus-visible {
+  outline: 2px dashed var(--px-frame-hover);
+  outline-offset: 5px;
+}
+
+/* ---------------- the arcade panel ---------------- */
+#mini-game :is(.edex-game-panel, .game-score-form, .game-leaderboard__item, .game-btn, .game-toolbar__btn, .game-powerups li, kbd, .game-score-form__input) {
+  border-radius: 0 !important;
+}
+
+#mini-game :is(.edex-game-panel, .game-btn, .game-toolbar__btn) {
+  --px-c: #2f4858;
+  --px-u: 2px;
+  box-shadow:
+    0 calc(var(--px-u) * -1) 0 0 var(--px-c),
+    0 var(--px-u) 0 0 var(--px-c),
+    calc(var(--px-u) * -1) 0 0 0 var(--px-c),
+    var(--px-u) 0 0 0 var(--px-c),
+    calc(var(--px-u) * 2) calc(var(--px-u) * 3) 0 0 rgba(0, 0, 0, 0.45) !important;
+}
+
+#mini-game :is(.game-btn, .game-toolbar__btn):is(:hover, :focus-visible) {
+  --px-c: #fac123;
+}
+
+/* the playfield keeps a thin rim but loses the rounded corners */
+#mini-game .edex-game-canvas {
+  border-radius: 0 !important;
+}

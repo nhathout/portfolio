@@ -1090,7 +1090,7 @@ html.darkmode #about .about-quest__art {
 /*  centered in the panel. Phones/swipe mode keep the original sizes.  */
 /* ------------------------------------------------------------------ */
 #about .about-tour.is-pinned {
-  --stop-w: clamp(250px, min((100vh - 390px) * 0.74, 27vw), 440px);
+  --stop-w: clamp(250px, min((100vh - 420px) * 0.74, 27vw), 440px);
 }
 
 #about .about-tour.is-pinned .about-tour__pin {
@@ -1130,9 +1130,14 @@ html.darkmode #about .about-quest__art {
   font-size: clamp(0.82rem, calc(var(--stop-w) * 0.03), 0.92rem);
 }
 
-/* photo deck: a touch smaller on laptop / half-screen windows; phones keep the full-width deck */
+/* photo deck: bigger on tablets and desktops; phones keep the full-width deck */
 @media (min-width: 641px) {
   #about .about-deck {
-    width: min(100%, clamp(250px, 21vw, 300px));
+    width: min(100%, clamp(380px, 30vw, 440px));
   }
+}
+
+/* breathing room between the flight route and the stop cards */
+#about .about-route {
+  margin-bottom: 1.6rem;
 }

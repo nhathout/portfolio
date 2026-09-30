@@ -19,8 +19,9 @@
 /*  Rail geometry: room for 32px waypoints centered on the line       */
 /* ------------------------------------------------------------------ */
 #education-experience .edex-rail.has-pixel-nodes {
-  --node-center: 1.2rem;
-  padding-left: 3rem;
+  --node-center: 1.3rem;
+  --rail-pad: 4.4rem;
+  padding-left: var(--rail-pad);
 }
 
 #education-experience .edex-rail.has-pixel-nodes .edex-rail__line {
@@ -43,7 +44,7 @@
 #education-experience .edex-node {
   position: absolute;
   top: 1.05rem;
-  left: calc(var(--node-center) - 3rem - 16px);
+  left: calc(var(--node-center) - var(--rail-pad) - 16px);
   z-index: 2;
   width: 32px;
   height: 32px;
@@ -343,12 +344,8 @@ html.darkmode #education-experience .edex-pill--experience {
 /* ------------------------------------------------------------------ */
 @media (max-width: 640px) {
   #education-experience .edex-rail.has-pixel-nodes {
-    --node-center: 0.95rem;
-    padding-left: 2.55rem;
-  }
-
-  #education-experience .edex-node {
-    left: calc(var(--node-center) - 2.55rem - 16px);
+    --node-center: 1rem;
+    --rail-pad: 3.35rem;
   }
 
   #education-experience .edex-walker {

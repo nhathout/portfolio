@@ -151,7 +151,7 @@
 
     function productName() {
         const title = document.getElementById('featuredTitle')?.textContent.trim();
-        return title || 'Wirepup';
+        return title || 'Tealbloc';
     }
 
     function getProjects() {

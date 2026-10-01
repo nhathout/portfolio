@@ -151,7 +151,7 @@
 
     function productName() {
         const title = document.getElementById('featuredTitle')?.textContent.trim();
-        return title || 'Tealbloc';
+        return title || 'BROS2';
     }
 
     function getProjects() {

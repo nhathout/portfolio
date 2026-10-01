@@ -84,23 +84,24 @@
             '................',
             '................'
         ],
+        // rounded glyph on Instagram's radial gradient (yellow bottom-left to blue top-right)
         instagram: [
-            '.VVVVVVVVVVVVVV.',
-            'VVVVVVVVVVVVVVVV',
-            'VVwwwwwwwwwwwwVV',
-            'VVwVVVVVVVVVVwVV',
-            'XXwXXXXXXXXwXwXX',
-            'XXwXXXwwwwXXXwXX',
-            'XXwXXwXXXXwXXwXX',
-            'XXwXXwXXXXwXXwXX',
-            'YYwYYwYYYYwYYwYY',
-            'YYwYYwYYYYwYYwYY',
-            'YYwYYYwwwwYYYwYY',
-            'YYwYYYYYYYYYYwYY',
-            'ZZwZZZZZZZZZZwZZ',
-            'ZZwwwwwwwwwwwwZZ',
-            'ZZZZZZZZZZZZZZZZ',
-            '.ZZZZZZZZZZZZZZ.'
+            '.UUUUUUUUUUUUUU.',
+            'VVVVVVVVVVUUUUUU',
+            'VVVwwwwwwwwwwUUU',
+            'VVwVVVVVVVVVVwUU',
+            'XXwXXXXXXVVwVwVU',
+            'XXwXXXwwwwXVVwVV',
+            'XXwXXwXXXXwXXwVV',
+            'YYwYYwYYXXwXXwVV',
+            'YYwYYwYYYYwXXwXV',
+            'YYwYYwYYYYwYXwXX',
+            'ZZwZZZwwwwYYYwXX',
+            'ZZwZZZZZZYYYYwXX',
+            'ZZwZZZZZZZZYYwXX',
+            'QQQwwwwwwwwwwYYX',
+            'QQQQQQQQZZZZYYYX',
+            '.QQQQQQQQZZZZYY.'
         ],
         phone: [
             '................',
@@ -123,10 +124,19 @@
     };
     const ICON_COLORS = {
         I: '#0a66c2',
+        U: '#5851db',
         V: '#833ab4',
         X: '#c13584',
         Y: '#e1306c',
-        Z: '#f77737'
+        Z: '#f77737',
+        Q: '#ffdc80',
+        // the same Instagram colors mixed toward white, for the hover shine
+        u: '#b4b1ef',
+        v: '#c7a6dd',
+        x: '#e3a4c8',
+        y: '#f2a2bd',
+        z: '#fbc2a5',
+        q: '#ffefc6'
     };
 
     function shift(rows, dx) {
@@ -139,7 +149,16 @@
             const beat = n % 6;
             return beat === 0 ? shift(ICONS.phone, -1) : beat === 1 ? shift(ICONS.phone, 1) : beat === 2 ? shift(ICONS.phone, -1) : ICONS.phone;
         },
-        instagram: n => (n % 5 === 0 ? ICONS.instagram.map(row => row.replace(/[VXYZ]/g, ch => (ch === 'V' ? 'w' : ch))) : ICONS.instagram),
+        // a diagonal shine sweeps across the tile, then it rests for a beat
+        instagram: n => {
+            const k = n % 12;
+            if (k < 1 || k > 7) return ICONS.instagram;
+            const s0 = (k - 1) * 5 - 1;
+            return ICONS.instagram.map((row, y) => row.replace(/[UVXYZQ]/g, (ch, x) => {
+                const s = x + y;
+                return s === s0 || s === s0 + 1 || s === s0 + 3 ? ch.toLowerCase() : ch;
+            }));
+        },
         github: n => (n % 8 === 3 ? ICONS.github.map((row, y) => (y === 6 ? row.replace('wwkwwwwkww', 'wwwwwwwwww') : row)) : ICONS.github),
         linkedin: n => (n % 4 < 2 ? ICONS.linkedin : ICONS.linkedin.map(row => row.replace(/I/g, 'b')))
     };
@@ -156,10 +175,16 @@
         const frames = ICON_FRAMES[name];
         const anim = frames ? animate(canvas, n => frames(n)) : null;
         if (anim) {
-            // animate() paints with the base palette only; wrap it so brand colors survive
-            anim.step = n => redraw(canvas, c => paint(c, frames(n), 0, 0, ICON_COLORS));
+            // animate() paints with the base palette only; wrap it so brand colors survive.
+            // The ticker is shared, so count frames from the hover to start each loop at frame 1.
+            let origin = null;
+            anim.step = n => {
+                if (origin === null) origin = n - 1;
+                redraw(canvas, c => paint(c, frames(n - origin), 0, 0, ICON_COLORS));
+            };
             const baseStop = anim.stop;
             anim.stop = () => {
+                origin = null;
                 baseStop();
                 redraw(canvas, c => paint(c, ICONS[name], 0, 0, ICON_COLORS));
             };

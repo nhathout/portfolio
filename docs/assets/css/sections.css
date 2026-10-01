@@ -1,20 +1,11 @@
 /*
- * Hero ANSI layer + upgrades to the Experience, Awards, and Contact sections.
+ * Hero polish + upgrades to the Experience, Awards, and Contact sections.
  * Colors come from the theme variables in index.html (:root / html.darkmode).
  */
 
 /* ------------------------------------------------------------------ */
 /*  Hero                                                              */
 /* ------------------------------------------------------------------ */
-.hero-panel > .hero-ascii {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 74%, transparent 97%);
-  mask-image: linear-gradient(180deg, #000 0%, #000 74%, transparent 97%);
-}
-
 /* keep the copy crisp now that the light-mode art is at full strength */
 html:not(.darkmode) .hero-panel .hero-intro,
 html:not(.darkmode) .hero-panel .hero-title {

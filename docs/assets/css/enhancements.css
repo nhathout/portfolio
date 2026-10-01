@@ -326,7 +326,6 @@ kbd {
     transform: none !important;
   }
 
-  .hero-ascii,
   .resume-popover,
   .toast {
     display: none !important;
@@ -807,6 +806,82 @@ kbd {
   .feature-brand__mark {
     width: 3.2rem;
     height: 3.2rem;
+  }
+}
+
+/* Teaser variant: one compact card until early access opens */
+.feature-shell--teaser {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-areas: "copy media";
+  align-items: center;
+}
+
+.feature-shell--teaser .feature-award {
+  margin-top: 1.4rem;
+  max-width: none;
+}
+
+.feature-peek {
+  grid-area: media;
+  position: relative;
+  min-width: 0;
+  margin: 0;
+  aspect-ratio: 16 / 10;
+  border-radius: 1.1rem;
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: #0f1319;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45);
+}
+
+.feature-peek img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* scaled up so the blur never shows soft edges */
+  transform: scale(1.08);
+  filter: blur(5px) saturate(0.95) brightness(0.9);
+  transition: filter 500ms ease;
+}
+
+.feature-shell--teaser:hover .feature-peek img {
+  filter: blur(3px) saturate(1) brightness(1);
+}
+
+.feature-peek__lock {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  padding: 1rem;
+  text-align: center;
+  background: radial-gradient(circle at 50% 50%, rgba(10, 12, 17, 0.55), rgba(10, 12, 17, 0.25) 70%);
+  color: #e6f4f3;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.feature-peek__badge {
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  background: var(--bros-teal);
+  color: var(--bros-ink);
+  font-weight: 900;
+  letter-spacing: 0.22em;
+}
+
+@media (max-width: 1100px) {
+  .feature-shell--teaser {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "media"
+      "copy";
   }
 }
 
@@ -1839,8 +1914,20 @@ html.darkmode .contact-copy__btn.is-copied {
     display: none;
   }
 
+  /* a long section label ("/ projects") gives way instead of pushing the menu button off-screen */
   .site-brand {
     white-space: nowrap;
+    min-width: 0;
+  }
+
+  .site-header #navSectionIndicator {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .header-actions {
+    flex-shrink: 0;
   }
 
   #resumePopover {
@@ -1893,6 +1980,13 @@ html.darkmode .contact-copy__btn.is-copied {
   #resumePopover .resume-popover__close::before,
   #resumePopover .resume-popover__close::after {
     width: 18px;
+  }
+}
+
+/* too narrow for even a truncated section label next to the name */
+@media (max-width: 380px) {
+  .site-header #navSectionIndicator {
+    display: none;
   }
 }
 

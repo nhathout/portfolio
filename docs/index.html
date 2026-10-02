@@ -26,11 +26,11 @@
   <meta content="Noah Hathout · Robotics &amp; AI Engineer" name="twitter:title"/>
   <meta content="Robotics + AI engineer at Boston University and Universal Robots. Projects, experience, and BROS2, a visual builder for ROS 2." name="twitter:description"/>
   <meta content="https://noahhathout.com/assets/opt/og-card.jpg" name="twitter:image"/>
-  <link href="assets/images/PixelMe_50x50.jpg" rel="icon"/>
-  <link href="assets/images/PixelMe_50x50.jpg" rel="apple-touch-icon"/>
+  <link href="assets/images/pixelme-icon.png" rel="icon" type="image/png"/>
+  <link href="assets/images/pixelme-touch.png" rel="apple-touch-icon"/>
   <link href="assets/css/enhancements.css?v=2026-09-30" rel="stylesheet"/>
-  <link href="assets/css/sections.css?v=2026-09-30" rel="stylesheet"/>
-  <link href="assets/css/about.css?v=2026-10-01" rel="stylesheet"/>
+  <link href="assets/css/sections.css?v=2026-10-02" rel="stylesheet"/>
+  <link href="assets/css/about.css?v=2026-10-02" rel="stylesheet"/>
   <link href="assets/css/game.css?v=2026-09-29" rel="stylesheet"/>
   <link href="assets/css/skills.css?v=2026-09-29" rel="stylesheet"/>
   <link href="assets/css/edex.css?v=2026-09-29" rel="stylesheet"/>
@@ -43,7 +43,7 @@
      "name": "Noah Hathout",
      "alternateName": "Noah Jean-Pierre Hathout",
      "url": "https://noahhathout.com/",
-     "image": "https://noahhathout.com/assets/images/PixelMe.jpg",
+     "image": "https://noahhathout.com/assets/images/PixelMe.png",
      "jobTitle": "Robotics & AI Engineer",
      "worksFor": { "@type": "Organization", "name": "Universal Robots" },
      "alumniOf": { "@type": "CollegeOrUniversity", "name": "Boston University" },
@@ -222,7 +222,7 @@
     <div class="container mx-auto px-6 flex flex-col justify-between items-center relative">
      <div class="flex flex-col relative">
       <div class="relative mx-auto mt-10">
-       <img alt="Pixel-art portrait of Noah" class="w-36 mx-auto pixel-portrait" fetchpriority="high" height="144" src="assets/opt/PixelMe.webp" width="144"/>
+       <img alt="Pixel-art portrait of Noah" class="w-36 mx-auto pixel-portrait" fetchpriority="high" height="156" src="assets/opt/PixelMe.webp" style="image-rendering: pixelated" width="156"/>
       </div>
       <div class="resume-cta">
        <a class="resume-cta-button resume-button resume-button--hero" id="resumeBox" download="noahhathout_cv.pdf" href="assets/files/noah_hathout_resume.pdf">
@@ -298,7 +298,8 @@
         Player one · press start
        </p>
        <h2 class="title-font sm:text-5xl text-5xl font-bold text-gray-900 about-title" data-reveal="">
-        About Me 🇪🇬🇮🇹🇺🇸
+        About Me
+        <span aria-label="Egypt, Italy, United States" class="about-flags" role="img"><span>🇪🇬</span><span>🇮🇹</span><span>🇺🇸</span></span>
        </h2>
        <p class="about-lede" data-reveal="">
         I'm Noah Jean-Pierre Hathout: a robotics &amp; AI engineer, tech enthusiast, and avid gamer. I'm finishing my M.S. in Robotics &amp; Autonomous Systems at Boston University while doing my thesis research as an AI Engineer Intern at Universal Robots, after earning my B.S. in Computer Engineering there (cum laude, 2025). I love exploring how machines can learn and interact with the world.
@@ -308,7 +309,7 @@
        </p>
        <section aria-labelledby="aboutSheetTitle" class="about-sheet" data-reveal="">
         <header class="about-sheet__head">
-         <img alt="" class="about-sheet__avatar" height="56" src="assets/opt/PixelMe.webp" width="56"/>
+         <img alt="" class="about-sheet__avatar" height="52" src="assets/opt/PixelMe.webp" width="52"/>
          <div>
           <p class="about-sheet__eyebrow">
            Character sheet
@@ -1393,10 +1394,8 @@
      <div class="contact-stage">
       <figure class="crt" data-reveal="">
        <button aria-label="Flip the channel" class="crt__screen" data-crt-screen="" type="button">
-        <video autoplay="" class="contact-video" loop="" muted="" playsinline="">
-         <source src="assets/clips/egypt_gif.mp4" type="video/mp4"/>
-         Your browser does not support the video tag.
-        </video>
+        <canvas aria-label="NJPH·TV, a pixel-art TV: me, my robot and a camel walking like Egyptians in front of the pyramids. Tap to change the channel." class="crt__canvas" data-crt-canvas="" height="126" role="img" width="168">
+        </canvas>
         <span aria-hidden="true" class="crt__scanlines">
         </span>
         <span aria-hidden="true" class="crt__static">
@@ -1592,7 +1591,7 @@
   <footer class="site-footer text-gray-600 body-font font-mono">
    <div class="container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col">
     <a aria-label="Back to top" class="flex title-font font-medium items-center md:justify-start justify-center text-gray-900" href="#">
-     <img alt="" class="bg-gray-500" height="50" src="assets/images/PixelMe_50x50.jpg" width="50"/>
+     <img alt="" class="site-footer__avatar" height="52" src="assets/opt/PixelMe.webp" width="52"/>
      <span class="ml-3 text-xl">
       [NH]
      </span>
@@ -1743,6 +1742,7 @@
       --header-bg: rgba(255, 255, 255, 0.82);
       --header-border: rgba(100, 116, 139, 0.34);
       --header-shadow: 0 16px 36px rgba(148, 163, 184, 0.14);
+      --hero-sky: linear-gradient(180deg, #b9e2e8 0%, #dcf1ee 46%, #f3f6ea 78%, var(--surface) 100%);
       --hero-filter: saturate(0.98) brightness(1.1);
       --hero-transform: scale(1);
       --hero-overlay: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(245, 248, 252, 0.45) 40%, rgba(245, 248, 252, 0.98) 100%);
@@ -1788,6 +1788,7 @@
       --header-bg: rgba(7, 17, 32, 0.78);
       --header-border: rgba(148, 163, 184, 0.18);
       --header-shadow: 0 18px 44px rgba(2, 6, 23, 0.3);
+      --hero-sky: linear-gradient(180deg, #03060f 0%, #0a1630 50%, #112842 80%, var(--surface) 100%);
       --hero-filter: saturate(1.06) brightness(0.55) hue-rotate(-10deg);
       --hero-transform: scale(1);
       --hero-overlay: linear-gradient(180deg, rgba(6, 12, 28, 0.2) 0%, rgba(7, 17, 32, 0.62) 44%, rgba(7, 17, 32, 0.98) 100%);
@@ -1996,6 +1997,11 @@
     }
     #about .about-polaroid img {
       background: var(--surface-strong);
+    }
+    .site-footer__avatar {
+      width: 52px;
+      height: 52px;
+      image-rendering: pixelated;
     }
     .site-footer {
       background: var(--surface-soft);
@@ -3474,13 +3480,8 @@
       overflow: hidden;
       /* the art stays readable in light mode: only a soft mist behind the
          centered copy and a fade into the page at the bottom */
-      background:
-        radial-gradient(ellipse 30% 38% at 50% 62%, rgba(246, 249, 244, 0.66), rgba(246, 249, 244, 0) 74%),
-        linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.04) 48%, rgba(255, 255, 255, 0.46) 84%, rgba(255, 255, 255, 0.9) 100%),
-        url('assets/images/pixel-background.jpg');
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: cover;
+      /* hero-art.js paints a pixel landscape over this; the gradient is the no-JS sky */
+      background: var(--hero-sky);
     }
     .hero-panel::before {
       content: '';
@@ -3488,11 +3489,8 @@
       inset: 0;
       background:
         var(--hero-glow),
-        var(--hero-overlay),
-        url('assets/images/pixel-space-wallpaper.jpg');
+        var(--hero-overlay);
       background-repeat: no-repeat;
-      background-position: center, center, center;
-      background-size: auto, auto, cover;
       filter: var(--hero-filter);
       transform: var(--hero-transform);
       opacity: 0;
@@ -4263,7 +4261,9 @@
 
     /* Adjust leaderboard font-size and layout are done in JS inline styles */
   </style>
-  <script defer="" src="pixel-kit.js?v=2026-09-29">
+  <script defer="" src="pixel-kit.js?v=2026-10-02">
+  </script>
+  <script defer="" src="hero-art.js?v=2026-10-02">
   </script>
   <script defer="" src="egg.js">
   </script>
@@ -4273,11 +4273,13 @@
   </script>
   <script defer="" src="game.js?v=2026-09-29">
   </script>
-  <script defer="" src="about-portrait.js?v=2026-10-01">
+  <script defer="" src="about-portrait.js?v=2026-10-02">
   </script>
-  <script defer="" src="about.js?v=2026-10-01">
+  <script defer="" src="about.js?v=2026-10-02">
   </script>
-  <script defer="" src="sections.js?v=2026-09-29">
+  <script defer="" src="sections.js?v=2026-10-02">
+  </script>
+  <script defer="" src="tv-channels.js?v=2026-10-02">
   </script>
   <script defer="" src="skills.js?v=2026-09-30">
   </script>

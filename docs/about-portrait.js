@@ -7,13 +7,13 @@
 (() => {
     const root = document.getElementById('aboutPortrait');
     const canvas = root?.querySelector('[data-portrait-canvas]');
-    if (!root || !canvas?.getContext || root.closest('[hidden]')) return;
+    if (!root || !canvas?.getContext || root.closest('[hidden]') || !window.PixelKit?.art) return;
 
     const W = 240;
     const H = 300;
     const SEA = 170;   // horizon row
     const M = 12;      // spare columns on each side of the layers that move with parallax
-    const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+    const { reducedMotion } = window.PixelKit;
 
     // -----------------------------------------------------------------
     //  Palettes: one per time of day. Ramps run dark -> light.
@@ -100,108 +100,10 @@
         ['#fff0ee', '#ff7a6a', '#b13e53']
     ];
 
-    // -----------------------------------------------------------------
-    //  Pixel helpers
-    // -----------------------------------------------------------------
-    const hexRgb = hex => {
-        const n = parseInt(hex.slice(1), 16);
-        return [n >> 16, (n >> 8) & 255, n & 255];
-    };
-    const u32 = hex => {
-        const [r, g, b] = hexRgb(hex);
-        return ((255 << 24) | (b << 16) | (g << 8) | r) >>> 0;
-    };
-    const u32Map = obj => Object.fromEntries(Object.entries(obj).map(([k, v]) => [k, u32(v)]));
-    const mixHex = (a, b, f) => {
-        const ca = hexRgb(a);
-        const cb = hexRgb(b);
-        return '#' + ca.map((v, i) => Math.round(v + (cb[i] - v) * f).toString(16).padStart(2, '0')).join('');
-    };
-    // insert in-between shades so long gradients dither finely
-    const expand = (ramp, k = 2) => ramp.flatMap((hex, i) => (i === ramp.length - 1 ? [hex] : Array.from({ length: k }, (_, j) => mixHex(hex, ramp[i + 1], j / k))));
-    const mixU32 = (a, b, f) => {
-        const r = (a & 255) + (((b & 255) - (a & 255)) * f);
-        const g = ((a >> 8) & 255) + ((((b >> 8) & 255) - ((a >> 8) & 255)) * f);
-        const bl = ((a >> 16) & 255) + ((((b >> 16) & 255) - ((a >> 16) & 255)) * f);
-        return ((255 << 24) | (Math.round(bl) << 16) | (Math.round(g) << 8) | Math.round(r)) >>> 0;
-    };
-
-    // A canvas plus a 32-bit view of its pixels; done() pushes the pixels to the canvas.
-    function bitmap(w, h) {
-        const c = document.createElement('canvas');
-        c.width = w;
-        c.height = h;
-        const ctx = c.getContext('2d');
-        const img = ctx.createImageData(w, h);
-        const buf = new Uint32Array(img.data.buffer);
-        return {
-            c, w, h, buf,
-            set(x, y, col) {
-                x = Math.floor(x);
-                y = Math.floor(y);
-                if (x >= 0 && y >= 0 && x < w && y < h) buf[y * w + x] = col;
-            },
-            has(x, y) {
-                x = Math.floor(x);
-                y = Math.floor(y);
-                return x >= 0 && y >= 0 && x < w && y < h && buf[y * w + x] !== 0;
-            },
-            done() {
-                ctx.putImageData(img, 0, 0);
-                return c;
-            }
-        };
-    }
-
-    // 4x4 ordered dither: pick(ramp, 2.3, x, y) mixes ramp[2] and ramp[3] 70/30.
-    const BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5];
-    const th = (x, y) => (BAYER[((y & 3) << 2) | (x & 3)] + 0.5) / 16;
-    function pick(ramp, v, x, y) {
-        const n = ramp.length - 1;
-        if (!(v > 0)) return ramp[0];
-        if (v >= n) return ramp[n];
-        const i = Math.floor(v);
-        return v - i > th(x, y) ? ramp[i + 1] : ramp[i];
-    }
-
-    const hash = (x, y = 0, s = 0) => {
-        let h = Math.imul(x | 0, 374761393) + Math.imul(y | 0, 668265263) + Math.imul(s | 0, 1442695041);
-        h = Math.imul(h ^ (h >>> 13), 1274126177);
-        return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
-    };
-    const smooth = t => t * t * (3 - 2 * t);
-    function noise(x, y = 0, s = 0) {
-        const xi = Math.floor(x);
-        const yi = Math.floor(y);
-        const u = smooth(x - xi);
-        const v = smooth(y - yi);
-        const a = hash(xi, yi, s);
-        const b = hash(xi + 1, yi, s);
-        const c = hash(xi, yi + 1, s);
-        const d = hash(xi + 1, yi + 1, s);
-        return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v;
-    }
-    const fbm = (x, y, s) => noise(x, y, s) * 0.6 + noise(x * 2.1, y * 2.1, s + 7) * 0.28 + noise(x * 4.3, y * 4.3, s + 13) * 0.12;
-    const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
-
-    function rng(seed) {
-        return () => {
-            seed = (seed + 0x6d2b79f5) | 0;
-            let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
-            t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-            return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-        };
-    }
-
-    // Paint string sprites ('.' = transparent) through a palette map.
-    function stamp(L, rows, dx, dy, pal, flip = false) {
-        rows.forEach((row, y) => {
-            for (let x = 0; x < row.length; x++) {
-                const key = row[flip ? row.length - 1 - x : x];
-                if (key !== '.' && pal[key] !== undefined) L.set(dx + x, dy + y, pal[key]);
-            }
-        });
-    }
+    const {
+        hexRgb, u32, u32Map, expand, mixU32, bitmap, BAYER, th, pick,
+        hash, noise, fbm, clamp, rng, stamp, paintGlow, crispWidth, loop
+    } = window.PixelKit.art;
 
     // -----------------------------------------------------------------
     //  Sky, sun / moon, stars
@@ -569,26 +471,6 @@
         block(cx - 10, 50, cx + 9, 55);
         // a little moss
         [[cx - 6, 45], [cx - 5, 45], [cx - 9, 50], [cx - 8, 50], [cx - 2, 26]].forEach(([x, y]) => L.set(x, y, pick(P.grass.map(u32), 1, x, y)));
-        return L.done();
-    }
-
-    // radial glow in five alpha steps, dithered between steps (drawn with 'lighter')
-    function paintGlow(radius, hex, strength, squash = 1) {
-        const size = radius * 2 + 1;
-        const L = bitmap(size, size);
-        const [r, g, b] = hexRgb(hex);
-        const steps = 5;
-        for (let y = 0; y < size; y++) {
-            for (let x = 0; x < size; x++) {
-                const d = Math.hypot(x - radius, (y - radius) / squash) / radius;
-                if (d >= 1) continue;
-                const q = (1 - d) * (1 - d) * steps;
-                const lvl = Math.floor(q) + (q - Math.floor(q) > th(x, y) ? 1 : 0);
-                if (!lvl) continue;
-                const a = Math.round((lvl / steps) * strength * 255);
-                L.set(x, y, ((a << 24) | (b << 16) | (g << 8) | r) >>> 0);
-            }
-        }
         return L.done();
     }
 
@@ -1455,7 +1337,7 @@
             m.y += m.vy * dt;
             if (m.age > 0.8) state.meteor = null;
         }
-        if (state.mode === 'night' && visible) {
+        if (state.mode === 'night' && runner.visible) {
             state.nextMeteor -= dt;
             if (state.nextMeteor <= 0) {
                 const dir = rnd() > 0.5 ? 1 : -1;
@@ -1494,36 +1376,17 @@
     // -----------------------------------------------------------------
     //  Loop: ~30 fps while on screen, still under reduced motion
     // -----------------------------------------------------------------
-    let visible = false;
-    let raf = 0;
-    let last = 0;
-    function frame(now) {
-        raf = 0;
-        if (!visible || document.hidden) return;
-        const dt = Math.min(0.1, (now - last) / 1000);
-        if (now - last >= 32) {
-            last = now;
-            render(dt);
-        }
-        raf = requestAnimationFrame(frame);
-    }
     let started = false;   // layers are only built once the portrait nears the viewport
-    function play() {
-        if (!started) {
+    const runner = loop(canvas, render, {
+        margin: '300px',
+        onVisible() {
+            started = true;
             // build the other time of day while the browser is idle, so the switch is instant
             const later = window.requestIdleCallback || (fn => setTimeout(fn, 1500));
             later(() => layersFor(state.mode === 'dusk' ? 'night' : 'dusk'));
+            if (reducedMotion) render(0);
         }
-        started = true;
-        if (reducedMotion) {
-            render(0);
-            return;
-        }
-        if (!raf) {
-            last = performance.now();
-            raf = requestAnimationFrame(frame);
-        }
-    }
+    });
     function nudge() {
         // one-off redraw for reduced motion (a tap, a mode switch)
         if (reducedMotion) render(0);
@@ -1534,31 +1397,13 @@
         render(0);
     }
 
-    if ('IntersectionObserver' in window) {
-        new IntersectionObserver(entries => {
-            visible = entries[0].isIntersecting;
-            if (visible) play();
-        }, { rootMargin: '300px' }).observe(canvas);
-    } else {
-        visible = true;
-        play();
-    }
-    document.addEventListener('visibilitychange', () => {
-        if (!document.hidden && visible) play();
-    });
-
     // -----------------------------------------------------------------
     //  Crisp sizing: whole device pixels per art pixel when that fits
     // -----------------------------------------------------------------
     const frameEl = root.querySelector('[data-portrait-frame]') || canvas.parentElement;
     function fit() {
         const avail = root.clientWidth;
-        if (!avail) return;
-        const dpr = window.devicePixelRatio || 1;
-        const k = Math.floor((avail * dpr) / W);
-        let css = (k * W) / dpr;
-        if (k < 1 || css < avail * 0.84) css = avail;
-        frameEl.style.width = `${css}px`;
+        if (avail) frameEl.style.width = `${crispWidth(avail, W)}px`;
     }
     fit();
     if ('ResizeObserver' in window) new ResizeObserver(fit).observe(root);

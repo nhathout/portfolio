@@ -227,7 +227,7 @@
     }
 
     // ---------------------------------------------------------------------
-    //  Contact: Boston clock, CRT channels, note composer
+    //  Contact: Boston clock and the note composer (the TV is tv-channels.js)
     // ---------------------------------------------------------------------
     function initClock() {
         const clocks = Array.from(document.querySelectorAll('[data-boston-clock]'));
@@ -248,32 +248,6 @@
         };
         render();
         setInterval(render, 30000);
-    }
-
-    function initCrt() {
-        const screen = document.querySelector('[data-crt-screen]');
-        if (!screen) return;
-        const video = screen.querySelector('video');
-        const label = screen.querySelector('[data-crt-channel]');
-        const channels = [
-            { name: 'CH 03', filter: 'none' },
-            { name: 'CH 04 · B&W', filter: 'grayscale(1) contrast(1.15)' },
-            { name: 'CH 05 · 1970', filter: 'sepia(0.85) saturate(1.2)' },
-            { name: 'CH 06 · VAPOR', filter: 'hue-rotate(160deg) saturate(1.4)' },
-            { name: 'CH 07 · NIGHT', filter: 'invert(1) hue-rotate(180deg)' }
-        ];
-        let index = 0;
-        screen.addEventListener('click', () => {
-            index = (index + 1) % channels.length;
-            screen.classList.remove('is-flipping');
-            void screen.offsetWidth; // restart the static burst
-            screen.classList.add('is-flipping');
-            setTimeout(() => {
-                if (video) video.style.filter = channels[index].filter;
-                if (label) label.textContent = channels[index].name;
-            }, reducedMotion ? 0 : 160);
-            setTimeout(() => screen.classList.remove('is-flipping'), 520);
-        });
     }
 
     function initComposer() {
@@ -315,6 +289,5 @@
     initEdex();
     initAwards();
     initClock();
-    initCrt();
     initComposer();
 })();

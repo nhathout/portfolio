@@ -14,9 +14,11 @@ Everything that ships lives in [`docs/`](docs/) (served by GitHub Pages at [noah
 | `docs/index.html` | Page markup plus most styles (inline `<style>` at the bottom) |
 | `docs/script.js` | Theme toggle, nav, experience timeline, skills cubes, **project data** (`projectEntries`), project grid + detail dialog |
 | `docs/interactions.js` | Command palette (`Ctrl/⌘ K` or `/`), scroll reveals, copy-email toast, flag-emoji fallback |
-| `docs/sections.js` | Experience timeline progress + durations, award unlocks/tilt, contact clock, CRT, and note composer |
+| `docs/sections.js` | Experience timeline progress + durations, award unlocks/tilt, contact clock, and note composer |
 | `docs/contact.js` | Contact pixel-art icons and the Boston skyline (sky follows Boston time) |
-| `docs/pixel-kit.js` | Shared pixel-art palette + painter used by the Contact/Skills/Experience art |
+| `docs/pixel-kit.js` | Shared pixel-art palette + painter (Contact/Skills/Experience art), plus `PixelKit.art`: dithered ramps, noise, bitmaps, glows, crisp sizing, and a visibility-aware animation loop used by the code-drawn scenes |
+| `docs/hero-art.js` | Hero: the PixelMe portrait (a 52px sprite in `FACE`, peace sign on hover) and the landscape behind the copy (misty morning in light mode, aurora night in dark mode; the robot follows the cursor, taps send a paper plane or a shooting star) |
+| `docs/tv-channels.js` | The Contact CRT's channels, drawn at 168×126: Giza, Roma, a [Course]out attract loop, and a test card (tap the screen to flip) |
 | `docs/about.js` | About section: character sheet, photo deck (`aboutPhotos`), pixel-art world tour (`aboutStops`), side quests (`aboutQuests`) |
 | `docs/about-portrait.js` | About section's pixel-art portrait (straw hat, Fuji, floating torii, sakura): drawn in code on a 240×300 canvas, with dusk/night palettes in `MODES` that follow the site theme, plus fireworks, ripples, and speech bubbles on tap |
 | `docs/game.js` | Atari [Course]out: the Breakout mini-game and its shared leaderboard |
@@ -28,6 +30,8 @@ Everything that ships lives in [`docs/`](docs/) (served by GitHub Pages at [noah
 **About section:** add photos to `aboutPhotos` and tour stops to `aboutStops` at the top of `docs/about.js` (a stop's optional `photo` replaces its pixel scene). The photo deck is parked for now: its `.about-intro__deck` block in `index.html` has `hidden`, and the pixel portrait (`.about-intro__portrait`) sits in its place. Move `hidden` from one block to the other to swap back (the deck loads no photos while it's hidden).
 
 **Server (`server.js`, deployed on Render):** besides the game leaderboard it hosts the BROS2 early-access waitlist (the page doesn't call it right now): `GET /api/bros2/interest` (count), `POST /api/bros2/interest` (`{ email, role? }`), and `GET /api/bros2/interest/export`, which needs the header `x-admin-key` to match the `INTEREST_ADMIN_KEY` environment variable (export is off when it's unset). `DB_DIR` overrides the database folder (default `/data/db`) for local testing.
+
+**PixelMe:** the sprite lives in `FACE` in `docs/hero-art.js`. The static copies (`assets/opt/PixelMe.webp`, `assets/images/pixelme-icon.png`, `pixelme-touch.png`, `PixelMe.png`, and the portrait on `assets/opt/og-card.jpg`) are that sprite exported at whole-number scales, so re-export them if you change it.
 
 **Adding images:** drop the original in `docs/assets/images/`, then save a web-sized copy (WebP, around 1000px wide for projects and 320px for logos) in `docs/assets/opt/` and point the page at that copy.
 

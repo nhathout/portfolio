@@ -21,6 +21,36 @@ html:not(.darkmode) .hero-panel .pixel-portrait {
   box-shadow: 0 0 0 6px rgba(246, 249, 244, 0.55), 0 28px 60px rgba(15, 23, 42, 0.32);
 }
 
+/* the pixel landscape hero-art.js paints behind the copy */
+.hero-panel > .hero-scene {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+
+.hero-panel.has-scene::before {
+  display: none;
+}
+
+/* hand the near ridge over to the About section in the last stretch */
+.hero-panel.has-scene::after {
+  background: linear-gradient(180deg, transparent 0%, transparent 86%, var(--surface) 100%);
+}
+
+/* the code-drawn portrait: crisp pixels, and the peek over the glasses is the hover */
+.hero-panel .hero-me {
+  image-rendering: pixelated;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.hero-panel .hero-me:hover {
+  transform: none;
+}
+
 /* isolation keeps the hover fill (a z-index:-1 pseudo-element) above this backdrop */
 html:not(.darkmode) .hero-panel .resume-button--hero {
   isolation: isolate;
@@ -238,17 +268,13 @@ html.darkmode .edex-rail .edex-card.is-current::after {
   outline-offset: 4px;
 }
 
-.crt .contact-video {
+/* the channels are drawn by tv-channels.js at 168x126 and scaled up crisp */
+.crt .crt__canvas {
   display: block;
   width: 100%;
   height: auto;
-  max-height: none;
   aspect-ratio: 4 / 3;
-  border: none;
-  border-radius: 0;
-  box-shadow: none;
-  object-fit: cover;
-  transition: filter 200ms ease;
+  image-rendering: pixelated;
 }
 
 .crt__scanlines {
@@ -284,7 +310,7 @@ html.darkmode .edex-rail .edex-card.is-current::after {
   animation: crt-static 520ms steps(6) both;
 }
 
-.crt__screen.is-flipping .contact-video {
+.crt__screen.is-flipping .crt__canvas {
   animation: crt-roll 520ms ease both;
 }
 

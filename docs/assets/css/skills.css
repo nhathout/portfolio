@@ -1,0 +1,601 @@
+/*
+ * Skills: the 3D logo cubes (base rules live inline in index.html) dressed in
+ * the site's pixel style: stepped-corner frames on every face, pixel name
+ * plates, pixel tabs/pager, a pixel-framed panel, and an RPG-style item box.
+ * Pixel borders use the "notched corner" box-shadow trick (4 offset shadows,
+ * no radius) or a stepped clip-path on the 3D faces.
+ */
+
+#skills {
+  --px: 3px;
+  --sk-frame: var(--px-frame, #333c57);
+  --px-panel: var(--surface-soft);
+  --px-tile: #ffffff;
+  --px-tile-hi: #ffffff;
+  --px-tile-lo: #d3dce6;
+  --px-plate: #ffffff;
+  --px-plate-ink: #1a1c2c;
+  --px-gold: #f5b73b;
+  /* `overflow: hidden` from the utility class makes a scroll container; clip avoids that */
+  overflow: clip;
+}
+
+html.darkmode #skills {
+  --sk-frame: var(--px-frame, #050a14);
+  /* light item tiles keep dark logos (ROS, Electron, Java...) readable */
+  --px-tile: #dbe4ee;
+  --px-tile-hi: #f4f7fb;
+  --px-tile-lo: #9fb0c3;
+  --px-plate: #16243d;
+  --px-plate-ink: #e5eefb;
+  --px-gold: #facc15;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Heading + panel                                                   */
+/* ------------------------------------------------------------------ */
+#skills .skills-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+  margin-bottom: 2.5rem;
+}
+
+#skills .skills-kicker {
+  font-size: 0.75rem;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+#skills .skills-panel {
+  position: relative;
+  margin: 3px;
+  padding: clamp(1.1rem, 2.6vw, 1.75rem);
+  background:
+    linear-gradient(var(--border) 1px, transparent 1px) 0 0 / 24px 24px,
+    linear-gradient(90deg, var(--border) 1px, transparent 1px) 0 0 / 24px 24px,
+    var(--px-panel);
+}
+
+#skills .skills-nav__title {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+#skills .skills-nav__kicker {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--accent) !important;
+}
+
+#skills .skills-nav__heading {
+  margin-top: 0.3rem;
+  font-size: clamp(1.3rem, 2.3vw, 1.6rem);
+  font-weight: 900;
+  line-height: 1.15;
+  color: var(--ink);
+}
+
+#skills .skills-chest {
+  position: relative;
+  width: 56px;
+  height: 49px;
+  flex-shrink: 0;
+}
+
+#skills .skills-chest__canvas {
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+#skills .skills-chest.is-open {
+  animation: skills-chest-pop 520ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+#skills .skills-chest.is-open::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 30%;
+  width: 70%;
+  height: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(255, 205, 117, 0.55), transparent 70%);
+  pointer-events: none;
+  animation: skills-chest-glow 2.4s ease-in-out infinite;
+}
+
+@keyframes skills-chest-pop {
+  0% { transform: none; }
+  40% { transform: translateY(-6px) scale(1.08); }
+  100% { transform: none; }
+}
+
+@keyframes skills-chest-glow {
+  50% { opacity: 0.45; }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Tabs + pager                                                      */
+/* ------------------------------------------------------------------ */
+#skills .skills-tab,
+#skills .skills-pager-btn {
+  border: none;
+  border-radius: 0;
+  background: var(--surface);
+  color: var(--ink-soft);
+  transition: transform 140ms ease, background 140ms ease, color 140ms ease;
+}
+
+html.darkmode #skills .skills-tab,
+html.darkmode #skills .skills-pager-btn {
+  background: #16243d;
+  color: var(--ink-soft);
+}
+
+#skills .skills-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 2px;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+#skills .skills-tab__count {
+  font-size: 0.66rem;
+  letter-spacing: 0;
+  color: var(--ink-muted);
+}
+
+#skills .skills-tab:hover,
+#skills .skills-pager-btn:hover {
+  color: var(--ink);
+  background: var(--surface);
+}
+
+html.darkmode #skills .skills-tab:hover,
+html.darkmode #skills .skills-pager-btn:hover {
+  background: #1d2f4f;
+  color: #ffffff;
+}
+
+#skills .skills-tab.is-active {
+  background: var(--accent-strong);
+  color: #ffffff;
+}
+
+html.darkmode #skills .skills-tab.is-active {
+  background: #38bdf8;
+  color: #06121f;
+}
+
+#skills .skills-tab.is-active .skills-tab__count {
+  color: inherit;
+  opacity: 0.75;
+}
+
+#skills .skills-tab:focus-visible,
+#skills .skills-pager-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 5px;
+}
+
+#skills .skills-pager-btn {
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 1.35rem;
+  font-weight: 800;
+}
+
+#skills .skills-active-label {
+  min-width: 13rem;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Shared pixel-frame recipe (same tokens as pixel-skin.css)          */
+/* ------------------------------------------------------------------ */
+#skills .skills-panel,
+#skills .skills-tab,
+#skills .skills-pager-btn,
+#skills .skill-label {
+  --px-c: var(--sk-frame);
+  border-radius: 0;
+  border-color: transparent;
+  box-shadow:
+    0 calc(var(--px-u) * -1) 0 0 var(--px-c),
+    0 var(--px-u) 0 0 var(--px-c),
+    calc(var(--px-u) * -1) 0 0 0 var(--px-c),
+    var(--px-u) 0 0 0 var(--px-c),
+    calc(var(--px-u) * 2) calc(var(--px-u) * 3) 0 0 var(--px-drop, rgba(15, 23, 42, 0.18));
+}
+
+#skills .skills-panel {
+  --px-u: 3px;
+}
+
+#skills .skills-tab,
+#skills .skills-pager-btn,
+#skills .skill-label {
+  --px-u: 2px;
+}
+
+#skills .skills-tab:hover,
+#skills .skills-tab:focus-visible,
+#skills .skills-tab.is-active,
+#skills .skills-pager-btn:hover,
+#skills .skills-pager-btn:focus-visible,
+#skills .skill-link:hover .skill-label,
+#skills .skill-link:focus-visible .skill-label,
+#skills .skill-link.is-preview .skill-label,
+#skills .skill-link.is-shown .skill-label {
+  --px-c: var(--px-frame-hover, var(--accent));
+  transform: translate(-2px, -2px);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Cubes: stepped pixel frames on each face                           */
+/* ------------------------------------------------------------------ */
+#skills .skill-face {
+  border-radius: 0;
+  border: var(--px) solid var(--sk-frame);
+  background: var(--px-tile);
+  box-shadow:
+    inset var(--px) var(--px) 0 0 var(--px-tile-hi),
+    inset calc(var(--px) * -1) calc(var(--px) * -1) 0 0 var(--px-tile-lo);
+  /* notch the corners so the frame reads as 8-bit */
+  clip-path: polygon(
+    var(--px) 0, calc(100% - var(--px)) 0, calc(100% - var(--px)) var(--px), 100% var(--px),
+    100% calc(100% - var(--px)), calc(100% - var(--px)) calc(100% - var(--px)), calc(100% - var(--px)) 100%, var(--px) 100%,
+    var(--px) calc(100% - var(--px)), 0 calc(100% - var(--px)), 0 var(--px), var(--px) var(--px)
+  );
+}
+
+html.darkmode #skills .skill-face {
+  border-color: var(--sk-frame);
+  background: var(--px-tile);
+  box-shadow:
+    inset var(--px) var(--px) 0 0 var(--px-tile-hi),
+    inset calc(var(--px) * -1) calc(var(--px) * -1) 0 0 var(--px-tile-lo);
+}
+
+#skills .skill-face img {
+  padding: 0.6rem;
+}
+
+/* a pixel glint instead of the soft diagonal sheen */
+#skills .skill-face::before,
+html.darkmode #skills .skill-face::before {
+  inset: 0;
+  background:
+    linear-gradient(#ffffff, #ffffff) 12% 14% / 6px 6px no-repeat,
+    linear-gradient(#ffffff, #ffffff) calc(12% + 6px) calc(14% + 6px) / 4px 4px no-repeat;
+  opacity: 0.85;
+  transform: none;
+  transition: opacity 200ms ease;
+}
+
+#skills .skill-link:hover .skill-face::before,
+#skills .skill-link:focus-visible .skill-face::before,
+#skills .skill-link.is-preview .skill-face::before {
+  transform: none;
+  opacity: 0.35;
+}
+
+/* scanlines on hover */
+#skills .skill-face::after,
+html.darkmode #skills .skill-face::after {
+  background: repeating-linear-gradient(0deg, rgba(15, 23, 42, 0.06) 0 2px, transparent 2px 4px);
+}
+
+/* the face border turns accent on the active cube */
+#skills .skill-link:hover .skill-face,
+#skills .skill-link:focus-visible .skill-face,
+#skills .skill-link.is-preview .skill-face,
+#skills .skill-link.is-shown .skill-face {
+  border-color: var(--accent);
+}
+
+#skills .skill-link:focus-visible {
+  outline: none;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Name plates                                                       */
+/* ------------------------------------------------------------------ */
+#skills .skill-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.35rem;
+  padding: 0.28rem 0.5rem 0.24rem;
+  background: var(--px-plate);
+  color: var(--px-plate-ink);
+  font-size: 0.64rem;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: 0.1em;
+  transition: transform 140ms ease, background 140ms ease, color 140ms ease;
+}
+
+html.darkmode #skills .skill-label {
+  color: var(--px-plate-ink);
+}
+
+#skills .skill-label__count {
+  padding: 0 0.25rem;
+  background: var(--px-gold);
+  color: #1a1c2c;
+  font-size: 0.58rem;
+  letter-spacing: 0;
+}
+
+#skills .skill-link:hover .skill-label,
+#skills .skill-link:focus-visible .skill-label,
+#skills .skill-link.is-preview .skill-label,
+#skills .skill-link.is-shown .skill-label {
+  background: var(--accent-strong);
+  color: #ffffff;
+}
+
+html.darkmode #skills .skill-link:hover .skill-label,
+html.darkmode #skills .skill-link:focus-visible .skill-label,
+html.darkmode #skills .skill-link.is-preview .skill-label,
+html.darkmode #skills .skill-link.is-shown .skill-label {
+  background: #38bdf8;
+  color: #06121f;
+}
+
+/* keyboard focus: a blinking pixel cursor before the plate */
+#skills .skill-link:focus-visible .skill-label::before {
+  content: "▶";
+  font-size: 0.55rem;
+  animation: skills-cursor 1s steps(2, jump-none) infinite;
+}
+
+@keyframes skills-cursor {
+  50% { opacity: 0; }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Item box under the cubes                                          */
+/* ------------------------------------------------------------------ */
+#skills .skills-info {
+  min-height: 7.5rem;
+  margin: 1.5rem 4px 4px;
+}
+
+#skills .skills-info.is-inline {
+  grid-column: 1 / -1;
+  min-height: 0;
+  margin: 0.25rem 4px 0.75rem;
+}
+
+#skills .skills-info.is-inline .skills-info__box--hint {
+  display: none;
+}
+
+#skills .skills-info__box {
+  display: grid;
+  gap: 0.6rem;
+  padding: 0.95rem 1.1rem 1rem;
+  background:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.025) 0 2px, transparent 2px 4px),
+    #141a2b;
+  color: #d8e1ec;
+  --px-u: 3px;
+  --px-c: var(--sk-frame);
+  box-shadow:
+    0 calc(var(--px-u) * -1) 0 0 var(--px-c),
+    0 var(--px-u) 0 0 var(--px-c),
+    calc(var(--px-u) * -1) 0 0 0 var(--px-c),
+    var(--px-u) 0 0 0 var(--px-c),
+    calc(var(--px-u) * 2) calc(var(--px-u) * 3) 0 0 var(--px-drop, rgba(15, 23, 42, 0.18)),
+    inset 0 0 0 2px #2b3754;
+  animation: skills-info-in 180ms steps(3, end);
+}
+
+@keyframes skills-info-in {
+  from { clip-path: inset(0 0 100% 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+
+#skills .skills-info__box--hint {
+  min-height: 7.5rem;
+  align-content: center;
+}
+
+#skills .skills-info__hint {
+  font-size: 0.82rem;
+  color: #94b0c2 !important;
+  text-align: center;
+}
+
+#skills .skills-info__hint::after {
+  content: "▮";
+  margin-left: 0.3rem;
+  color: #73eff7;
+  animation: skills-cursor 1s steps(2, jump-none) infinite;
+}
+
+#skills .skills-info__head {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+#skills .skills-info__icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  background: #f4f4f4;
+  box-shadow: inset 3px 3px 0 0 #c5d0dc;
+}
+
+#skills .skills-info__icon img {
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
+}
+
+#skills .skills-info__type {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #73eff7 !important;
+}
+
+#skills .skills-info__name {
+  margin-top: 0.15rem;
+  font-size: 1.15rem;
+  font-weight: 900;
+  line-height: 1.15;
+  color: #ffffff !important;
+}
+
+#skills .skills-info__link {
+  align-self: start;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #73eff7;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  white-space: nowrap;
+}
+
+#skills .skills-info__link:hover {
+  color: #ffffff;
+}
+
+#skills .skills-info__blurb {
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: #c8d3e0 !important;
+}
+
+#skills .skills-info__uses {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  padding-top: 0.6rem;
+  border-top: 2px dashed #2b3754;
+}
+
+#skills .skills-info__label {
+  margin-right: 0.3rem;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #ffcd75;
+}
+
+#skills .skills-info__empty {
+  font-size: 0.78rem;
+  color: #94b0c2;
+}
+
+#skills .skills-use {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  max-width: 100%;
+  padding: 0.34rem 0.6rem 0.34rem 0.45rem;
+  border: none;
+  background: #1f2840;
+  color: #eef3f9;
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-align: left;
+  box-shadow: inset 0 -2px 0 0 #0b1020;
+  transition: background 140ms ease, transform 140ms ease;
+}
+
+#skills .skills-use:hover,
+#skills .skills-use:focus-visible {
+  background: #2b3754;
+  transform: translateY(-2px);
+}
+
+#skills .skills-use:focus-visible,
+#skills .skills-info__link:focus-visible {
+  outline: 2px solid #73eff7;
+  outline-offset: 2px;
+}
+
+#skills .skills-use__mark {
+  color: #73eff7;
+}
+
+#skills .skills-use--featured .skills-use__mark {
+  color: #ffcd75;
+}
+
+#skills .skills-use--role .skills-use__mark {
+  color: #a7f070;
+}
+
+#skills .skills-use--anchor .skills-use__mark {
+  color: #ef7d57;
+}
+
+#skills .skills-tips {
+  font-size: 0.72rem;
+  color: var(--ink-muted);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Small screens + reduced motion                                     */
+/* ------------------------------------------------------------------ */
+@media (max-width: 640px) {
+  #skills .skills-active-label {
+    min-width: 0;
+  }
+
+  #skills .skills-info__head {
+    grid-template-columns: 40px minmax(0, 1fr);
+  }
+
+  #skills .skills-info__icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  #skills .skills-info__link {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+
+  #skills .skill-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.06em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #skills .skills-chest.is-open,
+  #skills .skills-chest.is-open::after,
+  #skills .skills-info__box,
+  #skills .skills-info__hint::after,
+  #skills .skill-link:focus-visible .skill-label::before {
+    animation: none !important;
+  }
+}

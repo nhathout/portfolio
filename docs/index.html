@@ -5,18 +5,62 @@
   <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
   <title>
-   [NJPH]
+   Noah Hathout · Robotics &amp; AI Engineer
   </title>
-  <meta content="example, placeholder, template" name="keywords"/>
-  <meta content="Welcome to my personal portfolio website, where I showcase my latest projects, professional skills, and creative ventures." name="description"/>
-  <meta content="https://via.placeholder.com/150" name="image" property="og:image"/>
-  <link href="assets/images/PixelMe_50x50.jpg" rel="icon"/>
-  <link href="/assets/css/styles.css" rel="stylesheet"/>
+  <meta content="Noah Hathout: robotics and AI engineer finishing an M.S. in Robotics &amp; Autonomous Systems at Boston University. AI Engineer Intern at Universal Robots, builder of BROS2, a visual builder for ROS 2." name="description"/>
+  <meta content="Noah Hathout, robotics engineer, AI engineer, ROS 2, BROS2, Boston University, Universal Robots, robot learning, computer vision, portfolio" name="keywords"/>
+  <meta content="Noah Hathout" name="author"/>
+  <link href="https://noahhathout.com/" rel="canonical"/>
+  <meta content="#edf2f7" media="(prefers-color-scheme: light)" name="theme-color"/>
+  <meta content="#071120" media="(prefers-color-scheme: dark)" name="theme-color"/>
+  <meta content="website" property="og:type"/>
+  <meta content="https://noahhathout.com/" property="og:url"/>
+  <meta content="Noah Hathout" property="og:site_name"/>
+  <meta content="Noah Hathout · Robotics &amp; AI Engineer" property="og:title"/>
+  <meta content="Robotics + AI engineer at Boston University and Universal Robots. Projects, experience, and BROS2, a visual builder for ROS 2." property="og:description"/>
+  <meta content="https://noahhathout.com/assets/opt/og-card.jpg" property="og:image"/>
+  <meta content="1200" property="og:image:width"/>
+  <meta content="630" property="og:image:height"/>
+  <meta content="Pixel-art portrait of Noah Hathout next to his name and title" property="og:image:alt"/>
+  <meta content="summary_large_image" name="twitter:card"/>
+  <meta content="Noah Hathout · Robotics &amp; AI Engineer" name="twitter:title"/>
+  <meta content="Robotics + AI engineer at Boston University and Universal Robots. Projects, experience, and BROS2, a visual builder for ROS 2." name="twitter:description"/>
+  <meta content="https://noahhathout.com/assets/opt/og-card.jpg" name="twitter:image"/>
+  <link href="assets/images/pixelme-icon.png" rel="icon" type="image/png"/>
+  <link href="assets/images/pixelme-touch.png" rel="apple-touch-icon"/>
+  <link href="assets/css/enhancements.css?v=2026-09-30" rel="stylesheet"/>
+  <link href="assets/css/sections.css?v=2026-10-02" rel="stylesheet"/>
+  <link href="assets/css/about.css?v=2026-10-02" rel="stylesheet"/>
+  <link href="assets/css/game.css?v=2026-09-29" rel="stylesheet"/>
+  <link href="assets/css/skills.css?v=2026-09-29" rel="stylesheet"/>
+  <link href="assets/css/edex.css?v=2026-09-29" rel="stylesheet"/>
+  <link href="assets/css/contact.css?v=2026-09-29" rel="stylesheet"/>
+  <link href="assets/css/pixel-skin.css?v=2026-10-01" rel="stylesheet"/>
+  <script type="application/ld+json">
+   {
+     "@context": "https://schema.org",
+     "@type": "Person",
+     "name": "Noah Hathout",
+     "alternateName": "Noah Jean-Pierre Hathout",
+     "url": "https://noahhathout.com/",
+     "image": "https://noahhathout.com/assets/images/PixelMe.png",
+     "jobTitle": "Robotics & AI Engineer",
+     "worksFor": { "@type": "Organization", "name": "Universal Robots" },
+     "alumniOf": { "@type": "CollegeOrUniversity", "name": "Boston University" },
+     "knowsAbout": ["Robotics", "ROS 2", "Robot learning", "Computer vision", "Machine learning", "Embedded systems"],
+     "sameAs": [
+       "https://github.com/nhathout",
+       "https://www.linkedin.com/in/noah-hathout/"
+     ]
+   }
+  </script>
   <script>
    (() => {
+     const root = document.documentElement;
+     root.classList.add('js');
      try {
        if (localStorage.getItem('darkmode') === 'active') {
-         document.documentElement.classList.add('darkmode');
+         root.classList.add('darkmode');
        }
      } catch (error) {}
    })();
@@ -25,8 +69,13 @@
   </script>
  </head>
  <body class="site-shell font-mono relative overflow-x-hidden">
+  <a class="skip-link" href="#main">
+   Skip to content
+  </a>
   <!-- HEADER -->
   <header class="site-header h-16 sm:h-20 flex items-center z-30 w-full border-b-2 transition-transform duration-500 ease-in-out fixed top-0 left-0" id="topNav">
+   <div aria-hidden="true" class="scroll-progress" id="scrollProgress">
+   </div>
    <div class="container mx-auto px-6 flex items-center justify-between">
     <div class="site-brand uppercase text-gray-800 font-black text-2xl sm:text-3xl flex items-center">
      <a class="brand-link text-2xl sm:text-3xl ml-3 mt-1 transition transform ease-in-out duration-100 hover:scale-105" href="#">
@@ -41,22 +90,30 @@
       <a class="py-2 px-2 sm:px-3 top-nav-link" href="#about">
        About
       </a>
+      <a class="py-2 px-2 sm:px-3 top-nav-link" href="#education-experience">
+       Experience
+      </a>
       <a class="py-2 px-2 sm:px-3 top-nav-link" href="#skills">
        Skills
-      </a>
-      <a class="py-2 px-2 sm:px-3 top-nav-link" href="#education-experience">
-       Education &amp; Experience
       </a>
       <a class="py-2 px-2 sm:px-3 top-nav-link" href="#projects">
        Projects
       </a>
       <a class="py-2 px-2 sm:px-3 top-nav-link" href="#awards-affiliations">
-       Awards &amp; Affiliations
+       Awards
       </a>
       <a class="py-2 px-2 sm:px-3 top-nav-link" href="#contact">
        Contact
       </a>
      </nav>
+     <button aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K" aria-label="Search and quick actions" class="palette-trigger" data-palette-open="" title="Search and quick actions" type="button">
+      <svg aria-hidden="true" viewBox="0 0 24 24">
+       <path d="M10.5 3a7.5 7.5 0 0 1 5.96 12.05l4.25 4.24a1 1 0 0 1-1.42 1.42l-4.24-4.25A7.5 7.5 0 1 1 10.5 3Zm0 2a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11Z"/>
+      </svg>
+      <kbd class="palette-trigger__kbd" data-palette-kbd="">
+       Ctrl K
+      </kbd>
+     </button>
      <button aria-label="Switch to dark mode" class="theme-switch theme-switch--desktop" data-theme-toggle="" type="button">
       <span aria-hidden="true" class="theme-switch__glyph">
        <svg class="theme-switch__icon theme-switch__icon--moon" viewBox="0 -960 960 960" xmlns="http://www.w3.org/2000/svg">
@@ -102,11 +159,11 @@
      <button class="mobile-swipe-chip is-active" data-target="about" type="button">
       About
      </button>
-     <button class="mobile-swipe-chip" data-target="skills" type="button">
-      Skills
-     </button>
      <button class="mobile-swipe-chip" data-target="education-experience" type="button">
       Education &amp; Experience
+     </button>
+     <button class="mobile-swipe-chip" data-target="skills" type="button">
+      Skills
      </button>
      <button class="mobile-swipe-chip" data-target="projects" type="button">
       Projects
@@ -135,10 +192,13 @@
       <button class="mobile-menu-action mobile-menu-action--outline" data-mobile-contact-action="" type="button">
        Say hello
       </button>
+      <button class="mobile-menu-action mobile-menu-action--outline" data-palette-open="" type="button">
+       Search projects &amp; actions
+      </button>
     </div>
    </div>
   </section>
-  <main>
+  <main id="main" tabindex="-1">
    <div class="resume-popover" id="resumePopover">
     <button class="resume-popover__close" id="resumePopoverClose" aria-label="Dismiss resume prompt"></button>
     <div class="resume-card">
@@ -150,7 +210,7 @@
       Grab my latest resume with my highlighted projects, research, and experience.
      </p>
      <a class="resume-download resume-button" download="noahhathout_cv.pdf" href="assets/files/noah_hathout_resume.pdf">
-      <img alt="Resume" class="h-6 w-6" src="assets/images/inbox-tray.png"/>
+      <img alt="Resume" class="h-6 w-6" src="assets/opt/inbox-tray.webp"/>
       <span>
         Download Resume
       </span>
@@ -162,11 +222,11 @@
     <div class="container mx-auto px-6 flex flex-col justify-between items-center relative">
      <div class="flex flex-col relative">
       <div class="relative mx-auto mt-10">
-       <img class="rounded-2xl w-36 mx-auto pixel-portrait" src="assets/images/PixelMe.jpg"/>
+       <img alt="Pixel-art portrait of Noah" class="w-36 mx-auto pixel-portrait" fetchpriority="high" height="156" src="assets/opt/PixelMe.webp" style="image-rendering: pixelated" width="156"/>
       </div>
       <div class="resume-cta">
        <a class="resume-cta-button resume-button resume-button--hero" id="resumeBox" download="noahhathout_cv.pdf" href="assets/files/noah_hathout_resume.pdf">
-        <img alt="Resume" class="h-6 w-6" src="assets/images/inbox-tray.png"/>
+        <img alt="Resume" class="h-6 w-6" src="assets/opt/inbox-tray.webp"/>
         <span>
          Download Resume
         </span>
@@ -181,61 +241,282 @@
         </span>
        </span>
       </p>
-      <h2 class="hero-title max-w-3xl text-4xl sm:text-5xl font-bold mx-auto text-center py-2">
-       R&amp;AS Engineering
-       MS Student
-      </h2>
+      <h1 class="hero-title max-w-3xl text-4xl sm:text-5xl font-bold mx-auto text-center py-2">
+       Robotics &amp; AI Engineer
+      </h1>
       <a href="https://www.bu.edu/eng/academics/departments-and-divisions/electrical-and-computer-engineering/" rel="noopener noreferrer" target="_blank">
-       <p class="hero-school max-w-3xl text-3xl md:text-3xl font-bold mx-auto text-center relative w-max transition transform ease-in-out duration-100 hover:scale-105">
-        [@ Boston University]
+       <p class="hero-school max-w-3xl text-2xl sm:text-3xl font-bold mx-auto text-center relative w-max transition transform ease-in-out duration-100 hover:scale-105">
+        [M.S. R&amp;AS @ Boston University]
        </p>
       </a>
+      <div aria-label="What I'm doing now" class="hero-now">
+       <a class="hero-now__chip" href="#education-experience">
+        <span aria-hidden="true" class="hero-now__dot">
+        </span>
+        AI Engineer Intern @ Universal Robots
+       </a>
+       <a class="hero-now__chip hero-now__chip--build" href="#featured-bros2">
+        <span aria-hidden="true" class="hero-now__dot">
+        </span>
+        Building BROS2, a visual builder for ROS 2
+       </a>
+      </div>
+      <div class="hero-socials">
+       <a aria-label="GitHub" class="hero-social" href="https://github.com/nhathout" rel="noopener noreferrer" target="_blank" title="GitHub">
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+         <path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.25-1.28-5.25-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/>
+        </svg>
+       </a>
+       <a aria-label="LinkedIn" class="hero-social" href="https://www.linkedin.com/in/noah-hathout/" rel="noopener noreferrer" target="_blank" title="LinkedIn">
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+         <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05a3.74 3.74 0 0 1 3.37-1.85c3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/>
+        </svg>
+       </a>
+       <a aria-label="Email" class="hero-social" href="mailto:nhathout@bu.edu" title="Email">
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+         <path d="M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm17 2.24-7.4 5.55a1 1 0 0 1-1.2 0L4 7.24V17h16V7.24ZM5.33 7l6.67 5 6.67-5H5.33Z"/>
+        </svg>
+       </a>
+      </div>
      </div>
     </div>
+    <a aria-label="Scroll to About" class="hero-scroll" href="#about">
+     <span aria-hidden="true" class="hero-scroll__mouse">
+     </span>
+     <span class="hero-scroll__label">
+      scroll
+     </span>
+    </a>
    </div>
    <!-- ABOUT SECTION -->
-   <section class="text-gray-600 body-font font-mono bg-white relative overflow-hidden pb-10 pt-10" id="about">
-    <div class="container mx-auto flex px-5 lg:flex-row flex-col items-center">
-     <div class="lg:flex-grow md:px-16 lg:pr-24 lg:px-16 flex flex-col md:items-start md:text-left md:mb-0 items-center sm:pb-10">
-      <h1 class="title-font sm:text-5xl text-5xl mb-4 font-bold text-gray-900 py-10">
-       About Me 🇪🇬🇮🇹🇺🇸
-      </h1>
-      <p class="leading-relaxed">
-       I'm Noah Jean-Pierre Hathout--A tech enthusiast, avid gamer, and student at Boston University, getting my master's in Robotics &amp; Autonomous Systems (R&amp;AS). Having just received my B.S. in Computer Engineering with a strong academic record and a spot on the Dean's List, I am passionate about AI and robotics and want to continue to explore how machines can learn and interact with the world.
-       <br/>
-       <br/>
-       Having lived and studied in five countries across three continents,
-       <br/>
-       <br/>
-       <span class="text-2xl font-semibold">
-        [🇺🇸 -&gt; 🇩🇪 -&gt; 🇹🇷 -&gt; 🇳🇱 -&gt; 🇹🇷 -&gt; 🇨🇳 -&gt; 🇩🇪 -&gt; 🇺🇸📍]
-       </span>
-       <br/>
-       <br/>
-       I've gained a unique global perspective and love for cross-cultural collaboration. This diverse background continuously fuels my drive to work on projects that positively impact our world and society.
-       <br/>
-       <br/>
-       When I'm not coding, debugging, or experimenting with new tech, you'll find me at the nearest climbing gym 🧗🏽‍♂️ or tennis courts 🎾, leveling up in the latest video games 🕹️, or maybe teaching an agent to do better than me at the video game 🤖.
-       <br/>
-       <br/>
-       I am all about combining serious tech skills and hard work with a touch of fun and creativity. So if you are also into AI, robotics, gaming, or just want to nerd out over the newest tech, let's connect :)
-      </p>
+   <section class="text-gray-600 body-font font-mono bg-white relative overflow-hidden pb-16 pt-10" id="about">
+    <div class="container mx-auto px-5">
+     <!-- intro: copy + character sheet, photo deck -->
+     <div class="about-intro">
+      <div class="about-intro__copy">
+       <p class="about-kicker" data-reveal="">
+        Player one · press start
+       </p>
+       <h2 class="title-font sm:text-5xl text-5xl font-bold text-gray-900 about-title" data-reveal="">
+        About Me
+        <span aria-label="Egypt, Italy, United States" class="about-flags" role="img"><span>🇪🇬</span><span>🇮🇹</span><span>🇺🇸</span></span>
+       </h2>
+       <p class="about-lede" data-reveal="">
+        I'm Noah Jean-Pierre Hathout: a robotics &amp; AI engineer, tech enthusiast, and avid gamer. I'm finishing my M.S. in Robotics &amp; Autonomous Systems at Boston University while doing my thesis research as an AI Engineer Intern at Universal Robots, after earning my B.S. in Computer Engineering there (cum laude, 2025). I love exploring how machines can learn and interact with the world.
+       </p>
+       <p class="about-lede about-lede--soft" data-reveal="">
+        On the side, I lead software part-time at UMG Technologies, I'm turning BROS2 (my visual builder for ROS 2) into a real product, and I'm teaching myself game development.
+       </p>
+       <section aria-labelledby="aboutSheetTitle" class="about-sheet" data-reveal="">
+        <header class="about-sheet__head">
+         <img alt="" class="about-sheet__avatar" height="52" src="assets/opt/PixelMe.webp" width="52"/>
+         <div>
+          <p class="about-sheet__eyebrow">
+           Character sheet
+          </p>
+          <h3 class="about-sheet__name" id="aboutSheetTitle">
+           Noah Jean-Pierre Hathout
+          </h3>
+         </div>
+         <span aria-hidden="true" class="about-sheet__p1">
+          P1
+         </span>
+        </header>
+        <dl class="about-sheet__stats">
+         <div>
+          <dt>
+           Class
+          </dt>
+          <dd>
+           Robotics &amp; AI Engineer
+          </dd>
+         </div>
+         <div>
+          <dt>
+           Guild
+          </dt>
+          <dd>
+           Boston University · M.S. R&amp;AS (exp. Dec 2026) · B.S. CE '25, cum laude
+          </dd>
+         </div>
+         <div>
+          <dt>
+           Current quest
+          </dt>
+          <dd>
+           AI Engineer Intern @ Universal Robots (M.S. thesis)
+          </dd>
+         </div>
+         <div>
+          <dt>
+           Also equipped
+          </dt>
+          <dd>
+           Lead Software Engineer @ UMG Technologies (part-time)
+          </dd>
+         </div>
+         <div>
+          <dt>
+           Side quest
+          </dt>
+          <dd>
+           <a class="about-sheet__link" href="#featured-bros2">
+            Building BROS2 into a product →
+           </a>
+          </dd>
+         </div>
+         <div>
+          <dt>
+           Home base
+          </dt>
+          <dd>
+           Boston, MA 📍
+          </dd>
+         </div>
+         <div>
+          <dt>
+           Roots
+          </dt>
+          <dd>
+           🇪🇬 🇮🇹 🇺🇸
+          </dd>
+         </div>
+         <div>
+          <dt>
+           Map explored
+          </dt>
+          <dd>
+           5 countries · 3 continents
+          </dd>
+         </div>
+        </dl>
+       </section>
+      </div>
+      <!-- photo deck: hidden for now while the pixel portrait below takes its place (remove `hidden` here and add it to .about-intro__portrait to swap back) -->
+      <div class="about-intro__deck" data-reveal="" hidden="">
+       <div aria-roledescription="carousel" aria-label="Photos of Noah" class="about-deck" id="aboutDeck" role="region" tabindex="0">
+        <div class="about-deck__stack" data-deck-stack="">
+        </div>
+        <div class="about-deck__controls">
+         <button aria-label="Previous photo" class="about-deck__btn" data-deck-prev="" type="button">
+          ‹
+         </button>
+         <p aria-live="polite" class="about-deck__caption" data-deck-caption="">
+         </p>
+         <button aria-label="Next photo" class="about-deck__btn" data-deck-next="" type="button">
+          ›
+         </button>
+        </div>
+        <p class="about-deck__hint">
+         Drag, swipe, or use ← → to shuffle
+        </p>
+       </div>
+      </div>
+      <!-- pixel portrait, drawn in code by about-portrait.js -->
+      <div class="about-intro__portrait" data-reveal="">
+       <div class="about-portrait" data-mode="dusk" id="aboutPortrait">
+        <figure class="about-portrait__figure">
+         <div class="about-portrait__frame" data-portrait-frame="">
+          <canvas aria-label="Pixel-art portrait of me from behind in a straw hat, sitting on a cliff with my robot buddy, watching the sun set behind Mt. Fuji. A floating torii stands in the sea, a pirate ship sails the horizon, and a sakura tree drops petals." class="about-portrait__canvas" data-portrait-canvas="" height="300" role="img" width="240">
+          </canvas>
+          <p aria-live="polite" class="about-portrait__bubble" data-portrait-bubble="">
+          </p>
+         </div>
+         <figcaption class="about-portrait__caption">
+          <span data-portrait-caption="">
+           夕焼け · golden hour
+          </span>
+         </figcaption>
+        </figure>
+        <div class="about-portrait__controls">
+         <div aria-label="Time of day" class="about-portrait__modes" role="group">
+          <button aria-pressed="true" class="about-portrait__btn" data-portrait-mode="dusk" type="button">
+           <span aria-hidden="true" lang="ja">夕</span>
+           Dusk
+          </button>
+          <button aria-pressed="false" class="about-portrait__btn" data-portrait-mode="night" type="button">
+           <span aria-hidden="true" lang="ja">夜</span>
+           Night
+          </button>
+         </div>
+         <button class="about-portrait__btn about-portrait__btn--hanabi" data-portrait-hanabi="" type="button">
+          <span aria-hidden="true">🎆</span>
+          Hanabi
+         </button>
+        </div>
+        <p class="about-portrait__hint">
+         Tap the sky for fireworks · tap me or my robot to say hi
+        </p>
+       </div>
+      </div>
      </div>
-     <div class="lg:max-w-lg shadow-2xl sm:shadow-none lg:w-full md:w-1/2 lg:pr-16 mt-10 lg:mt-0 flex flex-col items-center space-y-4">
-      <img alt="hero" class="object-cover object-center border-2 border-gray-200 w-60" src="assets/images/aboutME2.png"/>
-      <img alt="hero2" class="object-cover object-center border-2 border-gray-200 w-60" src="assets/images/aboutME.png"/>
-      <img alt="hero3" class="object-cover object-center border-2 border-gray-200 w-60" src="assets/images/aboutME3.png"/>
+     <!-- world tour: pinned horizontal journey on desktop, swipeable on mobile -->
+     <div aria-labelledby="aboutTourTitle" class="about-tour" id="aboutTour" role="region">
+      <div class="about-tour__pin">
+       <header class="about-tour__head">
+        <div>
+         <p class="about-kicker">
+          World tour · 5 countries · 3 continents
+         </p>
+         <h3 class="about-tour__title" id="aboutTourTitle">
+          Where I leveled up
+         </h3>
+        </div>
+        <p class="about-tour__lede">
+         Having lived and studied in five countries across three continents, I've gained a unique global perspective and a love for cross-cultural collaboration. It keeps fueling my drive to work on projects that positively impact our world.
+        </p>
+       </header>
+       <p class="about-tour__fallback">
+        [🇺🇸 → 🇩🇪 → 🇹🇷 → 🇳🇱 → 🇹🇷 → 🇨🇳 → 🇩🇪 → 🇺🇸📍]
+       </p>
+       <div aria-hidden="true" class="about-route" data-route="">
+       </div>
+       <div class="about-tour__viewport" data-tour-viewport="">
+        <ol class="about-tour__track" data-tour-track="">
+        </ol>
+       </div>
+       <div class="about-tour__footer">
+        <p aria-live="polite" class="about-tour__status" data-tour-status="">
+        </p>
+        <div aria-label="Jump to a stop" class="about-tour__dots" data-tour-dots="" role="group">
+        </div>
+        <p class="about-tour__hint" data-tour-hint="">
+         Keep scrolling to fly
+        </p>
+       </div>
+      </div>
+     </div>
+     <!-- side quests -->
+     <div class="about-quests" id="aboutQuests">
+      <header class="about-quests__head" data-reveal="">
+       <p class="about-kicker">
+        Side quests
+       </p>
+       <h3 class="about-quests__title">
+        When I'm not coding, debugging, or experimenting with new tech…
+       </h3>
+      </header>
+      <ul class="about-quests__grid" data-quests="">
+      </ul>
+     </div>
+     <div class="about-outro" data-reveal="">
+      <p>
+       I'm all about combining serious tech skills and hard work with a touch of fun and creativity. So if you're also into AI, robotics, gaming, or just want to nerd out over the newest tech, let's connect :)
+      </p>
+      <a class="about-outro__cta" href="#contact">
+       Say hi
+      </a>
      </div>
     </div>
    </section>
    <!-- EDUCATION & EXPERIENCE -->
    <section class="text-gray-600 body-font font-mono bg-white relative py-10" id="education-experience">
     <div class="container mx-auto px-5">
-     <div class="edex-shell">
+     <div class="edex-shell" data-reveal="">
       <div class="edex-header">
        <div class="edex-header-copy">
         <p class="edex-kicker">
-         Timeline / education + experience
+         Quest log / education + experience
         </p>
         <h2 class="edex-title">
          Education <br>+ Experience
@@ -306,7 +587,7 @@
           </p>
          </div>
          <div class="edex-spotlight__logo-shell">
-          <img alt="Universal Robots logo" id="edexSpotlightLogo" src="assets/images/ur_logo.png"/>
+          <img alt="Universal Robots logo" id="edexSpotlightLogo" src="assets/opt/ur_logo.webp"/>
          </div>
         </div>
         <p class="edex-spotlight__summary" id="edexSpotlightSummary">
@@ -349,7 +630,7 @@
        <div class="edex-rail" id="edexRail">
         <div aria-hidden="true" class="edex-rail__line">
         </div>
-        <article aria-label="View details for AI Engineer Intern at Universal Robots" aria-pressed="true" class="edex-card is-active" data-category="experience" data-category-label="Experience" data-highlights="Completing thesis work in an R&amp;D setting|Experimenting with models and integration on real robotic systems|Focusing on safe, adaptable physical interaction through robot learning, perception, and autonomy" data-location="North Reading, MA" data-logo="assets/images/ur_logo.png" data-mode="Hybrid" data-org="Universal Robots" data-period="Jun 2026 - Present" data-phase="Current thesis role" data-summary="Joining Universal Robots to complete my M.S. thesis in robotics, focused on applied AI and intelligent, compliant manipulation." data-tags="Applied AI|Robot Learning|Perception" data-title="AI Engineer Intern" role="button" style="--edex-accent:#0284c7; --edex-accent-soft:rgba(2,132,199,0.16);" tabindex="0">
+        <article aria-label="View details for AI Engineer Intern at Universal Robots" aria-pressed="true" class="edex-card is-active" data-category="experience" data-category-label="Experience" data-highlights="Completing thesis work in an R&amp;D setting|Experimenting with models and integration on real robotic systems|Focusing on safe, adaptable physical interaction through robot learning, perception, and autonomy" data-location="North Reading, MA" data-logo="assets/opt/ur_logo.webp" data-mode="Hybrid" data-org="Universal Robots" data-period="Jun 2026 - Present" data-phase="Current thesis role" data-summary="Joining Universal Robots to complete my M.S. thesis in robotics, focused on applied AI and intelligent, compliant manipulation." data-tags="Applied AI|Robot Learning|Perception" data-title="AI Engineer Intern" role="button" style="--edex-accent:#0284c7; --edex-accent-soft:rgba(2,132,199,0.16);" tabindex="0">
          <div class="edex-card__topline">
           <span class="edex-pill edex-pill--experience">
            Experience
@@ -360,7 +641,7 @@
          </div>
          <div class="edex-card__heading">
           <div class="edex-card__logo">
-           <img alt="Universal Robots Logo" src="assets/images/ur_logo.png"/>
+           <img alt="Universal Robots Logo" src="assets/opt/ur_logo.webp"/>
           </div>
           <div>
            <p class="edex-card__org">
@@ -386,7 +667,7 @@
           </span>
          </div>
         </article>
-        <article aria-label="View details for Lead Software Engineer at UMG Technologies" aria-pressed="false" class="edex-card" data-category="experience" data-category-label="Experience" data-highlights="Sole software engineer modernizing a C# industrial-automation stack|Improving operator UX while driving down legacy and newly found bugs|Prototyping AI and computer-vision features for next-gen tooling" data-location="Danvers, MA" data-logo="assets/images/UMGT_logo_sqr.png" data-mode="Hybrid" data-org="UMG Technologies, Inc." data-period="Jun 2025 - Present" data-phase="Current role" data-summary="Part-time leadership role steering the software direction of UMG's industrial tooling as the platform moves into its next phase." data-tags="C#|Automation|Computer Vision" data-title="Lead Software Engineer" role="button" style="--edex-accent:#0f766e; --edex-accent-soft:rgba(15,118,110,0.16);" tabindex="0">
+        <article aria-label="View details for Lead Software Engineer at UMG Technologies" aria-pressed="false" class="edex-card" data-category="experience" data-category-label="Experience" data-highlights="Modernizing a legacy C# industrial-automation platform into a maintainable 64-bit codebase|Moved engineering onto GitHub with structured releases and protected branches, speeding up production debugging under tight customer deadlines|Designed, deployed, and maintain the company&#39;s next-generation full-stack website" data-location="Danvers, MA" data-logo="assets/opt/UMGT_logo_sqr.webp" data-mode="Hybrid" data-org="UMG Technologies, Inc." data-period="Jun 2025 - Present" data-phase="Current role" data-summary="Part-time leadership role steering the software direction of UMG's industrial tooling as the platform moves into its next phase." data-tags="C#|Automation|Computer Vision" data-title="Lead Software Engineer" role="button" style="--edex-accent:#0f766e; --edex-accent-soft:rgba(15,118,110,0.16);" tabindex="0">
          <div class="edex-card__topline">
           <span class="edex-pill edex-pill--experience">
            Experience
@@ -397,7 +678,7 @@
          </div>
          <div class="edex-card__heading">
           <div class="edex-card__logo">
-           <img alt="UMG Technologies Logo" src="assets/images/UMGT_logo_sqr.png"/>
+           <img alt="UMG Technologies Logo" src="assets/opt/UMGT_logo_sqr.webp"/>
           </div>
           <div>
            <p class="edex-card__org">
@@ -423,7 +704,7 @@
           </span>
          </div>
         </article>
-        <article aria-label="View details for Robotics and Autonomous Systems masters at Boston University" aria-pressed="false" class="edex-card" data-category="education" data-category-label="Education" data-highlights="Coursework includes Vision/Robotics/Planning (ME740), Intro to R&amp;AS (EK505), Image/Video Computing (CS585), Product Design in ECE (EC601), Robot Learning (EC518), and Embedded Systems (EC535)|Graduate studies centered on how planning, learning, and hardware come together in robotic systems" data-location="Boston, MA" data-logo="assets/images/bu_logo.png" data-mode="On campus" data-org="Boston University" data-period="Exp. Sep 2025 - Dec 2026" data-phase="Graduate thesis track" data-summary="Current graduate chapter at BU focused on the systems side of autonomy, from motion planning to learning-driven robot behavior." data-tags="Thesis|Motion Planning|Robot Learning" data-title="M.S. in R&amp;AS" role="button" style="--edex-accent:#b91c1c; --edex-accent-soft:rgba(185,28,28,0.16);" tabindex="0">
+        <article aria-label="View details for Robotics and Autonomous Systems masters at Boston University" aria-pressed="false" class="edex-card" data-category="education" data-category-label="Education" data-highlights="Coursework includes Vision/Robotics/Planning (ME740), Intro to R&amp;AS (EK505), Image/Video Computing (CS585), Product Design in ECE (EC601), Robot Learning (EC518), and Embedded Systems (EC535)|Graduate studies centered on how planning, learning, and hardware come together in robotic systems" data-location="Boston, MA" data-logo="assets/opt/bu_logo.webp" data-mode="On campus" data-org="Boston University" data-period="Exp. Sep 2025 - Dec 2026" data-phase="Graduate thesis track" data-summary="Current graduate chapter at BU focused on the systems side of autonomy, from motion planning to learning-driven robot behavior." data-tags="Thesis|Motion Planning|Robot Learning" data-title="M.S. in R&amp;AS" role="button" style="--edex-accent:#b91c1c; --edex-accent-soft:rgba(185,28,28,0.16);" tabindex="0">
          <div class="edex-card__topline">
           <span class="edex-pill edex-pill--education">
            Education
@@ -434,7 +715,7 @@
          </div>
          <div class="edex-card__heading">
           <div class="edex-card__logo">
-           <img alt="Boston University Logo" src="assets/images/bu_logo.png"/>
+           <img alt="Boston University Logo" src="assets/opt/bu_logo.webp"/>
           </div>
           <div>
            <p class="edex-card__org">
@@ -460,7 +741,7 @@
           </span>
          </div>
         </article>
-        <article aria-label="View details for Computer Engineering bachelor's at Boston University" aria-pressed="false" class="edex-card" data-category="education" data-category-label="Education" data-highlights="Completed a BS in Computer Engineering with a concentration in Machine Learning|Graduated in 2025 cum laude, with a 3.73 / 4.00 cumulative GPA, and 5 Dean's List awards|Was also a part of BU USQI (Unity &amp; Social Quality Initiative), and intramural indoor &amp; outdoor soccer" data-location="Boston, MA" data-logo="assets/images/bu_logo.png" data-mode="cum laude" data-org="Boston University" data-period="Sep 2021 - May 2025" data-phase="Completed undergraduate degree" data-summary="BU undergraduate chapter that built the core engineering base behind the rest of this timeline." data-tags="Machine Learning|Dean's List|GPA 3.73" data-title="B.S. in CE" role="button" style="--edex-accent:#b91c1c; --edex-accent-soft:rgba(185,28,28,0.16);" tabindex="0">
+        <article aria-label="View details for Computer Engineering bachelor's at Boston University" aria-pressed="false" class="edex-card" data-category="education" data-category-label="Education" data-highlights="Completed a BS in Computer Engineering with a concentration in Machine Learning|Graduated in 2025 cum laude, with a 3.73 / 4.00 cumulative GPA, and 5 Dean's List awards|Was also a part of BU USQI (Unity &amp; Social Quality Initiative), and intramural indoor &amp; outdoor soccer" data-location="Boston, MA" data-logo="assets/opt/bu_logo.webp" data-mode="cum laude" data-org="Boston University" data-period="Sep 2021 - May 2025" data-phase="Completed undergraduate degree" data-summary="BU undergraduate chapter that built the core engineering base behind the rest of this timeline." data-tags="Machine Learning|Dean's List|GPA 3.73" data-title="B.S. in CE" role="button" style="--edex-accent:#b91c1c; --edex-accent-soft:rgba(185,28,28,0.16);" tabindex="0">
          <div class="edex-card__topline">
           <span class="edex-pill edex-pill--education">
            Education
@@ -471,7 +752,7 @@
          </div>
          <div class="edex-card__heading">
           <div class="edex-card__logo">
-           <img alt="Boston University Logo" src="assets/images/bu_logo.png"/>
+           <img alt="Boston University Logo" src="assets/opt/bu_logo.webp"/>
           </div>
           <div>
            <p class="edex-card__org">
@@ -497,7 +778,7 @@
           </span>
          </div>
         </article>
-        <article aria-label="View details for Research and Development Intern at Universal Robots" aria-pressed="false" class="edex-card" data-category="experience" data-category-label="Experience" data-highlights="Worked on-site in Odense Kommune, Denmark in the Innovation Lab|Contributed to robotic vision efforts in a hands-on R&amp;D environment|Used ROS2, C++, Python, and NVIDIA packages including Nvblox and cuVSLAM" data-location="Odense, Denmark" data-logo="assets/images/ur_logo.png" data-mode="On-site" data-org="Universal Robots" data-period="May 2024 - Sep 2024" data-phase="Research internship" data-summary="Cross-functional robotics internship combining perception work, tooling, and hands-on lab development at Universal Robots." data-tags="ROS2|C++|Robot Vision" data-title="Research &amp; Development Intern" role="button" style="--edex-accent:#0284c7; --edex-accent-soft:rgba(2,132,199,0.16);" tabindex="0">
+        <article aria-label="View details for Research and Development Intern at Universal Robots" aria-pressed="false" class="edex-card" data-category="experience" data-category-label="Experience" data-highlights="Worked on-site in Odense Kommune, Denmark in the Innovation Lab|Contributed to robotic vision efforts in a hands-on R&amp;D environment|Used ROS2, C++, Python, and NVIDIA packages including Nvblox and cuVSLAM" data-location="Odense, Denmark" data-logo="assets/opt/ur_logo.webp" data-mode="On-site" data-org="Universal Robots" data-period="May 2024 - Aug 2024" data-phase="Research internship" data-summary="Cross-functional robotics internship combining perception work, tooling, and hands-on lab development at Universal Robots." data-tags="ROS2|C++|Robot Vision" data-title="Research &amp; Development Intern" role="button" style="--edex-accent:#0284c7; --edex-accent-soft:rgba(2,132,199,0.16);" tabindex="0">
          <div class="edex-card__topline">
           <span class="edex-pill edex-pill--experience">
            Experience
@@ -508,7 +789,7 @@
          </div>
          <div class="edex-card__heading">
           <div class="edex-card__logo">
-           <img alt="Universal Robots Logo" src="assets/images/ur_logo.png"/>
+           <img alt="Universal Robots Logo" src="assets/opt/ur_logo.webp"/>
           </div>
           <div>
            <p class="edex-card__org">
@@ -534,7 +815,7 @@
           </span>
          </div>
         </article>
-        <article aria-label="View details for Apprentice at Universal Robots" aria-pressed="false" class="edex-card" data-category="experience" data-category-label="Experience" data-highlights="Explored edge AI concepts for Universal Robots' AI Accelerator work tied to PolyScope X|Set up and evaluated a Jetson Orin platform, prototyping on-device AI workflows and deployment constraints|Integrated a ZED2 stereo/depth camera while gaining early exposure to URScript, PolyScope X, and MiR workflows" data-location="Boston, MA" data-logo="assets/images/ur_logo.png" data-mode="On-site" data-org="Universal Robots" data-period="Nov 2023 - Jan 2024" data-phase="Apprenticeship" data-summary="Short apprenticeship exploring how edge AI and perception can extend cobot capabilities around PolyScope X." data-tags="Edge AI|Jetson Orin|Perception" data-title="Apprentice" role="button" style="--edex-accent:#0284c7; --edex-accent-soft:rgba(2,132,199,0.16);" tabindex="0">
+        <article aria-label="View details for Apprentice at Universal Robots" aria-pressed="false" class="edex-card" data-category="experience" data-category-label="Experience" data-highlights="Explored edge AI concepts for Universal Robots' AI Accelerator work tied to PolyScope X|Set up and evaluated a Jetson Orin platform, prototyping on-device AI workflows and deployment constraints|Integrated a ZED2 stereo/depth camera while gaining early exposure to URScript, PolyScope X, and MiR workflows" data-location="Boston, MA" data-logo="assets/opt/ur_logo.webp" data-mode="On-site" data-org="Universal Robots" data-period="Nov 2023 - Jan 2024" data-phase="Apprenticeship" data-summary="Short apprenticeship exploring how edge AI and perception can extend cobot capabilities around PolyScope X." data-tags="Edge AI|Jetson Orin|Perception" data-title="Apprentice" role="button" style="--edex-accent:#0284c7; --edex-accent-soft:rgba(2,132,199,0.16);" tabindex="0">
          <div class="edex-card__topline">
           <span class="edex-pill edex-pill--experience">
            Experience
@@ -545,7 +826,7 @@
          </div>
          <div class="edex-card__heading">
           <div class="edex-card__logo">
-           <img alt="Universal Robots Logo" src="assets/images/ur_logo.png"/>
+           <img alt="Universal Robots Logo" src="assets/opt/ur_logo.webp"/>
           </div>
           <div>
            <p class="edex-card__org">
@@ -571,7 +852,7 @@
           </span>
          </div>
         </article>
-        <article aria-label="View details for Teaching Assistant at Boston University College of Engineering" aria-pressed="false" class="edex-card" data-category="experience" data-category-label="Experience" data-highlights="TA for EK131, Intro to Engineering: Hands On|Supported students via office hours|Maintained Ender-3 V2 3D printers and managed on-demand print requests" data-location="Boston, MA" data-logo="assets/images/bu_logo.png" data-mode="On campus" data-org="Boston University, College of Engineering" data-period="Jan 2023 - Jun 2023" data-phase="Teaching" data-summary="Teaching and course-operations support role that kept BU's EK131 lab section moving week to week." data-tags="Teaching|Mentoring|Engineering" data-title="Teaching Assistant" role="button" style="--edex-accent:#b91c1c; --edex-accent-soft:rgba(185,28,28,0.16);" tabindex="0">
+        <article aria-label="View details for Teaching Assistant at Boston University College of Engineering" aria-pressed="false" class="edex-card" data-category="experience" data-category-label="Experience" data-highlights="TA for EK131, Intro to Engineering: Hands On|Supported students via office hours|Maintained Ender-3 V2 3D printers and managed on-demand print requests" data-location="Boston, MA" data-logo="assets/opt/bu_logo.webp" data-mode="On campus" data-org="Boston University, College of Engineering" data-period="Jan 2023 - Jun 2023" data-phase="Teaching" data-summary="Teaching and course-operations support role that kept BU's EK131 lab section moving week to week." data-tags="Teaching|Mentoring|Engineering" data-title="Teaching Assistant" role="button" style="--edex-accent:#b91c1c; --edex-accent-soft:rgba(185,28,28,0.16);" tabindex="0">
          <div class="edex-card__topline">
           <span class="edex-pill edex-pill--experience">
            Experience
@@ -582,7 +863,7 @@
          </div>
          <div class="edex-card__heading">
           <div class="edex-card__logo">
-           <img alt="Boston University Logo" src="assets/images/bu_logo.png"/>
+           <img alt="Boston University Logo" src="assets/opt/bu_logo.webp"/>
           </div>
           <div>
            <p class="edex-card__org">
@@ -605,7 +886,7 @@
           </span>
          </div>
         </article>
-        <article aria-label="View details for Campus Representative at Course Hero" aria-pressed="false" class="edex-card" data-category="experience" data-category-label="Experience" data-highlights="Hosted virtual and in-person events at Boston University|Promoted social good initiatives|Educated students on platform benefits" data-location="Boston, MA" data-logo="assets/images/coursehero_logo.png" data-mode="Hybrid" data-org="Course Hero" data-period="Oct 2022 - Jan 2023" data-phase="Campus ambassador" data-summary="Student community role focused on representing the platform on campus and turning awareness into participation." data-tags="Events|Community|Outreach" data-title="Campus Representative" role="button" style="--edex-accent:#1327a2; --edex-accent-soft:rgba(19,39,162,0.16);" tabindex="0">
+        <article aria-label="View details for Campus Representative at Course Hero" aria-pressed="false" class="edex-card" data-category="experience" data-category-label="Experience" data-highlights="Hosted virtual and in-person events at Boston University|Promoted social good initiatives|Educated students on platform benefits" data-location="Boston, MA" data-logo="assets/opt/coursehero_logo.webp" data-mode="Hybrid" data-org="Course Hero" data-period="Oct 2022 - Jan 2023" data-phase="Campus ambassador" data-summary="Student community role focused on representing the platform on campus and turning awareness into participation." data-tags="Events|Community|Outreach" data-title="Campus Representative" role="button" style="--edex-accent:#1327a2; --edex-accent-soft:rgba(19,39,162,0.16);" tabindex="0">
          <div class="edex-card__topline">
           <span class="edex-pill edex-pill--experience">
            Experience
@@ -616,7 +897,7 @@
          </div>
          <div class="edex-card__heading">
           <div class="edex-card__logo">
-           <img alt="Course Hero Logo" src="assets/images/coursehero_logo.png"/>
+           <img alt="Course Hero Logo" src="assets/opt/coursehero_logo.webp"/>
           </div>
           <div>
            <p class="edex-card__org">
@@ -642,7 +923,7 @@
           </span>
          </div>
         </article>
-        <article aria-label="View details for Founder and Designer at GriplS" aria-pressed="false" class="edex-card" data-category="experience" data-category-label="Experience" data-highlights="Designed grip bands for multiple sports|Directed 50% of profits to charities including BCRF and Autism Speaks|Sold the product in local sporting goods stores in Charlotte, North Carolina" data-location="Charlotte, NC" data-logo="assets/images/gripls_logo.png" data-mode="Founder-led" data-org="GriplS" data-period="May 2020 - Dec 2022" data-phase="Founder-led venture" data-summary="Founder-led venture that moved from product concept to local retail while keeping a charity component built into the business." data-tags="Product Design|Sales" data-title="Founder &amp; Designer" role="button" style="--edex-accent:#f59e0b; --edex-accent-soft:rgba(245,158,11,0.18);" tabindex="0">
+        <article aria-label="View details for Founder and Designer at GriplS" aria-pressed="false" class="edex-card" data-category="experience" data-category-label="Experience" data-highlights="Designed grip bands for multiple sports|Directed 50% of profits to charities including BCRF and Autism Speaks|Sold the product in local sporting goods stores in Charlotte, North Carolina" data-location="Charlotte, NC" data-logo="assets/opt/gripls_logo.webp" data-mode="Founder-led" data-org="GriplS" data-period="May 2020 - Dec 2022" data-phase="Founder-led venture" data-summary="Founder-led venture that moved from product concept to local retail while keeping a charity component built into the business." data-tags="Product Design|Sales" data-title="Founder &amp; Designer" role="button" style="--edex-accent:#f59e0b; --edex-accent-soft:rgba(245,158,11,0.18);" tabindex="0">
          <div class="edex-card__topline">
           <span class="edex-pill edex-pill--experience">
            Experience
@@ -653,7 +934,7 @@
          </div>
          <div class="edex-card__heading">
           <div class="edex-card__logo">
-           <img alt="GriplS Logo" src="assets/images/gripls_logo.png"/>
+           <img alt="GriplS Logo" src="assets/opt/gripls_logo.webp"/>
           </div>
           <div>
            <p class="edex-card__org">
@@ -676,7 +957,7 @@
           </span>
          </div>
         </article>
-        <article aria-label="View details for Ardrey Kell High School" aria-pressed="false" class="edex-card" data-category="education" data-category-label="Education" data-highlights="Completed a high school diploma at Ardrey Kell High School|Played on the varsity men's tennis team for 4 years; 2 years as captain|Awards and affiliations include  National Honors Society, French Honors Society, Junior Marshal, and AK Garden Club" data-location="Charlotte, NC" data-logo="assets/images/akhs_logo.png" data-mode="Leadership" data-org="Ardrey Kell High School" data-period="Aug 2017 - Jun 2021" data-phase="High school" data-summary="Early chapter built around academics, leadership, extracurriculars, and varsity tennis." data-tags="Tennis|Honors|Leadership" data-title="High School Diploma" role="button" style="--edex-accent:#6d28d9; --edex-accent-soft:rgba(109,40,217,0.16);" tabindex="0">
+        <article aria-label="View details for Ardrey Kell High School" aria-pressed="false" class="edex-card" data-category="education" data-category-label="Education" data-highlights="Completed a high school diploma at Ardrey Kell High School|Played on the varsity men's tennis team for 4 years; 2 years as captain|Awards and affiliations include  National Honors Society, French Honors Society, Junior Marshal, and AK Garden Club" data-location="Charlotte, NC" data-logo="assets/opt/akhs_logo.webp" data-mode="Leadership" data-org="Ardrey Kell High School" data-period="Aug 2017 - Jun 2021" data-phase="High school" data-summary="Early chapter built around academics, leadership, extracurriculars, and varsity tennis." data-tags="Tennis|Honors|Leadership" data-title="High School Diploma" role="button" style="--edex-accent:#6d28d9; --edex-accent-soft:rgba(109,40,217,0.16);" tabindex="0">
          <div class="edex-card__topline">
           <span class="edex-pill edex-pill--education">
            Education
@@ -687,7 +968,7 @@
          </div>
          <div class="edex-card__heading">
           <div class="edex-card__logo">
-           <img alt="Ardrey Kell High School Logo" src="assets/images/akhs_logo.png"/>
+           <img alt="Ardrey Kell High School Logo" src="assets/opt/akhs_logo.webp"/>
           </div>
           <div>
            <p class="edex-card__org">
@@ -712,7 +993,7 @@
         </article>
        </div>
       </div>
-      <div class="hidden md:grid edex-sidequest" id="mini-game">
+      <div class="edex-sidequest" id="mini-game">
        <div class="edex-sidequest__copy">
         <p class="edex-sidequest__kicker">
          Coursework side quest
@@ -721,41 +1002,121 @@
          Atari [Course]out
         </h3>
         <p class="edex-sidequest__desc">
-         Destroy the classes I destroyed :) 
+         Destroy the classes I destroyed :) Every brick is a real course, the combos stack up, and from the second semester on, the thesis fights back.
         </p>
-        <p class="edex-sidequest__instructions">
-         Use
-         <strong>
-          spacebar
-         </strong>
-         to launch and
-         <strong>
-          left / right arrow keys
-         </strong>
-         to move the paddle.
-        </p>
-        <p class="edex-sidequest__note">
-         Desktop / laptop only
-        </p>
+        <dl aria-label="Controls" class="game-controls" id="gameControls">
+         <div>
+          <dt>
+           Move
+          </dt>
+          <dd>
+           <kbd>←</kbd> <kbd>→</kbd>, mouse, or drag
+          </dd>
+         </div>
+         <div>
+          <dt>
+           Launch
+          </dt>
+          <dd>
+           <kbd>Space</kbd>, click, or tap
+          </dd>
+         </div>
+         <div>
+          <dt>
+           Pause
+          </dt>
+          <dd>
+           <kbd>Esc</kbd> or <kbd>P</kbd>, or the Pause button
+          </dd>
+         </div>
+        </dl>
+        <ul aria-label="Power-ups" class="game-powerups">
+         <li>
+          <span aria-hidden="true" class="game-cap game-cap--wide">
+           W
+          </span>
+          Wide paddle
+         </li>
+         <li>
+          <span aria-hidden="true" class="game-cap game-cap--multi">
+           M
+          </span>
+          Multiball
+         </li>
+         <li>
+          <span aria-hidden="true" class="game-cap game-cap--slow">
+           S
+          </span>
+          Slow-mo
+         </li>
+         <li>
+          <span aria-hidden="true" class="game-cap game-cap--life">
+           ♥
+          </span>
+          Extra life
+         </li>
+        </ul>
        </div>
        <div class="edex-sidequest__play">
-        <div class="edex-game-panel" id="start-screen">
-         <h4 class="font-semibold mb-2">
-          Leaderboard
-         </h4>
-         <ol class="mb-4" id="leaderboard">
-         </ol>
-         <div class="edex-game-actions">
-          <button class="px-4 py-2 rounded game-btn game-btn-primary" id="startBtn">
-           Start Game
-          </button>
-          <button class="px-4 py-2 rounded game-btn game-btn-secondary" id="resetLeaderboardBtn">
-           Reset Leaderboard
-          </button>
+        <div class="game-stage" id="gameStage">
+         <div aria-labelledby="gamePanelTitle" class="edex-game-panel" id="start-screen" role="region">
+          <div class="game-panel__head">
+           <p class="game-panel__eyebrow" id="gamePanelEyebrow">
+            High scores
+           </p>
+           <h4 class="game-panel__title" id="gamePanelTitle">
+            Leaderboard
+           </h4>
+           <p class="game-panel__summary" hidden="" id="gamePanelSummary">
+           </p>
+          </div>
+          <form autocomplete="off" class="game-score-form" hidden="" id="gameScoreForm" novalidate="">
+           <label class="game-score-form__label" for="gameInitials">
+            Put your initials on the board (1–4 letters or numbers)
+           </label>
+           <div class="game-score-form__row">
+            <input autocapitalize="characters" class="game-score-form__input" id="gameInitials" inputmode="text" maxlength="4" name="initials" pattern="[A-Za-z0-9]{1,4}" placeholder="NJPH" spellcheck="false" type="text"/>
+            <button class="game-btn game-btn-primary" type="submit">
+             Save score
+            </button>
+            <button class="game-btn game-btn-ghost" id="gameSkip" type="button">
+             Skip
+            </button>
+           </div>
+           <p aria-live="polite" class="game-score-form__msg" id="gameFormMessage" role="status">
+           </p>
+          </form>
+          <div aria-live="polite" class="game-leaderboard-wrap" id="leaderboard">
+          </div>
+          <div class="edex-game-actions">
+           <button class="game-btn game-btn-primary" id="startBtn" type="button">
+            Start Game
+           </button>
+           <button class="game-btn game-btn-ghost" id="resetLeaderboardBtn" type="button">
+            Reset leaderboard
+           </button>
+          </div>
          </div>
+         <canvas aria-describedby="gameControls" aria-label="Atari Courseout game board. Arrow keys or the mouse move the paddle, Space launches the ball, P or Escape pauses." class="edex-game-canvas" id="gameCanvas" style="display:none;" tabindex="0">
+         </canvas>
         </div>
-        <canvas class="edex-game-canvas mx-auto border-2 border-gray-300" height="360" id="gameCanvas" style="display:none;" width="560">
-        </canvas>
+        <div aria-label="Game controls" class="game-toolbar" role="toolbar">
+         <button aria-pressed="false" class="game-toolbar__btn" hidden="" id="gamePause" type="button">
+          Pause
+         </button>
+         <button class="game-toolbar__btn" hidden="" id="gameQuit" type="button">
+          End run
+         </button>
+         <button aria-pressed="false" class="game-toolbar__btn game-toolbar__btn--sound" id="gameMute" type="button">
+          <span aria-hidden="true" class="game-toolbar__icon">
+          </span>
+          <span data-sound-label="">
+           Sound on
+          </span>
+         </button>
+        </div>
+        <p aria-live="polite" class="sr-only" id="gameLive">
+        </p>
        </div>
       </div>
      </div>
@@ -764,57 +1125,140 @@
    <!-- SKILLS SECTION -->
    <section class="text-gray-600 body-font font-mono bg-white relative overflow-hidden py-10" id="skills">
     <div class="container mx-auto px-5">
-     <h2 class="text-4xl font-bold text-black mb-10 text-center">
-      Skills
-     </h2>
-     <div class="bg-gray-100 p-5 rounded-xl space-y-6">
+     <div class="skills-head" data-reveal="">
+      <p class="skills-kicker">
+       items collected
+      </p>
+      <h2 class="text-4xl md:text-5xl font-bold text-black text-center">
+       Skills
+      </h2>
+     </div>
+     <div class="skills-panel space-y-6" data-reveal="" id="skillsPanel">
       <div class="skills-nav flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-       <div>
-        <p class="text-xs uppercase tracking-[0.3em] text-gray-500">
-         Navigate my stack
-        </p>
-        <h3 class="text-2xl font-bold text-gray-800">
-         Explore by focus area
-        </h3>
+       <div class="skills-nav__title">
+        <span aria-hidden="true" class="skills-chest" data-skills-chest="">
+        </span>
+        <div>
+         <p class="skills-nav__kicker">
+          Navigate my stack
+         </p>
+         <h3 class="skills-nav__heading">
+          Explore by focus area
+         </h3>
+        </div>
        </div>
        <div class="skills-pager flex items-center justify-center gap-3">
         <button aria-label="Previous skill category" class="skills-pager-btn" id="skillsPrev" type="button">
          ‹
         </button>
-        <span class="skills-active-label text-lg font-semibold text-gray-800 text-center" id="skillsActiveLabel">
+        <span class="skills-active-label text-center" id="skillsActiveLabel">
         </span>
         <button aria-label="Next skill category" class="skills-pager-btn" id="skillsNext" type="button">
          ›
         </button>
        </div>
       </div>
-      <div class="skills-tabs flex flex-wrap items-center justify-center gap-3" id="skillsTabs">
+      <div aria-label="Skill categories" class="skills-tabs flex flex-wrap items-center justify-center gap-3" id="skillsTabs" role="group">
       </div>
       <div class="skills-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6" id="skillsGrid">
       </div>
-      <p class="text-center text-xs text-gray-500">
+      <div aria-live="polite" class="skills-info" id="skillsInfo">
+      </div>
+      <p class="skills-tips text-center">
        <span class="skills-tip skills-tip--desktop">
-        Hover over a cube to spin it, then click to check out more info. Use the arrows (or scroll) to switch topics.
+        Hover a cube to spin it and see where I've used it; click to visit the tool. Use the arrows (or swipe sideways) to switch topics.
        </span>
        <span class="skills-tip skills-tip--mobile">
-        Double tap to explore more about a skill. 
+        Tap a cube to see where I've used it; tap again to visit the tool.
        </span>
       </p>
+      <noscript>
+       <p>
+        Python, C, C++, C#, TensorFlow, PyTorch, MATLAB, JavaScript, TypeScript, React, SQLite, FastAPI, HTML, CSS, OpenCV, pytest, Java, Arduino, Raspberry Pi, ESP32, NVIDIA, Universal Robots, ROS, ROS 2, Intel RealSense, Orbbec, BeagleBone, Git, GitHub, GitHub Actions, Docker, Onshape, Bambu Lab, Godot, Electron, Unreal Engine 5, Ubuntu, Windows, macOS, Linux.
+       </p>
+      </noscript>
      </div>
     </div>
    </section>
    <!-- PROJECTS SECTION -->
    <section class="text-gray-600 body-font font-mono bg-white relative overflow-hidden py-10" id="projects">
-    <div class="container mx-auto flex flex-col items-center justify-center px-5 mb-10 text-center space-y-5">
+    <div class="container mx-auto flex flex-col items-center justify-center px-5 mb-10 text-center space-y-5" data-reveal="">
      <p class="text-xs uppercase tracking-[0.5em] text-gray-500">
       levels cleared
      </p>
-     <p class="text-5xl font-bold text-black">
+     <h2 class="text-5xl font-bold text-black">
       Projects
-     </p>
+     </h2>
     </div>
     <div class="container mx-auto px-5">
+     <!-- FEATURED: BROS2 teaser card -->
+     <article aria-labelledby="featuredTitle" class="feature-shell feature-shell--teaser" data-reveal="" id="featured-bros2">
+      <div class="feature-copy">
+       <p class="feature-kicker">
+        <span aria-hidden="true" class="feature-kicker__pulse">
+        </span>
+        Now building · coming soon
+       </p>
+       <div class="feature-brand">
+        <img alt="" class="feature-brand__mark" height="64" src="assets/opt/bros2/mark.svg" width="64"/>
+        <div>
+         <h3 class="feature-brand__name" id="featuredTitle">
+          BROS2
+         </h3>
+         <p class="feature-brand__tagline">
+          A visual builder for ROS 2
+         </p>
+        </div>
+       </div>
+       <p class="feature-lede">
+        Build robot software by connecting blocks: every block is a real ROS 2 node and every wire is a real topic. It started as a class project, and I'm rebuilding it from the ground up into a real product.
+       </p>
+       <div class="feature-actions">
+        <a class="feature-cta" href="mailto:nhathout@bu.edu?subject=BROS2%20early%20access">
+         Get notified
+        </a>
+        <span class="feature-status">
+         <span aria-hidden="true" class="feature-status__dot">
+         </span>
+         Early access opening soon
+        </span>
+       </div>
+       <div class="feature-award">
+        <svg aria-hidden="true" fill="none" viewBox="0 0 32 32">
+         <path d="M10 3H16L14.2 10.1C13.8 11.6 12.4 12.6 10.9 12.4L8.3 12L10 3Z" fill="#0F766E"/>
+         <path d="M22 3H16L17.8 10.1C18.2 11.6 19.6 12.6 21.1 12.4L23.7 12L22 3Z" fill="#115E59"/>
+         <circle cx="16" cy="18" r="9" fill="#FAC123"/>
+         <circle cx="16" cy="18" r="5.6" fill="#FFF3C2"/>
+         <path d="M16 14.6L17.3 17.2L20.2 17.6L18.1 19.6L18.6 22.5L16 21.1L13.4 22.5L13.9 19.6L11.8 17.6L14.7 17.2L16 14.6Z" fill="#B45309"/>
+        </svg>
+        <p>
+         <strong>Best Project</strong>, BU EC601 · Fall 2025
+        </p>
+       </div>
+      </div>
+      <figure class="feature-peek">
+       <img alt="Blurred sneak peek of the BROS2 editor" decoding="async" height="800" loading="lazy" src="assets/opt/bros2/demo-poster.webp" width="1280"/>
+       <figcaption class="feature-peek__lock">
+        <span class="feature-peek__badge">
+         Locked
+        </span>
+        Full demo unlocks soon :)
+       </figcaption>
+      </figure>
+     </article>
+     <div class="projects-toolbar" data-reveal="" id="projectsGridAnchor">
+      <p class="projects-toolbar__label">
+       Filter the archive
+      </p>
+      <div aria-label="Filter projects by area" class="projects-filters" id="projectsFilters" role="group">
+      </div>
+     </div>
      <div class="projects-grid" id="projectsGrid">
+     </div>
+     <div class="projects-more-wrap">
+      <button aria-controls="projectsGrid" aria-expanded="false" class="projects-more" hidden="" id="projectsMore" type="button">
+       Show all projects
+      </button>
      </div>
     </div>
    </section>
@@ -830,32 +1274,53 @@
       </h2>
      </div>
      <div class="award-grid">
-      <article class="award-card">
+      <article class="award-card" data-reveal="">
        <div class="award-ribbon">
         <span>
-         Dean's List
+         Best Project
         </span>
        </div>
        <div class="award-body">
-        <img alt="Dean's List" src="assets/images/deanslist.png"/>
+        <img alt="BROS2 logo" height="90" loading="lazy" src="assets/opt/bros2/mark.svg" width="90"/>
+        <div>
+         <p class="award-title">
+          BU EC601 · Fall 2025
+         </p>
+         <p class="award-copy">
+          BROS2, our drag-and-drop IDE for ROS 2, took Best Project of the semester. I'm now rebuilding it into a real product, with early access coming soon.
+         </p>
+         <a class="award-link" data-scroll-to="featured-bros2" href="#featured-bros2">
+          See BROS2 →
+         </a>
+        </div>
+       </div>
+      </article>
+      <article class="award-card" data-reveal="">
+       <div class="award-ribbon">
+        <span>
+         Dean's List ×5
+        </span>
+       </div>
+       <div class="award-body">
+        <img alt="Dean's List" height="90" loading="lazy" src="assets/opt/deanslist.webp" width="90"/>
         <div>
          <p class="award-title">
           Boston University · College of Engineering
          </p>
          <p class="award-copy">
-          Consistently placed in the top 30% of my cohort. Long nights, too many debug sessions, still worth it.
+          Five Dean's List semesters and a cum laude B.S. in 2025. Long nights, too many debug sessions, still worth it.
          </p>
         </div>
        </div>
       </article>
-      <article class="award-card">
+      <article class="award-card" data-reveal="">
        <div class="award-ribbon">
         <span>
          Hood Hargett Scholar
         </span>
        </div>
        <div class="award-body">
-        <img alt="Hood Hargett Scholarship" src="assets/images/hhbc.png"/>
+        <img alt="Hood Hargett Scholarship" src="assets/opt/hhbc.webp"/>
         <div>
          <p class="award-title">
           Hood Hargett Breakfast Club
@@ -870,7 +1335,7 @@
        </div>
       </article>
      </div>
-     <div class="affiliation-panel">
+     <div class="affiliation-panel" data-reveal="">
       <div class="flex flex-col gap-4">
        <p class="text-xs uppercase tracking-[0.4em] text-gray-500">
         communities + affiliations
@@ -881,7 +1346,7 @@
       </div>
       <div class="affiliation-grid">
        <a class="affiliation-card" href="https://www.ieee.org/" rel="noopener noreferrer" target="_blank">
-        <img alt="IEEE" src="assets/images/IEEE_logo.png"/>
+        <img alt="IEEE" src="assets/opt/IEEE_logo.webp"/>
         <div>
          <p>
           IEEE
@@ -892,7 +1357,7 @@
         </div>
        </a>
        <a class="affiliation-card" href="https://www.twitch.tv/sernawa" rel="noopener noreferrer" target="_blank">
-        <img alt="Twitch" src="assets/images/twitch_logo.png"/>
+        <img alt="Twitch" src="assets/opt/twitch_logo.webp"/>
         <div>
          <p>
           Twitch
@@ -923,28 +1388,63 @@
     </section>
     -->
    <!-- CONTACT SECTION -->
-   <section class="text-gray-600 body-font font-mono bg-white relative overflow-hidden py-10" id="contact">
-    <div class="container mx-auto flex flex-col lg:flex-row items-center px-5 gap-10">
-     <div class="lg:w-1/2 w-full">
-      <video autoplay="" class="contact-video" loop="" muted="" playsinline="">
-       <source src="assets/clips/egypt_gif.mp4" type="video/mp4"/>
-       Your browser does not support the video tag.
-      </video>
+   <section class="text-gray-600 body-font font-mono bg-white relative overflow-hidden pt-10" id="contact">
+    <div class="container mx-auto px-5">
+     <div class="contact-layout">
+     <div class="contact-stage">
+      <figure class="crt" data-reveal="">
+       <button aria-label="Flip the channel" class="crt__screen" data-crt-screen="" type="button">
+        <canvas aria-label="NJPH·TV, a pixel-art TV: me, my robot and a camel walking like Egyptians in front of the pyramids. Tap to change the channel." class="crt__canvas" data-crt-canvas="" height="126" role="img" width="168">
+        </canvas>
+        <span aria-hidden="true" class="crt__scanlines">
+        </span>
+        <span aria-hidden="true" class="crt__static">
+        </span>
+        <span aria-hidden="true" class="crt__channel" data-crt-channel="">
+         CH 03
+        </span>
+       </button>
+       <div aria-hidden="true" class="crt__base">
+        <span class="crt__brand">
+         NJPH·TV
+        </span>
+        <span class="crt__grille">
+        </span>
+        <span class="crt__knob">
+        </span>
+        <span class="crt__knob">
+        </span>
+        <span class="crt__led">
+        </span>
+       </div>
+       <figcaption class="crt__caption">
+        <span aria-hidden="true" class="crt__caption-dot">
+        </span>
+        Boston, MA ·
+        <time data-boston-clock="">
+         --:--
+        </time>
+        local time
+       </figcaption>
+      </figure>
      </div>
-     <div class="lg:w-1/2 w-full">
+     <div class="contact-main">
       <div class="contact-card">
        <div class="text-center lg:text-left">
         <p class="text-xs uppercase tracking-[0.4em] text-gray-500 mb-2">
          LET'S CONNECT
         </p>
-        <h1 class="title-font text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
+        <h2 class="title-font text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
          Say hi
-        </h1>
+        </h2>
+        <p class="contact-lede">
+         Open to robotics, AI, and software roles, research collaborations, and BROS2 early-access testers.
+        </p>
        </div>
-       <div class="contact-links">
-        <a class="contact-link" href="https://www.linkedin.com/in/noah-hathout/" rel="noopener noreferrer" target="_blank">
+       <div class="contact-links" data-reveal="">
+        <a class="contact-link contact-link--linkedin" href="https://www.linkedin.com/in/noah-hathout/" rel="noopener noreferrer" target="_blank">
          <div class="contact-link-inner">
-          <img alt="LinkedIn" src="assets/images/linkedin_logo.png"/>
+          <img alt="" height="52" src="assets/opt/linkedin_logo.webp" width="52"/>
           <span>
            LinkedIn
            <small>
@@ -953,17 +1453,20 @@
           </span>
          </div>
         </a>
-        <a class="contact-link" href="tel:+17047777361" rel="noopener noreferrer" target="_blank">
+        <a class="contact-link contact-link--github" href="https://github.com/nhathout" rel="noopener noreferrer" target="_blank">
          <div class="contact-link-inner">
-          <img alt="Phone" src="assets/images/phone.png"/>
+          <img alt="" height="52" src="assets/images/github_logo.png" width="52"/>
           <span>
-           Phone
+           GitHub
+           <small>
+            @nhathout
+           </small>
           </span>
          </div>
         </a>
-        <a class="contact-link" href="mailto:nhathout@bu.edu" rel="noopener noreferrer" target="_blank">
+        <a class="contact-link contact-link--email" href="mailto:nhathout@bu.edu">
          <div class="contact-link-inner">
-          <img alt="Email" src="assets/images/email.png"/>
+          <img alt="" height="52" src="assets/opt/email.webp" width="52"/>
           <span>
            Email
            <small>
@@ -972,9 +1475,9 @@
           </span>
          </div>
         </a>
-        <a class="contact-link" href="https://www.instagram.com/noahhathout/?hl=en" rel="noopener noreferrer" target="_blank">
+        <a class="contact-link contact-link--instagram" href="https://www.instagram.com/noahhathout/?hl=en" rel="noopener noreferrer" target="_blank">
          <div class="contact-link-inner">
-          <img alt="Instagram" src="assets/images/instagram_logo.png"/>
+          <img alt="" height="52" src="assets/opt/instagram_logo.webp" width="52"/>
           <span>
            Instagram
            <small>
@@ -983,16 +1486,112 @@
           </span>
          </div>
         </a>
+        <a class="contact-link contact-link--phone" href="tel:+17047777361">
+         <div class="contact-link-inner">
+          <img alt="" height="52" src="assets/opt/phone.webp" width="52"/>
+          <span>
+           Phone
+           <small>
+            Tap to call
+           </small>
+          </span>
+         </div>
+        </a>
+       </div>
+       <details class="composer">
+        <summary class="composer__toggle">
+         <span aria-hidden="true" class="composer__pencil">
+          ✎
+         </span>
+         Write me a quick note
+         <span aria-hidden="true" class="composer__chev">
+         </span>
+        </summary>
+        <form class="composer__form" data-composer="" novalidate="">
+         <fieldset class="composer__topics">
+          <legend>
+           What's it about?
+          </legend>
+          <button aria-pressed="true" class="composer__topic is-active" data-topic="Saying hi" type="button">
+           👋 Just saying hi
+          </button>
+          <button aria-pressed="false" class="composer__topic" data-topic="Opportunity" type="button">
+           💼 Job / internship
+          </button>
+          <button aria-pressed="false" class="composer__topic" data-topic="Research collaboration" type="button">
+           🔬 Research collab
+          </button>
+          <button aria-pressed="false" class="composer__topic" data-topic="BROS2 early access" type="button">
+           🧩 BROS2 early access
+          </button>
+         </fieldset>
+         <label class="composer__label" for="composerMessage">
+          Message
+         </label>
+         <textarea class="composer__message" id="composerMessage" maxlength="1500" placeholder="Hi Noah, I saw your portfolio and…" rows="4"></textarea>
+         <div class="composer__actions">
+          <button class="composer__send" type="submit">
+           Open in my email app
+          </button>
+          <button class="composer__copy" data-composer-copy="" type="button">
+           Copy message
+          </button>
+         </div>
+        </form>
+       </details>
+       <div class="contact-copy">
+        <p>
+         Or grab the essentials:
+        </p>
+        <div class="contact-copy__actions">
+        <a class="contact-copy__btn" download="noahhathout_cv.pdf" href="assets/files/noah_hathout_resume.pdf">
+         <svg aria-hidden="true" viewBox="0 0 24 24">
+          <path d="M11 3a1 1 0 1 1 2 0v9.59l3.3-3.3a1 1 0 1 1 1.4 1.42l-5 5a1 1 0 0 1-1.4 0l-5-5a1 1 0 1 1 1.4-1.42l3.3 3.3V3ZM4 19a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1Z"/>
+         </svg>
+         <span>
+          Resume
+         </span>
+        </a>
+        <button class="contact-copy__btn" data-copy-email="nhathout@bu.edu" type="button">
+         <svg aria-hidden="true" viewBox="0 0 24 24">
+          <path d="M9 3h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-2v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h2V5a2 2 0 0 1 2-2Zm0 4h6a2 2 0 0 1 2 2v6h2V5H9v2ZM5 9v10h10V9H5Z"/>
+         </svg>
+         <span data-copy-label="">
+          Copy email
+         </span>
+        </button>
+        </div>
+       </div>
        </div>
       </div>
+     </div>
+    </div>
+    <div class="skyline" data-phase="day" data-skyline="">
+     <canvas aria-label="Pixel-art Boston skyline across the Charles River: the Citgo sign, the Prudential Tower, 200 Clarendon, and the Longfellow Bridge, with a tiny pixel Noah waving from the Cambridge side. The sky follows the time of day in Boston." class="skyline__canvas" height="84" role="img" width="320">
+     </canvas>
+     <button aria-label="Wave at pixel Noah" class="skyline__noah" data-skyline-noah="" type="button">
+     </button>
+     <span aria-hidden="true" class="skyline__bubble" data-skyline-bubble="">
+      hi! 👋
+     </span>
+     <div class="skyline__bar">
+      <p class="skyline__label" data-skyline-label="">
+       Boston right now
+      </p>
+      <button class="skyline__cycle" data-skyline-cycle="" type="button">
+       <span aria-hidden="true">
+        ◐
+       </span>
+       Change time of day
+      </button>
      </div>
     </div>
    </section>
   </main>
   <footer class="site-footer text-gray-600 body-font font-mono">
    <div class="container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col">
-    <a class="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
-     <img alt="Profile Pic" class="rounded-lg bg-gray-500" src="assets/images/PixelMe_50x50.jpg"/>
+    <a aria-label="Back to top" class="flex title-font font-medium items-center md:justify-start justify-center text-gray-900" href="#">
+     <img alt="" class="site-footer__avatar" height="52" src="assets/opt/PixelMe.webp" width="52"/>
      <span class="ml-3 text-xl">
       [NH]
      </span>
@@ -1007,12 +1606,116 @@
       @noahhathout
      </a>
     </p>
-    <span class="inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center fill-current text-gray-500 sm:justify-start">
-     <!-- Social media icons here -->
+    <p class="footer-hint">
+     <kbd data-palette-kbd="">
+      Ctrl K
+     </kbd>
+     to jump anywhere
+    </p>
+    <span class="footer-socials inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center items-center fill-current text-gray-500 sm:justify-start">
+     <a aria-label="GitHub" class="footer-social" href="https://github.com/nhathout" rel="noopener noreferrer" target="_blank">
+      <svg aria-hidden="true" viewBox="0 0 24 24">
+       <path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.25-1.28-5.25-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/>
+      </svg>
+     </a>
+     <a aria-label="LinkedIn" class="footer-social" href="https://www.linkedin.com/in/noah-hathout/" rel="noopener noreferrer" target="_blank">
+      <svg aria-hidden="true" viewBox="0 0 24 24">
+       <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05a3.74 3.74 0 0 1 3.37-1.85c3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/>
+      </svg>
+     </a>
+     <a aria-label="Email" class="footer-social" href="mailto:nhathout@bu.edu">
+      <svg aria-hidden="true" viewBox="0 0 24 24">
+       <path d="M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm17 2.24-7.4 5.55a1 1 0 0 1-1.2 0L4 7.24V17h16V7.24ZM5.33 7l6.67 5 6.67-5H5.33Z"/>
+      </svg>
+     </a>
      <button id="eggHeart" aria-label="?" type="button"></button>
     </span>
    </div>
   </footer>
+  <!-- PROJECT DETAIL DIALOG -->
+  <dialog aria-labelledby="projectDialogTitle" class="project-dialog" id="projectDialog">
+   <div class="project-dialog__scroll">
+    <div class="project-dialog__toolbar">
+     <div class="project-dialog__nav">
+      <button aria-label="Previous project" class="project-dialog__navbtn" data-dialog-prev="" type="button">
+       ←
+      </button>
+      <span class="project-dialog__counter" data-dialog-counter="">
+      </span>
+      <button aria-label="Next project" class="project-dialog__navbtn" data-dialog-next="" type="button">
+       →
+      </button>
+     </div>
+     <button aria-label="Close project details" class="project-dialog__close" data-dialog-close="" type="button">
+      <svg aria-hidden="true" viewBox="0 0 24 24">
+       <path d="M6.4 5 12 10.6 17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6L6.4 19 5 17.6l5.6-5.6L5 6.4 6.4 5Z"/>
+      </svg>
+     </button>
+    </div>
+    <div class="project-dialog__media" data-dialog-media="">
+    </div>
+    <div class="project-dialog__body">
+     <p class="project-dialog__kicker" data-dialog-kicker="">
+     </p>
+     <h3 class="project-dialog__title" data-dialog-title="" id="projectDialogTitle">
+     </h3>
+     <p class="project-dialog__subtitle" data-dialog-subtitle="" hidden="">
+     </p>
+     <div class="project-dialog__notes" data-dialog-notes="" hidden="">
+     </div>
+     <p class="project-dialog__description" data-dialog-description="">
+     </p>
+     <ul class="project-dialog__details" data-dialog-details="" hidden="">
+     </ul>
+     <div data-dialog-tags="">
+     </div>
+     <div class="project-dialog__links" data-dialog-links="">
+     </div>
+     <p class="project-dialog__hint">
+      Tip: use ← / → to flip through projects.
+     </p>
+    </div>
+   </div>
+  </dialog>
+  <!-- COMMAND PALETTE -->
+  <dialog aria-label="Search and quick actions" class="palette" id="commandPalette">
+   <div class="palette__search">
+    <svg aria-hidden="true" viewBox="0 0 24 24">
+     <path d="M10.5 3a7.5 7.5 0 0 1 5.96 12.05l4.25 4.24a1 1 0 0 1-1.42 1.42l-4.24-4.25A7.5 7.5 0 1 1 10.5 3Zm0 2a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11Z"/>
+    </svg>
+    <input aria-activedescendant="" aria-autocomplete="list" aria-controls="paletteList" aria-expanded="true" aria-label="Search sections, projects, and actions" autocomplete="off" class="palette__input" id="paletteInput" placeholder="Search or jump to…" role="combobox" spellcheck="false" type="text"/>
+    <kbd class="palette__esc">
+     esc
+    </kbd>
+   </div>
+   <ul aria-label="Results" class="palette__list" id="paletteList" role="listbox">
+   </ul>
+   <div class="palette__footer" aria-hidden="true">
+    <span>
+     <kbd>
+      ↑
+     </kbd>
+     <kbd>
+      ↓
+     </kbd>
+     navigate
+    </span>
+    <span>
+     <kbd>
+      ↵
+     </kbd>
+     select
+    </span>
+    <span>
+     <kbd>
+      esc
+     </kbd>
+     close
+    </span>
+   </div>
+  </dialog>
+  <div aria-live="polite" class="toast" id="toast" role="status">
+  </div>
   <style>
    :root {
       color-scheme: light;
@@ -1039,6 +1742,7 @@
       --header-bg: rgba(255, 255, 255, 0.82);
       --header-border: rgba(100, 116, 139, 0.34);
       --header-shadow: 0 16px 36px rgba(148, 163, 184, 0.14);
+      --hero-sky: linear-gradient(180deg, #b9e2e8 0%, #dcf1ee 46%, #f3f6ea 78%, var(--surface) 100%);
       --hero-filter: saturate(0.98) brightness(1.1);
       --hero-transform: scale(1);
       --hero-overlay: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(245, 248, 252, 0.45) 40%, rgba(245, 248, 252, 0.98) 100%);
@@ -1084,6 +1788,7 @@
       --header-bg: rgba(7, 17, 32, 0.78);
       --header-border: rgba(148, 163, 184, 0.18);
       --header-shadow: 0 18px 44px rgba(2, 6, 23, 0.3);
+      --hero-sky: linear-gradient(180deg, #03060f 0%, #0a1630 50%, #112842 80%, var(--surface) 100%);
       --hero-filter: saturate(1.06) brightness(0.55) hue-rotate(-10deg);
       --hero-transform: scale(1);
       --hero-overlay: linear-gradient(180deg, rgba(6, 12, 28, 0.2) 0%, rgba(7, 17, 32, 0.62) 44%, rgba(7, 17, 32, 0.98) 100%);
@@ -1265,12 +1970,12 @@
     #education-experience {
       background: var(--surface-soft);
     }
-    #about h1,
+    #about h2,
     #skills h2,
     #projects .text-5xl,
     #awards-affiliations h2,
     #awards-affiliations h3,
-    #contact h1,
+    #contact h2,
     .hero-title,
     .hero-school,
     .hero-intro,
@@ -1290,10 +1995,13 @@
       background: var(--surface-soft);
       box-shadow: inset 0 0 0 1px var(--border);
     }
-    #about img {
-      border-color: var(--border-strong);
+    #about .about-polaroid img {
       background: var(--surface-strong);
-      box-shadow: var(--shadow-soft);
+    }
+    .site-footer__avatar {
+      width: 52px;
+      height: 52px;
+      image-rendering: pixelated;
     }
     .site-footer {
       background: var(--surface-soft);
@@ -1883,161 +2591,7 @@
       background: var(--edex-accent-soft);
       color: var(--edex-accent);
     }
-    .edex-sidequest {
-      margin-top: 1.5rem;
-      display: grid;
-      grid-template-columns: minmax(280px, 0.76fr) minmax(0, 1.24fr);
-      gap: 2rem;
-      align-items: stretch;
-      padding: 2rem;
-      border-radius: 1.75rem;
-      background: linear-gradient(135deg, #0f172a 0%, #111827 45%, #053b36 100%);
-      color: #e2e8f0;
-      box-shadow: 0 24px 48px rgba(15, 23, 42, 0.18);
-    }
-    .edex-sidequest__copy {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-self: stretch;
-      max-width: 29rem;
-      padding: 0.5rem 0 0.5rem 0.2rem;
-    }
-    .edex-sidequest__kicker {
-      font-size: 0.74rem;
-      font-weight: 700;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--edex-amber);
-    }
-    .edex-sidequest__title {
-      margin-top: 0.75rem;
-      font-size: clamp(2.65rem, 4vw, 3.55rem);
-      line-height: 1.05;
-      font-weight: 900;
-      color: #f8fafc;
-      max-width: 10ch;
-    }
-    .edex-sidequest__desc {
-      margin-top: 1rem;
-      max-width: 26rem;
-      font-size: 1.05rem;
-      line-height: 1.75;
-      color: #cbd5e1;
-    }
-    .edex-sidequest__instructions {
-      margin-top: 1rem;
-      max-width: 27rem;
-      font-size: 1rem;
-      line-height: 1.65;
-      color: #e2e8f0;
-    }
-    .edex-sidequest__instructions strong {
-      color: #ffffff;
-    }
-    .edex-sidequest__note {
-      margin-top: 0.85rem;
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--edex-amber);
-    }
-    .edex-sidequest__play {
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      justify-content: center;
-      gap: 1.25rem;
-      min-width: 0;
-    }
-    .edex-game-panel {
-      width: 100%;
-      max-width: 44rem;
-      margin-left: auto;
-      padding: 1.55rem 1.65rem;
-      border-radius: 1.55rem;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(148, 163, 184, 0.24);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 18px 34px rgba(15, 23, 42, 0.16);
-      position: relative;
-      overflow: hidden;
-    }
-    .edex-game-panel::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), transparent 55%);
-      pointer-events: none;
-    }
-    .edex-game-panel h4 {
-      color: #f8fafc;
-      font-size: 1.05rem;
-    }
-    .edex-game-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      margin-top: 1.2rem;
-    }
-    .edex-sidequest #leaderboard {
-      min-height: 1.5rem;
-      color: #cbd5e1;
-      width: 100%;
-      max-height: 18rem;
-      overflow-y: auto;
-      margin: 0;
-      padding: 0 0.2rem 0 0;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(250, 193, 35, 0.45) rgba(255, 255, 255, 0.04);
-    }
-    .game-leaderboard {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(7.1rem, 1fr));
-      gap: 0.75rem;
-      padding: 0;
-      margin: 0;
-      list-style: none;
-    }
-    .game-leaderboard__item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.55rem;
-      padding: 0.5rem 0.6rem;
-      border-radius: 0.9rem;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      color: #e2e8f0;
-      font-size: 0.72rem;
-      letter-spacing: 0.08em;
-    }
-    .game-leaderboard__item span {
-      color: #cbd5e1;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    .game-leaderboard__item strong {
-      color: #fac123;
-      font-weight: 800;
-      flex-shrink: 0;
-    }
-    .game-leaderboard-empty {
-      color: #cbd5e1;
-      font-size: 0.8rem;
-      line-height: 1.6;
-    }
-    .edex-game-canvas {
-      width: 100%;
-      max-width: 44rem;
-      margin-left: auto;
-      height: auto;
-      border-radius: 1rem;
-      border-color: rgba(255, 255, 255, 0.2);
-      box-shadow: 0 24px 40px rgba(15, 23, 42, 0.22);
-      display: block;
-    }
+    /* Atari [Course]out styles live in assets/css/game.css */
     .resume-popover {
       position: fixed;
       /* --resume-lift is driven from script.js: as the footer scrolls in, the
@@ -2069,6 +2623,15 @@
       visibility: visible;
       pointer-events: auto;
       transition: opacity 260ms ease, transform 260ms ease, visibility 0s;
+    }
+    /* stepped aside while the contact card (which has its own resume button) is on screen */
+    .resume-popover.is-visible.is-tucked {
+      opacity: 0;
+      transform: translateY(20px);
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 260ms ease, transform 260ms ease,
+                  visibility 0s linear 260ms;
     }
     .resume-popover__close {
       position: absolute;
@@ -2748,19 +3311,19 @@
   .contact-link:hover {
     transform: rotate(-2deg) skew(1deg) translate(10px, -8px);
   }
-  .contact-link:nth-child(1):hover .contact-link-inner {
+  .contact-link--linkedin:hover .contact-link-inner {
     background: linear-gradient(120deg, #0a66c2, #14b8a6);
     color: #ffffff;
   }
-  .contact-link:nth-child(2):hover .contact-link-inner {
+  .contact-link--phone:hover .contact-link-inner {
     background: linear-gradient(120deg, #10b981, #34d399);
     color: #ffffff;
   }
-  .contact-link:nth-child(3):hover .contact-link-inner {
+  .contact-link--email:hover .contact-link-inner {
     background: linear-gradient(120deg, #f97316, #facc15);
     color: #ffffff;
   }
-  .contact-link:nth-child(4):hover .contact-link-inner {
+  .contact-link--instagram:hover .contact-link-inner {
     background: linear-gradient(120deg, #d946ef, #f43f5e);
     color: #ffffff;
   }
@@ -2915,10 +3478,10 @@
       position: relative;
       isolation: isolate;
       overflow: hidden;
-      background: linear-gradient(0deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.1)), url('assets/images/pixel-background.jpg');
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: cover;
+      /* the art stays readable in light mode: only a soft mist behind the
+         centered copy and a fade into the page at the bottom */
+      /* hero-art.js paints a pixel landscape over this; the gradient is the no-JS sky */
+      background: var(--hero-sky);
     }
     .hero-panel::before {
       content: '';
@@ -2926,11 +3489,8 @@
       inset: 0;
       background:
         var(--hero-glow),
-        var(--hero-overlay),
-        url('assets/images/pixel-space-wallpaper.jpg');
+        var(--hero-overlay);
       background-repeat: no-repeat;
-      background-position: center, center, center;
-      background-size: auto, auto, cover;
       filter: var(--hero-filter);
       transform: var(--hero-transform);
       opacity: 0;
@@ -2975,7 +3535,7 @@
       .hero-panel {
         padding-top: 6rem;
       }
-      .hero-panel h2 {
+      .hero-panel .hero-title {
         font-size: 2.2rem;
       }
       .hero-panel p {
@@ -3145,31 +3705,6 @@
     .mobile-menu-action:hover {
       transform: translateY(-1px);
       box-shadow: 0 14px 32px rgba(0, 121, 107, 0.2);
-    }
-    .game-btn {
-      transition: background-color 200ms ease, transform 200ms ease, box-shadow 200ms ease;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      border-radius: 0.95rem;
-      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.18);
-    }
-    .game-btn-primary {
-      background-color: #00796b;
-      color: #ffffff;
-    }
-    .game-btn-primary:hover {
-      background-color: #005f52;
-      transform: translateY(-2px);
-      box-shadow: 0 16px 26px rgba(0, 121, 107, 0.24);
-    }
-    .game-btn-secondary {
-      background-color: #fac123;
-      color: #1f2937;
-    }
-    .game-btn-secondary:hover {
-      background-color: #e1a100;
-      transform: translateY(-2px);
-      box-shadow: 0 16px 26px rgba(250, 193, 35, 0.28);
     }
     body.mobile-nav-open {
       overflow: hidden;
@@ -3589,17 +4124,6 @@
       .edex-spotlight {
         position: static;
       }
-      .edex-sidequest__copy {
-        max-width: none;
-        padding-left: 0;
-      }
-      .edex-game-panel,
-      .edex-game-canvas {
-        max-width: none;
-      }
-      .game-leaderboard {
-        grid-template-columns: repeat(auto-fit, minmax(6.75rem, 1fr));
-      }
     }
     @media (max-width: 768px) {
       .edex-stats {
@@ -3614,16 +4138,6 @@
       }
       .edex-spotlight {
         padding: 1.25rem;
-      }
-      .edex-sidequest {
-        padding: 1.35rem;
-        gap: 1.25rem;
-      }
-      .edex-sidequest__title {
-        font-size: 2.2rem;
-      }
-      .game-leaderboard {
-        grid-template-columns: repeat(auto-fit, minmax(6.1rem, 1fr));
       }
       .projects-grid {
         grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -3689,6 +4203,9 @@
       .resume-popover.is-visible {
         transform: translate(-50%, 0);
       }
+      .resume-popover.is-visible.is-tucked {
+        transform: translate(-50%, 24px);
+      }
     }
     .skill-link.is-preview .skill-cube {
       animation: skill-rotate 6s linear infinite;
@@ -3744,9 +4261,31 @@
 
     /* Adjust leaderboard font-size and layout are done in JS inline styles */
   </style>
+  <script defer="" src="pixel-kit.js?v=2026-10-02">
+  </script>
+  <script defer="" src="hero-art.js?v=2026-10-02">
+  </script>
   <script defer="" src="egg.js">
   </script>
-  <script defer="" src="script.js?v=818ab50">
+  <script defer="" src="script.js?v=2026-09-29">
+  </script>
+  <script defer="" src="interactions.js?v=2026-09-30">
+  </script>
+  <script defer="" src="game.js?v=2026-09-29">
+  </script>
+  <script defer="" src="about-portrait.js?v=2026-10-02">
+  </script>
+  <script defer="" src="about.js?v=2026-10-02">
+  </script>
+  <script defer="" src="sections.js?v=2026-10-02">
+  </script>
+  <script defer="" src="tv-channels.js?v=2026-10-02">
+  </script>
+  <script defer="" src="skills.js?v=2026-09-30">
+  </script>
+  <script defer="" src="edex.js?v=2026-09-29">
+  </script>
+  <script defer="" src="contact.js?v=2026-09-30">
   </script>
  </body>
 </html>

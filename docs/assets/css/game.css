@@ -1,0 +1,592 @@
+/*
+ * Atari [Course]out: the breakout side quest in the Education & Experience section.
+ * Scoped under #mini-game so it wins over the shared edex rules in index.html.
+ * The panel is dark in both themes; the canvas board itself follows the site theme.
+ */
+
+#mini-game [hidden] {
+  display: none !important;
+}
+
+#mini-game {
+  position: relative;
+  margin-top: 1.5rem;
+  display: grid;
+  grid-template-columns: minmax(250px, 0.72fr) minmax(0, 1.28fr);
+  gap: clamp(1.25rem, 3vw, 2.25rem);
+  align-items: center;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border-radius: 1.75rem;
+  border: 1px solid rgba(250, 193, 35, 0.12);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(250, 193, 35, 0.14), transparent 38%),
+    radial-gradient(circle at 100% 100%, rgba(20, 184, 166, 0.2), transparent 44%),
+    linear-gradient(135deg, #0f172a 0%, #111827 45%, #053b36 100%);
+  color: #e2e8f0;
+  box-shadow: 0 24px 48px rgba(15, 23, 42, 0.2);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* faint CRT scanlines */
+#mini-game::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 4px);
+  pointer-events: none;
+}
+
+html.darkmode #mini-game {
+  border-color: rgba(148, 163, 184, 0.16);
+  box-shadow: 0 28px 60px rgba(2, 6, 23, 0.45);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Copy column                                                       */
+/* ------------------------------------------------------------------ */
+#mini-game .edex-sidequest__copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 29rem;
+  min-width: 0;
+}
+
+#mini-game .edex-sidequest__kicker {
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #fac123;
+}
+
+#mini-game .edex-sidequest__title {
+  margin-top: 0.7rem;
+  font-size: clamp(2.3rem, 4vw, 3.4rem);
+  line-height: 1.05;
+  font-weight: 900;
+  color: #f8fafc;
+  max-width: 10ch;
+  text-shadow: 3px 3px 0 rgba(250, 193, 35, 0.22);
+}
+
+#mini-game .edex-sidequest__desc {
+  margin-top: 0.9rem;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #cbd5e1;
+}
+
+#mini-game kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.55rem;
+  padding: 0.08rem 0.4rem;
+  border-radius: 0.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-bottom-width: 2px;
+  background: rgba(255, 255, 255, 0.07);
+  color: #f8fafc;
+  font-family: inherit;
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+#mini-game .game-controls {
+  margin-top: 1.15rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+#mini-game .game-controls > div {
+  display: grid;
+  grid-template-columns: 4.6rem 1fr;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+#mini-game .game-controls dt {
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #fac123;
+}
+
+#mini-game .game-controls dd {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: #e2e8f0;
+}
+
+#mini-game .game-powerups {
+  margin-top: 1.1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  list-style: none;
+  padding: 0;
+}
+
+#mini-game .game-powerups li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.28rem 0.6rem 0.28rem 0.3rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #cbd5e1;
+}
+
+#mini-game .game-cap {
+  display: inline-grid;
+  place-items: center;
+  width: 1.7rem;
+  height: 1rem;
+  border-radius: 999px;
+  font-size: 0.62rem;
+  font-weight: 900;
+  line-height: 1;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.55);
+}
+
+#mini-game .game-cap--wide { background: #14b8a6; color: #042f2e; }
+#mini-game .game-cap--multi { background: #fac123; color: #422006; }
+#mini-game .game-cap--slow { background: #60a5fa; color: #0b2447; }
+#mini-game .game-cap--life { background: #fb7185; color: #4c0519; }
+
+/* ------------------------------------------------------------------ */
+/*  Play column                                                       */
+/* ------------------------------------------------------------------ */
+#mini-game .edex-sidequest__play {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  min-width: 0;
+}
+
+#mini-game .game-stage {
+  position: relative;
+  width: 100%;
+}
+
+#mini-game .edex-game-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  aspect-ratio: var(--game-aspect, 17 / 10);
+  padding: clamp(1rem, 2.4vw, 1.5rem);
+  border-radius: 1.1rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 18px 34px rgba(15, 23, 42, 0.18);
+  overflow: hidden;
+}
+
+#mini-game .edex-game-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), transparent 55%);
+  pointer-events: none;
+}
+
+#mini-game .game-panel__eyebrow {
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #fac123;
+}
+
+#mini-game .game-panel__title {
+  margin-top: 0.25rem;
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: #f8fafc;
+}
+
+#mini-game .game-panel__summary {
+  margin-top: 0.3rem;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: #cbd5e1;
+}
+
+/* leaderboard */
+#mini-game .game-leaderboard-wrap {
+  flex: 1 1 auto;
+  min-height: 3rem;
+  max-height: 16rem;
+  overflow-y: auto;
+  padding-right: 0.2rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(250, 193, 35, 0.45) rgba(255, 255, 255, 0.04);
+}
+
+#mini-game .game-leaderboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(7.4rem, 1fr));
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+#mini-game .game-leaderboard__item {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 0.8rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: #e2e8f0;
+}
+
+#mini-game .game-leaderboard__rank {
+  color: #94a3b8;
+  font-size: 0.64rem;
+  flex-shrink: 0;
+}
+
+#mini-game .game-leaderboard__name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 700;
+}
+
+#mini-game .game-leaderboard__item strong {
+  color: #fac123;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+#mini-game .game-leaderboard__item.is-top1 {
+  border-color: rgba(250, 193, 35, 0.55);
+  background: linear-gradient(120deg, rgba(250, 193, 35, 0.18), rgba(250, 193, 35, 0.04));
+}
+
+#mini-game .game-leaderboard__item.is-top2 {
+  border-color: rgba(203, 213, 225, 0.45);
+  background: linear-gradient(120deg, rgba(203, 213, 225, 0.14), rgba(203, 213, 225, 0.03));
+}
+
+#mini-game .game-leaderboard__item.is-top3 {
+  border-color: rgba(217, 119, 6, 0.5);
+  background: linear-gradient(120deg, rgba(217, 119, 6, 0.16), rgba(217, 119, 6, 0.03));
+}
+
+#mini-game .game-leaderboard__item.is-top1 .game-leaderboard__rank { color: #fac123; }
+#mini-game .game-leaderboard__item.is-top2 .game-leaderboard__rank { color: #e2e8f0; }
+#mini-game .game-leaderboard__item.is-top3 .game-leaderboard__rank { color: #f59e0b; }
+
+#mini-game .game-leaderboard__item.is-you {
+  border-color: #14b8a6;
+  box-shadow: 0 0 0 2px rgba(20, 184, 166, 0.35);
+  animation: game-you 1.6s ease-in-out 3;
+}
+
+@keyframes game-you {
+  50% { box-shadow: 0 0 0 5px rgba(20, 184, 166, 0.12); }
+}
+
+#mini-game .game-leaderboard-empty {
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: #cbd5e1;
+}
+
+/* initials form */
+#mini-game .game-score-form {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.85rem;
+  border-radius: 0.9rem;
+  border: 1px dashed rgba(250, 193, 35, 0.45);
+  background: rgba(250, 193, 35, 0.06);
+}
+
+#mini-game .game-score-form__label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+#mini-game .game-score-form__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+#mini-game .game-score-form__input {
+  width: 7.5rem;
+  padding: 0.5rem 0.7rem;
+  border-radius: 0.7rem;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(2, 6, 23, 0.45);
+  color: #f8fafc;
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+#mini-game .game-score-form__input::placeholder {
+  color: rgba(248, 250, 252, 0.28);
+}
+
+#mini-game .game-score-form__input:focus {
+  outline: 2px solid #fac123;
+  outline-offset: 2px;
+  border-color: transparent;
+}
+
+#mini-game .game-score-form__msg {
+  min-height: 1.1em;
+  font-size: 0.74rem;
+  color: #fcd34d;
+}
+
+/* buttons */
+#mini-game .edex-game-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: auto;
+}
+
+#mini-game .game-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.62rem 1.1rem;
+  border-radius: 0.8rem;
+  border: 1px solid transparent;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 180ms ease, background-color 180ms ease, box-shadow 180ms ease, color 180ms ease, border-color 180ms ease;
+}
+
+#mini-game .game-btn:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+#mini-game .game-btn-primary {
+  background: #fac123;
+  color: #1f1300;
+  box-shadow: 0 10px 22px rgba(250, 193, 35, 0.25), inset 0 -3px 0 rgba(0, 0, 0, 0.18);
+}
+
+#mini-game .game-btn-primary:hover,
+#mini-game .game-btn-primary:focus-visible {
+  background: #ffd24d;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(250, 193, 35, 0.32), inset 0 -3px 0 rgba(0, 0, 0, 0.18);
+}
+
+#mini-game .game-btn-ghost {
+  background: transparent;
+  color: #cbd5e1;
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+#mini-game .game-btn-ghost:hover,
+#mini-game .game-btn-ghost:focus-visible {
+  color: #f8fafc;
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+#mini-game .game-btn:focus-visible,
+#mini-game .game-toolbar__btn:focus-visible {
+  outline: 2px solid #fac123;
+  outline-offset: 3px;
+}
+
+#resetLeaderboardBtn {
+  margin-left: auto;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.66rem;
+  opacity: 0.75;
+}
+
+/* the board */
+#mini-game .edex-game-canvas {
+  width: 100%;
+  height: auto;
+  border-radius: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.14);
+  background: #0b1526;
+  box-shadow: 0 24px 40px rgba(2, 6, 23, 0.3);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+#mini-game .edex-game-canvas.is-running {
+  touch-action: none;
+}
+
+@media (pointer: fine) {
+  #mini-game .edex-game-canvas.is-playing {
+    cursor: none;
+  }
+}
+
+#mini-game .edex-game-canvas:focus {
+  outline: none;
+}
+
+#mini-game .edex-game-canvas:focus-visible {
+  outline: 3px solid #fac123;
+  outline-offset: 3px;
+}
+
+/* toolbar under the board */
+#mini-game .game-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.45rem;
+}
+
+#mini-game .game-toolbar__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.42rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.05);
+  color: #e2e8f0;
+  font-family: inherit;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+#mini-game .game-toolbar__btn:hover {
+  border-color: rgba(250, 193, 35, 0.5);
+  color: #fac123;
+}
+
+#mini-game .game-toolbar__btn[aria-pressed="true"] {
+  background: rgba(250, 193, 35, 0.14);
+  border-color: rgba(250, 193, 35, 0.5);
+}
+
+#mini-game .game-toolbar__btn--sound[aria-pressed="true"] {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.16);
+  color: #94a3b8;
+}
+
+#mini-game .game-toolbar__icon {
+  display: inline-flex;
+  width: 1rem;
+  height: 1rem;
+}
+
+#mini-game .game-toolbar__icon svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Responsive                                                        */
+/* ------------------------------------------------------------------ */
+@media (max-width: 1024px) {
+  #mini-game {
+    grid-template-columns: 1fr;
+  }
+
+  #mini-game .edex-sidequest__copy {
+    max-width: none;
+  }
+
+  #mini-game .game-controls {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  #mini-game .game-controls > div {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  #mini-game {
+    border-radius: 1.4rem;
+    padding: 1.1rem;
+  }
+
+  #mini-game .edex-sidequest__title {
+    font-size: 2.1rem;
+  }
+
+  #mini-game .game-controls {
+    grid-template-columns: 1fr;
+  }
+
+  #mini-game .game-controls > div {
+    grid-template-columns: 4.2rem 1fr;
+    gap: 0.6rem;
+  }
+
+  #mini-game .game-leaderboard {
+    grid-template-columns: repeat(auto-fill, minmax(6.4rem, 1fr));
+  }
+
+  #mini-game .game-leaderboard-wrap {
+    max-height: 13rem;
+  }
+
+  #mini-game .game-toolbar {
+    justify-content: stretch;
+  }
+
+  #mini-game .game-toolbar__btn {
+    flex: 1 1 auto;
+    justify-content: center;
+    padding: 0.55rem 0.7rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #mini-game .game-leaderboard__item.is-you {
+    animation: none;
+  }
+
+  #mini-game .game-btn,
+  #mini-game .game-btn:hover {
+    transform: none;
+  }
+}

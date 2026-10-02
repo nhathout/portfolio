@@ -145,8 +145,8 @@ let lastScrollTop = 0;
 const topNav = document.getElementById('topNav');
 const indicatorSections = [
     { id: 'about', label: '/ about' },
-    { id: 'skills', label: '/ skills' },
     { id: 'education-experience', label: '/ edex' },
+    { id: 'skills', label: '/ skills' },
     { id: 'projects', label: '/ projects' },
     { id: 'awards-affiliations', label: '/ awards' },
     { id: 'contact', label: '/ contact' }
@@ -384,14 +384,26 @@ function initEdexSection() {
     setEdexFilter('all');
 }
 
-// ====================
-//  Skills Grid (3D cubes)
-// ====================
-
-const skillFaces = ['front', 'back', 'right', 'left', 'top', 'bottom'];
+// Project cards. Fields:
+//   id          stable slug (used by the detail dialog + command palette)
+//   categories  any of: robotics, ai, embedded, software, games (drives the filter chips)
+//   status      optional pill: 'live' | 'private' | 'building'
+//   image       still image; or `video` (+ `poster`) for a looping clip; or `terminal` lines for a text-art tile
+//   details     bullet points shown in the detail dialog
+//   upcoming    renders the card as locked (no media, no details)
+const projectCategories = [
+    { id: 'all', label: 'All' },
+    { id: 'robotics', label: 'Robotics' },
+    { id: 'ai', label: 'AI / ML' },
+    { id: 'embedded', label: 'Embedded' },
+    { id: 'software', label: 'Software & Web' },
+    { id: 'games', label: 'Games' }
+];
 const projectEntries = [
     {
+        id: 'thesis',
         title: "Master's Thesis",
+        categories: ['robotics', 'ai'],
         description: 'Current thesis work. Final title, visuals, summary, and links unlock once the project is complete.',
         upcoming: {
             label: 'Thesis in progress',
@@ -401,440 +413,315 @@ const projectEntries = [
         links: []
     },
     {
+        id: 'untitled-game',
+        title: 'Untitled Game',
+        categories: ['games', 'software'],
+        description: 'My first video game: a 3D title in Godot 4, built with an AI-assisted workflow and its own automated test suite. The concept stays under wraps until it is ready to show.',
+        tags: ['Godot 4', 'GDScript', '3D'],
+        upcoming: {
+            label: 'In development',
+            note: 'Codename redacted. Unlocks at announcement.',
+            placeholderMark: 'P1'
+        },
+        links: []
+    },
+    {
+        id: 'sunny',
+        title: 'Sunny',
+        subtitle: 'Local-first multi-agent assistant',
+        categories: ['ai', 'software'],
+        status: 'private',
+        description: 'A crew of AI agents that runs on my PC on a schedule: each one does a chore, files an honest report, and never acts on the outside world without my approval.',
+        terminal: [
+            ['07:00', 'crew wakes (task scheduler)', ''],
+            ['07:01', 'backups', 'ok'],
+            ['07:03', 'repo health', '2 warn'],
+            ['07:09', 'research', 'report filed'],
+            ['07:12', 'captain', 'digest ready'],
+            ['', 'model: local · spent $0.00', '']
+        ],
+        details: [
+            'Specialist agents wake on a schedule (Windows Task Scheduler can wake the PC from sleep), do one job each, and write a structured report; a captain agent turns them into a single daily digest.',
+            'Local-first: runs on local models through Ollama by default and escalates to Claude only where it is worth it, inside a monthly budget that falls back to local models on its own.',
+            'Anything that touches the outside world goes through an approval queue first.',
+            'A pixel-art control room UI that only shows what the harness can actually prove from real process and file state.',
+            'Python 3.12, pydantic, httpx, and the Claude Agent SDK, backed by 1,400+ pytest tests.'
+        ],
+        tags: ['Python', 'Multi-agent', 'Ollama', 'Claude Agent SDK', 'pytest'],
+        links: []
+    },
+    {
+        id: 'trashformerpro',
         title: 'TrashformerPro',
+        categories: ['ai', 'embedded'],
         description: 'Low-cost Raspberry Pi smart-bin prototype that detects staged waste, classifies four categories with MobileNetV3-Large, and gives live feedback through a web app, LEDs, buzzer, and logs.',
-        image: 'assets/clips/trashpro.gif',
+        video: 'assets/opt/trashpro.mp4',
+        poster: 'assets/opt/trashpro-poster.webp',
+        details: [
+            'Embedded waste-classification prototype on a Raspberry Pi 5 with an upward-facing camera, acrylic sorting plate, LED/buzzer feedback, a web app, and runtime logging.',
+            'MobileNetV3-Large four-class classifier with empty-plate differencing and confidence-gated inference.',
+            'Reached 95.3% test accuracy after on-device feedback fine-tuning.'
+        ],
+        tags: ['Raspberry Pi 5', 'MobileNetV3', 'Python', 'Web app'],
         links: [
             { label: 'Report', href: 'assets/files/TrashformerPro_finalreport.pdf' },
             { label: 'Repository', href: 'https://github.com/nhathout/TrashformerPro' }
         ]
     },
     {
-        title: 'BROS2',
-        description: 'Electron desktop app to visually compose ROS 2 graphs, auto-generate packages/launch files, and run them in a managed Docker workspace with live introspection.',
-        image: 'assets/clips/ec601-demo-HD720p-ezgif.com-video-speed.mov',
-        award: {
-            title: 'BU Best Project Award',
-            season: 'Fall 2025'
-        },
-        links: [
-            { label: 'Repository', href: 'https://github.com/nhathout/BROS2' }
-        ]
-    },
-    {
+        id: 'pixelpose',
         title: 'PixelPose',
+        categories: ['ai'],
         description: '6-DoF monocular camera pose regression study comparing CNN, ViT, and DINO backbones across indoor and outdoor datasets, with Grad-CAM and patch attribution to inspect learned spatial cues.',
-        image: 'assets/images/pixelpose.png',
+        image: 'assets/opt/pixelpose.webp',
+        details: [
+            'Benchmarked CNN, ViT, and DINO backbones for absolute pose regression on indoor (MS 7-Scenes) and outdoor (Cambridge KingsCollege) scenes.',
+            'Trained per-scene models and evaluated position and orientation error.',
+            'Interpreted predictions with Grad-CAM and patch-token attribution.'
+        ],
+        tags: ['PyTorch', 'ViT / DINO', 'Computer Vision'],
         links: [
             { label: 'Report', href: 'assets/files/IVC_Final-1.pdf' }
         ]
     },
     {
+        id: 'pollux',
+        title: 'Pollux',
+        categories: ['robotics', 'ai', 'embedded'],
+        description: 'An autonomous countertop-cleaning robot with reinforcement learning to avoid cliffs and obstacles.',
+        video: 'assets/opt/pollux.mp4',
+        poster: 'assets/opt/pollux-poster.webp',
+        details: [
+            'ROS 2 mobile robot that disinfects surfaces with UV-C LEDs while avoiding obstacles and cliffs.',
+            'Custom PPO reward structure reaching 60%+ simulated coverage with zero edge violations.',
+            'Ultrasonic and IMU sensing in a real-time perception stack on a Raspberry Pi 4B.'
+        ],
+        tags: ['ROS 2', 'PPO (RL)', 'Raspberry Pi 4B'],
+        links: [
+            { label: 'Repository', href: 'https://github.com/nhathout/pollux-AMR' }
+        ]
+    },
+    {
+        id: 'tiltgolf',
         title: 'TiltGolf',
+        categories: ['embedded', 'games'],
         description: 'Tilt-controlled mini golf on BeagleBone Black; IMU driver streams tilt to a Qt arcade UI with real-time physics.',
-        image: 'assets/clips/TiltGolfFinalProjectofEC535BostonUniversity_Open-SourceIMUMiniGolfonBeagleBone-ezgif.com-speed.gif',
+        video: 'assets/opt/tiltgolf.mp4',
+        poster: 'assets/opt/tiltgolf-poster.webp',
+        details: [
+            'Linux kernel driver for the IMU on a BeagleBone Black streams tilt data to user space.',
+            'Qt arcade UI with Box2D physics turns the board into a mini-golf controller.'
+        ],
+        tags: ['BeagleBone', 'Kernel driver', 'Qt', 'Box2D'],
         links: [
             { label: 'Report', href: 'https://github.com/nhathout/TiltGolf/blob/main/tiltgolf-final-report.pdf' },
             { label: 'Repository', href: 'https://github.com/nhathout/TiltGolf' }
         ]
     },
     {
+        id: 'trashformer',
         title: 'Trashformer',
+        categories: ['robotics', 'ai'],
         description: 'Open-source 3D-printed tabletop sorting arm with vision-driven classification and trajectory planning to sort waste.',
-        image: 'assets/images/trashformer.png',
+        image: 'assets/opt/trashformer.webp',
+        tags: ['3D printing', 'Computer Vision', 'Motion planning'],
         links: [
             { label: 'Report', href: 'assets/files/EK505_Transformer_Final_Report__2_.pdf' },
             { label: 'Repository', href: 'https://github.com/nhathout/trashformer' }
         ]
     },
     {
-        title: 'Pollux',
-        description: 'An autonomous countertop-cleaning robot with reinforcement learning to avoid cliffs and obstacles.',
-        image: 'assets/clips/pollux.gif',
-        links: [
-            { label: 'Repository', href: 'https://github.com/nhathout/pollux-AMR' }
-        ]
-    },
-    {
+        id: 'supertuxsmart',
         title: 'SuperTuxSmart',
+        categories: ['ai', 'games'],
         description: 'Optimized pySuperTuxKart racing performance via computer vision + RL. Full write-up included.',
-        image: 'assets/images/supertuxsmart.png',
+        image: 'assets/opt/supertuxsmart.webp',
+        tags: ['Reinforcement learning', 'Computer Vision', 'Python'],
         links: [
             { label: 'Report', href: 'https://github.com/nhathout/EC418-Final-Project/blob/main/FinalReport.pdf' },
             { label: 'Repository', href: 'https://github.com/nhathout/EC418-Final-Project' }
         ]
     },
     {
+        id: 'detectron2-attention',
         title: 'Detectron2 Attention Tracker',
+        categories: ['ai'],
         description: 'Meta’s Detectron2 reworked for facial attention tracking, blending COCO instance segmentation and custom training.',
-        image: 'assets/images/dl_final_project.png',
+        image: 'assets/opt/dl_final_project.webp',
+        tags: ['Detectron2', 'PyTorch', 'Segmentation'],
         links: [
             { label: 'Report', href: 'https://docs.google.com/document/d/1jopVcW5oSQAM1AiB77bWeUELJqZ4IWX0DPezHU_gHWk/edit?usp=sharing' },
             { label: 'Repository', href: 'https://github.com/nhathout/AreYoutTrieulyPayingAttentionOrJustJoshingNoahmNotButHilarioIsNET' }
         ]
     },
     {
-        title: 'Smart Home API',
-        description: 'Python API to orchestrate houses, rooms, and devices with strong validation + testing.',
-        image: 'assets/images/smarthome.png',
-        links: [
-            { label: 'Repository', href: 'https://github.com/nhathout/smart-home-api' }
-        ]
-    },
-    {
+        id: 'pira',
         title: 'PIRA · Personal Indoor Robot Assistant',
+        categories: ['robotics', 'embedded'],
         description: 'Optitrack navigation, WASD teleop, Node.js coordination, and Streamlit visualization for multi-robot control.',
-        image: 'assets/images/pira.png',
+        image: 'assets/opt/pira.webp',
+        tags: ['ESP32', 'RTOS', 'OptiTrack', 'Node.js'],
         links: [
             { label: 'Repository', href: 'https://github.com/nhathout/PIRA' }
         ]
     },
     {
+        id: 'chatsheets',
         title: 'ChatSheets AI',
+        categories: ['ai', 'software'],
         description: 'Upload a CSV, chat through your dataset, and generate SQL/plots in real time.',
-        image: 'assets/images/chatsheets.png',
+        image: 'assets/opt/chatsheets.webp',
+        tags: ['LLMs', 'SQLite', 'Python'],
         links: [
             { label: 'Repository', href: 'https://github.com/nhathout/ChatSheetsAI' }
         ]
     },
     {
-        title: 'PyP2PChat',
-        description: 'Peer-to-peer terminal chat where each node doubles as client/server, racing to establish consensus.',
-        image: 'assets/images/pyp2pchat.png',
+        id: 'editorial-portfolio',
+        title: 'Vol. 1 · Editorial Portfolio',
+        categories: ['software'],
+        status: 'live',
+        description: 'A magazine-style portfolio I designed and built for a Northeastern business & AI-governance student: a cover page with “cover lines” instead of a nav bar, chapter pages, and small interactive touches.',
+        image: 'assets/opt/editorial-portfolio.webp',
+        details: [
+            'Cover-page layout with a masthead, cover lines, and a contents list that doubles as navigation.',
+            'Chapter pages with staggered scroll reveals, tilt and flip cards, and ←/→ keyboard paging between chapters.',
+            'Plain HTML, CSS, and JavaScript with no build step, deployed to GitHub Pages by a GitHub Actions workflow.'
+        ],
+        tags: ['HTML', 'CSS', 'JavaScript', 'GitHub Pages'],
         links: [
-            { label: 'Repository', href: 'https://github.com/nhathout/PyP2PChat' }
+            { label: 'Live', href: 'https://nhathout.github.io/shunyaweb/' }
         ]
     },
     {
-        title: 'FitCat · Network of Smart Cat Collars',
-        description: 'Hardware + cloud dashboard for cat activity monitoring with LoRa and predictive analytics.',
-        image: 'assets/images/fitcat.png',
-        links: [
-            { label: 'Repository', href: 'https://github.com/nhathout/Fit-Cat' }
-        ]
-    },
-    {
-        title: 'SmartPill · Ingestible Sensor',
-        description: 'ESP32 ingestible sensor logging biometrics along a simulated digestive tract—proof-of-concept diagnostics.',
-        image: 'assets/images/smartpill.png',
-        links: [
-            { label: 'Repository', href: 'https://github.com/nhathout/SmartPill-Ingestible-Sensor' }
-        ]
-    },
-    {
-        title: 'elect-A-leader',
-        description: 'Distributed, fault-tolerant e-voting system with IR fob authentication and leader election.',
-        image: 'assets/images/election.png',
-        links: [
-            { label: 'Repository', href: 'https://github.com/nhathout/elect-A-leader' }
-        ]
-    },
-    {
-        title: 'Personal Portfolio',
-        description: 'The site you’re browsing.',
-        image: 'assets/images/PixelMe.jpg',
-        links: [
-            { label: 'Repository', href: 'https://github.com/nhathout/portfolio' }
-        ]
-    },
-    {
+        id: 'mias-portfolio',
         title: 'Mia’s Art Portfolio',
+        categories: ['software'],
+        status: 'live',
         description: 'Custom site for my sister’s artwork. Live at miasportfolio.art.',
-        image: 'assets/images/mia.png',
+        image: 'assets/opt/mia.webp',
+        tags: ['Web design', 'Custom domain'],
         links: [
             { label: 'Live', href: 'https://miasportfolio.art/' },
             { label: 'Repository', href: 'https://github.com/nhathout/mias-portfolio' }
         ]
     },
     {
+        id: 'smart-home-api',
+        title: 'Smart Home API',
+        categories: ['software'],
+        description: 'Python API to orchestrate houses, rooms, and devices with strong validation + testing.',
+        image: 'assets/opt/smarthome.webp',
+        tags: ['Python', 'API design', 'Testing'],
+        links: [
+            { label: 'Repository', href: 'https://github.com/nhathout/smart-home-api' }
+        ]
+    },
+    {
+        id: 'pyp2pchat',
+        title: 'PyP2PChat',
+        categories: ['software'],
+        description: 'Peer-to-peer terminal chat where each node doubles as client/server, racing to establish consensus.',
+        image: 'assets/opt/pyp2pchat.webp',
+        tags: ['Python', 'Sockets', 'P2P'],
+        links: [
+            { label: 'Repository', href: 'https://github.com/nhathout/PyP2PChat' }
+        ]
+    },
+    {
+        id: 'fitcat',
+        title: 'FitCat · Network of Smart Cat Collars',
+        categories: ['embedded'],
+        description: 'Hardware + cloud dashboard for cat activity monitoring with LoRa and predictive analytics.',
+        image: 'assets/opt/fitcat.webp',
+        tags: ['LoRa', 'IoT', 'Dashboard'],
+        links: [
+            { label: 'Repository', href: 'https://github.com/nhathout/Fit-Cat' }
+        ]
+    },
+    {
+        id: 'smartpill',
+        title: 'SmartPill · Ingestible Sensor',
+        categories: ['embedded'],
+        description: 'ESP32 ingestible sensor logging biometrics along a simulated digestive tract—proof-of-concept diagnostics.',
+        image: 'assets/opt/smartpill.webp',
+        tags: ['ESP32', 'Sensors'],
+        links: [
+            { label: 'Repository', href: 'https://github.com/nhathout/SmartPill-Ingestible-Sensor' }
+        ]
+    },
+    {
+        id: 'elect-a-leader',
+        title: 'elect-A-leader',
+        categories: ['embedded', 'software'],
+        description: 'Distributed, fault-tolerant e-voting system with IR fob authentication and leader election.',
+        image: 'assets/opt/election.webp',
+        tags: ['Distributed systems', 'Leader election', 'IR auth'],
+        links: [
+            { label: 'Repository', href: 'https://github.com/nhathout/elect-A-leader' }
+        ]
+    },
+    {
+        id: 'personal-portfolio',
+        title: 'Personal Portfolio',
+        categories: ['software', 'games'],
+        status: 'live',
+        description: 'The site you’re browsing, including a Breakout mini-game with a shared leaderboard and a command palette.',
+        image: 'assets/opt/PixelMe.webp',
+        pixelated: true,
+        tags: ['HTML', 'CSS', 'JavaScript', 'Node.js'],
+        links: [
+            { label: 'Repository', href: 'https://github.com/nhathout/portfolio' }
+        ]
+    },
+    {
+        id: 'huffman',
         title: 'Huffman Code Generator',
+        categories: ['software'],
         description: 'C++ encoder/decoder using Huffman trees and priority queues for compression + restore.',
-        image: 'assets/images/huffman.png',
+        image: 'assets/opt/huffman.webp',
+        tags: ['C++', 'Data structures'],
         links: [
             { label: 'Repository', href: 'https://github.com/nhathout/AppliedAlgorithms/tree/main/huffman-code-generator' }
         ]
     }
 ];
-const skillCategories = [
-    { id: 'software', label: 'Programming & AI' },
-    { id: 'hardware', label: 'Embedded & Robotics' },
-    { id: 'platforms', label: 'Platforms & Operating Systems' }
-];
-const skillsData = [
-    { name: 'Python', category: 'software', href: 'https://www.python.org/', img: 'assets/images/python_logo.png' },
-    { name: 'C', category: 'software', href: 'https://en.cppreference.com/w/c', img: 'assets/images/c_logo.png' },
-    { name: 'C++', category: 'software', href: 'https://isocpp.org/', img: 'assets/images/cplus_logo.png' },
-    { name: 'C#', category: 'software', href: 'https://dotnet.microsoft.com/en-us/languages/csharp', img: 'assets/images/csharp_logo.png' },
-    { name: 'TensorFlow', category: 'software', href: 'https://www.tensorflow.org/', img: 'assets/images/tensorflow.png' },
-    { name: 'PyTorch', category: 'software', href: 'https://pytorch.org/', img: 'assets/images/pytorch.png' },
-    { name: 'MATLAB', category: 'software', href: 'https://www.mathworks.com/products/matlab.html', img: 'assets/images/matlab.png' },
-    { name: 'JavaScript', category: 'software', href: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript', img: 'assets/images/javascript.png' },
-    { name: 'SQLite', category: 'software', href: 'https://sqlite.org/', img: 'assets/images/sqlite_logo.png' },
-    { name: 'FastAPI', category: 'software', href: 'https://fastapi.tiangolo.com/', img: 'assets/images/fastapi_logo.png' },
-    { name: 'HTML', category: 'software', href: 'https://developer.mozilla.org/en-US/docs/Web/HTML', img: 'assets/images/html_logo.png' },
-    { name: 'CSS', category: 'software', href: 'https://developer.mozilla.org/en-US/docs/Web/CSS', img: 'assets/images/css_logo.png' },
-    { name: 'Java', category: 'software', href: 'https://www.java.com/', img: 'assets/images/java_logo.png' },
-    { name: 'Arduino', category: 'hardware', href: 'https://www.arduino.cc/', img: 'assets/images/arduino.png' },
-    { name: 'Raspberry Pi', category: 'hardware', href: 'https://www.raspberrypi.org/', img: 'assets/images/raspi_logo.png' },
-    { name: 'Espressif (ESP)', category: 'hardware', href: 'https://www.espressif.com/', img: 'assets/images/espressif.png' },
-    { name: 'NVIDIA', category: 'hardware', href: 'https://learn.nvidia.com/courses/course-detail?course_id=course-v1:DLI+S-FX-01+V1', img: 'assets/images/nvidia.png' },
-    { name: 'Universal Robots', category: 'hardware', href: 'https://www.universal-robots.com/', img: 'assets/images/ur_logo.png' },
-    { name: 'ROS', category: 'hardware', href: 'https://www.ros.org/', img: 'assets/images/ros1_logo.png' },
-    { name: 'ROS2', category: 'hardware', href: 'https://www.ros.org/', img: 'assets/images/ros_logo.png' },
-    { name: 'Intel', category: 'hardware', href: 'https://www.intelrealsense.com/sdk-2/', img: 'assets/images/intel_logo.png' },
-    { name: 'Orbbec', category: 'hardware', href: 'https://www.orbbec.com/developers/orbbec-sdk/', img: 'assets/images/orbbec_logo.png' },
-    { name: 'BeagleBone', category: 'hardware', href: 'https://www.beagleboard.org/', img: 'assets/images/beaglebone_logo.png' },
-    { name: 'GitHub', category: 'platforms', href: 'https://github.com/nhathout', img: 'assets/images/github_logo.png' },
-    { name: 'Git', category: 'platforms', href: 'https://git-scm.com/', img: 'assets/images/git_logo.png' },
-    { name: 'Docker', category: 'platforms', href: 'https://www.docker.com/', img: 'assets/images/docker_logo.png' },
-    { name: 'Onshape', category: 'platforms', href: 'https://www.onshape.com/', img: 'assets/images/onshape.png' },
-    { name: 'Bambu Lab', category: 'platforms', href: 'https://bambulab.com/en-us', img: 'assets/images/bambulablogo.png' },
-    { name: 'Ubuntu', category: 'platforms', href: 'https://ubuntu.com/', img: 'assets/images/ubuntu_logo.png' },
-    { name: 'Unreal Engine 5', category: 'platforms', href: 'https://www.unrealengine.com/en-US/unreal-engine-5', img: 'assets/images/ur5.png' },
-    { name: 'Windows', category: 'platforms', href: 'https://www.microsoft.com/windows', img: 'assets/images/windows_logo.png' },
-    { name: 'macOS', category: 'platforms', href: 'https://www.apple.com/macos/', img: 'assets/images/macos_logo.png' },
-    { name: 'Linux', category: 'platforms', href: 'https://www.kernel.org/', img: 'assets/images/linux_logo.png' }
-];
-
-let activeSkillCategoryIndex = 0;
-let skillsGridEl;
-let skillsTabsEl;
-let skillsActiveLabelEl;
-let skillsPrevBtn;
-let skillsNextBtn;
-let skillTabButtons = [];
-let skillsWheelLock = 0;
-let skillsAutoCycleTimer;
-let skillPreviewLink = null;
-let skillPreviewTimer = null;
-let skillPreviewHandlersBound = false;
+// Skills now live in skills.js (the pixel inventory).
 
 function isCoarsePointer() {
     return Boolean(coarsePointerMedia?.matches) || 'ontouchstart' in window;
 }
 
-function setSkillPreview(link) {
-    if (!link) return;
-    if (skillPreviewLink === link) {
-        resetSkillPreviewTimer();
-        return;
-    }
-    clearSkillPreview();
-    skillPreviewLink = link;
-    link.classList.add('is-preview');
-    resetSkillPreviewTimer();
+// ====================
+//  Projects grid, filters + detail dialog
+// ====================
+
+const PROJECTS_COLLAPSED_COUNT = 8;
+const projectStatusLabels = {
+    live: 'Live',
+    private: 'Private',
+    building: 'In progress'
+};
+const projectsFiltersEl = document.getElementById('projectsFilters');
+const projectsMoreBtn = document.getElementById('projectsMore');
+const projectDialog = document.getElementById('projectDialog');
+let activeProjectFilter = 'all';
+let projectsExpanded = false;
+let projectMediaObserver = null;
+let dialogProjectList = [];
+let dialogProjectIndex = -1;
+
+function prefersReducedMotion() {
+    return Boolean(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches);
 }
 
-function resetSkillPreviewTimer() {
-    if (skillPreviewTimer) {
-        clearTimeout(skillPreviewTimer);
-    }
-    if (!skillPreviewLink) return;
-    skillPreviewTimer = window.setTimeout(() => {
-        clearSkillPreview();
-    }, 5000);
+function getProjectById(projectId) {
+    return projectEntries.find(project => project.id === projectId) || null;
 }
 
-function clearSkillPreview() {
-    if (skillPreviewLink) {
-        skillPreviewLink.classList.remove('is-preview');
-        skillPreviewLink = null;
-    }
-    if (skillPreviewTimer) {
-        clearTimeout(skillPreviewTimer);
-        skillPreviewTimer = null;
-    }
-}
-
-function handleSkillLinkPreview(event) {
-    if (!isCoarsePointer()) return;
-    const link = event.target.closest('.skill-link');
-    if (!link) return;
-    if (!link.classList.contains('is-preview')) {
-        event.preventDefault();
-        setSkillPreview(link);
-    } else {
-        clearSkillPreview();
-    }
-}
-
-function handleOutsideSkillClick(event) {
-    if (!skillPreviewLink) return;
-    const clickedLink = event.target.closest('.skill-link');
-    if (clickedLink === skillPreviewLink) return;
-    clearSkillPreview();
-}
-
-function handleSkillScrollClear() {
-    if (!skillPreviewLink || !isCoarsePointer()) return;
-    clearSkillPreview();
-}
-
-function initSkillLinkPreviewHandling() {
-    if (!skillsGridEl || skillPreviewHandlersBound) return;
-    skillsGridEl.addEventListener('click', handleSkillLinkPreview);
-    document.addEventListener('click', handleOutsideSkillClick);
-    window.addEventListener('scroll', handleSkillScrollClear, { passive: true });
-    skillPreviewHandlersBound = true;
-}
-
-if (coarsePointerMedia) {
-    const pointerChangeHandler = event => {
-        if (!event.matches) {
-            clearSkillPreview();
-        }
-    };
-    if (typeof coarsePointerMedia.addEventListener === 'function') {
-        coarsePointerMedia.addEventListener('change', pointerChangeHandler);
-    } else if (typeof coarsePointerMedia.addListener === 'function') {
-        coarsePointerMedia.addListener(pointerChangeHandler);
-    }
-}
-
-function initSkillsSection() {
-    skillsGridEl = document.getElementById('skillsGrid');
-    skillsTabsEl = document.getElementById('skillsTabs');
-    skillsActiveLabelEl = document.getElementById('skillsActiveLabel');
-    skillsPrevBtn = document.getElementById('skillsPrev');
-    skillsNextBtn = document.getElementById('skillsNext');
-
-    if (!skillsGridEl || !skillsTabsEl) return;
-
-    initSkillLinkPreviewHandling();
-    buildSkillsTabs();
-    renderSkillsGrid(skillCategories[activeSkillCategoryIndex].id);
-    updateSkillsNav();
-
-    skillsPrevBtn?.addEventListener('click', () => {
-        cycleSkillCategory(-1);
-        restartSkillsAutoCycle();
-    });
-    skillsNextBtn?.addEventListener('click', () => {
-        cycleSkillCategory(1);
-        restartSkillsAutoCycle();
-    });
-    skillsGridEl.addEventListener('wheel', event => {
-        handleSkillsWheel(event);
-        restartSkillsAutoCycle();
-    }, { passive: false });
-}
-
-function buildSkillsTabs() {
-    skillsTabsEl.innerHTML = '';
-    skillTabButtons = [];
-
-    skillCategories.forEach((category, index) => {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.className = 'skills-tab';
-        button.textContent = category.label;
-        button.addEventListener('click', () => setSkillCategory(index));
-        skillsTabsEl.appendChild(button);
-        skillTabButtons.push(button);
-    });
-}
-
-function renderSkillsGrid(categoryId) {
-    if (!skillsGridEl) return;
-    clearSkillPreview();
-    skillsGridEl.innerHTML = '';
-
-    const fragment = document.createDocumentFragment();
-    skillsData
-        .filter(skill => skill.category === categoryId)
-        .forEach(skill => {
-            const wrapper = document.createElement('div');
-            wrapper.className = 'flex justify-center';
-
-            const link = document.createElement('a');
-            link.href = skill.href;
-            link.target = '_blank';
-            link.rel = 'noopener noreferrer';
-            link.className = 'skill-link';
-            link.setAttribute('aria-label', skill.name);
-            link.title = skill.name;
-
-            const cube = document.createElement('div');
-            cube.className = 'skill-cube';
-
-            skillFaces.forEach(face => {
-                const faceEl = document.createElement('div');
-                faceEl.className = `skill-face ${face}`;
-
-                const img = document.createElement('img');
-                img.src = skill.img;
-                img.alt = '';
-                img.setAttribute('aria-hidden', 'true');
-
-                faceEl.appendChild(img);
-                cube.appendChild(faceEl);
-            });
-
-            const label = document.createElement('span');
-            label.className = 'skill-label';
-            label.textContent = skill.name;
-
-            link.appendChild(cube);
-            link.appendChild(label);
-            wrapper.appendChild(link);
-            fragment.appendChild(wrapper);
-        });
-
-    skillsGridEl.appendChild(fragment);
-}
-
-function setSkillCategory(nextIndex, { animate = true } = {}) {
-    if (!skillCategories.length) return;
-    const normalizedIndex = (nextIndex + skillCategories.length) % skillCategories.length;
-    if (normalizedIndex === activeSkillCategoryIndex) return;
-
-    const updateCategory = () => {
-        activeSkillCategoryIndex = normalizedIndex;
-        renderSkillsGrid(skillCategories[activeSkillCategoryIndex].id);
-        updateSkillsNav();
-    };
-
-    if (!animate || !skillsGridEl) {
-        updateCategory();
-        return;
-    }
-
-    skillsGridEl.classList.add('skills-grid--exit');
-    setTimeout(() => {
-        updateCategory();
-        skillsGridEl.classList.remove('skills-grid--exit');
-        skillsGridEl.classList.add('skills-grid--enter');
-        setTimeout(() => skillsGridEl.classList.remove('skills-grid--enter'), 400);
-    }, 200);
-}
-
-function cycleSkillCategory(direction) {
-    setSkillCategory(activeSkillCategoryIndex + direction);
-}
-
-function updateSkillsNav() {
-    if (skillsActiveLabelEl) {
-        skillsActiveLabelEl.textContent = skillCategories[activeSkillCategoryIndex].label;
-    }
-    skillTabButtons.forEach((btn, index) => {
-        btn.classList.toggle('is-active', index === activeSkillCategoryIndex);
-    });
-}
-
-function handleSkillsWheel(event) {
-    if (!skillsGridEl) return;
-    if (Math.abs(event.deltaX) <= Math.abs(event.deltaY)) return;
-    if (Math.abs(event.deltaX) < 15) return;
-    const now = Date.now();
-    if (now - skillsWheelLock < 600) return;
-    event.preventDefault();
-    cycleSkillCategory(event.deltaX > 0 ? 1 : -1);
-    skillsWheelLock = now;
-}
-
-function restartSkillsAutoCycle() {
-    if (skillsAutoCycleTimer) clearInterval(skillsAutoCycleTimer);
-    skillsAutoCycleTimer = setInterval(() => cycleSkillCategory(1), 20000);
+function getFilteredProjects(filter = activeProjectFilter) {
+    if (filter === 'all') return projectEntries;
+    return projectEntries.filter(project => project.categories?.includes(filter));
 }
 
 function createProjectAwardText(award) {
@@ -908,7 +795,106 @@ function createProjectUpcomingNote(upcoming) {
     return note;
 }
 
-function createProjectMedia(project) {
+function createProjectStatusPill(status) {
+    const label = projectStatusLabels[status];
+    if (!label) return null;
+    const pill = document.createElement('span');
+    pill.className = `project-status project-status--${status}`;
+    pill.textContent = label;
+    return pill;
+}
+
+function createProjectTerminal(project) {
+    const art = document.createElement('div');
+    art.className = 'project-terminal';
+    art.setAttribute('role', 'img');
+    art.setAttribute('aria-label', `${project.title}: example morning run log`);
+
+    const bar = document.createElement('div');
+    bar.className = 'project-terminal__bar';
+    bar.setAttribute('aria-hidden', 'true');
+    bar.innerHTML = '<i></i><i></i><i></i>';
+    const barLabel = document.createElement('small');
+    barLabel.textContent = `${project.title.toLowerCase()} · crew log`;
+    bar.appendChild(barLabel);
+
+    const body = document.createElement('div');
+    body.className = 'project-terminal__body';
+    body.setAttribute('aria-hidden', 'true');
+    project.terminal.forEach(([time, message, result], index) => {
+        const row = document.createElement('p');
+        row.style.setProperty('--line', index);
+        const timeEl = document.createElement('span');
+        timeEl.className = 'project-terminal__time';
+        timeEl.textContent = time ? `[${time}]` : '>';
+        const messageEl = document.createElement('span');
+        messageEl.className = 'project-terminal__msg';
+        messageEl.textContent = message;
+        const resultEl = document.createElement('span');
+        resultEl.className = 'project-terminal__result';
+        resultEl.textContent = result;
+        row.append(timeEl, messageEl, resultEl);
+        body.appendChild(row);
+    });
+
+    art.append(bar, body);
+    return art;
+}
+
+function createProjectVideo(project, { inDialog = false } = {}) {
+    const video = document.createElement('video');
+    video.muted = true;
+    video.loop = true;
+    video.playsInline = true;
+    video.setAttribute('muted', '');
+    video.setAttribute('playsinline', '');
+    video.setAttribute('aria-label', `${project.title} demo clip`);
+    if (project.poster) video.poster = project.poster;
+
+    if (inDialog) {
+        video.src = project.video;
+        video.preload = 'auto';
+        if (prefersReducedMotion()) {
+            video.controls = true;
+        } else {
+            video.autoplay = true;
+        }
+        return video;
+    }
+
+    // grid clips load + play only while they are on screen
+    video.preload = 'none';
+    video.dataset.src = project.video;
+    observeProjectVideo(video);
+    return video;
+}
+
+function observeProjectVideo(video) {
+    if (prefersReducedMotion()) return;
+    if (!('IntersectionObserver' in window)) {
+        video.src = video.dataset.src;
+        video.play?.().catch(() => {});
+        return;
+    }
+    if (!projectMediaObserver) {
+        projectMediaObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                const clip = entry.target;
+                if (entry.isIntersecting) {
+                    if (!clip.getAttribute('src') && clip.dataset.src) {
+                        clip.src = clip.dataset.src;
+                    }
+                    clip.play?.().catch(() => {});
+                } else if (!clip.paused) {
+                    clip.pause();
+                }
+            });
+        }, { rootMargin: '160px 0px', threshold: 0.15 });
+    }
+    projectMediaObserver.observe(video);
+}
+
+function createProjectMedia(project, { inDialog = false } = {}) {
     const media = document.createElement('div');
     media.className = 'project-media';
 
@@ -935,22 +921,23 @@ function createProjectMedia(project) {
         return media;
     }
 
-    const isVideo = project.image && /\.(mp4|mov|webm)$/i.test(project.image);
-    if (isVideo) {
-        const video = document.createElement('video');
-        video.src = project.image;
-        video.autoplay = true;
-        video.loop = true;
-        video.muted = true;
-        video.playsInline = true;
-        video.setAttribute('aria-label', project.title);
-        media.appendChild(video);
+    if (project.terminal) {
+        media.classList.add('project-media--terminal');
+        media.appendChild(createProjectTerminal(project));
+    } else if (project.video) {
+        media.appendChild(createProjectVideo(project, { inDialog }));
     } else if (project.image) {
         const img = document.createElement('img');
         img.src = project.image;
         img.alt = project.title;
+        img.decoding = 'async';
+        if (!inDialog) img.loading = 'lazy';
+        if (project.pixelated) img.classList.add('is-pixelated');
         media.appendChild(img);
     }
+
+    const status = createProjectStatusPill(project.status);
+    if (status) media.appendChild(status);
 
     if (project.award) {
         media.appendChild(createProjectAwardBadge());
@@ -959,834 +946,306 @@ function createProjectMedia(project) {
     return media;
 }
 
+function createProjectTags(tags, className = 'project-tags') {
+    const list = document.createElement('ul');
+    list.className = className;
+    list.setAttribute('aria-label', 'Tech');
+    tags.forEach(tag => {
+        const item = document.createElement('li');
+        item.textContent = tag;
+        list.appendChild(item);
+    });
+    return list;
+}
+
+function createProjectLinks(project) {
+    const linksContainer = document.createElement('div');
+    linksContainer.className = 'project-links';
+
+    (project.links || []).forEach(link => {
+        const anchor = document.createElement('a');
+        anchor.href = link.href;
+        anchor.target = '_blank';
+        anchor.rel = 'noopener noreferrer';
+        anchor.textContent = `${link.label} ↗`;
+        linksContainer.appendChild(anchor);
+    });
+
+    return linksContainer;
+}
+
+function createProjectCard(project, index) {
+    const card = document.createElement('article');
+    card.className = 'project-card';
+    card.dataset.projectId = project.id;
+    card.style.setProperty('--card-index', index);
+    if (project.award) {
+        card.classList.add('project-card--awarded');
+    }
+    if (project.upcoming) {
+        card.classList.add('project-card--upcoming');
+    }
+    const media = createProjectMedia(project);
+
+    const content = document.createElement('div');
+    content.className = 'project-content';
+    const title = document.createElement('h3');
+    const titleButton = document.createElement('button');
+    titleButton.type = 'button';
+    titleButton.className = 'project-title-btn';
+    titleButton.dataset.projectOpen = project.id;
+    titleButton.setAttribute('aria-haspopup', 'dialog');
+    titleButton.textContent = project.title;
+    title.appendChild(titleButton);
+    const description = document.createElement('p');
+    description.textContent = project.description;
+
+    content.appendChild(title);
+    if (project.subtitle) {
+        const subtitle = document.createElement('p');
+        subtitle.className = 'project-subtitle';
+        subtitle.textContent = project.subtitle;
+        content.appendChild(subtitle);
+    }
+    if (project.award) {
+        content.appendChild(createProjectAwardNote(project.award));
+    }
+    if (project.upcoming) {
+        content.appendChild(createProjectUpcomingNote(project.upcoming));
+    }
+    content.appendChild(description);
+    if (project.tags?.length) {
+        content.appendChild(createProjectTags(project.tags.slice(0, 4)));
+    }
+    if (project.links?.length) {
+        content.appendChild(createProjectLinks(project));
+    }
+
+    const expandHint = document.createElement('span');
+    expandHint.className = 'project-expand-hint';
+    expandHint.setAttribute('aria-hidden', 'true');
+    expandHint.textContent = project.upcoming ? 'Peek' : 'Details';
+    media.appendChild(expandHint);
+
+    card.appendChild(media);
+    card.appendChild(content);
+    return card;
+}
+
+function buildProjectFilters() {
+    if (!projectsFiltersEl) return;
+    projectsFiltersEl.innerHTML = '';
+    projectCategories.forEach(category => {
+        const count = getFilteredProjects(category.id).length;
+        if (!count) return;
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'projects-filter';
+        button.dataset.filter = category.id;
+        button.setAttribute('aria-pressed', String(category.id === activeProjectFilter));
+        button.classList.toggle('is-active', category.id === activeProjectFilter);
+        button.innerHTML = '<span></span><small></small>';
+        button.firstChild.textContent = category.label;
+        button.lastChild.textContent = String(count);
+        button.addEventListener('click', () => setProjectFilter(category.id));
+        projectsFiltersEl.appendChild(button);
+    });
+}
+
+function setProjectFilter(filter) {
+    if (filter === activeProjectFilter) return;
+    activeProjectFilter = filter;
+    projectsFiltersEl?.querySelectorAll('.projects-filter').forEach(button => {
+        const isActive = button.dataset.filter === filter;
+        button.classList.toggle('is-active', isActive);
+        button.setAttribute('aria-pressed', String(isActive));
+    });
+    buildProjectsGrid();
+}
+
 function buildProjectsGrid() {
     if (!projectsGrid) return;
+    projectMediaObserver?.disconnect();
     projectsGrid.innerHTML = '';
+
+    const filtered = getFilteredProjects();
+    const collapsible = activeProjectFilter === 'all' && filtered.length > PROJECTS_COLLAPSED_COUNT;
+    const visible = collapsible && !projectsExpanded ? filtered.slice(0, PROJECTS_COLLAPSED_COUNT) : filtered;
+
     const fragment = document.createDocumentFragment();
-    projectEntries.forEach(project => {
-        const card = document.createElement('article');
-        card.className = 'project-card';
-        if (project.award) {
-            card.classList.add('project-card--awarded');
-        }
-        if (project.upcoming) {
-            card.classList.add('project-card--upcoming');
-        }
-        const media = createProjectMedia(project);
-
-        const content = document.createElement('div');
-        content.className = 'project-content';
-        const title = document.createElement('h3');
-        title.textContent = project.title;
-        const description = document.createElement('p');
-        description.textContent = project.description;
-
-        const linksContainer = document.createElement('div');
-        linksContainer.className = 'project-links';
-        project.links.forEach(link => {
-            const anchor = document.createElement('a');
-            anchor.href = link.href;
-            anchor.target = '_blank';
-            anchor.rel = 'noopener noreferrer';
-            anchor.textContent = `${link.label} ↗`;
-            linksContainer.appendChild(anchor);
-        });
-
-        content.appendChild(title);
-        if (project.award) {
-            content.appendChild(createProjectAwardNote(project.award));
-        }
-        if (project.upcoming) {
-            content.appendChild(createProjectUpcomingNote(project.upcoming));
-        }
-        content.appendChild(description);
-        if (project.links?.length) {
-            content.appendChild(linksContainer);
-        }
-
-        card.appendChild(media);
-        card.appendChild(content);
-        fragment.appendChild(card);
-    });
+    visible.forEach((project, index) => fragment.appendChild(createProjectCard(project, index)));
     projectsGrid.appendChild(fragment);
+
+    if (projectsMoreBtn) {
+        projectsMoreBtn.hidden = !collapsible;
+        projectsMoreBtn.setAttribute('aria-expanded', String(projectsExpanded));
+        projectsMoreBtn.textContent = projectsExpanded
+            ? 'Show fewer projects'
+            : `Show all ${filtered.length} projects`;
+    }
+}
+
+function initProjectsSection() {
+    buildProjectFilters();
+    buildProjectsGrid();
+
+    projectsMoreBtn?.addEventListener('click', () => {
+        const wasExpanded = projectsExpanded;
+        projectsExpanded = !projectsExpanded;
+        buildProjectsGrid();
+        if (wasExpanded) {
+            scrollToSection('projectsGridAnchor');
+        } else {
+            projectsGrid.children[PROJECTS_COLLAPSED_COUNT]?.querySelector('[data-project-open]')?.focus({ preventScroll: true });
+        }
+    });
+
+    // the whole card opens the detail dialog; real links/buttons inside keep their own behavior
+    projectsGrid?.addEventListener('click', event => {
+        const opener = event.target.closest('[data-project-open]');
+        if (opener) {
+            openProjectDialog(opener.dataset.projectOpen, { list: getFilteredProjects() });
+            return;
+        }
+        if (event.target.closest('a, button')) return;
+        const card = event.target.closest('.project-card');
+        if (card?.dataset.projectId) {
+            openProjectDialog(card.dataset.projectId, { list: getFilteredProjects() });
+        }
+    });
+
+    initProjectDialog();
+}
+
+function renderProjectDialog(project) {
+    if (!projectDialog || !project) return;
+    const mediaSlot = projectDialog.querySelector('[data-dialog-media]');
+    const kicker = projectDialog.querySelector('[data-dialog-kicker]');
+    const title = projectDialog.querySelector('[data-dialog-title]');
+    const subtitle = projectDialog.querySelector('[data-dialog-subtitle]');
+    const notes = projectDialog.querySelector('[data-dialog-notes]');
+    const description = projectDialog.querySelector('[data-dialog-description]');
+    const details = projectDialog.querySelector('[data-dialog-details]');
+    const tagsSlot = projectDialog.querySelector('[data-dialog-tags]');
+    const linksSlot = projectDialog.querySelector('[data-dialog-links]');
+    const counter = projectDialog.querySelector('[data-dialog-counter]');
+
+    mediaSlot.querySelectorAll('video').forEach(video => video.pause());
+    mediaSlot.innerHTML = '';
+    mediaSlot.appendChild(createProjectMedia(project, { inDialog: true }));
+
+    const categoryLabels = (project.categories || [])
+        .map(id => projectCategories.find(category => category.id === id)?.label)
+        .filter(Boolean);
+    const statusLabel = project.upcoming ? 'Locked' : projectStatusLabels[project.status];
+    kicker.textContent = [statusLabel, ...categoryLabels].filter(Boolean).join(' · ');
+    title.textContent = project.title;
+    subtitle.textContent = project.subtitle || '';
+    subtitle.hidden = !project.subtitle;
+
+    notes.innerHTML = '';
+    if (project.award) notes.appendChild(createProjectAwardNote(project.award));
+    if (project.upcoming) notes.appendChild(createProjectUpcomingNote(project.upcoming));
+    notes.hidden = !notes.childElementCount;
+
+    description.textContent = project.description;
+
+    details.innerHTML = '';
+    (project.details || []).forEach(point => {
+        const item = document.createElement('li');
+        item.textContent = point;
+        details.appendChild(item);
+    });
+    details.hidden = !details.childElementCount;
+
+    tagsSlot.innerHTML = '';
+    if (project.tags?.length) tagsSlot.appendChild(createProjectTags(project.tags));
+
+    linksSlot.innerHTML = '';
+    if (project.links?.length) {
+        linksSlot.appendChild(createProjectLinks(project));
+    } else if (!project.upcoming) {
+        const note = document.createElement('p');
+        note.className = 'project-dialog__private-note';
+        note.textContent = 'Private repository. Happy to walk through it in a conversation.';
+        linksSlot.appendChild(note);
+    }
+
+    if (counter) {
+        counter.textContent = dialogProjectList.length > 1
+            ? `${dialogProjectIndex + 1} / ${dialogProjectList.length}`
+            : '';
+    }
+    projectDialog.querySelector('.project-dialog__scroll')?.scrollTo({ top: 0 });
+}
+
+function openProjectDialog(projectId, { list } = {}) {
+    const project = getProjectById(projectId);
+    if (!project || !projectDialog) return;
+    dialogProjectList = (list && list.some(entry => entry.id === projectId)) ? list : projectEntries;
+    dialogProjectIndex = dialogProjectList.findIndex(entry => entry.id === projectId);
+    renderProjectDialog(project);
+    if (!projectDialog.open) {
+        if (typeof projectDialog.showModal === 'function') {
+            projectDialog.showModal();
+        } else {
+            projectDialog.setAttribute('open', '');
+        }
+        document.documentElement.classList.add('dialog-open');
+    }
+}
+
+function stepProjectDialog(direction) {
+    if (!dialogProjectList.length) return;
+    dialogProjectIndex = (dialogProjectIndex + direction + dialogProjectList.length) % dialogProjectList.length;
+    renderProjectDialog(dialogProjectList[dialogProjectIndex]);
+}
+
+function closeProjectDialog() {
+    if (!projectDialog?.open) return;
+    if (typeof projectDialog.close === 'function') {
+        projectDialog.close();
+    } else {
+        projectDialog.removeAttribute('open');
+        projectDialog.dispatchEvent(new Event('close'));
+    }
+}
+
+function initProjectDialog() {
+    if (!projectDialog) return;
+    projectDialog.addEventListener('close', () => {
+        projectDialog.querySelectorAll('video').forEach(video => video.pause());
+        projectDialog.querySelector('[data-dialog-media]').innerHTML = '';
+        if (!document.querySelector('dialog[open]')) {
+            document.documentElement.classList.remove('dialog-open');
+        }
+    });
+    // clicks on the backdrop land on the <dialog> element itself
+    projectDialog.addEventListener('click', event => {
+        if (event.target === projectDialog) closeProjectDialog();
+    });
+    projectDialog.querySelectorAll('[data-dialog-close]').forEach(button => {
+        button.addEventListener('click', closeProjectDialog);
+    });
+    projectDialog.querySelector('[data-dialog-prev]')?.addEventListener('click', () => stepProjectDialog(-1));
+    projectDialog.querySelector('[data-dialog-next]')?.addEventListener('click', () => stepProjectDialog(1));
+    projectDialog.addEventListener('keydown', event => {
+        if (event.target.closest('input, textarea')) return;
+        if (event.key === 'ArrowRight') {
+            event.preventDefault();
+            stepProjectDialog(1);
+        } else if (event.key === 'ArrowLeft') {
+            event.preventDefault();
+            stepProjectDialog(-1);
+        }
+    });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     initCopyrightYear();
     initEdexSection();
-    initSkillsSection();
-    restartSkillsAutoCycle();
-    buildProjectsGrid();
+    initProjectsSection();
     initResumePopover();
 });
 
-(() => {
-// ====================
-//  Breakout Game Vars
-// ====================
-
-const startBtn = document.getElementById('startBtn');
-const resetLeaderboardBtn = document.getElementById('resetLeaderboardBtn'); 
-const gameCanvas = document.getElementById('gameCanvas');
-const startScreen = document.getElementById('start-screen');
-const leaderboardEl = document.getElementById('leaderboard');
-
-const isCoarsePointer = coarsePointerMedia?.matches;
-
-if (!startBtn || !resetLeaderboardBtn || !gameCanvas || !startScreen || !leaderboardEl || isCoarsePointer) {
-    return;
-}
-
-window.addEventListener('load', loadLeaderboardFromServer);
-
-resetLeaderboardBtn.addEventListener('click', resetLeaderboard);
-const ctx = gameCanvas.getContext('2d');
-const GAME_WIDTH = 680;
-const GAME_HEIGHT = 400;
-
-function configureGameCanvas() {
-    const dpr = window.devicePixelRatio || 1;
-    gameCanvas.width = Math.round(GAME_WIDTH * dpr);
-    gameCanvas.height = Math.round(GAME_HEIGHT * dpr);
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.imageSmoothingEnabled = true;
-}
-
-configureGameCanvas();
-window.addEventListener('resize', configureGameCanvas);
-
-let score = 0;
-let lives = 2;
-
-// Shared leaderboard array loaded from server
-let leaderboard = [];
-
-// Game states
-let isGameOver = false;
-let isPaused = false;
-let isNotStarted = true;  // Ball not launched yet, attached to paddle
-let isLaunched = false;   // Ball launched after space press
-
-// Game settings
-const paddleHeight = 18;
-const paddleWidth = 108;
-const paddleBottomOffset = 18;
-let paddleX = (GAME_WIDTH - paddleWidth) / 2;
-let rightPressed = false;
-let leftPressed = false;
-const paddleSpeed = 9;
-
-const ballRadius = 9;
-const initialVelocity = { x: 2.8, y: -3.4 };
-let x = GAME_WIDTH / 2;
-let y = getPaddleY() - ballRadius - 32;
-let dx = initialVelocity.x;
-let dy = initialVelocity.y;
-
-const courseDeck = [
-    { title: 'Vis, Rob & Plan', code: 'SE740', tone: '#0f766e', fill: '#dff7f1' },
-    { title: 'Intro to R&AS', code: 'EK505', tone: '#0f766e', fill: '#ddf5ef' },
-    { title: 'Product Design in ECE', code: 'EC601', tone: '#b45309', fill: '#fff0d9' },
-    { title: 'Image/Video Computing', code: 'CS585', tone: '#2563eb', fill: '#e1efff' },
-    { title: 'Smart/Embedded Systems', code: 'EC444/535', tone: '#7c3aed', fill: '#f0e8ff' },
-    { title: 'Robot Learning', code: 'EC518', tone: '#0f766e', fill: '#dff7f1' },
-    { title: 'M.S. Thesis', code: 'ME954', tone: '#be123c', fill: '#ffe4ea' },
-    { title: 'ML', code: 'EC414', tone: '#1d4ed8', fill: '#e2ecff' },
-    { title: 'DL', code: 'EC523', tone: '#0f766e', fill: '#dff7f1' },
-    { title: 'RL', code: 'EC418', tone: '#b45309', fill: '#fff0d9' }
-];
-const activeBrickCount = courseDeck.length;
-const brickColumnCount = 5;
-const brickRowCount = Math.ceil(activeBrickCount / brickColumnCount);
-const brickPadding = 12;
-const brickOffsetTop = 58;
-const brickOffsetLeft = 18;
-const brickHeight = 68;
-const brickWidth = Math.floor((GAME_WIDTH - (brickOffsetLeft * 2) - (brickPadding * (brickColumnCount - 1))) / brickColumnCount);
-const gameBoardTheme = {
-    backgroundTop: '#f8fbfb',
-    backgroundBottom: '#dff1ed',
-    grid: 'rgba(15, 118, 110, 0.08)',
-    hudFill: 'rgba(255, 255, 255, 0.82)',
-    hudStroke: 'rgba(15, 118, 110, 0.16)',
-    hudInk: '#0f172a',
-    statusFill: 'rgba(5, 59, 54, 0.92)',
-    statusInk: '#f8fafc',
-    paddleStart: '#053b36',
-    paddleEnd: '#0f766e',
-    paddleGlow: 'rgba(5, 59, 54, 0.28)',
-    ball: '#fac123',
-    ballCore: '#fff7d6',
-    boardGlow: 'rgba(250, 193, 35, 0.18)'
-};
-
-let bricks = createBrickGrid();
-
-const MAX_LEADERBOARD_NAME_LENGTH = 4;
-
-function getPaddleY() {
-    return GAME_HEIGHT - paddleHeight - paddleBottomOffset;
-}
-
-function createBrickGrid() {
-    const nextBricks = [];
-    for (let c = 0; c < brickColumnCount; c++) {
-        nextBricks[c] = [];
-        for (let r = 0; r < brickRowCount; r++) {
-            const courseIndex = (r * brickColumnCount) + c;
-            const course = courseDeck[courseIndex];
-            nextBricks[c][r] = course ? {
-                x: 0,
-                y: 0,
-                status: 1,
-                course: course.title,
-                code: course.code,
-                tone: course.tone,
-                fill: course.fill
-            } : {
-                x: 0,
-                y: 0,
-                status: 0,
-                course: '',
-                code: '',
-                tone: '#0f172a',
-                fill: '#ffffff'
-            };
-        }
-    }
-    return nextBricks;
-}
-
-function sanitizeLeaderboardName(value) {
-    return String(value ?? '')
-        .toUpperCase()
-        .replace(/[^A-Z0-9]/g, '')
-        .slice(0, MAX_LEADERBOARD_NAME_LENGTH);
-}
-
-function isValidLeaderboardName(value) {
-    return Boolean(sanitizeLeaderboardName(value));
-}
-
-function normalizeLeaderboardEntries(entries) {
-    if (!Array.isArray(entries)) return [];
-    return entries
-        .map(entry => ({
-            initials: sanitizeLeaderboardName(entry?.initials),
-            score: Number.parseInt(entry?.score, 10) || 0
-        }))
-        .filter(entry => entry.initials)
-        .sort((left, right) => right.score - left.score || left.initials.localeCompare(right.initials));
-}
-
-// ===============================
-//  Leaderboard Server Integration
-// ===============================
-
-const SERVER_URL = "https://portfolio-xoe6.onrender.com";
-
-// Load from server
-async function loadLeaderboardFromServer() {
-    try {
-        const res = await fetch(`${SERVER_URL}/api/leaderboard`);
-        leaderboard = normalizeLeaderboardEntries(await res.json());
-        updateLeaderboard();
-    } catch (err) {
-        console.error("Failed to load leaderboard from server:", err);
-        leaderboard = [];
-        updateLeaderboard();
-    }
-}
-
-// Save a new score
-async function saveScoreToServer(initials, newScore) {
-    const safeInitials = sanitizeLeaderboardName(initials);
-    if (!safeInitials) return;
-
-    try {
-        const res = await fetch(`${SERVER_URL}/api/leaderboard`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ initials: safeInitials, score: newScore })
-        });
-        if (!res.ok) {
-            throw new Error(`Leaderboard save failed with status ${res.status}`);
-        }
-        const data = await res.json();
-        if (data.leaderboard) {
-            leaderboard = normalizeLeaderboardEntries(data.leaderboard);
-        }
-        await loadLeaderboardFromServer();
-    } catch (err) {
-        console.error("Failed to save score:", err);
-    }
-}
-
-// Reset on server
-async function resetLeaderboardOnServer(passkey) {
-    try {
-        const res = await fetch(`${SERVER_URL}/api/leaderboard/reset`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ passkey })
-        });
-        const data = await res.json();
-        if (data.error) {
-            alert(data.error);
-        } else {
-            // success
-            alert("reset the leaderboard");
-            leaderboard = [];
-            updateLeaderboard();
-        }
-    } catch (err) {
-        console.error("Failed to reset leaderboard:", err);
-    }
-}
-
-// ====================================================
-//  Generic Drawing Functions for the Breakout Elements
-// ====================================================
-
-function drawRoundedRect(x, y, width, height, radius, fillColor, options = {}) {
-    const {
-        strokeColor = null,
-        strokeWidth = 1,
-        shadowColor = null,
-        shadowBlur = 0,
-        shadowOffsetX = 0,
-        shadowOffsetY = 0
-    } = options;
-
-    ctx.save();
-    if (shadowColor) {
-        ctx.shadowColor = shadowColor;
-        ctx.shadowBlur = shadowBlur;
-        ctx.shadowOffsetX = shadowOffsetX;
-        ctx.shadowOffsetY = shadowOffsetY;
-    }
-    ctx.beginPath();
-    ctx.moveTo(x + radius, y);
-    ctx.lineTo(x + width - radius, y);
-    ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-    ctx.lineTo(x + width, y + height - radius);
-    ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-    ctx.lineTo(x + radius, y + height);
-    ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-    ctx.lineTo(x, y + radius);
-    ctx.quadraticCurveTo(x, y, x + radius, y);
-    ctx.fillStyle = fillColor;
-    ctx.fill();
-    if (strokeColor) {
-        ctx.shadowColor = 'transparent';
-        ctx.lineWidth = strokeWidth;
-        ctx.strokeStyle = strokeColor;
-        ctx.stroke();
-    }
-    ctx.closePath();
-    ctx.restore();
-}
-
-function wrapTextLines(text, maxWidth) {
-    const words = text.split(' ');
-    const lines = [];
-    let currentLine = '';
-
-    words.forEach(word => {
-        const testLine = currentLine ? `${currentLine} ${word}` : word;
-        if (ctx.measureText(testLine).width > maxWidth && currentLine) {
-            lines.push(currentLine);
-            currentLine = word;
-        } else {
-            currentLine = testLine;
-        }
-    });
-
-    if (currentLine) {
-        lines.push(currentLine);
-    }
-
-    return lines;
-}
-
-function drawBoardBackground() {
-    ctx.save();
-
-    const background = ctx.createLinearGradient(0, 0, 0, GAME_HEIGHT);
-    background.addColorStop(0, gameBoardTheme.backgroundTop);
-    background.addColorStop(0.58, '#eff8f7');
-    background.addColorStop(1, gameBoardTheme.backgroundBottom);
-    ctx.fillStyle = background;
-    ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-
-    const glow = ctx.createRadialGradient(GAME_WIDTH * 0.82, 48, 0, GAME_WIDTH * 0.82, 48, 180);
-    glow.addColorStop(0, gameBoardTheme.boardGlow);
-    glow.addColorStop(1, 'rgba(250, 193, 35, 0)');
-    ctx.fillStyle = glow;
-    ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-
-    ctx.strokeStyle = gameBoardTheme.grid;
-    ctx.lineWidth = 1;
-    for (let gridX = 18; gridX < GAME_WIDTH; gridX += 28) {
-        ctx.beginPath();
-        ctx.moveTo(gridX, 0);
-        ctx.lineTo(gridX, GAME_HEIGHT);
-        ctx.stroke();
-    }
-    for (let gridY = 18; gridY < GAME_HEIGHT; gridY += 28) {
-        ctx.beginPath();
-        ctx.moveTo(0, gridY);
-        ctx.lineTo(GAME_WIDTH, gridY);
-        ctx.stroke();
-    }
-
-    drawRoundedRect(10, 10, GAME_WIDTH - 20, 36, 18, 'rgba(255, 255, 255, 0.74)', {
-        strokeColor: gameBoardTheme.hudStroke
-    });
-
-    ctx.restore();
-}
-
-function drawHudBadge(text, x, y, { align = 'left', fill = gameBoardTheme.hudFill, stroke = gameBoardTheme.hudStroke, color = gameBoardTheme.hudInk } = {}) {
-    ctx.save();
-    ctx.font = "700 11px 'Courier New', monospace";
-    const badgePaddingX = 12;
-    const badgeWidth = ctx.measureText(text).width + (badgePaddingX * 2);
-    let badgeX = x;
-
-    if (align === 'right') {
-        badgeX = x - badgeWidth;
-    } else if (align === 'center') {
-        badgeX = x - (badgeWidth / 2);
-    }
-
-    drawRoundedRect(badgeX, y, badgeWidth, 24, 12, fill, {
-        strokeColor: stroke
-    });
-
-    ctx.fillStyle = color;
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(text, badgeX + badgePaddingX, y + 13);
-    ctx.restore();
-}
-
-function drawBricks() {
-    ctx.save();
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-
-    for (let c = 0; c < brickColumnCount; c++) {
-        for (let r = 0; r < brickRowCount; r++) {
-            const b = bricks[c][r];
-            if (b.status === 1) {
-                let brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
-                let brickY = (r * (brickHeight + brickPadding)) + brickOffsetTop;
-                b.x = brickX;
-                b.y = brickY;
-
-                const brickFill = ctx.createLinearGradient(brickX, brickY, brickX, brickY + brickHeight);
-                brickFill.addColorStop(0, 'rgba(255, 255, 255, 0.96)');
-                brickFill.addColorStop(1, b.fill);
-
-                drawRoundedRect(brickX, brickY, brickWidth, brickHeight, 12, brickFill, {
-                    strokeColor: 'rgba(255, 255, 255, 0.85)',
-                    shadowColor: 'rgba(15, 23, 42, 0.16)',
-                    shadowBlur: 12,
-                    shadowOffsetY: 8
-                });
-                drawRoundedRect(brickX + 9, brickY + 8, brickWidth - 18, 8, 4, b.tone);
-
-                ctx.font = "700 10px 'Courier New', monospace";
-                const codeWidth = Math.max(56, ctx.measureText(b.code).width + 20);
-                const codeX = brickX + ((brickWidth - codeWidth) / 2);
-                drawRoundedRect(codeX, brickY + 18, codeWidth, 18, 9, 'rgba(255, 255, 255, 0.94)', {
-                    strokeColor: 'rgba(15, 23, 42, 0.08)'
-                });
-                ctx.fillStyle = b.tone;
-                ctx.fillText(b.code, brickX + (brickWidth / 2), brickY + 28);
-
-                ctx.font = "700 11px 'Courier New', monospace";
-                const lines = wrapTextLines(b.course, brickWidth - 20).slice(0, 3);
-                const lineHeight = 12;
-                const titleBlockHeight = lines.length * lineHeight;
-                const titleAreaTop = brickY + 40;
-                const titleAreaHeight = brickHeight - 46;
-                const startY = titleAreaTop + ((titleAreaHeight - titleBlockHeight) / 2) + (lineHeight / 2);
-
-                ctx.fillStyle = b.tone;
-                lines.forEach((line, index) => {
-                    ctx.fillText(line, brickX + (brickWidth / 2), startY + (index * lineHeight));
-                });
-            }
-        }
-    }
-    ctx.restore();
-}
-
-function drawBall() {
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(x, y, ballRadius, 0, Math.PI*2);
-    ctx.shadowColor = 'rgba(250, 193, 35, 0.4)';
-    ctx.shadowBlur = 16;
-    ctx.fillStyle = gameBoardTheme.ball;
-    ctx.fill();
-    ctx.closePath();
-    ctx.beginPath();
-    ctx.arc(x - 2, y - 2, ballRadius * 0.48, 0, Math.PI * 2);
-    ctx.fillStyle = gameBoardTheme.ballCore;
-    ctx.fill();
-    ctx.closePath();
-    ctx.restore();
-}
-
-function drawPaddle() {
-    const paddleY = getPaddleY();
-    const paddleGradient = ctx.createLinearGradient(paddleX, paddleY, paddleX, paddleY + paddleHeight);
-    paddleGradient.addColorStop(0, gameBoardTheme.paddleEnd);
-    paddleGradient.addColorStop(1, gameBoardTheme.paddleStart);
-
-    drawRoundedRect(paddleX, paddleY, paddleWidth, paddleHeight, paddleHeight / 2, paddleGradient, {
-        strokeColor: 'rgba(255, 255, 255, 0.38)',
-        shadowColor: gameBoardTheme.paddleGlow,
-        shadowBlur: 14,
-        shadowOffsetY: 6
-    });
-    drawRoundedRect(paddleX + 12, paddleY + 4, paddleWidth - 24, 4, 2, 'rgba(255, 255, 255, 0.35)');
-}
-
-function drawScore() {
-    drawHudBadge(`SCORE ${score}`, 16, 16);
-}
-
-function drawLives() {
-    drawHudBadge(`LIVES ${lives}`, GAME_WIDTH - 16, 16, { align: 'right' });
-}
-
-function drawStatusBadge() {
-    const statusText = isPaused
-        ? 'PAUSED · SPACE TO RESUME'
-        : isNotStarted
-            ? 'SPACE TO LAUNCH'
-            : 'COURSEOUT';
-    drawHudBadge(statusText, GAME_WIDTH / 2, 16, {
-        align: 'center',
-        fill: gameBoardTheme.statusFill,
-        stroke: 'rgba(255, 255, 255, 0.16)',
-        color: gameBoardTheme.statusInk
-    });
-}
-
-// =======================
-//  Collision & Game Logic
-// =======================
-
-function collisionDetection() {
-    for (let c = 0; c < brickColumnCount; c++) {
-        for (let r = 0; r < brickRowCount; r++) {
-            let b = bricks[c][r];
-            if (b.status === 1) {
-                if (
-                    x + ballRadius > b.x &&
-                    x - ballRadius < b.x + brickWidth &&
-                    y + ballRadius > b.y &&
-                    y - ballRadius < b.y + brickHeight
-                ) {
-                    // Collided
-                    b.status = 0;
-                    score++;
-
-                    // Figure out which side we hit
-                    let ballCenterNextX = x + dx;
-                    let ballCenterNextY = y + dy;
-                    const distLeft   = Math.abs(ballCenterNextX - b.x);
-                    const distRight  = Math.abs(ballCenterNextX - (b.x + brickWidth));
-                    const distTop    = Math.abs(ballCenterNextY - b.y);
-                    const distBottom = Math.abs(ballCenterNextY - (b.y + brickHeight));
-                    const minDist = Math.min(distLeft, distRight, distTop, distBottom);
-
-                    if (minDist === distLeft) {
-                        dx = -Math.abs(dx);
-                        x = b.x - ballRadius - 1;
-                    } else if (minDist === distRight) {
-                        dx = Math.abs(dx);
-                        x = b.x + brickWidth + ballRadius + 1;
-                    } else if (minDist === distTop) {
-                        dy = -Math.abs(dy);
-                        y = b.y - ballRadius - 1;
-                    } else {
-                        dy = Math.abs(dy);
-                        y = b.y + brickHeight + ballRadius + 1;
-                    }
-
-                    // Win check
-                    if (score === activeBrickCount) {
-                        endGame(true);
-                    }
-                }
-            }
-        }
-    }
-}
-
-function endGame(won) {
-    isGameOver = true;
-    cancelAnimationFrame(animationId);
-
-    let initials = '';
-    while (true) {
-        const response = prompt(
-            won
-                ? "You won! Enter a 1-4 character name or initials:"
-                : "Game over. Enter a 1-4 character name or initials:"
-        );
-        if (response === null) break;
-        initials = sanitizeLeaderboardName(response);
-        if (initials) {
-            saveScoreToServer(initials, score);
-            break;
-        }
-        alert('A name is required. Symbols-only entries are not allowed.');
-    }
-
-    gameCanvas.style.display = 'none';
-    startScreen.style.display = 'block';
-}
-
-function updateLeaderboard() {
-    leaderboardEl.innerHTML = "";
-    const normalizedEntries = normalizeLeaderboardEntries(leaderboard);
-
-    if (!normalizedEntries.length) {
-        const emptyState = document.createElement('p');
-        emptyState.className = 'game-leaderboard-empty';
-        emptyState.textContent = 'No scores yet. Clear the courses and take the top spot.';
-        leaderboardEl.appendChild(emptyState);
-        return;
-    }
-
-    const ul = document.createElement('ul');
-    ul.className = 'game-leaderboard';
-
-    for (let i = 0; i < normalizedEntries.length; i++) {
-        const entry = normalizedEntries[i];
-        const li = document.createElement('li');
-        li.className = 'game-leaderboard__item';
-
-        const initials = document.createElement('span');
-        initials.textContent = `#${i + 1} ${entry.initials}`;
-
-        const entryScore = document.createElement('strong');
-        entryScore.textContent = entry.score;
-
-        li.appendChild(initials);
-        li.appendChild(entryScore);
-        ul.appendChild(li);
-    }
-
-    leaderboardEl.appendChild(ul);
-    leaderboard = normalizedEntries;
-}
-
-function resetLeaderboard() {
-    let passkey = prompt("if you know, you know:");
-    if (!passkey) return;
-
-    // Instead of localStorage, reset on server
-    resetLeaderboardOnServer(passkey);
-}
-
-// =======================
-//  Paddle & Ball Movement
-// =======================
-
-// Key listeners
-document.addEventListener("keydown", keyDownHandler, false);
-document.addEventListener("keyup", keyUpHandler, false);
-document.addEventListener("keydown", pauseHandler, false);
-
-// Prevent spacebar from scrolling the page
-window.addEventListener('keydown', function(e) {
-    if (e.code === 'Space') {
-        e.preventDefault();
-    }
-}, false);
-
-function keyDownHandler(e) {
-    if (e.key === "Right" || e.key === "ArrowRight") {
-        rightPressed = true;
-    } else if (e.key === "Left" || e.key === "ArrowLeft") {
-        leftPressed = true;
-    }
-}
-
-function keyUpHandler(e) {
-    if (e.key === "Right" || e.key === "ArrowRight") {
-        rightPressed = false;
-    } else if (e.key === "Left" || e.key === "ArrowLeft") {
-        leftPressed = false;
-    }
-}
-
-function pauseHandler(e) {
-    // Press Esc to pause
-    if (e.key === "Escape" && isLaunched && !isPaused && !isGameOver) {
-        isPaused = true;
-    }
-    // Spacebar to resume if paused
-    else if (e.key === " " && isPaused && !isGameOver) {
-        isPaused = false;
-    }
-    // Spacebar to launch if not started
-    else if (e.key === " " && isNotStarted && !isGameOver) {
-        isNotStarted = false;
-        isLaunched = true;
-    }
-}
-
-let animationId;
-function draw() {
-    if (isGameOver) return;
-
-    ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-    drawBoardBackground();
-
-    // Ball stuck to paddle if not launched
-    if (isNotStarted) {
-        x = paddleX + paddleWidth / 2;
-        y = getPaddleY() - ballRadius;
-    }
-
-    drawBricks();
-    drawPaddle();
-    drawScore();
-    drawLives();
-    drawStatusBadge();
-
-    if (!isPaused) {
-        drawBall();
-        collisionDetection();
-
-        // If launched, update ball position
-        if (isLaunched) {
-            // Side walls
-            if (x + dx > GAME_WIDTH - ballRadius || x + dx < ballRadius) {
-                dx = -dx;
-            }
-            // Top
-            if (y + dy < ballRadius) {
-                dy = -dy;
-            }
-            // Bottom area -> check paddle
-            else if (y + dy > getPaddleY() - ballRadius) {
-                if (x > paddleX && x < paddleX + paddleWidth) {
-                    // More dynamic angles
-                    const paddleCenter = paddleX + paddleWidth / 2;
-                    const distFromCenter = x - paddleCenter;
-                    dx = distFromCenter * 0.15;  // tweak factor
-
-                    // Flip vertical dir
-                    dy = -Math.abs(dy);
-
-                    // Speed up ball
-                    dx *= 1.1;
-                    dy *= 1.3;
-                } else {
-                    lives--;
-                    if (!lives) {
-                        endGame(false);
-                        return;
-                    } else {
-                        // Reset ball above paddle but keep game going
-                        x = GAME_WIDTH / 2;
-                        y = getPaddleY() - ballRadius - 32;
-                        dx = initialVelocity.x;
-                        dy = initialVelocity.y;
-                        isNotStarted = true; 
-                        isLaunched = false;
-                    }
-                }
-            }
-
-            // Move paddle
-            if (rightPressed && paddleX < GAME_WIDTH - paddleWidth) {
-                paddleX += paddleSpeed;
-            } else if (leftPressed && paddleX > 0) {
-                paddleX -= paddleSpeed;
-            }
-
-            if (!isNotStarted) {
-                x += dx;
-                y += dy;
-            } else {
-                // Ball stuck
-                x = paddleX + paddleWidth/2;
-                y = getPaddleY() - ballRadius;
-            }
-
-        } else {
-            // Not launched yet
-            if (rightPressed && paddleX < GAME_WIDTH - paddleWidth) {
-                paddleX += paddleSpeed;
-            } else if (leftPressed && paddleX > 0) {
-                paddleX -= paddleSpeed;
-            }
-            x = paddleX + paddleWidth/2;
-            y = getPaddleY() - ballRadius;
-            drawBall();
-        }
-
-    } else {
-        const centerX = GAME_WIDTH / 2;
-        const centerY = GAME_HEIGHT / 2;
-
-        drawRoundedRect(centerX - 118, centerY - 40, 236, 80, 18, 'rgba(15, 23, 42, 0.72)', {
-            strokeColor: 'rgba(255, 255, 255, 0.14)'
-        });
-        ctx.save();
-        ctx.fillStyle = '#f8fafc';
-        ctx.font = "700 18px 'Courier New', monospace";
-        ctx.textAlign = 'center';
-        ctx.fillText('Paused', centerX, centerY - 6);
-        ctx.font = "600 11px 'Courier New', monospace";
-        ctx.fillStyle = 'rgba(248, 250, 252, 0.78)';
-        ctx.fillText('press space to resume', centerX, centerY + 18);
-        ctx.restore();
-    }
-
-    animationId = requestAnimationFrame(draw);
-}
-
-function startGame() {
-    if (animationId) {
-        cancelAnimationFrame(animationId);
-    }
-
-    score = 0;
-    lives = 2;
-    paddleX = (GAME_WIDTH - paddleWidth) / 2;
-    x = GAME_WIDTH / 2;
-    y = getPaddleY() - ballRadius - 32;
-    dx = initialVelocity.x;
-    dy = initialVelocity.y;
-
-    isGameOver = false;
-    isPaused = false;
-    isNotStarted = true;
-    isLaunched = false;
-
-    bricks = createBrickGrid();
-    for (let c = 0; c < brickColumnCount; c++) {
-        for (let r = 0; r < brickRowCount; r++) {
-            bricks[c][r].status = bricks[c][r].course ? 1 : 0;
-        }
-    }
-
-    startScreen.style.display = 'none';
-    gameCanvas.style.display = 'block';
-    draw();
-}
-
-startBtn.addEventListener('click', startGame);
-})();
+// The Atari [Course]out mini-game lives in game.js.

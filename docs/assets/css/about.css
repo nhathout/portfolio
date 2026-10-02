@@ -666,6 +666,16 @@ html.flag-fallback #about .about-flags {
   scroll-snap-type: none;
 }
 
+/* iOS Safari won't touch-scroll an overflow container that has a mask, so
+   phones and tablets swipe the cards without the edge fade */
+@media (hover: none) and (pointer: coarse) {
+  #about .about-tour:not(.is-pinned) .about-tour__viewport {
+    -webkit-mask-image: none;
+    mask-image: none;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
 #about .about-tour__track {
   display: flex;
   align-items: flex-start;

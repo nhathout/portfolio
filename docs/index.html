@@ -30,12 +30,12 @@
   <link href="assets/images/PixelMe_50x50.jpg" rel="apple-touch-icon"/>
   <link href="assets/css/enhancements.css?v=2026-09-30" rel="stylesheet"/>
   <link href="assets/css/sections.css?v=2026-09-30" rel="stylesheet"/>
-  <link href="assets/css/about.css?v=2026-09-29" rel="stylesheet"/>
+  <link href="assets/css/about.css?v=2026-10-01" rel="stylesheet"/>
   <link href="assets/css/game.css?v=2026-09-29" rel="stylesheet"/>
   <link href="assets/css/skills.css?v=2026-09-29" rel="stylesheet"/>
   <link href="assets/css/edex.css?v=2026-09-29" rel="stylesheet"/>
   <link href="assets/css/contact.css?v=2026-09-29" rel="stylesheet"/>
-  <link href="assets/css/pixel-skin.css?v=2026-09-30" rel="stylesheet"/>
+  <link href="assets/css/pixel-skin.css?v=2026-10-01" rel="stylesheet"/>
   <script type="application/ld+json">
    {
      "@context": "https://schema.org",
@@ -391,7 +391,8 @@
         </dl>
        </section>
       </div>
-      <div class="about-intro__deck" data-reveal="">
+      <!-- photo deck: hidden for now while the pixel portrait below takes its place (remove `hidden` here and add it to .about-intro__portrait to swap back) -->
+      <div class="about-intro__deck" data-reveal="" hidden="">
        <div aria-roledescription="carousel" aria-label="Photos of Noah" class="about-deck" id="aboutDeck" role="region" tabindex="0">
         <div class="about-deck__stack" data-deck-stack="">
         </div>
@@ -407,6 +408,43 @@
         </div>
         <p class="about-deck__hint">
          Drag, swipe, or use ← → to shuffle
+        </p>
+       </div>
+      </div>
+      <!-- pixel portrait, drawn in code by about-portrait.js -->
+      <div class="about-intro__portrait" data-reveal="">
+       <div class="about-portrait" data-mode="dusk" id="aboutPortrait">
+        <figure class="about-portrait__figure">
+         <div class="about-portrait__frame" data-portrait-frame="">
+          <canvas aria-label="Pixel-art portrait of me from behind in a straw hat, sitting on a cliff with my robot buddy, watching the sun set behind Mt. Fuji. A floating torii stands in the sea, a pirate ship sails the horizon, and a sakura tree drops petals." class="about-portrait__canvas" data-portrait-canvas="" height="300" role="img" width="240">
+          </canvas>
+          <p aria-live="polite" class="about-portrait__bubble" data-portrait-bubble="">
+          </p>
+         </div>
+         <figcaption class="about-portrait__caption">
+          <span data-portrait-caption="">
+           夕焼け · golden hour
+          </span>
+         </figcaption>
+        </figure>
+        <div class="about-portrait__controls">
+         <div aria-label="Time of day" class="about-portrait__modes" role="group">
+          <button aria-pressed="true" class="about-portrait__btn" data-portrait-mode="dusk" type="button">
+           <span aria-hidden="true" lang="ja">夕</span>
+           Dusk
+          </button>
+          <button aria-pressed="false" class="about-portrait__btn" data-portrait-mode="night" type="button">
+           <span aria-hidden="true" lang="ja">夜</span>
+           Night
+          </button>
+         </div>
+         <button class="about-portrait__btn about-portrait__btn--hanabi" data-portrait-hanabi="" type="button">
+          <span aria-hidden="true">🎆</span>
+          Hanabi
+         </button>
+        </div>
+        <p class="about-portrait__hint">
+         Tap the sky for fireworks · tap me or my robot to say hi
         </p>
        </div>
       </div>
@@ -4235,7 +4273,9 @@
   </script>
   <script defer="" src="game.js?v=2026-09-29">
   </script>
-  <script defer="" src="about.js?v=2026-09-29">
+  <script defer="" src="about-portrait.js?v=2026-10-01">
+  </script>
+  <script defer="" src="about.js?v=2026-10-01">
   </script>
   <script defer="" src="sections.js?v=2026-09-29">
   </script>

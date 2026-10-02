@@ -631,7 +631,8 @@
         const deck = document.getElementById('aboutDeck');
         const stack = deck?.querySelector('[data-deck-stack]');
         const caption = deck?.querySelector('[data-deck-caption]');
-        if (!deck || !stack || !aboutPhotos.length) return;
+        // the deck is parked (hidden) while the pixel portrait is up: don't load the photos
+        if (!deck || !stack || !aboutPhotos.length || deck.closest('[hidden]')) return;
 
         const tilts = [-3.5, 2.8, -1.6, 4.2, -4.6, 1.4];
         let order = aboutPhotos.map((_, index) => index);

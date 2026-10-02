@@ -339,6 +339,168 @@
   color: var(--ink-muted);
 }
 
+/* whichever of the deck / portrait is parked stays hidden ([hidden] loses to display: flex otherwise) */
+#about .about-intro__deck[hidden],
+#about .about-intro__portrait[hidden] {
+  display: none;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Pixel portrait (drawn by about-portrait.js)                       */
+/* ------------------------------------------------------------------ */
+#about .about-intro__portrait {
+  display: flex;
+  justify-content: center;
+  position: sticky;
+  top: 6.5rem;
+  padding-top: 2.4rem;
+}
+
+#about .about-portrait {
+  width: min(100%, 500px);
+}
+
+#about .about-portrait__figure {
+  margin: 0;
+}
+
+/* the JS sets the frame's width so every art pixel lands on whole device pixels */
+#about .about-portrait__frame {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  background: #1b1838;
+  line-height: 0;
+}
+
+#about .about-portrait[data-mode="night"] .about-portrait__frame {
+  background: #060818;
+}
+
+#about .about-portrait__canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 240 / 300;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+#about .about-portrait__caption {
+  margin-top: 0.85rem;
+  text-align: center;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+}
+
+#about .about-portrait__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem 0.9rem;
+  margin-top: 0.85rem;
+}
+
+#about .about-portrait__modes {
+  display: inline-flex;
+  gap: 0.6rem;
+}
+
+#about .about-portrait__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.75rem;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  line-height: 1.2;
+  transition: transform 160ms ease, background 160ms ease, color 160ms ease;
+}
+
+#about .about-portrait__btn [lang="ja"] {
+  font-size: 0.86rem;
+}
+
+#about .about-portrait__btn:hover,
+#about .about-portrait__btn:focus-visible {
+  transform: translateY(-2px);
+}
+
+#about .about-portrait__btn:focus-visible {
+  outline: 2px dashed var(--px-frame-hover, var(--accent));
+  outline-offset: 5px;
+}
+
+#about .about-portrait__btn[aria-pressed="true"] {
+  background: #1b1838;
+  color: #ffd27a;
+}
+
+#about .about-portrait[data-mode="night"] .about-portrait__btn[aria-pressed="true"] {
+  background: #0e1533;
+  color: #c8d4ee;
+}
+
+#about .about-portrait__hint {
+  margin-top: 0.7rem;
+  text-align: center;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+}
+
+/* speech bubble over the canvas when you tap me or the robot */
+#about .about-portrait__bubble {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 2;
+  width: max-content;
+  max-width: min(86%, 270px);
+  padding: 0.45rem 0.65rem;
+  background: #fffdf5;
+  color: #1a1c2c;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.35;
+  text-align: center;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, calc(-100% - 4px));
+  box-shadow:
+    0 -2px 0 0 #1a1c2c,
+    0 2px 0 0 #1a1c2c,
+    -2px 0 0 0 #1a1c2c,
+    2px 0 0 0 #1a1c2c,
+    4px 6px 0 0 rgba(26, 28, 44, 0.35);
+  transition: opacity 140ms ease, transform 200ms steps(3, end);
+}
+
+#about .about-portrait__bubble::after {
+  content: '';
+  position: absolute;
+  left: var(--tail, 50%);
+  bottom: -6px;
+  width: 6px;
+  height: 6px;
+  margin-left: -3px;
+  background: #fffdf5;
+  box-shadow: 2px 0 0 0 #1a1c2c, -2px 0 0 0 #1a1c2c, 0 2px 0 0 #1a1c2c;
+}
+
+#about .about-portrait__bubble.is-on {
+  opacity: 1;
+  transform: translate(-50%, calc(-100% - 10px));
+}
+
 /* ------------------------------------------------------------------ */
 /*  World tour                                                        */
 /* ------------------------------------------------------------------ */
@@ -1001,7 +1163,8 @@ html.darkmode #about .about-quest__art {
     grid-template-columns: 1fr;
   }
 
-  #about .about-intro__deck {
+  #about .about-intro__deck,
+  #about .about-intro__portrait {
     position: static;
     padding-top: 0.5rem;
   }

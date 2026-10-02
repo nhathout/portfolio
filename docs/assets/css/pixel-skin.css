@@ -36,7 +36,8 @@ html.darkmode {
   .project-lock-badge, .project-placeholder-label, .feature-tab, .feature-cta, .feature-peek__badge,
   .palette-trigger, .theme-switch, .mobile-swipe-chip, .mobile-menu-action,
   .resume-download, .toast, .skip-link, .project-dialog__navbtn, .project-dialog__close,
-  .hero-school, .pixel-portrait, .feature-kicker, #about .about-outro__cta, #about .about-deck__btn
+  .hero-school, .pixel-portrait, .feature-kicker, #about .about-outro__cta, #about .about-deck__btn,
+  #about .about-portrait__frame, #about .about-portrait__btn
 ) {
   --px-c: var(--px-frame);
   --px-u: 2px;
@@ -56,7 +57,7 @@ html.darkmode {
   .project-dialog, .palette, .resume-popover, .mobile-menu-card,
   .feature-shell, #mini-game.edex-sidequest,
   #about .about-stop, #about .about-quest, #about .about-outro, #about .about-sheet,
-  .pixel-portrait
+  .pixel-portrait, #about .about-portrait__frame
 ) {
   --px-u: 3px;
 }
@@ -69,7 +70,7 @@ html.darkmode {
 }
 
 /* dark showcase panels keep a frame that belongs to their own palette */
-:is(.feature-shell, #mini-game.edex-sidequest, #about .about-sheet) {
+:is(.feature-shell, #mini-game.edex-sidequest, #about .about-sheet, #about .about-portrait__frame) {
   --px-c: var(--px-frame-dark-panel);
 }
 
@@ -80,7 +81,7 @@ html.darkmode {
   .contact-copy__btn, .feature-tab, .feature-cta, .palette-trigger, .theme-switch,
   .project-links a, .projects-filter, #about .about-stop, #about .about-quest,
   .project-dialog__navbtn, .project-dialog__close, .mobile-swipe-chip, .mobile-menu-action,
-  .hero-school, .pixel-portrait, #about .about-outro__cta, #about .about-deck__btn
+  .hero-school, .pixel-portrait, #about .about-outro__cta, #about .about-deck__btn, #about .about-portrait__btn
 ):is(:hover, :focus-visible) {
   --px-c: var(--px-frame-hover);
 }
@@ -89,7 +90,7 @@ html.darkmode {
   --px-c: var(--px-frame-hover);
 }
 
-:is(.projects-filter.is-active, .composer__topic.is-active, .feature-tab.is-active, .mobile-swipe-chip.is-active, #about .about-stop.is-active) {
+:is(.projects-filter.is-active, .composer__topic.is-active, .feature-tab.is-active, .mobile-swipe-chip.is-active, #about .about-stop.is-active, #about .about-portrait__btn[aria-pressed="true"]) {
   --px-c: var(--px-frame-hover);
 }
 

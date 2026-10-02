@@ -177,7 +177,11 @@
 
         img.replaceWith(canvas);
         const size = () => {
-            const css = crispNear(window.matchMedia('(max-width: 768px)').matches ? 124 : 156, S);
+            // shrinks a step on short laptop screens so the hero still fits
+            const target = window.matchMedia('(max-width: 768px)').matches
+                ? 124
+                : Math.min(156, Math.max(112, window.innerHeight * 0.17));
+            const css = crispNear(target, S);
             canvas.style.width = `${css}px`;
             canvas.style.height = `${css}px`;
         };

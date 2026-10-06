@@ -626,6 +626,8 @@
           Focusing on safe, adaptable physical interaction through robot learning, perception, and autonomy.
          </li>
         </ul>
+        <a class="edex-spotlight__link" hidden="" href="#" id="edexSpotlightLink" rel="noopener" target="_blank">
+        </a>
        </aside>
        <div class="edex-rail" id="edexRail">
         <div aria-hidden="true" class="edex-rail__line">
@@ -667,7 +669,7 @@
           </span>
          </div>
         </article>
-        <article aria-label="View details for Lead Software Engineer at UMG Technologies" aria-pressed="false" class="edex-card" data-category="experience" data-category-label="Experience" data-highlights="Modernizing a legacy C# industrial-automation platform into a maintainable 64-bit codebase|Moved engineering onto GitHub with structured releases and protected branches, speeding up production debugging under tight customer deadlines|Designed, deployed, and maintain the company&#39;s next-generation full-stack website" data-location="Danvers, MA" data-logo="assets/opt/UMGT_logo_sqr.webp" data-mode="Hybrid" data-org="UMG Technologies, Inc." data-period="Jun 2025 - Present" data-phase="Current role" data-summary="Part-time leadership role steering the software direction of UMG's industrial tooling as the platform moves into its next phase." data-tags="C#|Automation|Computer Vision" data-title="Lead Software Engineer" role="button" style="--edex-accent:#0f766e; --edex-accent-soft:rgba(15,118,110,0.16);" tabindex="0">
+        <article aria-label="View details for Lead Software Engineer at UMG Technologies" aria-pressed="false" class="edex-card" data-category="experience" data-category-label="Experience" data-highlights="Modernizing a legacy C# industrial-automation platform into a maintainable 64-bit codebase|Moved engineering onto GitHub with structured releases and protected branches, speeding up production debugging under tight customer deadlines|Designed, built, and deployed the company&#39;s new website, umgtinc.com, on my own, including a customer portal for software delivery" data-link="https://www.umgtinc.com/" data-link-label="Visit umgtinc.com" data-location="Danvers, MA" data-logo="assets/opt/UMGT_logo_sqr.webp" data-mode="Hybrid" data-org="UMG Technologies, Inc." data-period="Jun 2025 - Present" data-phase="Current role" data-summary="Part-time leadership role steering the software direction of UMG's industrial tooling as the platform moves into its next phase." data-tags="C#|Automation|Computer Vision" data-title="Lead Software Engineer" role="button" style="--edex-accent:#0f766e; --edex-accent-soft:rgba(15,118,110,0.16);" tabindex="0">
          <div class="edex-card__topline">
           <span class="edex-pill edex-pill--experience">
            Experience
@@ -2436,6 +2438,30 @@
       border-radius: 999px;
       background: var(--spotlight-accent);
       box-shadow: 0 0 0 5px var(--spotlight-accent-soft);
+    }
+    .edex-spotlight__link {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      margin-top: 1.3rem;
+      padding: 0.6rem 0.95rem;
+      background: var(--spotlight-accent);
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: transform 0.15s ease, filter 0.15s ease;
+    }
+    .edex-spotlight__link:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.1);
+    }
+    .edex-spotlight__link[hidden] {
+      display: none;
     }
     .edex-rail {
       position: relative;
@@ -4323,7 +4349,7 @@
   </script>
   <script defer="" src="egg.js">
   </script>
-  <script defer="" src="script.js?v=2026-09-29">
+  <script defer="" src="script.js?v=2026-10-05">
   </script>
   <script defer="" src="interactions.js?v=2026-09-30">
   </script>

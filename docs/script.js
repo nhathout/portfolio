@@ -210,6 +210,7 @@ const edexSpotlight = {
     meta: document.getElementById('edexSpotlightMeta'),
     tags: document.getElementById('edexSpotlightTags'),
     highlights: document.getElementById('edexSpotlightHighlights'),
+    link: document.getElementById('edexSpotlightLink'),
     logo: document.getElementById('edexSpotlightLogo')
 };
 const RESUME_STORAGE_KEY = null;
@@ -328,6 +329,11 @@ function activateEdexCard(card, { animate = true } = {}) {
     renderEdexCollection(edexSpotlight.meta, meta, 'edex-meta-pill');
     renderEdexCollection(edexSpotlight.tags, tags, 'edex-tag');
     renderEdexHighlights(highlights);
+    if (edexSpotlight.link) {
+        edexSpotlight.link.hidden = !card.dataset.link;
+        edexSpotlight.link.href = card.dataset.link || '#';
+        edexSpotlight.link.textContent = `${card.dataset.linkLabel || 'Visit site'} ↗`;
+    }
 
     if (!animate) return;
     edexSpotlight.root.classList.add('is-swapping');
@@ -449,6 +455,27 @@ const projectEntries = [
         ],
         tags: ['Python', 'Multi-agent', 'Ollama', 'Claude Agent SDK', 'pytest'],
         links: []
+    },
+    {
+        id: 'umgtinc-website',
+        title: 'UMG Technologies Website',
+        subtitle: 'umgtinc.com',
+        categories: ['software'],
+        status: 'live',
+        description: 'The corporate site for UMG Technologies, the industrial-automation company where I lead software. I designed, built, and deployed it on my own: product and industry pages up front, and a customer portal for software delivery behind the login.',
+        video: 'assets/opt/umgtinc.mp4',
+        poster: 'assets/opt/umgtinc-poster.webp',
+        details: [
+            'Solo build, 200+ commits since June 2025: 30+ pages covering the pin-insertion product line (spec tables, photo galleries), six industries, careers, and contact.',
+            'Plain HTML, CSS, and JavaScript with no build step; sized in rem so it keeps its proportions from phones up to 2560px monitors, plus a language menu that translates the page in place.',
+            'Customer accounts on an AWS Amplify Gen 2 backend (Cognito, AppSync, S3, Lambda): customers register their machines and receive one-time, time-limited software downloads.',
+            'An internal dashboard where employees send releases, manage team roles, and share files.',
+            'The code is company property, so the repository is private.'
+        ],
+        tags: ['HTML', 'CSS', 'JavaScript', 'AWS Amplify', 'Cognito'],
+        links: [
+            { label: 'Live', href: 'https://www.umgtinc.com/' }
+        ]
     },
     {
         id: 'trashformerpro',

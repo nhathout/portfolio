@@ -4,6 +4,12 @@
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
   <meta content="noindex" name="robots"/>
+  <script>
+   (function () {
+     var path = location.pathname;
+     if (/^\/links\/*$/i.test(path) && path !== '/links') location.replace('/links' + location.search + location.hash);
+   })();
+  </script>
   <title>
    404 · Level not found · Noah Hathout
   </title>

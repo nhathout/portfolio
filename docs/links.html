@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<!--
+  HOW TO SWITCH THINGS ON
+  This page is the link in every social bio. Some parts ship switched off; each one is
+  marked below with "SWITCH ON (n)". Test with /links?from=tiktok after any change.
+
+  (1) More social rows. When an account is confirmed as yours, find the commented-out row
+      in "Find me elsewhere", replace HANDLE with the real handle (in the href and in the
+      aria-label), and remove the comment markers around it.
+  (2) The game. When it is announced, replace the locked "Untitled Game" tile with the
+      commented template next to it (a store-page button): set the name, the caption and
+      STORE_PAGE_URL, and delete the locked tile.
+  (3) The newsletter. Copy the action URL and the field names from your provider's own
+      embed code into the hidden form marked data-slot="newsletter", then remove its
+      hidden attribute. Keep the mail card above it as the fallback. Examples to check
+      against the provider's embed code (they change):
+        Kit:        posts email_address to https://app.kit.com/forms/FORM_ID/subscriptions
+        Buttondown: posts email to https://buttondown.com/api/emails/embed-subscribe/USERNAME
+      The postal address that newsletter emails must carry goes in the provider's email
+      footer settings, never on this page. The hidden "source" input is filled from ?from.
+  (4) A "now" chip. To show one line of news (a new role, say), uncomment the template in
+      the chips list under the bio and edit its text.
+-->
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Noah Hathout · Links</title>
+  <meta content="Robotics &amp; AI engineer. I build games, robot tools and my own AI crew." name="description"/>
+  <meta content="Noah Hathout" name="author"/>
+  <link href="https://noahhathout.com/links" rel="canonical"/>
+  <meta content="#edf2f7" media="(prefers-color-scheme: light)" name="theme-color"/>
+  <meta content="#071120" media="(prefers-color-scheme: dark)" name="theme-color"/>
+  <meta content="website" property="og:type"/>
+  <meta content="https://noahhathout.com/links" property="og:url"/>
+  <meta content="Noah Hathout" property="og:site_name"/>
+  <meta content="Noah Hathout · Links" property="og:title"/>
+  <meta content="Robotics &amp; AI engineer. I build games, robot tools and my own AI crew." property="og:description"/>
+  <meta content="https://noahhathout.com/assets/opt/og-card.jpg" property="og:image"/>
+  <meta content="1200" property="og:image:width"/>
+  <meta content="630" property="og:image:height"/>
+  <meta content="Pixel-art portrait of Noah Hathout next to his name and title" property="og:image:alt"/>
+  <meta content="summary_large_image" name="twitter:card"/>
+  <meta content="Noah Hathout · Links" name="twitter:title"/>
+  <meta content="Robotics &amp; AI engineer. I build games, robot tools and my own AI crew." name="twitter:description"/>
+  <meta content="https://noahhathout.com/assets/opt/og-card.jpg" name="twitter:image"/>
+  <link href="/assets/images/pixelme-icon.png" rel="icon" type="image/png"/>
+  <link href="/assets/images/pixelme-touch.png" rel="apple-touch-icon"/>
+  <script>
+   (function () {
+     var root = document.documentElement;
+     root.classList.add('js');
+     try {
+       if (localStorage.getItem('darkmode') === 'active') root.classList.add('darkmode');
+     } catch (error) {}
+   })();
+  </script>
+  <style>
+   :root {
+     color-scheme: light;
+     --bg: #edf2f7;
+     --surface: #f3f5f8;
+     --surface-2: #e2e8ef;
+     --sel: #cfe3e0;
+     --ink: #0f172a;
+     --ink-soft: #334155;
+     --muted: #64748b;
+     --accent: #00796b;
+     --accent-strong: #053b36;
+     --on-strong: #edf2f7;
+     --frame: #333c57;
+     --frame-hover: #00796b;
+     --drop: rgba(26, 28, 44, 0.2);
+     --line: rgba(51, 60, 87, 0.35);
+     --sw-games: #fac123;
+     --sw-tools: #22c3b6;
+     --sw-crew: #3b5dc9;
+     --qr-plate: #f3f5f8;
+     --qr-ink: #0f172a;
+   }
+   html.darkmode {
+     color-scheme: dark;
+     --bg: #071120;
+     --surface: #0d1a2e;
+     --surface-2: #12233b;
+     --sel: #1e4a66;
+     --ink: #e5eefb;
+     --ink-soft: #c4d2e5;
+     --muted: #8ea1bb;
+     --accent: #38bdf8;
+     --accent-strong: #8cf5e6;
+     --on-strong: #071120;
+     --frame: #3a4868;
+     --frame-hover: #38bdf8;
+     --drop: rgba(0, 0, 0, 0.55);
+     --line: rgba(142, 161, 187, 0.35);
+     --sw-crew: #73eff7;
+     /* scanners read dark modules on a light plate most reliably */
+     --qr-plate: #c4d2e5;
+     --qr-ink: #071120;
+   }
+   *, *::before, *::after { box-sizing: border-box; margin: 0; }
+   [hidden] { display: none !important; }
+   html { -webkit-text-size-adjust: 100%; }
+   body {
+     min-height: 100vh;
+     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+     line-height: 1.55;
+     color: var(--ink-soft);
+     background:
+       radial-gradient(circle at 12% 4%, rgba(0, 121, 107, 0.12), transparent 34%),
+       radial-gradient(circle at 88% 98%, rgba(250, 193, 35, 0.12), transparent 34%),
+       var(--bg);
+   }
+   html.darkmode body {
+     background:
+       radial-gradient(circle at 12% 4%, rgba(56, 189, 248, 0.08), transparent 34%),
+       radial-gradient(circle at 88% 98%, rgba(250, 193, 35, 0.04), transparent 34%),
+       var(--bg);
+   }
+   a { color: inherit; }
+   button { font: inherit; color: inherit; }
+   :focus-visible { outline: 2px dashed var(--accent); outline-offset: 5px; }
+   .vh { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+   /* the 8-bit frame (pixel-skin.css): box-shadow sides, square corners, a hard drop */
+   .px {
+     --px-c: var(--frame);
+     --px-u: 3px;
+     --ring: 0 calc(var(--px-u) * -1) 0 0 var(--px-c), 0 var(--px-u) 0 0 var(--px-c), calc(var(--px-u) * -1) 0 0 0 var(--px-c), var(--px-u) 0 0 0 var(--px-c);
+     box-shadow: var(--ring), calc(var(--px-u) * 2) calc(var(--px-u) * 3) 0 0 var(--drop);
+   }
+   .px2 { --px-u: 2px; }
+   .hit { cursor: pointer; transition: transform 120ms ease-out; }
+   @media (hover: hover) {
+     .hit:not(:disabled):hover { --px-c: var(--frame-hover); transform: translate(-2px, -2px); }
+     .hit:hover .arrow { transform: translateX(4px); }
+     .hit:hover .ico .f1 { visibility: hidden; }
+     .hit:hover .ico .f2 { visibility: visible; }
+   }
+   .hit:focus-visible { --px-c: var(--frame-hover); transform: translate(-2px, -2px); }
+   .hit:focus-visible .arrow { transform: translateX(4px); }
+   .hit:focus-visible .ico .f1 { visibility: hidden; }
+   .hit:focus-visible .ico .f2 { visibility: visible; }
+   :is(.hit, .bros).is-attract { --px-c: var(--frame-hover); }
+   .hit:active { transform: translate(2px, 2px); transition: none; box-shadow: var(--ring); }
+   .arrow { display: inline-block; font-weight: 800; color: var(--ink); transition: transform 120ms ease-out; }
+
+   .page { max-width: 552px; margin: 0 auto; padding: 0 16px 40px; }
+
+   /* top bar */
+   .top { height: 56px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+   .home { display: inline-flex; align-items: center; min-height: 44px; padding: 0 10px; margin-left: -10px; font-size: 0.84rem; font-weight: 800; color: var(--ink); text-decoration: none; }
+   @media (hover: hover) { .home:hover { color: var(--accent); } }
+   .tools { display: flex; gap: 12px; padding-right: 2px; }
+   .ib { display: inline-grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; background: var(--surface); color: var(--ink); }
+   .ib svg { width: 24px; height: 24px; }
+   .ib .sun, html.darkmode .ib .moon { display: none; }
+   html.darkmode .ib .sun { display: block; }
+
+   /* the stage: a live pixel scene of the Charles */
+   .stage {
+     position: relative;
+     overflow: hidden;
+     margin: 6px 3px 0;
+     background: linear-gradient(#3b8ee6, #5cc3f8 40%, #b9f6fb 62%);
+   }
+   .stage canvas { position: absolute; left: 0; top: 0; z-index: 1; width: 100%; height: auto; image-rendering: pixelated; }
+   .fb { display: block; width: 100%; height: auto; position: relative; }
+   /* the chip sits high (4px) so its face clears the top of the Citgo sign; the button stays 44px tall */
+   .clock { position: absolute; left: 0; top: 0; z-index: 3; min-width: 44px; min-height: 44px; padding: 4px 7px 7px; border: 0; background: none; cursor: pointer; text-align: left; }
+   .clock__face, .bubble {
+     display: inline-block;
+     padding: 3px 7px;
+     font-size: 0.66rem;
+     font-weight: 800;
+     letter-spacing: 0.1em;
+     line-height: 1.3;
+     white-space: nowrap;
+     color: #1a1c2c;
+     background: rgba(233, 238, 244, 0.92);
+     box-shadow: 0 -2px 0 #1a1c2c, 0 2px 0 #1a1c2c, -2px 0 0 #1a1c2c, 2px 0 0 #1a1c2c, 3px 4px 0 rgba(26, 28, 44, 0.35);
+   }
+   .stage:is([data-phase="dusk"], [data-phase="night"]) .clock__face {
+     color: #f4f4f4;
+     background: rgba(26, 28, 44, 0.88);
+     box-shadow: 0 -2px 0 #94b0c2, 0 2px 0 #94b0c2, -2px 0 0 #94b0c2, 2px 0 0 #94b0c2, 3px 4px 0 rgba(0, 0, 0, 0.4);
+   }
+   .clock:focus-visible { outline: none; }
+   .clock:focus-visible .clock__face { outline: 2px dashed #1a1c2c; outline-offset: 4px; }
+   .stage:is([data-phase="dusk"], [data-phase="night"]) .clock:focus-visible .clock__face { outline-color: #ffcd75; }
+   .bubble { position: absolute; z-index: 2; font-size: 0.72rem; letter-spacing: 0; opacity: 0; transform: translate(-50%, -100%); pointer-events: none; }
+   .bubble::after { content: ""; position: absolute; left: 50%; bottom: -6px; width: 6px; height: 4px; margin-left: -3px; background: #1a1c2c; clip-path: polygon(0 0, 100% 0, 50% 100%); }
+   .bubble.is-on { animation: bubble 2.4s steps(8, end) both; }
+   @keyframes bubble {
+     0% { opacity: 0; transform: translate(-50%, -80%); }
+     8%, 85% { opacity: 1; transform: translate(-50%, -100%); }
+     100% { opacity: 0; transform: translate(-50%, -110%); }
+   }
+   .stage-hint { display: none; }
+
+   /* identity */
+   .id { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 16px; align-items: end; padding: 0 3px; }
+   .avatar { position: relative; z-index: 4; width: 84px; height: 84px; margin: -42px 0 0 12px; padding: 0; border: 0; background: #9df4fe; }
+   .avatar:disabled { cursor: default; transform: none; }
+   .avatar img { display: block; width: 84px; height: 84px; image-rendering: pixelated; }
+   h1 { padding-bottom: 2px; font-size: 1.55rem; font-weight: 900; line-height: 1.15; color: var(--ink); }
+   .bio { grid-column: 1 / -1; margin-top: 12px; font-size: 1rem; }
+   /* the nouns are not links: no resting underline, only the bar that grows while a door is lit
+      (deeper shades in light mode so the bar reads on the pale page) */
+   .bio [data-noun] {
+     --nc: #b07a0a;
+     font-weight: 800;
+     color: var(--ink);
+     white-space: nowrap;
+     padding-bottom: 2px;
+     background: linear-gradient(var(--nc), var(--nc)) 0 100% / 0 3px no-repeat;
+     transition: background-size 180ms steps(6, end);
+   }
+   .bio [data-noun="tools"] { --nc: #0e8a80; }
+   .bio [data-noun="crew"] { --nc: var(--sw-crew); }
+   html.darkmode .bio [data-noun="games"] { --nc: var(--sw-games); }
+   html.darkmode .bio [data-noun="tools"] { --nc: var(--sw-tools); }
+   .bio [data-noun].is-lit { background-size: 100% 3px; }
+   .chips { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px 10px; margin-top: 12px; padding: 0; list-style: none; }
+   .chips li {
+     display: inline-flex;
+     align-items: center;
+     gap: 7px;
+     padding: 3px 9px;
+     font-size: 0.72rem;
+     font-weight: 700;
+     background: var(--surface-2);
+     box-shadow: 0 -1px 0 var(--line), 0 1px 0 var(--line), -1px 0 0 var(--line), 1px 0 0 var(--line);
+   }
+   .chips li::before { content: ""; width: 6px; height: 6px; background: var(--accent); }
+   .greet { grid-column: 1 / -1; margin-top: 12px; padding-left: 10px; font-size: 0.9rem; font-weight: 800; color: var(--ink); box-shadow: inset 4px 0 0 var(--accent); }
+
+   /* the doors */
+   .doors { display: grid; gap: 24px; margin-top: 26px; }
+   .kicker { display: flex; align-items: center; gap: 8px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.22em; line-height: 1.2; text-transform: uppercase; color: var(--ink-soft); }
+   .sw { flex: none; width: 10px; height: 10px; background: var(--c); box-shadow: inset -2px -2px 0 rgba(0, 0, 0, 0.24); }
+   .door { display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; align-items: center; gap: 10px 14px; padding: 14px 16px 16px; background: var(--surface); color: var(--ink-soft); text-decoration: none; }
+   .door > .kicker { grid-column: 1 / -1; }
+   .door__t { display: block; font-size: 1.08rem; font-weight: 800; line-height: 1.25; color: var(--ink); }
+   .door__c { display: block; margin-top: 3px; font-size: 0.84rem; line-height: 1.5; }
+   .tag { display: inline-block; margin-left: 6px; padding: 1px 6px; font-size: 0.62rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; vertical-align: 2px; color: var(--ink-soft); box-shadow: 0 -1px 0 var(--line), 0 1px 0 var(--line), -1px 0 0 var(--line), 1px 0 0 var(--line); }
+   .ico { position: relative; flex: none; width: 32px; height: 32px; background: var(--ico, var(--frame)); box-shadow: inset 0 0 0 6px var(--surface); }
+   .door .ico { width: 48px; height: 48px; box-shadow: inset 0 0 0 12px var(--surface); }
+   .ico.has-art, html:not(.js) .ico { background: none; box-shadow: none; }
+   .ico canvas { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; }
+   .ico .f2 { visibility: hidden; }
+   .tile {
+     --px-c: var(--frame);
+     --ring: 0 0 0 0 transparent;
+     display: grid;
+     grid-template-columns: 48px minmax(0, 1fr);
+     align-items: center;
+     gap: 2px 14px;
+     margin-top: 16px;
+     padding: 13px 16px;
+     color: var(--ink-soft);
+     text-decoration: none;
+     background:
+       repeating-linear-gradient(90deg, var(--px-c) 0 3px, transparent 3px 6px) 0 0 / 100% 3px no-repeat,
+       repeating-linear-gradient(90deg, var(--px-c) 0 3px, transparent 3px 6px) 0 100% / 100% 3px no-repeat,
+       repeating-linear-gradient(180deg, var(--px-c) 0 3px, transparent 3px 6px) 0 0 / 3px 100% no-repeat,
+       repeating-linear-gradient(180deg, var(--px-c) 0 3px, transparent 3px 6px) 100% 0 / 3px 100% no-repeat,
+       var(--surface-2);
+   }
+   .tile .lock { grid-row: span 3; justify-self: center; width: 30px; height: 36px; }
+   .tile__t { font-size: 0.98rem; font-weight: 800; color: var(--ink); }
+   .tile__m, .tile__n { font-size: 0.8rem; line-height: 1.5; }
+   .redact { color: var(--ink); }
+   .redact i { display: inline-block; width: 1ch; font-style: normal; text-align: center; }
+   @keyframes rattle { 0%, 100% { transform: none; } 25% { transform: translateX(-2px) rotate(-8deg); } 75% { transform: translateX(2px) rotate(8deg); } }
+   @media (hover: hover) { .tile:hover .lock { animation: rattle 140ms steps(2, end) 3; } }
+   .tile:focus-visible .lock, .tile.is-attract .lock { animation: rattle 140ms steps(2, end) 3; }
+
+   .bros { display: block; padding: 14px 16px 16px; background: var(--surface); transition: transform 120ms ease-out; }
+   @media (hover: hover) { .bros:hover { --px-c: var(--frame-hover); transform: translate(-2px, -2px); } }
+   .bros:focus-within, .bros.is-attract { --px-c: var(--frame-hover); }
+   /* the mark sits in the doors' 48px icon column, so all three doors share one text edge */
+   .bros__head { display: flex; align-items: center; gap: 14px; margin-top: 12px; }
+   .bros__head img { flex: none; width: 40px; height: 40px; margin: 0 4px; }
+   .bros__name { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 900; line-height: 1.2; color: var(--ink); }
+   .wire { width: 60px; height: 24px; }
+   .wire .blk { fill: var(--sw-tools); }
+   .wire .ln { fill: var(--ink-soft); }
+   .wire .pk { fill: var(--sw-games); opacity: 0; }
+   @keyframes packet { from { transform: translateX(0); } to { transform: translateX(12px); } }
+   @media (hover: hover) { .bros:hover .wire .pk { opacity: 1; animation: packet 600ms steps(6, end) infinite; } }
+   .bros:focus-within .wire .pk, .bros.is-attract .wire .pk { opacity: 1; animation: packet 600ms steps(6, end) infinite; }
+   .bros__tag { font-size: 0.84rem; }
+   .bros .door__c { margin-top: 10px; }
+   .facts { display: grid; gap: 6px; margin-top: 10px; padding: 0; list-style: none; font-size: 0.8rem; }
+   .facts li { display: flex; align-items: center; gap: 9px; }
+   .facts svg { flex: none; width: 20px; height: 24px; }
+   .pulse { flex: none; width: 8px; height: 8px; margin: 0 6px 0 6px; background: var(--sw-tools); animation: pulse 1.4s steps(2, end) infinite; }
+   @keyframes pulse { 50% { opacity: 0.3; } }
+   .act { display: flex; flex-wrap: wrap; gap: 12px 14px; margin-top: 16px; }
+   @media (min-width: 420px) { .bros > .door__c, .bros .facts, .bros .act { margin-left: 62px; } }
+   .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 16px; border: 0; font-size: 0.76rem; font-weight: 800; letter-spacing: 0.1em; line-height: 1.2; text-transform: uppercase; text-decoration: none; color: var(--ink); background: var(--surface); }
+   .btn--go { color: var(--on-strong); background: var(--accent-strong); }
+
+   /* say hi */
+   .card { margin-top: 38px; padding: 20px 18px 22px; background: var(--surface); }
+   .card h2 { margin-top: 6px; font-size: 1.6rem; font-weight: 900; line-height: 1.15; color: var(--ink); }
+   .lede { margin-top: 8px; font-size: 0.9rem; }
+   fieldset { min-width: 0; margin-top: 18px; padding: 0; border: 0; }
+   legend { padding: 0; margin-bottom: 10px; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-soft); }
+   /* chips grow to fill each row, so wrapped rows stay even instead of stair-stepping */
+   .topics { display: flex; flex-wrap: wrap; gap: 12px; }
+   .topic { position: relative; display: inline-flex; flex: 1 1 auto; }
+   .topic input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+   .topic span { display: inline-flex; align-items: center; gap: 8px; width: 100%; min-height: 44px; padding: 0 12px; font-size: 0.78rem; font-weight: 700; color: var(--ink); background: var(--surface-2); pointer-events: none; }
+   .topic .sw { width: 8px; height: 8px; }
+   /* hover gets a soft frame; only the checked chip carries the accent */
+   @media (hover: hover) { .topic:hover input:not(:checked) + span { --px-c: var(--ink-soft); } }
+   .topic input:checked + span { --px-c: var(--frame-hover); background: var(--sel); }
+   .topic input:checked + span::after { content: ""; width: 6px; height: 6px; margin-left: 2px; background: var(--accent); }
+   .topic input:focus-visible + span { outline: 2px dashed var(--accent); outline-offset: 5px; }
+   .topic input:active + span { transform: translate(2px, 2px); box-shadow: var(--ring); }
+   .addr { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin-top: 18px; }
+   .addr__v { font-size: 0.95rem; font-weight: 800; color: var(--ink); user-select: all; -webkit-user-select: all; overflow-wrap: anywhere; }
+   .hint { margin-top: 16px; padding: 10px 12px; font-size: 0.8rem; background: var(--surface-2); box-shadow: inset 4px 0 0 var(--sw-games); }
+   .news { margin-top: 18px; }
+   .news label { display: block; margin-bottom: 6px; font-size: 0.78rem; font-weight: 800; color: var(--ink); }
+   .news input[type="email"] { width: 100%; min-height: 44px; margin-bottom: 12px; padding: 0 12px; border: 0; font: inherit; color: var(--ink); background: var(--surface-2); }
+
+   /* find me elsewhere */
+   .else { margin-top: 38px; }
+   .else h2 { font-size: 0.7rem; font-weight: 800; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-soft); }
+   .rows { display: grid; gap: 18px; margin-top: 14px; padding: 0; list-style: none; }
+   .row { display: flex; align-items: center; gap: 12px; min-height: 60px; padding: 10px 14px; background: var(--surface); color: var(--ink-soft); text-decoration: none; }
+   .row__b { min-width: 0; }
+   .row__n { display: block; font-size: 0.92rem; font-weight: 800; line-height: 1.3; color: var(--ink); }
+   .row__h { display: block; font-size: 0.76rem; line-height: 1.35; overflow-wrap: anywhere; }
+   .row .arrow { margin-left: auto; }
+   @media (min-width: 420px) {
+     .rows { grid-template-columns: 1fr 1fr; }
+     .rows li:last-child:nth-child(odd) { grid-column: 1 / -1; }
+   }
+
+   /* footer */
+   .foot { display: grid; justify-items: start; gap: 16px; margin-top: 40px; font-size: 0.8rem; }
+   .qr-box summary { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 14px; font-size: 0.76rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink); background: var(--surface); list-style: none; }
+   .qr-box summary::-webkit-details-marker { display: none; }
+   .qr-box summary::before { content: ""; width: 8px; height: 8px; background: var(--ink); clip-path: polygon(0 0, 100% 50%, 0 100%); }
+   .qr-box[open] summary::before { clip-path: polygon(0 0, 100% 0, 50% 100%); }
+   .qr-box[open] .qr-show, .qr-box:not([open]) .qr-hide { display: none; }
+   .qr-plate { display: inline-block; margin-top: 18px; padding: 10px; color: var(--qr-ink); background: var(--qr-plate); }
+   .qr-plate svg { display: block; width: 222px; height: 222px; }
+   .qr-box[open] .qr-plate svg { animation: qr-paint 320ms steps(8, end) both; }
+   @keyframes qr-paint { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0 0 0 0); } }
+   .qr-cap { margin-top: 10px; font-size: 0.8rem; color: var(--ink-soft); }
+   .foot__home { display: inline-flex; align-items: center; min-height: 44px; font-weight: 800; color: var(--ink); text-decoration: none; }
+   @media (hover: hover) { .foot__home:hover { color: var(--accent); } }
+   .copy { color: var(--ink-soft); }
+
+   .toast { position: fixed; left: 50%; bottom: 20px; z-index: 60; max-width: calc(100% - 32px); padding: 9px 14px; font-size: 0.8rem; font-weight: 800; color: var(--bg); background: var(--ink); opacity: 0; transform: translate(-50%, 12px); pointer-events: none; transition: opacity 160ms, transform 160ms; }
+   .toast.is-on { opacity: 1; transform: translate(-50%, 0); }
+   .toast.is-sel { pointer-events: auto; overflow-wrap: anywhere; user-select: all; -webkit-user-select: all; }
+   .planes { position: fixed; inset: 0; z-index: 55; overflow: hidden; pointer-events: none; }
+   .planes canvas { position: absolute; width: 40px; height: 28px; image-rendering: pixelated; }
+
+   @media (max-width: 359px) {
+     .clock__face { letter-spacing: 0.04em; }
+     .door, .tile { grid-template-columns: 32px minmax(0, 1fr) auto; column-gap: 10px; padding-left: 12px; padding-right: 12px; }
+     .tile { grid-template-columns: 32px minmax(0, 1fr); }
+     .door .ico { width: 32px; height: 32px; }
+     .tile .lock { width: 25px; height: 30px; }
+   }
+
+   /* desktop: the stage stays in view on the left, so every cue plays where you can see it */
+   @media (min-width: 880px) {
+     .page { max-width: 1184px; padding: 0 32px 64px; }
+     .top { height: 80px; }
+     /* the stage never gets narrower than 340px, so the scene is not squeezed into a sliver at 880-1000px */
+     .layout { display: grid; grid-template-columns: minmax(340px, 1fr) minmax(0, 520px); gap: clamp(32px, 4vw, 56px); align-items: start; }
+     .stage-col { position: sticky; top: 24px; }
+     .stage { margin-top: 8px; }
+     .js .stage-hint { display: block; margin: 20px 3px 0; font-size: 0.78rem; }
+     .avatar { margin: 8px 0 0 3px; }
+     h1 { font-size: 2.05rem; }
+     .bio { font-size: 1.06rem; }
+   }
+   @media (min-width: 880px) and (hover: none) { .js .stage-hint { display: none; } }
+
+   @media (prefers-reduced-motion: reduce) {
+     *, *::before, *::after { animation: none !important; transition: none !important; }
+     .hit, .hit:hover, .hit:focus-visible, .hit:active, .arrow, .bros:hover, .hit:hover .arrow, .hit:focus-visible .arrow, .topic input:active + span { transform: none !important; }
+     .bubble.is-on { opacity: 1; }
+     .wire .pk { opacity: 0 !important; }
+   }
+  </style>
+  <script defer src="/pixel-kit.js"></script>
+  <script defer src="/links.js"></script>
+ </head>
+ <body>
+  <div class="page">
+   <header class="top">
+    <a class="home" data-cue="home" href="/">← noahhathout.com</a>
+    <div class="tools">
+     <button aria-label="Share this page" class="ib px px2 hit" data-share="" hidden="" title="Share this page" type="button">
+      <svg aria-hidden="true" focusable="false" shape-rendering="crispEdges" viewBox="0 0 12 12"><path d="M5 0h2v1h1v1h1v1H7v5H5V3H3V2h1V1h1zM1 6h2v4h6V6h2v6H1z" fill="currentColor"/></svg>
+     </button>
+     <button aria-label="Switch to dark mode" class="ib px px2 hit" data-theme-btn="" hidden="" title="Switch to dark mode" type="button">
+      <svg aria-hidden="true" class="moon" focusable="false" shape-rendering="crispEdges" viewBox="0 0 12 12"><path d="M4 0h4v1H4zM2 1h4v1H2zM1 2h3v1H1zM1 3h2v1H1zM0 4h3v4H0zM11 7h1v1h-1zM1 8h3v1H1zM10 8h2v1h-2zM1 9h5v1H1zM8 9h3v1H8zM2 10h7v1H2zM4 11h4v1H4z" fill="currentColor"/></svg>
+      <svg aria-hidden="true" class="sun" focusable="false" shape-rendering="crispEdges" viewBox="0 0 12 12"><path d="M4 3h4v1H4zM3 4h6v4H3zM4 8h4v1H4zM5 0h2v2H5zM5 10h2v2H5zM0 5h2v2H0zM10 5h2v2h-2zM1 1h1v1H1zM2 2h1v1H2zM10 1h1v1h-1zM9 2h1v1H9zM1 10h1v1H1zM2 9h1v1H2zM10 10h1v1h-1zM9 9h1v1H9z" fill="currentColor"/></svg>
+     </button>
+    </div>
+   </header>
+   <div class="layout">
+    <div class="stage-col">
+     <div class="stage px" data-phase="day" data-stage="">
+      <svg aria-hidden="true" class="fb" focusable="false" preserveAspectRatio="xMidYMax meet" shape-rendering="crispEdges" viewBox="0 0 118 46">
+       <path fill="#94b0c2" d="M0 20h6v-3h5v5h7v-4h6v10H0zM40 19h7v9h-7zM78 18h8v10h-8zM96 21h8v7h-8zM106 17h12v11h-12z"/>
+       <path fill="#566c86" d="M0 22h9v6H0zM12 22h14v6H12zM28 21h8v7h-8zM38 23h6v5h-6zM55 10h9v18h-9zM59 4h1v4h-1zM56 8h7v2h-7zM66 22h4v6h-4zM78 21h9v7h-9zM108 21h10v7h-10z"/>
+       <path fill="#73eff7" d="M70 7h7v21h-7z"/>
+       <path fill="#3b5dc9" d="M18 10h10v9H18z"/>
+       <path fill="#e0433f" d="M23 11h1v1h-1zM22 12h3v2h-3zM21 14h5v2h-5zM20 16h7v1h-7z"/>
+       <path fill="#b7c8d6" d="M82 26h36v2H82zM92 19h3v7h-3zM102 19h3v7h-3z"/>
+       <path fill="#3b7fc4" d="M0 28h118v8H0z"/>
+       <path fill="#38b764" d="M0 36h118v2H0z"/>
+       <path fill="#94b0c2" d="M0 38h118v8H0z"/>
+       <path fill="#29366f" d="M48 30h5v3h-5zM47 33h7v5h-7zM48 38h2v4h-2zM51 38h2v4h-2z"/>
+      </svg>
+      <canvas aria-label="Pixel-art Boston skyline across the Charles River: the Citgo sign, the Prudential Tower, the Hancock tower and the Longfellow Bridge, with pixel Noah on the Cambridge bank. The sky follows the real time in Boston." height="46" role="img" width="118"></canvas>
+      <span aria-hidden="true" class="bubble" data-bubble="">hi!</span>
+      <button aria-describedby="clock-help" class="clock" data-clock="" hidden="" type="button"><span class="clock__face" data-clock-face="">BOSTON</span></button>
+     </div>
+     <span class="vh" id="clock-help">Previews the sky at another time of day.</span>
+     <span aria-live="polite" class="vh" data-clock-live=""></span>
+     <p class="stage-hint">Hover a link: pixel Noah reacts.</p>
+    </div>
+    <main class="content">
+     <section class="id" aria-labelledby="name">
+      <button aria-label="Wave at pixel Noah" class="avatar px hit" data-avatar="" disabled="" type="button">
+       <img alt="" height="84" src="/assets/opt/PixelMe.webp" width="84"/>
+      </button>
+      <h1 id="name">Noah Hathout</h1>
+      <p class="bio">Robotics &amp; AI engineer. I build <span data-noun="games">games</span>, <span data-noun="tools">robot tools</span> and <span data-noun="crew">my own AI crew</span>.</p>
+      <ul class="chips">
+       <li>M.S. R&amp;AS @ Boston University</li>
+       <li>AI Engineer Intern @ Universal Robots</li>
+       <!-- SWITCH ON (4): a one-line "now" chip. Edit the text, then remove these comment markers.
+       <li>NOW: ROLE @ PLACE</li>
+       -->
+      </ul>
+      <p class="greet" data-greet="" hidden=""></p>
+     </section>
+
+     <section class="doors" aria-labelledby="doors-h">
+      <h2 class="vh" id="doors-h">What I build</h2>
+      <div class="door-group">
+       <a class="door px hit" data-cue="arcade" data-noun="games" href="/#mini-game">
+        <span class="kicker"><i class="sw" style="--c: var(--sw-games)"></i>Games</span>
+        <span class="ico" data-icon="arcade" style="--ico: #b13e53"></span>
+        <span><span class="door__t">Play my arcade game</span><span class="door__c">A mini-game on my home page. Works with touch.</span></span>
+        <span aria-hidden="true" class="arrow">→</span>
+       </a>
+       <a aria-label="Untitled Game, my first video game in Godot 4. Codename redacted. Unlocks at announcement." class="tile hit" data-cue="untitled" data-noun="games" href="/#projects">
+        <svg aria-hidden="true" class="lock" focusable="false" shape-rendering="crispEdges" viewBox="0 0 10 12"><path d="M2 0h6v1H2zM1 1h2v4H1zM7 1h2v4H7z" fill="currentColor"/><path d="M0 5h10v7H0z" fill="#fac123"/><path d="M0 11h10v1H0z" fill="#c98a4b"/><path d="M4 7h2v3H4z" fill="#1a1c2c"/></svg>
+        <span class="tile__t">Untitled Game</span>
+        <span class="tile__m">My first video game · Godot 4 · Codename <span aria-hidden="true" class="redact" data-redact=""><i>█</i><i>█</i><i>█</i><i>█</i><i>█</i><i>█</i></span></span>
+        <span class="tile__n">Unlocks at announcement.</span>
+       </a>
+       <!-- SWITCH ON (2): when the game is announced, use this instead of the locked tile above.
+       <a class="door px hit" data-cue="arcade" data-noun="games" href="STORE_PAGE_URL" style="margin-top: 16px">
+        <span class="ico" data-icon="arcade" style="--ico: #b13e53"></span>
+        <span><span class="door__t">GAME_NAME</span><span class="door__c">My first video game. See it on its store page.</span></span>
+        <span aria-hidden="true" class="arrow">→</span>
+       </a>
+       -->
+      </div>
+
+      <section aria-labelledby="bros-h" class="bros px" data-cue="bros2" data-noun="tools">
+       <p class="kicker"><i class="sw" style="--c: var(--sw-tools)"></i>Robot tools</p>
+       <div class="bros__head">
+        <img alt="" height="40" src="/assets/opt/bros2/mark.svg" width="40"/>
+        <div>
+         <h3 class="bros__name" id="bros-h">BROS2
+          <svg aria-hidden="true" class="wire" focusable="false" shape-rendering="crispEdges" viewBox="0 0 30 12"><path class="blk" d="M0 3h8v6H0zM22 3h8v6h-8z"/><path class="ln" d="M8 5h14v2H8z"/><path class="pk" d="M8 5h2v2H8z"/></svg>
+         </h3>
+         <p class="bros__tag">A visual builder for ROS 2</p>
+        </div>
+       </div>
+       <p class="door__c">Every block is a real ROS 2 node and every wire is a real topic.</p>
+       <ul class="facts">
+        <li><svg aria-hidden="true" focusable="false" shape-rendering="crispEdges" viewBox="0 0 10 12"><path d="M2 0h2v4H2zM6 0h2v4H6z" fill="#0f766e"/><path d="M3 4h4v1H3zM2 5h6v1H2zM1 6h8v3H1zM2 9h6v1H2zM3 10h4v1H3z" fill="#fac123"/><path d="M4 6h2v3H4zM3 7h4v1H3z" fill="#b45309"/></svg><span><strong>Best Project</strong>, BU EC601 · Fall 2025</span></li>
+        <li><i aria-hidden="true" class="pulse"></i><span>Early access opening soon</span></li>
+       </ul>
+       <div class="act">
+        <a class="btn btn--go px px2 hit" data-mail="" data-notify="" href="mailto:nhathout@bu.edu?subject=BROS2%20early%20access">Get notified</a>
+        <a class="btn px px2 hit" href="/#featured-bros2">See it <span aria-hidden="true" class="arrow">→</span></a>
+       </div>
+      </section>
+
+      <a class="door px hit" data-cue="sunny" data-noun="crew" href="/#projects">
+       <span class="kicker"><i class="sw" style="--c: var(--sw-crew)"></i>AI crew</span>
+       <span class="ico" data-icon="crew" style="--ico: #3b5dc9"></span>
+       <span><span class="door__t">Sunny<span class="tag">Private project</span></span><span class="door__c">A crew of AI agents that runs on my PC on a schedule, and never acts on the outside world without my approval.</span></span>
+       <span aria-hidden="true" class="arrow">→</span>
+      </a>
+     </section>
+
+     <section aria-labelledby="say-hi-h" class="card px" id="say-hi">
+      <p class="kicker">Let's connect</p>
+      <h2 id="say-hi-h">Say hi</h2>
+      <p class="lede">Open to robotics, AI, and software roles, research collaborations, and BROS2 early-access testers.</p>
+      <form action="mailto:nhathout@bu.edu" data-compose="" enctype="text/plain" method="get">
+       <fieldset>
+        <legend>What's it about?</legend>
+        <div class="topics">
+         <label class="topic"><input checked="" name="subject" type="radio" value="BROS2 early access"/><span class="px px2"><i class="sw" style="--c: #22c3b6"></i>BROS2 early access</span></label>
+         <label class="topic"><input name="subject" type="radio" value="Keep me posted: first game"/><span class="px px2"><i class="sw" style="--c: #fac123"></i>News on my first game</span></label>
+         <label class="topic"><input name="subject" type="radio" value="Opportunity"/><span class="px px2"><i class="sw" style="--c: #3b5dc9"></i>Job / internship</span></label>
+         <label class="topic"><input name="subject" type="radio" value="Research collaboration"/><span class="px px2"><i class="sw" style="--c: #a7f070"></i>Research collab</span></label>
+         <label class="topic"><input name="subject" type="radio" value="Saying hi"/><span class="px px2"><i class="sw" style="--c: #ef7d57"></i>Just saying hi</span></label>
+        </div>
+       </fieldset>
+       <div class="act">
+        <button class="btn btn--go px px2 hit" data-compose-submit="" type="submit">Open in my email app</button>
+        <a class="btn btn--go px px2 hit" data-compose-open="" data-mail="" hidden="" href="mailto:nhathout@bu.edu">Open in my email app</a>
+        <button class="btn px px2 hit" data-compose-copy="" data-mail="" hidden="" type="button"><span data-label="">Copy message</span></button>
+       </div>
+      </form>
+      <div class="addr">
+       <span class="addr__v" data-addr="">nhathout@bu.edu</span>
+       <button class="btn px px2 hit" data-copy-email="" data-mail="" hidden="" type="button"><span data-label="">Copy email</span></button>
+      </div>
+      <p class="hint" data-inapp="" hidden="">Email app not opening? This in-app browser may block it. Copy the address, or open this page in your browser from the ⋯ menu.</p>
+      <form action="" class="news" data-slot="newsletter" hidden="" method="post">
+       <label for="news-email">Your email, for news when there is some</label>
+       <input autocomplete="email" id="news-email" name="email" required="" type="email"/>
+       <input data-source="" name="source" type="hidden" value=""/>
+       <button class="btn btn--go px px2 hit" type="submit">Keep me posted</button>
+      </form>
+     </section>
+
+     <section aria-labelledby="else-h" class="else">
+      <h2 id="else-h">Find me elsewhere</h2>
+      <ul class="rows">
+       <li><a aria-label="Instagram, @noahhathout" class="row px hit" data-cue="instagram" href="https://www.instagram.com/noahhathout/"><span class="ico" data-icon="instagram" style="--ico: #c13584"></span><span class="row__b"><span class="row__n">Instagram</span><span class="row__h">@noahhathout</span></span><span aria-hidden="true" class="arrow">→</span></a></li>
+       <li><a aria-label="LinkedIn, /noah-hathout" class="row px hit" data-cue="linkedin" href="https://www.linkedin.com/in/noah-hathout/"><span class="ico" data-icon="linkedin" style="--ico: #0a66c2"></span><span class="row__b"><span class="row__n">LinkedIn</span><span class="row__h">/noah-hathout</span></span><span aria-hidden="true" class="arrow">→</span></a></li>
+       <li><a aria-label="GitHub, @nhathout" class="row px hit" data-cue="github" href="https://github.com/nhathout"><span class="ico" data-icon="github" style="--ico: #1a1c2c"></span><span class="row__b"><span class="row__n">GitHub</span><span class="row__h">@nhathout</span></span><span aria-hidden="true" class="arrow">→</span></a></li>
+       <li><a aria-label="Twitch, sernawa, streamer" class="row px hit" data-cue="twitch" href="https://www.twitch.tv/sernawa"><span class="ico" data-icon="twitch" style="--ico: #9146ff"></span><span class="row__b"><span class="row__n">Twitch</span><span class="row__h">sernawa · Streamer</span></span><span aria-hidden="true" class="arrow">→</span></a></li>
+       <!-- SWITCH ON (1): YouTube. Replace HANDLE (twice), then remove these comment markers.
+       <li><a aria-label="YouTube, @HANDLE" class="row px hit" data-cue="youtube" href="https://www.youtube.com/@HANDLE"><span class="ico" data-icon="youtube" style="--ico: #e0433f"></span><span class="row__b"><span class="row__n">YouTube</span><span class="row__h">@HANDLE</span></span><span aria-hidden="true" class="arrow">→</span></a></li>
+       -->
+       <!-- SWITCH ON (1): TikTok. Replace HANDLE (twice), then remove these comment markers.
+       <li><a aria-label="TikTok, @HANDLE" class="row px hit" data-cue="tiktok" href="https://www.tiktok.com/@HANDLE"><span class="ico" data-icon="tiktok" style="--ico: #1a1c2c"></span><span class="row__b"><span class="row__n">TikTok</span><span class="row__h">@HANDLE</span></span><span aria-hidden="true" class="arrow">→</span></a></li>
+       -->
+       <li><a aria-label="Resume, PDF" class="row px hit" data-cue="resume" href="/assets/files/noah_hathout_resume.pdf"><span class="ico" data-icon="resume" style="--ico: #94b0c2"></span><span class="row__b"><span class="row__n">Resume</span><span class="row__h">PDF</span></span><span aria-hidden="true" class="arrow">→</span></a></li>
+      </ul>
+     </section>
+
+     <footer class="foot">
+      <details class="qr-box">
+       <summary class="px px2 hit"><span class="qr-show">Show my QR code</span><span class="qr-hide">Hide QR code</span></summary>
+       <div class="qr-plate px">
+        <svg class="qr" viewBox="-4 -4 37 37" width="222" height="222" shape-rendering="crispEdges" role="img" aria-label="QR code for noahhathout.com/links"><path fill="currentColor" d="M0 0h7v1h-7zM11 0h1v1h-1zM14 0h1v1h-1zM16 0h5v1h-5zM22 0h7v1h-7zM0 1h1v1h-1zM6 1h1v1h-1zM10 1h1v1h-1zM12 1h2v1h-2zM15 1h2v1h-2zM20 1h1v1h-1zM22 1h1v1h-1zM28 1h1v1h-1zM0 2h1v1h-1zM2 2h3v1h-3zM6 2h1v1h-1zM8 2h2v1h-2zM11 2h1v1h-1zM15 2h1v1h-1zM19 2h2v1h-2zM22 2h1v1h-1zM24 2h3v1h-3zM28 2h1v1h-1zM0 3h1v1h-1zM2 3h3v1h-3zM6 3h1v1h-1zM8 3h2v1h-2zM11 3h1v1h-1zM15 3h5v1h-5zM22 3h1v1h-1zM24 3h3v1h-3zM28 3h1v1h-1zM0 4h1v1h-1zM2 4h3v1h-3zM6 4h1v1h-1zM8 4h2v1h-2zM12 4h1v1h-1zM16 4h5v1h-5zM22 4h1v1h-1zM24 4h3v1h-3zM28 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM8 5h1v1h-1zM10 5h3v1h-3zM15 5h3v1h-3zM20 5h1v1h-1zM22 5h1v1h-1zM28 5h1v1h-1zM0 6h7v1h-7zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h7v1h-7zM8 7h1v1h-1zM12 7h1v1h-1zM15 7h2v1h-2zM19 7h1v1h-1zM0 8h1v1h-1zM2 8h5v1h-5zM9 8h3v1h-3zM16 8h2v1h-2zM22 8h5v1h-5zM0 9h1v1h-1zM3 9h2v1h-2zM7 9h3v1h-3zM12 9h2v1h-2zM17 9h8v1h-8zM28 9h1v1h-1zM2 10h1v1h-1zM5 10h2v1h-2zM11 10h6v1h-6zM21 10h2v1h-2zM24 10h1v1h-1zM1 11h1v1h-1zM4 11h2v1h-2zM7 11h1v1h-1zM10 11h1v1h-1zM12 11h2v1h-2zM15 11h2v1h-2zM18 11h4v1h-4zM25 11h1v1h-1zM27 11h1v1h-1zM0 12h2v1h-2zM4 12h1v1h-1zM6 12h1v1h-1zM8 12h5v1h-5zM14 12h1v1h-1zM17 12h1v1h-1zM19 12h1v1h-1zM25 12h2v1h-2zM0 13h1v1h-1zM2 13h1v1h-1zM7 13h1v1h-1zM9 13h1v1h-1zM11 13h1v1h-1zM16 13h4v1h-4zM21 13h4v1h-4zM28 13h1v1h-1zM0 14h3v1h-3zM6 14h2v1h-2zM10 14h1v1h-1zM15 14h2v1h-2zM18 14h1v1h-1zM21 14h1v1h-1zM23 14h4v1h-4zM0 15h3v1h-3zM4 15h2v1h-2zM7 15h5v1h-5zM14 15h1v1h-1zM16 15h1v1h-1zM20 15h1v1h-1zM24 15h1v1h-1zM27 15h1v1h-1zM1 16h4v1h-4zM6 16h3v1h-3zM11 16h1v1h-1zM17 16h1v1h-1zM20 16h1v1h-1zM25 16h2v1h-2zM0 17h1v1h-1zM3 17h3v1h-3zM7 17h3v1h-3zM11 17h1v1h-1zM13 17h2v1h-2zM16 17h5v1h-5zM22 17h3v1h-3zM26 17h1v1h-1zM28 17h1v1h-1zM0 18h1v1h-1zM3 18h4v1h-4zM9 18h3v1h-3zM13 18h3v1h-3zM17 18h1v1h-1zM20 18h1v1h-1zM23 18h1v1h-1zM26 18h1v1h-1zM0 19h1v1h-1zM4 19h1v1h-1zM8 19h1v1h-1zM11 19h1v1h-1zM13 19h1v1h-1zM18 19h1v1h-1zM20 19h2v1h-2zM23 19h1v1h-1zM27 19h1v1h-1zM0 20h1v1h-1zM3 20h2v1h-2zM6 20h2v1h-2zM10 20h1v1h-1zM14 20h4v1h-4zM20 20h5v1h-5zM26 20h3v1h-3zM8 21h4v1h-4zM16 21h5v1h-5zM24 21h5v1h-5zM0 22h7v1h-7zM11 22h2v1h-2zM15 22h1v1h-1zM17 22h4v1h-4zM22 22h1v1h-1zM24 22h3v1h-3zM0 23h1v1h-1zM6 23h1v1h-1zM8 23h1v1h-1zM14 23h1v1h-1zM16 23h1v1h-1zM19 23h2v1h-2zM24 23h1v1h-1zM0 24h1v1h-1zM2 24h3v1h-3zM6 24h1v1h-1zM8 24h3v1h-3zM15 24h1v1h-1zM17 24h1v1h-1zM20 24h5v1h-5zM26 24h1v1h-1zM0 25h1v1h-1zM2 25h3v1h-3zM6 25h1v1h-1zM8 25h1v1h-1zM10 25h2v1h-2zM13 25h2v1h-2zM16 25h1v1h-1zM19 25h2v1h-2zM25 25h4v1h-4zM0 26h1v1h-1zM2 26h3v1h-3zM6 26h1v1h-1zM8 26h2v1h-2zM11 26h1v1h-1zM13 26h1v1h-1zM15 26h13v1h-13zM0 27h1v1h-1zM6 27h1v1h-1zM9 27h3v1h-3zM14 27h1v1h-1zM16 27h1v1h-1zM20 27h3v1h-3zM25 27h1v1h-1zM27 27h1v1h-1zM0 28h7v1h-7zM8 28h3v1h-3zM13 28h2v1h-2zM16 28h4v1h-4zM21 28h1v1h-1zM23 28h1v1h-1zM26 28h1v1h-1z"/></svg>
+       </div>
+       <p class="qr-cap">Point a camera here to open this page.</p>
+      </details>
+      <a class="foot__home" data-cue="home" href="/">Full site → noahhathout.com</a>
+      <p class="copy">© 2026 Noah Hathout · Boston, MA</p>
+     </footer>
+    </main>
+   </div>
+  </div>
+  <div aria-live="polite" class="toast px px2" data-toast="" role="status"></div>
+  <div aria-hidden="true" class="planes" data-planes=""></div>
+ </body>
+</html>

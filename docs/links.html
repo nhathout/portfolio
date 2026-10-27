@@ -83,7 +83,7 @@
      --bg: #071120;
      --surface: #0d1a2e;
      --surface-2: #12233b;
-     --sel: #163a52;
+     --sel: #1e4a66;
      --ink: #e5eefb;
      --ink-soft: #c4d2e5;
      --muted: #8ea1bb;
@@ -112,6 +112,12 @@
        radial-gradient(circle at 88% 98%, rgba(250, 193, 35, 0.12), transparent 34%),
        var(--bg);
    }
+   html.darkmode body {
+     background:
+       radial-gradient(circle at 12% 4%, rgba(56, 189, 248, 0.08), transparent 34%),
+       radial-gradient(circle at 88% 98%, rgba(250, 193, 35, 0.04), transparent 34%),
+       var(--bg);
+   }
    a { color: inherit; }
    button { font: inherit; color: inherit; }
    :focus-visible { outline: 2px dashed var(--accent); outline-offset: 5px; }
@@ -127,7 +133,7 @@
    .px2 { --px-u: 2px; }
    .hit { cursor: pointer; transition: transform 120ms ease-out; }
    @media (hover: hover) {
-     .hit:hover { --px-c: var(--frame-hover); transform: translate(-2px, -2px); }
+     .hit:not(:disabled):hover { --px-c: var(--frame-hover); transform: translate(-2px, -2px); }
      .hit:hover .arrow { transform: translateX(4px); }
      .hit:hover .ico .f1 { visibility: hidden; }
      .hit:hover .ico .f2 { visibility: visible; }
@@ -161,11 +167,12 @@
    }
    .stage canvas { position: absolute; left: 0; top: 0; z-index: 1; width: 100%; height: auto; image-rendering: pixelated; }
    .fb { display: block; width: 100%; height: auto; position: relative; }
-   .clock { position: absolute; left: 0; top: 0; z-index: 3; min-width: 44px; min-height: 44px; padding: 7px; border: 0; background: none; cursor: pointer; text-align: left; }
+   /* the chip sits high (4px) so its face clears the top of the Citgo sign; the button stays 44px tall */
+   .clock { position: absolute; left: 0; top: 0; z-index: 3; min-width: 44px; min-height: 44px; padding: 4px 7px 7px; border: 0; background: none; cursor: pointer; text-align: left; }
    .clock__face, .bubble {
      display: inline-block;
      padding: 3px 7px;
-     font-size: 0.6rem;
+     font-size: 0.66rem;
      font-weight: 800;
      letter-spacing: 0.1em;
      line-height: 1.3;
@@ -195,24 +202,26 @@
    /* identity */
    .id { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 16px; align-items: end; padding: 0 3px; }
    .avatar { position: relative; z-index: 4; width: 84px; height: 84px; margin: -42px 0 0 12px; padding: 0; border: 0; background: #9df4fe; }
-   .avatar:disabled { cursor: default; }
+   .avatar:disabled { cursor: default; transform: none; }
    .avatar img { display: block; width: 84px; height: 84px; image-rendering: pixelated; }
    h1 { padding-bottom: 2px; font-size: 1.55rem; font-weight: 900; line-height: 1.15; color: var(--ink); }
    .bio { grid-column: 1 / -1; margin-top: 12px; font-size: 1rem; }
+   /* the nouns are not links: no resting underline, only the bar that grows while a door is lit
+      (deeper shades in light mode so the bar reads on the pale page) */
    .bio [data-noun] {
-     --nc: var(--sw-games);
+     --nc: #b07a0a;
      font-weight: 800;
      color: var(--ink);
      white-space: nowrap;
      padding-bottom: 2px;
-     background:
-       linear-gradient(var(--nc), var(--nc)) 0 100% / 100% 1px no-repeat,
-       linear-gradient(var(--nc), var(--nc)) 0 100% / 0 3px no-repeat;
+     background: linear-gradient(var(--nc), var(--nc)) 0 100% / 0 3px no-repeat;
      transition: background-size 180ms steps(6, end);
    }
-   .bio [data-noun="tools"] { --nc: var(--sw-tools); }
+   .bio [data-noun="tools"] { --nc: #0e8a80; }
    .bio [data-noun="crew"] { --nc: var(--sw-crew); }
-   .bio [data-noun].is-lit { background-size: 100% 1px, 100% 3px; }
+   html.darkmode .bio [data-noun="games"] { --nc: var(--sw-games); }
+   html.darkmode .bio [data-noun="tools"] { --nc: var(--sw-tools); }
+   .bio [data-noun].is-lit { background-size: 100% 3px; }
    .chips { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px 10px; margin-top: 12px; padding: 0; list-style: none; }
    .chips li {
      display: inline-flex;
@@ -238,7 +247,7 @@
    .tag { display: inline-block; margin-left: 6px; padding: 1px 6px; font-size: 0.62rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; vertical-align: 2px; color: var(--ink-soft); box-shadow: 0 -1px 0 var(--line), 0 1px 0 var(--line), -1px 0 0 var(--line), 1px 0 0 var(--line); }
    .ico { position: relative; flex: none; width: 32px; height: 32px; background: var(--ico, var(--frame)); box-shadow: inset 0 0 0 6px var(--surface); }
    .door .ico { width: 48px; height: 48px; box-shadow: inset 0 0 0 12px var(--surface); }
-   .ico.has-art { background: none; box-shadow: none; }
+   .ico.has-art, html:not(.js) .ico { background: none; box-shadow: none; }
    .ico canvas { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; }
    .ico .f2 { visibility: hidden; }
    .tile {
@@ -271,8 +280,9 @@
    .bros { display: block; padding: 14px 16px 16px; background: var(--surface); transition: transform 120ms ease-out; }
    @media (hover: hover) { .bros:hover { --px-c: var(--frame-hover); transform: translate(-2px, -2px); } }
    .bros:focus-within, .bros.is-attract { --px-c: var(--frame-hover); }
-   .bros__head { display: flex; align-items: center; gap: 12px; margin-top: 12px; }
-   .bros__head img { flex: none; width: 40px; height: 40px; }
+   /* the mark sits in the doors' 48px icon column, so all three doors share one text edge */
+   .bros__head { display: flex; align-items: center; gap: 14px; margin-top: 12px; }
+   .bros__head img { flex: none; width: 40px; height: 40px; margin: 0 4px; }
    .bros__name { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 900; line-height: 1.2; color: var(--ink); }
    .wire { width: 60px; height: 24px; }
    .wire .blk { fill: var(--sw-tools); }
@@ -289,6 +299,7 @@
    .pulse { flex: none; width: 8px; height: 8px; margin: 0 6px 0 6px; background: var(--sw-tools); animation: pulse 1.4s steps(2, end) infinite; }
    @keyframes pulse { 50% { opacity: 0.3; } }
    .act { display: flex; flex-wrap: wrap; gap: 12px 14px; margin-top: 16px; }
+   @media (min-width: 420px) { .bros > .door__c, .bros .facts, .bros .act { margin-left: 62px; } }
    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 16px; border: 0; font-size: 0.76rem; font-weight: 800; letter-spacing: 0.1em; line-height: 1.2; text-transform: uppercase; text-decoration: none; color: var(--ink); background: var(--surface); }
    .btn--go { color: var(--on-strong); background: var(--accent-strong); }
 
@@ -298,12 +309,14 @@
    .lede { margin-top: 8px; font-size: 0.9rem; }
    fieldset { min-width: 0; margin-top: 18px; padding: 0; border: 0; }
    legend { padding: 0; margin-bottom: 10px; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-soft); }
+   /* chips grow to fill each row, so wrapped rows stay even instead of stair-stepping */
    .topics { display: flex; flex-wrap: wrap; gap: 12px; }
-   .topic { position: relative; display: inline-flex; }
+   .topic { position: relative; display: inline-flex; flex: 1 1 auto; }
    .topic input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
-   .topic span { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 12px; font-size: 0.78rem; font-weight: 700; color: var(--ink); background: var(--surface-2); pointer-events: none; }
+   .topic span { display: inline-flex; align-items: center; gap: 8px; width: 100%; min-height: 44px; padding: 0 12px; font-size: 0.78rem; font-weight: 700; color: var(--ink); background: var(--surface-2); pointer-events: none; }
    .topic .sw { width: 8px; height: 8px; }
-   @media (hover: hover) { .topic:hover span { --px-c: var(--frame-hover); } }
+   /* hover gets a soft frame; only the checked chip carries the accent */
+   @media (hover: hover) { .topic:hover input:not(:checked) + span { --px-c: var(--ink-soft); } }
    .topic input:checked + span { --px-c: var(--frame-hover); background: var(--sel); }
    .topic input:checked + span::after { content: ""; width: 6px; height: 6px; margin-left: 2px; background: var(--accent); }
    .topic input:focus-visible + span { outline: 2px dashed var(--accent); outline-offset: 5px; }
@@ -335,6 +348,7 @@
    .qr-box summary::-webkit-details-marker { display: none; }
    .qr-box summary::before { content: ""; width: 8px; height: 8px; background: var(--ink); clip-path: polygon(0 0, 100% 50%, 0 100%); }
    .qr-box[open] summary::before { clip-path: polygon(0 0, 100% 0, 50% 100%); }
+   .qr-box[open] .qr-show, .qr-box:not([open]) .qr-hide { display: none; }
    .qr-plate { display: inline-block; margin-top: 18px; padding: 10px; color: var(--qr-ink); background: var(--qr-plate); }
    .qr-plate svg { display: block; width: 222px; height: 222px; }
    .qr-box[open] .qr-plate svg { animation: qr-paint 320ms steps(8, end) both; }
@@ -346,11 +360,12 @@
 
    .toast { position: fixed; left: 50%; bottom: 20px; z-index: 60; max-width: calc(100% - 32px); padding: 9px 14px; font-size: 0.8rem; font-weight: 800; color: var(--bg); background: var(--ink); opacity: 0; transform: translate(-50%, 12px); pointer-events: none; transition: opacity 160ms, transform 160ms; }
    .toast.is-on { opacity: 1; transform: translate(-50%, 0); }
+   .toast.is-sel { pointer-events: auto; overflow-wrap: anywhere; user-select: all; -webkit-user-select: all; }
    .planes { position: fixed; inset: 0; z-index: 55; overflow: hidden; pointer-events: none; }
    .planes canvas { position: absolute; width: 40px; height: 28px; image-rendering: pixelated; }
 
    @media (max-width: 359px) {
-     .clock__face { font-size: 0.56rem; letter-spacing: 0.06em; }
+     .clock__face { letter-spacing: 0.04em; }
      .door, .tile { grid-template-columns: 32px minmax(0, 1fr) auto; column-gap: 10px; padding-left: 12px; padding-right: 12px; }
      .tile { grid-template-columns: 32px minmax(0, 1fr); }
      .door .ico { width: 32px; height: 32px; }
@@ -360,7 +375,9 @@
    /* desktop: the stage stays in view on the left, so every cue plays where you can see it */
    @media (min-width: 880px) {
      .page { max-width: 1184px; padding: 0 32px 64px; }
-     .layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 520px); gap: 56px; align-items: start; }
+     .top { height: 80px; }
+     /* the stage never gets narrower than 340px, so the scene is not squeezed into a sliver at 880-1000px */
+     .layout { display: grid; grid-template-columns: minmax(340px, 1fr) minmax(0, 520px); gap: clamp(32px, 4vw, 56px); align-items: start; }
      .stage-col { position: sticky; top: 24px; }
      .stage { margin-top: 8px; }
      .js .stage-hint { display: block; margin: 20px 3px 0; font-size: 0.78rem; }
@@ -388,7 +405,7 @@
      <button aria-label="Share this page" class="ib px px2 hit" data-share="" hidden="" title="Share this page" type="button">
       <svg aria-hidden="true" focusable="false" shape-rendering="crispEdges" viewBox="0 0 12 12"><path d="M5 0h2v1h1v1h1v1H7v5H5V3H3V2h1V1h1zM1 6h2v4h6V6h2v6H1z" fill="currentColor"/></svg>
      </button>
-     <button aria-label="Switch to dark mode" aria-pressed="false" class="ib px px2 hit" data-theme-btn="" hidden="" title="Switch to dark mode" type="button">
+     <button aria-label="Switch to dark mode" class="ib px px2 hit" data-theme-btn="" hidden="" title="Switch to dark mode" type="button">
       <svg aria-hidden="true" class="moon" focusable="false" shape-rendering="crispEdges" viewBox="0 0 12 12"><path d="M4 0h4v1H4zM2 1h4v1H2zM1 2h3v1H1zM1 3h2v1H1zM0 4h3v4H0zM11 7h1v1h-1zM1 8h3v1H1zM10 8h2v1h-2zM1 9h5v1H1zM8 9h3v1H8zM2 10h7v1H2zM4 11h4v1H4z" fill="currentColor"/></svg>
       <svg aria-hidden="true" class="sun" focusable="false" shape-rendering="crispEdges" viewBox="0 0 12 12"><path d="M4 3h4v1H4zM3 4h6v4H3zM4 8h4v1H4zM5 0h2v2H5zM5 10h2v2H5zM0 5h2v2H0zM10 5h2v2h-2zM1 1h1v1H1zM2 2h1v1H2zM10 1h1v1h-1zM9 2h1v1H9zM1 10h1v1H1zM2 9h1v1H2zM10 10h1v1h-1zM9 9h1v1H9z" fill="currentColor"/></svg>
      </button>
@@ -541,7 +558,7 @@
 
      <footer class="foot">
       <details class="qr-box">
-       <summary class="px px2 hit">Show my QR code</summary>
+       <summary class="px px2 hit"><span class="qr-show">Show my QR code</span><span class="qr-hide">Hide QR code</span></summary>
        <div class="qr-plate px">
         <svg class="qr" viewBox="-4 -4 37 37" width="222" height="222" shape-rendering="crispEdges" role="img" aria-label="QR code for noahhathout.com/links"><path fill="currentColor" d="M0 0h7v1h-7zM11 0h1v1h-1zM14 0h1v1h-1zM16 0h5v1h-5zM22 0h7v1h-7zM0 1h1v1h-1zM6 1h1v1h-1zM10 1h1v1h-1zM12 1h2v1h-2zM15 1h2v1h-2zM20 1h1v1h-1zM22 1h1v1h-1zM28 1h1v1h-1zM0 2h1v1h-1zM2 2h3v1h-3zM6 2h1v1h-1zM8 2h2v1h-2zM11 2h1v1h-1zM15 2h1v1h-1zM19 2h2v1h-2zM22 2h1v1h-1zM24 2h3v1h-3zM28 2h1v1h-1zM0 3h1v1h-1zM2 3h3v1h-3zM6 3h1v1h-1zM8 3h2v1h-2zM11 3h1v1h-1zM15 3h5v1h-5zM22 3h1v1h-1zM24 3h3v1h-3zM28 3h1v1h-1zM0 4h1v1h-1zM2 4h3v1h-3zM6 4h1v1h-1zM8 4h2v1h-2zM12 4h1v1h-1zM16 4h5v1h-5zM22 4h1v1h-1zM24 4h3v1h-3zM28 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM8 5h1v1h-1zM10 5h3v1h-3zM15 5h3v1h-3zM20 5h1v1h-1zM22 5h1v1h-1zM28 5h1v1h-1zM0 6h7v1h-7zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h7v1h-7zM8 7h1v1h-1zM12 7h1v1h-1zM15 7h2v1h-2zM19 7h1v1h-1zM0 8h1v1h-1zM2 8h5v1h-5zM9 8h3v1h-3zM16 8h2v1h-2zM22 8h5v1h-5zM0 9h1v1h-1zM3 9h2v1h-2zM7 9h3v1h-3zM12 9h2v1h-2zM17 9h8v1h-8zM28 9h1v1h-1zM2 10h1v1h-1zM5 10h2v1h-2zM11 10h6v1h-6zM21 10h2v1h-2zM24 10h1v1h-1zM1 11h1v1h-1zM4 11h2v1h-2zM7 11h1v1h-1zM10 11h1v1h-1zM12 11h2v1h-2zM15 11h2v1h-2zM18 11h4v1h-4zM25 11h1v1h-1zM27 11h1v1h-1zM0 12h2v1h-2zM4 12h1v1h-1zM6 12h1v1h-1zM8 12h5v1h-5zM14 12h1v1h-1zM17 12h1v1h-1zM19 12h1v1h-1zM25 12h2v1h-2zM0 13h1v1h-1zM2 13h1v1h-1zM7 13h1v1h-1zM9 13h1v1h-1zM11 13h1v1h-1zM16 13h4v1h-4zM21 13h4v1h-4zM28 13h1v1h-1zM0 14h3v1h-3zM6 14h2v1h-2zM10 14h1v1h-1zM15 14h2v1h-2zM18 14h1v1h-1zM21 14h1v1h-1zM23 14h4v1h-4zM0 15h3v1h-3zM4 15h2v1h-2zM7 15h5v1h-5zM14 15h1v1h-1zM16 15h1v1h-1zM20 15h1v1h-1zM24 15h1v1h-1zM27 15h1v1h-1zM1 16h4v1h-4zM6 16h3v1h-3zM11 16h1v1h-1zM17 16h1v1h-1zM20 16h1v1h-1zM25 16h2v1h-2zM0 17h1v1h-1zM3 17h3v1h-3zM7 17h3v1h-3zM11 17h1v1h-1zM13 17h2v1h-2zM16 17h5v1h-5zM22 17h3v1h-3zM26 17h1v1h-1zM28 17h1v1h-1zM0 18h1v1h-1zM3 18h4v1h-4zM9 18h3v1h-3zM13 18h3v1h-3zM17 18h1v1h-1zM20 18h1v1h-1zM23 18h1v1h-1zM26 18h1v1h-1zM0 19h1v1h-1zM4 19h1v1h-1zM8 19h1v1h-1zM11 19h1v1h-1zM13 19h1v1h-1zM18 19h1v1h-1zM20 19h2v1h-2zM23 19h1v1h-1zM27 19h1v1h-1zM0 20h1v1h-1zM3 20h2v1h-2zM6 20h2v1h-2zM10 20h1v1h-1zM14 20h4v1h-4zM20 20h5v1h-5zM26 20h3v1h-3zM8 21h4v1h-4zM16 21h5v1h-5zM24 21h5v1h-5zM0 22h7v1h-7zM11 22h2v1h-2zM15 22h1v1h-1zM17 22h4v1h-4zM22 22h1v1h-1zM24 22h3v1h-3zM0 23h1v1h-1zM6 23h1v1h-1zM8 23h1v1h-1zM14 23h1v1h-1zM16 23h1v1h-1zM19 23h2v1h-2zM24 23h1v1h-1zM0 24h1v1h-1zM2 24h3v1h-3zM6 24h1v1h-1zM8 24h3v1h-3zM15 24h1v1h-1zM17 24h1v1h-1zM20 24h5v1h-5zM26 24h1v1h-1zM0 25h1v1h-1zM2 25h3v1h-3zM6 25h1v1h-1zM8 25h1v1h-1zM10 25h2v1h-2zM13 25h2v1h-2zM16 25h1v1h-1zM19 25h2v1h-2zM25 25h4v1h-4zM0 26h1v1h-1zM2 26h3v1h-3zM6 26h1v1h-1zM8 26h2v1h-2zM11 26h1v1h-1zM13 26h1v1h-1zM15 26h13v1h-13zM0 27h1v1h-1zM6 27h1v1h-1zM9 27h3v1h-3zM14 27h1v1h-1zM16 27h1v1h-1zM20 27h3v1h-3zM25 27h1v1h-1zM27 27h1v1h-1zM0 28h7v1h-7zM8 28h3v1h-3zM13 28h2v1h-2zM16 28h4v1h-4zM21 28h1v1h-1zM23 28h1v1h-1zM26 28h1v1h-1z"/></svg>
        </div>

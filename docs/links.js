@@ -48,8 +48,7 @@
   const syncTheme = () => {
     const dark = root.classList.contains('darkmode');
     const label = dark ? 'Switch to light mode' : 'Switch to dark mode';
-    themeBtn.setAttribute('aria-pressed', String(dark));
-    themeBtn.setAttribute('aria-label', label);
+    themeBtn.setAttribute('aria-label', label); // an action label, so no aria-pressed (the two would contradict)
     themeBtn.title = label;
   };
   if (themeBtn) {
@@ -66,11 +65,12 @@
   }
 
   const toastEl = $('[data-toast]');
-  function toast(text) {
+  function toast(text, ms, selectable) {
     toastEl.textContent = text;
+    toastEl.classList.toggle('is-sel', !!selectable);
     toastEl.classList.add('is-on');
     clearTimeout(toast.t);
-    toast.t = later(() => toastEl.classList.remove('is-on'), 1800);
+    toast.t = later(() => toastEl.classList.remove('is-on', 'is-sel'), ms || 1800);
   }
 
   async function copyText(text, selectEl) {
@@ -122,7 +122,9 @@
           if (error && error.name === 'AbortError') return;
         }
       }
-      toast((await copyText(url)) ? 'Link copied' : url);
+      if (await copyText(url)) toast('Link copied');
+      else toast(url, 8000, true); // copying is blocked: leave the link up long enough to select it
+
     });
   }
 
@@ -173,8 +175,9 @@
     copyEmail.hidden = false;
     copyEmail.addEventListener('click', async () => copied(copyEmail, await copyText(EMAIL, $('[data-addr]')), 'Email'));
   }
-  const inApp = $('[data-inapp]');
-  if (inApp && /TikTok|musical_ly|Bytedance|Instagram|FBAN|FBAV/i.test(navigator.userAgent || '')) inApp.hidden = false;
+  const inApp = /TikTok|musical_ly|Bytedance|Instagram|FBAN|FBAV/i.test(navigator.userAgent || '');
+  const inAppHint = $('[data-inapp]');
+  if (inAppHint && inApp) inAppHint.hidden = false;
   const source = $('[data-slot="newsletter"] [data-source]');
   if (source) source.value = via ? via.slug : '';
 
@@ -331,8 +334,12 @@
   ];
   const BENCH = ['zzzzzzzzzzzz', 'MMMMMMMMMMMM', 'zzzzzzzzzzzz', '.k........k.', '.k........k.', '.k........k.'];
   const EXT = { T: '#22c3b6', H: '#0e9a90' };
-  const BOT_PAL = { D: '#c2d3e0', G: '#94b0c2' }; // light bots on the evening path
+  const BOT_PAL = { D: '#c98a4b', G: '#6e3b1f' }; // copper bots: they stand out on every path colour, and their white reports on them
   const SUIT = Object.assign({ n: '#1d2133' }, EXT);
+  // at night the path is dark navy, so Noah's trousers go a shade lighter to keep his legs
+  const NIGHT_LEGS = { D: '#566c86' };
+  const EXT_NIGHT = Object.assign({}, EXT, NIGHT_LEGS);
+  const SUIT_NIGHT = Object.assign({}, SUIT, NIGHT_LEGS);
   const GH = ['#0e4429', '#006d32', '#26a641', '#39d353'];
   const suits = new Map();
   const suit = rows => { // a white collar and a red tie on the shirt rows
@@ -358,6 +365,7 @@
     let W = 118, H = 46, S = 28, BANK = 36, G = 43, scale = 3, f = 0.54, desk = false, chipR = 0;
     let phaseKey = phaseForHour(bostonHour()), preview = 0;
     let layer = null, windows = [], stars = [], boats = [], lamps = [], piers = [], pru = null, cit = null, bridgeTo = 80;
+    let stone = '#e2e9f0';
     const noah = { x: 47, home: 47, target: 47, waveUntil: 0, walking: false };
     let frame = 0, cue = null, owner = null, leaving = null, coins = [], tow = null, flashAt = -1e5, lastFlash = -1e5;
     let visible = false, ratio = 0, timer = 0, slow = false, lastInput = now();
@@ -400,8 +408,12 @@
         R(g, bands[Math.min(bands.length - 1, Math.floor((sy0 + 2) / bandH))], mx + 2, sy0, 4, 5);
       } else if (ph.glow) {
         const sx = Math.round(W * (phaseKey === 'dawn' ? 0.7 : 0.92)), sy = Math.round(S * 0.5);
-        g.globalAlpha = 0.35;
-        R(g, ph.glow, sx - 7, sy - 3, 15, 13);
+        g.globalAlpha = 0.3; // a glow with stepped corners, not a square
+        R(g, ph.glow, sx - 7, sy, 15, 7);
+        g.fillRect(sx - 5, sy - 2, 11, 2);
+        g.fillRect(sx - 5, sy + 7, 11, 2);
+        g.fillRect(sx - 3, sy - 3, 7, 1);
+        g.fillRect(sx - 3, sy + 9, 7, 1);
         g.globalAlpha = 1;
         g.fillRect(sx - 3, sy, 7, 7);
         g.fillRect(sx - 4, sy + 1, 9, 5);
@@ -443,8 +455,10 @@
           }
         }
       };
-      // Back Bay rowhouses + mid-rises along the river
-      for (let x = 0; x < W;) {
+      // Back Bay rowhouses + mid-rises along the river; they stop where the bridge starts, so its
+      // towers stand against the hazy far skyline instead of merging into buildings
+      const span = Math.round(26 * f) + 2, bridgeStart = lm.bridge - span - 1;
+      for (let x = 0; x < bridgeStart;) {
         const low = Object.values(lm).some(pos => Math.abs(pos - x) < 12);
         const w = 5 + Math.floor(rand() * 6);
         building(x, w, Math.round((low ? 4 + Math.floor(rand() * 3) : 6 + Math.floor(rand() * 9)) * f) + 1);
@@ -470,13 +484,16 @@
       citgo(g, cit.x, cit.y, day ? 'day' : 'lit');
       R(g, near, cit.x + 1, cit.y + 11, 1, 1);
       g.fillRect(cit.x + 8, cit.y + 11, 1, 1);
-      // the Longfellow Bridge: deck, "salt and pepper" towers, a row of lamps
-      const br = lm.bridge, span = Math.round(26 * f) + 2, towerH = Math.round(7 * f) + 2, towers = [br - 6, br + 4];
-      R(g, trim, br - span, S - 2, span * 2, 2);
+      // the Longfellow Bridge in pale stone: a deck over the water, taller "salt and pepper"
+      // towers, and a row of lamps on its rail (they light one by one for the full-site cue)
+      const br = lm.bridge, towerH = Math.round(12 * f) + 3, towers = [br - 7, br + 4];
+      stone = day ? '#e2e9f0' : night ? '#4f5b7e' : '#8e7fa0';
+      R(g, stone, br - span, S - 3, span * 2, 2);
       towers.forEach(tx => {
-        R(g, trim, tx, S - 2 - towerH, 3, towerH);
-        g.fillRect(tx - 1, S - 3 - towerH, 5, 1);
-        R(g, near, tx + 1, S - 5 - towerH, 1, 2);
+        R(g, stone, tx, S - 3 - towerH, 3, towerH);
+        R(g, near, tx + 2, S - 3 - towerH, 1, towerH); // the shaded side
+        R(g, stone, tx - 1, S - 4 - towerH, 5, 1);
+        R(g, near, tx + 1, S - 6 - towerH, 1, 2);
       });
       piers = [];
       for (let a = -span + 2; a < span; a += 8) piers.push(br + a);
@@ -484,8 +501,8 @@
       for (let lx = br - span + 3; lx < Math.min(W - 1, br + span - 2); lx += 5) {
         if (towers.some(tx => lx >= tx - 2 && lx <= tx + 4)) continue;
         lamps.push(lx);
-        R(g, trim, lx, S - 4, 1, 2);
-        R(g, near, lx, S - 5, 1, 1);
+        R(g, near, lx, S - 5, 1, 2);
+        R(g, near, lx, S - 6, 1, 1);
       }
       bridgeTo = Math.max(noah.home + 12, br - span - 9);
       // Esplanade trees, the river wall, stars
@@ -511,29 +528,36 @@
       for (let i = 0; i < W; i += 11) {
         if ((i + frame) % 23 < 16) ctx.fillRect(Math.round((i * 7 + (reduced ? 0 : frame * 0.6)) % W), S + 2 + ((i * 13) % Math.max(1, BANK - S - 3)), 3, 1);
       }
-      ctx.fillStyle = ph.near;
+      ctx.fillStyle = stone; // the bridge's piers stand in the water
       piers.forEach(x => ctx.fillRect(x, S, 2, 3));
+      ctx.fillStyle = ph.near;
+      piers.forEach(x => ctx.fillRect(x + 1, S, 1, 3));
     }
 
     function drawBank() {
       const night = phaseKey === 'night', day = phaseKey === 'day', lh = desk ? 18 : 10;
       R(ctx, night ? '#1f2a1f' : day ? '#38b764' : '#2f4a3a', 0, BANK, W, 2);
-      R(ctx, night ? '#333c57' : day ? '#94b0c2' : '#566c86', 0, BANK + 2, W, H - BANK - 2);
-      ctx.fillStyle = night ? '#262b44' : day ? '#7d95ab' : '#47566f';
+      // the night path is darker than the stage frame (#333c57), so the frame keeps its edge
+      R(ctx, night ? '#252b45' : day ? '#94b0c2' : '#566c86', 0, BANK + 2, W, H - BANK - 2);
+      ctx.fillStyle = night ? '#1e2338' : day ? '#7d95ab' : '#47566f';
       for (let x = 0; x < W; x += 6) ctx.fillRect(x, BANK + 5, 3, 1);
-      if (desk) { // the wide desktop path gets a second row of paving and a bench
+      if (desk) { // the wide desktop path gets a second row of paving and a bench, left of Noah's walk
         for (let x = 3; x < W; x += 6) ctx.fillRect(x, BANK + 12, 3, 1);
         ctx.fillRect(0, H - 2, W, 2);
-        px(BENCH, W * 0.56, G - 5, night ? { z: '#6e3b1f', M: '#3b2a24' } : null);
+        px(BENCH, W * 0.12, G - 5, night ? { z: '#6e3b1f', M: '#3b2a24' } : null);
       }
       for (let x = 30; x < W; x += 64) { // lampposts along the Cambridge path
-        R(ctx, '#1a1c2c', x, G - lh, 1, lh);
+        R(ctx, night ? '#3a4868' : '#1a1c2c', x, G - lh, 1, lh); // iron posts, a shade lighter after dark
         ctx.fillRect(x - 1, G - lh - 1, 3, 1);
         ctx.fillRect(x - 1, G - 1, 3, 1);
         if (day) continue;
+        // a lit head with a small glow, and a pool of light on the path (no translucent boxes)
         R(ctx, '#ffcd75', x - 1, G - lh, 3, 1);
-        ctx.globalAlpha = 0.22;
-        ctx.fillRect(x - 4, G - lh + 1, 9, 4);
+        R(ctx, '#fff6d8', x, G - lh, 1, 1);
+        [[0.22, 2, -1, 5, 3], [0.32, 3, 1, 7, 1], [0.14, 5, 1, 11, 1]].forEach(([a, half, dy, w, h], i) => {
+          ctx.globalAlpha = a;
+          ctx.fillRect(x - half, i ? G + dy : G - lh + dy, w, h);
+        });
         ctx.globalAlpha = 1;
       }
     }
@@ -560,7 +584,7 @@
         }
       }
       if (c.name === 'sunny' && c.bots) {
-        c.bots.forEach(b => px((c.out ? BOT_HOME : b.has ? BOT : BOT_EMPTY)[b.moving ? frame % 2 : 0], b.x, G - 6, phaseKey === 'day' ? EXT : BOT_PAL));
+        c.bots.forEach(b => px((c.out ? BOT_HOME : b.has ? BOT : BOT_EMPTY)[b.moving ? frame % 2 : 0], b.x, G - 6, BOT_PAL));
       }
     }
 
@@ -610,9 +634,9 @@
       if (name === 'home') { // the bridge lamps light one by one
         lamps.forEach((lx, i) => {
           if (c.k < 2 + i * 2) return;
-          R(ctx, '#ffcd75', lx, S - 5, 1, 1);
+          R(ctx, '#ffcd75', lx, S - 6, 1, 1);
           ctx.globalAlpha = 0.3;
-          ctx.fillRect(lx - 1, S - 6, 3, 3);
+          ctx.fillRect(lx - 1, S - 7, 3, 3);
           ctx.globalAlpha = 1;
         });
       }
@@ -626,7 +650,9 @@
       if (t < noah.waveUntil) rows = frame % 4 < 2 ? NOAH.wave : NOAH.wave2;
       else if (name === 'instagram') rows = NOAH.wave2;
       else if (noah.walking) rows = frame % 2 ? NOAH.walk : NOAH.idle;
-      px(name === 'linkedin' ? suit(rows) : rows, noah.x, top() + hop(), name === 'linkedin' ? SUIT : EXT);
+      const night = phaseKey === 'night';
+      px(name === 'linkedin' ? suit(rows) : rows, noah.x, top() + hop(),
+        name === 'linkedin' ? (night ? SUIT_NIGHT : SUIT) : (night ? EXT_NIGHT : EXT));
       drawFront(c);
       if (tow) { // a small plane tows a CV banner across the sky
         px(BANNER[frame % 2], tow.x, tow.y);
@@ -788,7 +814,7 @@
     function layout() {
       desk = media('(min-width: 880px)');
       scale = desk ? 4 : 3;
-      W = Math.max(80, Math.ceil((host.clientWidth || 352) / scale));
+      W = Math.max(40, Math.ceil((host.clientWidth || 352) / scale)); // never wider than the frame (+ < 1 art px)
       H = desk ? clamp(Math.floor((window.innerHeight - 96) / scale), 96, 150) : 46;
       S = desk ? Math.round(H * 0.6) : 28;
       BANK = desk ? Math.round(H * 0.79) : 36;
@@ -895,6 +921,13 @@
     const noun = el.dataset.noun && $(`.bio [data-noun="${el.dataset.noun}"]`);
     if (noun) noun.classList.toggle('is-lit', on);
   };
+  const keyboardFocus = el => {
+    try {
+      return el.matches(':focus-visible') || !!el.querySelector(':focus-visible');
+    } catch (error) { // a browser without :focus-visible
+      return true;
+    }
+  };
   $$('[data-cue]').forEach(el => {
     const name = el.dataset.cue;
     const st = { hover: false, focus: false, touch: false };
@@ -931,7 +964,8 @@
       on();
     });
     el.addEventListener('focusin', () => {
-      if (st.focus) return;
+      // keyboard focus only: a click also focuses a link, and that must not keep the cue running
+      if (st.focus || !keyboardFocus(el)) return;
       st.focus = true;
       on();
     });
@@ -974,6 +1008,8 @@
   $$('[data-mail]').forEach(el => el.addEventListener('click', () => {
     paperPlane(el);
     scene.wave();
+    // in-app browsers often swallow mailto: say so where the visitor is looking, not only in the card
+    if (inApp && /^mailto:/.test(el.getAttribute('href') || '')) toast(`No email app? Copy ${EMAIL} under Say hi.`, 4500);
   }));
 
   const avatar = $('[data-avatar]');
